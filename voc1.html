@@ -245,7 +245,7 @@
     </div>
     <div class="stat-card">
       <div class="stat-label">✓ 配對</div>
-      <div class="stat-value" id="matched">0/7</div>
+      <div class="stat-value" id="matched">0/5</div>
     </div>
   </div>
 
@@ -291,6 +291,9 @@ let timerInterval = null;
 
 function initGame() {
   const shuffled = [...sentences].sort(() => Math.random() - 0.5);
+  
+  // 更新配對計數顯示
+  document.getElementById('matched').textContent = '0/' + sentences.length;
   
   // 生成單字按鈕
   const wordButtonsContainer = document.getElementById('wordButtonsContainer');
@@ -349,7 +352,7 @@ function fillBlank(blankEl) {
     blankEl.removeAttribute('data-word');
     
     matchedWords.push(selectedWord);
-    document.getElementById('matched').textContent = matchedWords.length + '/7';
+    document.getElementById('matched').textContent = matchedWords.length + '/' + sentences.length;
     
     const selectedBtn = document.querySelector('.word-btn[data-selected="true"]');
     if (selectedBtn) {
@@ -358,7 +361,7 @@ function fillBlank(blankEl) {
     
     selectedWord = null;
     
-    if (matchedWords.length === 7) {
+    if (matchedWords.length === sentences.length) {
       showResults();
     }
   } else {
