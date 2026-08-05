@@ -229,7 +229,7 @@
   </head>
   <body>
     <div class="wrap">
-      <h1>glycolysis</h1>
+      <h1>glycolysis enzyme sequence</h1>
       <p class="subtitle">拖曳排序項目到正確的順序</p>
 
       <div class="stats">
@@ -269,133 +269,133 @@
     </div>
 
     <script>
-      const items = ['Hexokinase', 'Phosphoglucose isomerase', 'Phosphofructokinase-1 (PFK-1)', 'Aldolase', 'Triose phosphate isomerase (TPI)', 'Glyceraldehyde-3-phosphate dehydrogenase (GAPDH)', 'Phosphoglycerate kinase (PGK)', 'Phosphoglycerate mutase (PGM)', 'Enolase', 'Pyruvate kinase'];
-      const correctOrder = ['Hexokinase', 'Phosphoglucose isomerase', 'Phosphofructokinase-1 (PFK-1)', 'Aldolase', 'Triose phosphate isomerase (TPI)', 'Glyceraldehyde-3-phosphate dehydrogenase (GAPDH)', 'Phosphoglycerate kinase (PGK)', 'Phosphoglycerate mutase (PGM)', 'Enolase', 'Pyruvate kinase'];
-            let startTime = Date.now();
-            let timerInterval = null;
-            let draggedElement = null;
+const items = ['Hexokinase', 'Phosphoglucose isomerase', 'Phosphofructokinase-1 (PFK-1)', 'Aldolase', 'Triose phosphate isomerase (TPI)', 'Glyceraldehyde-3-phosphate dehydrogenase (GAPDH)', 'Phosphoglycerate kinase (PGK)', 'Phosphoglycerate mutase (PGM)', 'Enolase', 'Pyruvate kinase'];
+const correctOrder = ['Hexokinase', 'Phosphoglucose isomerase', 'Phosphofructokinase-1 (PFK-1)', 'Aldolase', 'Triose phosphate isomerase (TPI)', 'Glyceraldehyde-3-phosphate dehydrogenase (GAPDH)', 'Phosphoglycerate kinase (PGK)', 'Phosphoglycerate mutase (PGM)', 'Enolase', 'Pyruvate kinase'];
+      let startTime = Date.now();
+      let timerInterval = null;
+      let draggedElement = null;
 
-            function initGame() {
-              const itemsContainer = document.getElementById('itemsContainer');
-              itemsContainer.innerHTML = '';
+      function initGame() {
+        const itemsContainer = document.getElementById('itemsContainer');
+        itemsContainer.innerHTML = '';
 
-              const shuffled = [...items].sort(() => Math.random() - 0.5);
+        const shuffled = [...items].sort(() => Math.random() - 0.5);
 
-              shuffled.forEach((item, idx) => {
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.textContent = item;
-                div.draggable = true;
-                div.dataset.value = item;
+        shuffled.forEach((item, idx) => {
+          const div = document.createElement('div');
+          div.className = 'item';
+          div.textContent = item;
+          div.draggable = true;
+          div.dataset.value = item;
 
-                div.addEventListener('dragstart', handleDragStart);
-                div.addEventListener('dragend', handleDragEnd);
-                div.addEventListener('dragover', handleDragOver);
-                div.addEventListener('drop', handleDrop);
-                div.addEventListener('dragleave', handleDragLeave);
+          div.addEventListener('dragstart', handleDragStart);
+          div.addEventListener('dragend', handleDragEnd);
+          div.addEventListener('dragover', handleDragOver);
+          div.addEventListener('drop', handleDrop);
+          div.addEventListener('dragleave', handleDragLeave);
 
-                itemsContainer.appendChild(div);
-              });
+          itemsContainer.appendChild(div);
+        });
 
-              startTimer();
-            }
+        startTimer();
+      }
 
-            function handleDragStart(e) {
-              draggedElement = this;
-              this.classList.add('dragging');
-            }
+      function handleDragStart(e) {
+        draggedElement = this;
+        this.classList.add('dragging');
+      }
 
-            function handleDragEnd(e) {
-              this.classList.remove('dragging');
-              document.querySelectorAll('.item').forEach(el => {
-                el.classList.remove('drag-over');
-              });
-            }
+      function handleDragEnd(e) {
+        this.classList.remove('dragging');
+        document.querySelectorAll('.item').forEach(el => {
+          el.classList.remove('drag-over');
+        });
+      }
 
-            function handleDragOver(e) {
-              e.preventDefault();
-              if (this !== draggedElement) {
-                this.classList.add('drag-over');
-              }
-            }
+      function handleDragOver(e) {
+        e.preventDefault();
+        if (this !== draggedElement) {
+          this.classList.add('drag-over');
+        }
+      }
 
-            function handleDragLeave(e) {
-              this.classList.remove('drag-over');
-            }
+      function handleDragLeave(e) {
+        this.classList.remove('drag-over');
+      }
 
-            function handleDrop(e) {
-              e.preventDefault();
-              this.classList.remove('drag-over');
+      function handleDrop(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
 
-              if (this !== draggedElement) {
-                const allItems = document.querySelectorAll('.item');
-                const draggedIdx = Array.from(allItems).indexOf(draggedElement);
-                const targetIdx = Array.from(allItems).indexOf(this);
+        if (this !== draggedElement) {
+          const allItems = document.querySelectorAll('.item');
+          const draggedIdx = Array.from(allItems).indexOf(draggedElement);
+          const targetIdx = Array.from(allItems).indexOf(this);
 
-                if (draggedIdx < targetIdx) {
-                  this.parentNode.insertBefore(draggedElement, this.nextSibling);
-                } else {
-                  this.parentNode.insertBefore(draggedElement, this);
-                }
-              }
-            }
+          if (draggedIdx < targetIdx) {
+            this.parentNode.insertBefore(draggedElement, this.nextSibling);
+          } else {
+            this.parentNode.insertBefore(draggedElement, this);
+          }
+        }
+      }
 
-            function getCurrentOrder() {
-              const items = document.querySelectorAll('.item');
-              return Array.from(items).map(el => el.dataset.value);
-            }
+      function getCurrentOrder() {
+        const items = document.querySelectorAll('.item');
+        return Array.from(items).map(el => el.dataset.value);
+      }
 
-            function checkOrder() {
-              const currentOrder = getCurrentOrder();
-              const isCorrect = JSON.stringify(currentOrder) === JSON.stringify(correctOrder);
+      function checkOrder() {
+        const currentOrder = getCurrentOrder();
+        const isCorrect = JSON.stringify(currentOrder) === JSON.stringify(correctOrder);
 
-              const feedback = document.getElementById('feedback');
-              feedback.classList.add('show');
+        const feedback = document.getElementById('feedback');
+        feedback.classList.add('show');
 
-              if (isCorrect) {
-                feedback.classList.add('success');
-                feedback.classList.remove('error');
-                feedback.textContent = '✓ 正確！';
+        if (isCorrect) {
+          feedback.classList.add('success');
+          feedback.classList.remove('error');
+          feedback.textContent = '✓ 正確！';
 
-                setTimeout(() => {
-                  showResults();
-                }, 500);
-              } else {
-                feedback.classList.add('error');
-                feedback.classList.remove('success');
-                feedback.textContent = '✗ 順序不對，再試一次';
-              }
-            }
+          setTimeout(() => {
+            showResults();
+          }, 500);
+        } else {
+          feedback.classList.add('error');
+          feedback.classList.remove('success');
+          feedback.textContent = '✗ 順序不對，再試一次';
+        }
+      }
 
-            function resetOrder() {
-              const feedback = document.getElementById('feedback');
-              feedback.classList.remove('show');
-              initGame();
-            }
+      function resetOrder() {
+        const feedback = document.getElementById('feedback');
+        feedback.classList.remove('show');
+        initGame();
+      }
 
-            function startTimer() {
-              startTime = Date.now();
-              timerInterval = setInterval(() => {
-                const elapsed = Math.floor((Date.now() - startTime) / 1000);
-                const mins = Math.floor(elapsed / 60);
-                const secs = elapsed % 60;
-                document.getElementById('timer').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
-              }, 100);
-            }
+      function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const mins = Math.floor(elapsed / 60);
+          const secs = elapsed % 60;
+          document.getElementById('timer').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+        }, 100);
+      }
 
-            function showResults() {
-              clearInterval(timerInterval);
+      function showResults() {
+        clearInterval(timerInterval);
 
-              const elapsed = Math.floor((Date.now() - startTime) / 1000);
-              const mins = Math.floor(elapsed / 60);
-              const secs = elapsed % 60;
-              const timeStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const mins = Math.floor(elapsed / 60);
+        const secs = elapsed % 60;
+        const timeStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
 
-              document.getElementById('finalTime').textContent = timeStr;
-              document.getElementById('resultOverlay').classList.add('show');
-            }
+        document.getElementById('finalTime').textContent = timeStr;
+        document.getElementById('resultOverlay').classList.add('show');
+      }
 
-            initGame();
+      initGame();
     </script>
   </body>
 </html>
