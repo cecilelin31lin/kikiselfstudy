@@ -3,11 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>配位基化學光譜序列</title>
+    <title>glycolysis enzyme sequence</title>
     <style>
       * { box-sizing: border-box; }
-      body {
+      html, body {
         margin: 0;
+        padding: 0;
+        overscroll-behavior: none;
+      }
+      body {
         padding: 24px 16px 60px;
         background: #f5f5f5;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Nunito', sans-serif;
@@ -68,65 +72,51 @@
         border-radius: 12px;
         padding: 12px;
         margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
       }
 
       .item {
         background: white;
         border: 0.5px solid #ccc;
         border-radius: 6px;
-        padding: 12px;
+        padding: 14px 12px;
+        margin-bottom: 8px;
         font-size: 14px;
         color: #2B3A55;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
+        position: relative;
+        will-change: transform;
       }
-      .item:hover {
-        border-color: #999;
-        background: #f9f9f9;
+      .item:last-child {
+        margin-bottom: 0;
       }
-      .item.selected {
-        background: #f0f8ff;
+      .item.dragging {
+        opacity: 0.95;
+        background: #EAF3FC;
         border-color: #378ADD;
+        box-shadow: 0 8px 20px rgba(55,138,221,0.35);
+        z-index: 100;
       }
-
-      .item-content {
+      .item.sliding {
+        transition: transform 0.18s ease;
+      }
+      .item-text {
         flex: 1;
-        cursor: pointer;
-        padding: 6px;
       }
-
-      .item-buttons {
-        display: flex;
-        gap: 4px;
+      .item-handle {
+        color: #999;
+        font-size: 20px;
+        line-height: 1;
+        flex-shrink: 0;
+        padding: 8px 12px;
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
       }
-
-      .btn-arrow {
-        background: white;
-        border: 0.5px solid #ddd;
-        border-radius: 4px;
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        font-size: 16px;
-        cursor: pointer;
-        transition: all 0.2s;
-        color: #2B3A55;
-      }
-      .btn-arrow:hover {
-        border-color: #378ADD;
-        color: #378ADD;
-      }
-      .btn-arrow:active {
-        background: #f0f8ff;
-      }
-      .btn-arrow:disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
+      .item-handle:active {
+        cursor: grabbing;
       }
 
       .button-group {
@@ -254,8 +244,8 @@
   </head>
   <body>
     <div class="wrap">
-      <h1>排序順序遊戲</h1>
-      <p class="subtitle">點擊項目，用↑↓按鈕排序</p>
+      <h1>Glycolysis Enzyme</h1>
+      <p class="subtitle">按住 ≡ 拖曳排序項目</p>
 
       <div class="stats">
         <div class="stat-card">
@@ -268,7 +258,7 @@
         </div>
       </div>
 
-      <div class="instruction">點擊項目選擇，用↑↓按鈕移動</div>
+      <div class="instruction">按照反應需要的酵素順序排序</div>
 
       <div class="items-container" id="itemsContainer"></div>
 
@@ -294,84 +284,122 @@
     </div>
 
     <script>
-      const items = ['CO', 'CN', 'en', 'NH3', 'NCS', 'H2O', 'F-', 'Cl-', 'Br-', 'I-'];
-      const correctOrder = ['CO', 'CN', 'en', 'NH3', 'NCS', 'H2O', 'F-', 'Cl-', 'Br-', 'I-'];
+      const items = ['Hexokinase', 'Phosphoglucose isomerase', 'Phosphofructokinase-1 (PFK-1)', 'Aldolase', 'Triose phosphate isomerase (TPI)', 'Glyceraldehyde-3-phosphate dehydrogenase (GAPDH)', 'Phosphoglycerate kinase (PGK)', 'Phosphoglycerate mutase (PGM)', 'Enolase', 'Pyruvate kinase'];
+      const correctOrder = ['Hexokinase', 'Phosphoglucose isomerase', 'Phosphofructokinase-1 (PFK-1)', 'Aldolase', 'Triose phosphate isomerase (TPI)', 'Glyceraldehyde-3-phosphate dehydrogenase (GAPDH)', 'Phosphoglycerate kinase (PGK)', 'Phosphoglycerate mutase (PGM)', 'Enolase', 'Pyruvate kinase'];
 
       let startTime = Date.now();
       let timerInterval = null;
-      let selectedIndex = -1;
       let currentItems = [];
+      let itemsContainer = null;
+
+      let dragValue = null;
+      let dragStartY = 0;
+      let itemHeight = 0;
+      let orderAtDragStart = [];
 
       function initGame() {
         currentItems = [...items].sort(() => Math.random() - 0.5);
-        selectedIndex = -1;
+        itemsContainer = document.getElementById('itemsContainer');
         render();
         startTimer();
       }
 
       function render() {
-        const itemsContainer = document.getElementById('itemsContainer');
         itemsContainer.innerHTML = '';
-
-        currentItems.forEach((item, idx) => {
+        currentItems.forEach((val) => {
           const div = document.createElement('div');
           div.className = 'item';
-          if (idx === selectedIndex) {
-            div.classList.add('selected');
-          }
+          div.dataset.value = val;
 
-          const content = document.createElement('div');
-          content.className = 'item-content';
-          content.textContent = item;
-          content.onclick = () => selectItem(idx);
+          const text = document.createElement('span');
+          text.className = 'item-text';
+          text.textContent = val;
 
-          const buttons = document.createElement('div');
-          buttons.className = 'item-buttons';
+          const handle = document.createElement('span');
+          handle.className = 'item-handle';
+          handle.textContent = '≡';
 
-          const btnUp = document.createElement('button');
-          btnUp.className = 'btn-arrow';
-          btnUp.textContent = '↑';
-          btnUp.disabled = idx === 0;
-          btnUp.onclick = () => moveUp(idx);
+          div.appendChild(text);
+          div.appendChild(handle);
 
-          const btnDown = document.createElement('button');
-          btnDown.className = 'btn-arrow';
-          btnDown.textContent = '↓';
-          btnDown.disabled = idx === currentItems.length - 1;
-          btnDown.onclick = () => moveDown(idx);
+          handle.addEventListener('mousedown', (e) => startDrag(e, val));
+          handle.addEventListener('touchstart', (e) => startDrag(e, val), { passive: false });
 
-          buttons.appendChild(btnUp);
-          buttons.appendChild(btnDown);
-
-          div.appendChild(content);
-          div.appendChild(buttons);
           itemsContainer.appendChild(div);
         });
       }
 
-      function selectItem(idx) {
-        selectedIndex = selectedIndex === idx ? -1 : idx;
+      function getItemEls() {
+        return Array.from(itemsContainer.querySelectorAll('.item'));
+      }
+
+      function startDrag(e, value) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        dragValue = value;
+        orderAtDragStart = [...currentItems];
+
+        const point = e.touches ? e.touches[0] : e;
+        dragStartY = point.clientY;
+
+        const els = getItemEls();
+        const draggedEl = els.find(el => el.dataset.value === value);
+        const rect = draggedEl.getBoundingClientRect();
+        itemHeight = rect.height + 8; // height + margin-bottom
+
+        draggedEl.classList.add('dragging');
+
+        document.addEventListener('mousemove', onDragMove, { passive: false });
+        document.addEventListener('touchmove', onDragMove, { passive: false });
+        document.addEventListener('mouseup', onDragEnd);
+        document.addEventListener('touchend', onDragEnd);
+      }
+
+      function onDragMove(e) {
+        if (!dragValue) return;
+        e.preventDefault();
+
+        const point = e.touches ? e.touches[0] : e;
+        const deltaY = point.clientY - dragStartY;
+
+        const els = getItemEls();
+        const draggedEl = els.find(el => el.dataset.value === dragValue);
+
+        // 拖曳項目直接跟著手指走（transform，不脫離文件流）
+        draggedEl.style.transform = `translateY(${deltaY}px)`;
+
+        const oldIndex = orderAtDragStart.indexOf(dragValue);
+
+        // 依照拖曳距離計算新的插入位置
+        let newIndex = oldIndex + Math.round(deltaY / itemHeight);
+        newIndex = Math.max(0, Math.min(newIndex, orderAtDragStart.length - 1));
+
+        let newOrder = [...orderAtDragStart];
+        newOrder.splice(oldIndex, 1);
+        newOrder.splice(newIndex, 0, dragValue);
+        currentItems = newOrder;
+
+        // 其他項目滑動到新位置（transform 位移量 = 新舊 slot 差 * 一格高度）
+        els.forEach((el) => {
+          if (el === draggedEl) return;
+          const val = el.dataset.value;
+          const newPos = newOrder.indexOf(val);
+          const oldPos = orderAtDragStart.indexOf(val);
+          const offset = (newPos - oldPos) * itemHeight;
+          el.classList.add('sliding');
+          el.style.transform = `translateY(${offset}px)`;
+        });
+      }
+
+      function onDragEnd(e) {
+        document.removeEventListener('mousemove', onDragMove);
+        document.removeEventListener('touchmove', onDragMove);
+        document.removeEventListener('mouseup', onDragEnd);
+        document.removeEventListener('touchend', onDragEnd);
+
+        dragValue = null;
         render();
-      }
-
-      function moveUp(idx) {
-        if (idx > 0) {
-          const temp = currentItems[idx];
-          currentItems[idx] = currentItems[idx - 1];
-          currentItems[idx - 1] = temp;
-          selectedIndex = idx - 1;
-          render();
-        }
-      }
-
-      function moveDown(idx) {
-        if (idx < currentItems.length - 1) {
-          const temp = currentItems[idx];
-          currentItems[idx] = currentItems[idx + 1];
-          currentItems[idx + 1] = temp;
-          selectedIndex = idx + 1;
-          render();
-        }
       }
 
       function checkOrder() {
