@@ -353,7 +353,29 @@ const allQuestions = [
   { type: 4, question: '維生素A的前驅物為___', answer: '類胡蘿蔔素', explanation: 0 },
   { type: 3, question: '由Na/K pump導致的secondary active transport 是？', answer: 'SGLT', options: ['GluT', 'SGLT', 'K⁺ leak channel', 'V-type ATPase'], explanation: '小腸吸收Glc不是使用一般GluT，而是使用由Na/K pump造成的次級主動運輸，將Na和Glc同時運進cell' },
   { type: 3, question: '下列關於葡萄糖轉運蛋白（GLUT）的敘述，何者正確？', answer: 'GLUT2的Km值高，親和力低，適合作為血糖濃度的感應器', options: ['GLUT1主要表現於骨骼肌與脂肪組織，且需要insulin刺激才能運輸葡萄糖', 'GLUT5主要負責運輸葡萄糖，具有高度insulin依賴性', 'GLUT2的Km值高，親和力低，適合作為血糖濃度的感應器', 'GLUT4廣泛分布於全身細胞，屬於insulin-independent的轉運蛋白'], explanation: 0 },
-  { type: 9, question: 'liver不用GluT4，所以肝臟使用Glc與insulin無關', answer: false, explanation: '肝臟不表現 GLUT4，而是表現 GLUT2，因此葡萄糖進入肝細胞 不依賴胰島素。雖然 Glc 進入肝細胞不依賴 insulin，但肝臟接下來是否利用、儲存 glucose，仍然高度受到 insulin 調控。' },
+  { type: 9, question: 'liver不用GluT4，所以肝臟使用Glc與insulin無關', answer: false, explanation: '肝臟不表現 GLUT4，而是表現 GLUT2，因此葡萄糖進入肝細胞不依賴胰島素。雖然 Glc 進入肝細胞不依賴 insulin，但肝臟接下來是否利用、儲存 glucose，仍然高度受到 insulin 調控。' },
+  { type: 3, 
+    question: '全酵素 (Holoenzyme) 的組成是？', 
+    answer: 'Apoenzyme + Cofactor',
+    options: ['Apoenzyme + Cofactor', 'Apoenzyme + Coenzyme only', 'Prosthetic group + Metal ion', 'Apoenzyme本身即具活性'],
+    explanation: '全酵素 = 主酶(蛋白質部分) + 輔助因子，缺少Cofactor則Apoenzyme無活性'
+  },
+  
+  { 
+    type: 9, 
+    question: 'Prosthetic group（輔基）與酵素蛋白是以共價鍵緊密結合的', 
+    answer: true,
+    explanation: '輔基特徵就是具有共價鍵(covalent bonding)，屬於緊密結合(tight)'
+  },
+  
+
+  { 
+    type: 4, 
+    question: 'Fe²⁺以Heme形式存在時，主要分布在____中', 
+    answer: 'Cytochrome',
+    explanation: 'Heme(血基質)存在於Cytochrome(細胞色素)中；Non-heme則存在於Fe-S cluster中'
+  },
+
 ];
 
 /*
@@ -369,6 +391,7 @@ const allQuestions = [
   
   // 類型 9：是非題（answer: true 或 false）
   { type: 9, question: 'Q', answer: true, explanation: 'explain' },
+  { type: 9, question: 'Q', answer: false, explanation: 'explanation' },
   
   // 沒有解析的例子
   { type: 2, question: '2+2=__', answer: '4', explanation: 0 },
