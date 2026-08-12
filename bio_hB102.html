@@ -347,11 +347,13 @@
 
 <script>
 const allQuestions = [
-  { type: 9, question: '身上所有蛋白質都有一定構型並執行固定功能', answer: false, explanation: 'Intrinsically disordered proteins (IDPs) 是一類在天然生理條件下缺乏穩定三維結構的蛋白質，但依然具有重要的生物學功能' },
-  { type: 9, question: '細胞內生成的hormone或NTM從生成到分泌出cell，會穿過多層膜', answer: false, explanation: '物質一直在vesicle中，先是被包入vesicle，再經由vesicle與plasma membrane融合吐出去。所以未穿過任何膜' },
-  { type: 3, question: '原本在細胞內的vesicle，其內膜在vesicle要融合出cell時，會變成細胞膜的___', answer: '外膜', options: ['內膜', '外膜', '隨機'], explanation: '原先碰到細胞質的膜在融合後一樣是碰到細胞質' },
-  { type: 4, question: '不可逆抑制劑之所以不可逆是因為抑制劑與酵素產生___', answer: '共價鍵', explanation: 0 },
-  { type: 9, question: '化學滲透磷酸化一定要與ETC一起', answer: false, explanation: '不需要，只需要有跨膜的H+濃度差、ATP synthase以及ATP synthase' },
+  { type: 9, question: '動物的細胞比植物細胞大', answer: false, explanation: '植物的比較大，因為植物有central vacuole' },
+  { type: 4, question: '植物的細胞壁___（是／不是）細胞外基質', answer: '是', explanation: 'ECM的成分在cell內產生，由exocytosis分泌到細胞膜外，只要過了細胞膜就是細胞外，所以細胞壁是ECM' },
+  { type: 3, question: '下列何者不是ECM？', answer: 'integrin', options: ['collagen', 'proteoglycan', 'integrin', 'laminin'], explanation: 'integrin是CAM細胞黏附分子，integti負責連接cell及ECM' },
+  { type: 4, question: '維生素A的前驅物為___', answer: '類胡蘿蔔素', explanation: 'explanation' },
+  { type: 3, question: '由Na/K pump導致的secondary active transport 是？', answer: 'SGLT', options: ['GluT', 'SGLT', 'K⁺ leak channel', 'V-type ATPase'], explanation: '小腸吸收Glc不是使用一般GluT，而是使用由Na/K pump造成的次級主動運輸，將Na和Glc同時運進cell' },
+  { type: 3, question: '下列關於葡萄糖轉運蛋白（GLUT）的敘述，何者正確？', answer: 'GLUT2的Km值高，親和力低，適合作為血糖濃度的感應器', options: ['GLUT1主要表現於骨骼肌與脂肪組織，且需要insulin刺激才能運輸葡萄糖', 'GLUT5主要負責運輸葡萄糖，具有高度insulin依賴性', 'GLUT2的Km值高，親和力低，適合作為血糖濃度的感應器', 'GLUT4廣泛分布於全身細胞，屬於insulin-independent的轉運蛋白'], explanation: 0 },
+  { type: 9, question: 'liver不用GluT4，所以肝臟使用Glc與insulin無關', answer: false, explanation: '肝臟不表現 GLUT4，而是表現 GLUT2，因此葡萄糖進入肝細胞 不依賴胰島素。雖然 Glc 進入肝細胞不依賴 insulin，但肝臟接下來是否利用、儲存 glucose，仍然高度受到 insulin 調控。' },
 ];
 
 /*
@@ -360,13 +362,13 @@ const allQuestions = [
   { type: 2, question: '1+1=__', answer: '2', explanation: '基本數學運算' },
   
   // 類型 3：選擇題（需提供 options）
-  { type: 3, question: '下列哪個是最強的酸？', answer: 'HClO₄', options: ['HNO₃', 'HClO₄', 'H₂SO₄', 'HCl'], explanation: 'HClO₄是已知最強的酸' },
+  { type: 3, question: 'Q？', answer: 'A1', options: ['A1', 'A2', 'A3', 'A4'], explanation: 'explaination' },
   
   // 類型 4：填空題（文字輸入）
-  { type: 4, question: '水的化學式是___', answer: 'H2O', explanation: '由2個氫原子和1個氧原子組成' },
+  { type: 4, question: 'Qaaa___', answer: 'A', explanation: 'explanation' },
   
   // 類型 9：是非題（answer: true 或 false）
-  { type: 9, question: 'HClO₄的酸性比HNO₃強', answer: true, explanation: 'HClO₄是最強的酸' },
+  { type: 9, question: 'Q', answer: true, explanation: 'explain' },
   
   // 沒有解析的例子
   { type: 2, question: '2+2=__', answer: '4', explanation: 0 },
