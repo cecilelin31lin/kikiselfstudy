@@ -303,9 +303,13 @@ function initGame() {
   showQuestion();
   startTimer();
 
-  document.getElementById('answerInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && !answered) {
-      submitAnswer();
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      if (answered) {
+        nextQuestion();
+      } else {
+        submitAnswer();
+      }
     }
   });
 }
@@ -330,6 +334,7 @@ function submitAnswer() {
   if (answered) return;
 
   const q = shuffledQuestions[currentQuestion];
+  const input = document.getElementById('answerInput');
   const userAnswer = input.value.trim();
 
   if (!userAnswer) return;
