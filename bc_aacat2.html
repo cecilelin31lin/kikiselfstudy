@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UV吸光值測驗</title>
+<title>AA化學特性測驗</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -282,14 +282,14 @@ const questions = [
     options: ['Met', 'Ser', 'Thr', 'Asn']
   },
   { 
-    question: '下列何者屬於Aliphatic linear（直鏈脂肪族）？', 
+    question: '下列何者屬於Aliphatic linear（直鏈烷類）？', 
     answer: 'Gly',
     options: ['Gly', 'Val', 'Leu', 'Ile']
   },
   { 
     question: '下列何者不是BCAA？', 
-    answer: 'Leu',
-    options: ['Val', 'Leu', 'Ile', 'Ala']
+    answer: 'Thr',
+    options: ['Val', 'Leu', 'Ile', 'Thr']
   },
   { 
     question: '下列何者屬於Aromatic（芳香族）？', 
@@ -301,10 +301,25 @@ const questions = [
     answer: 'Pro',
     options: ['Pro', 'Gly', 'Ala', 'Val']
   },
+   { 
+    question: '下列何者屬於Aliphatic linear（直鏈烷類）？', 
+    answer: 'Ala',
+    options: ['Ala', 'Val', 'Leu', 'Ile']
+  },
   { 
     question: '下列何者含-OH，容易被磷酸化？', 
     answer: 'Ser',
     options: ['Ser', 'Cys', 'Met', 'Asp']
+  },
+   { 
+    question: '下列何者含-OH，容易被磷酸化？', 
+    answer: 'Thr',
+    options: ['Thr', 'Val', 'Met', 'Asp']
+  },
+ { 
+    question: '下列何者含-OH，容易被磷酸化？', 
+    answer: 'Tyr',
+    options: ['Tyr', 'Val', 'Trp', 'Lys']
   },
   { 
     question: '下列何者屬於Amide（醯胺）類？', 
@@ -363,8 +378,8 @@ const questions = [
   },
   { 
     question: 'Ser/Thr/Tyr kinase的功能是？', 
-    answer: '將磷酸基轉移到核酸/蛋白質上',
-    options: ['將磷酸基轉移到核酸/蛋白質上', '將胺基轉移到蛋白質上', '切割蛋白質胜肽鍵', '合成新的胺基酸']
+    answer: '將磷酸基轉移到蛋白質上',
+    options: ['將磷酸基轉移到蛋白質上', '將胺基轉移到蛋白質上', '切割蛋白質胜肽鍵', '合成新的胺基酸']
   },
 ];
 
