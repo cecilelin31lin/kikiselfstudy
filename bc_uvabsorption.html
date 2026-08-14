@@ -292,6 +292,12 @@ let answered = false;
 function initGame() {
   showQuestion();
   startTimer();
+
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && answered) {
+      nextQuestion();
+    }
+  });
 }
 
 function showQuestion() {
