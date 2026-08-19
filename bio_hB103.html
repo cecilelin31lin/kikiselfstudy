@@ -405,7 +405,6 @@ let shuffledQuestions = [];
 
 function initGame() {
   shuffledQuestions = [...allQuestions].sort(() => Math.random() - 0.5);
-  document.getElementById('progress').textContent = '1/' + shuffledQuestions.length;
   showQuestion();
   startTimer();
 
@@ -423,6 +422,7 @@ function initGame() {
 function showQuestion() {
   answered = false;
   const q = shuffledQuestions[currentQuestion];
+  document.getElementById('progress').textContent = (currentQuestion + 1) + '/' + shuffledQuestions.length;
   document.getElementById('questionProgress').textContent = '第 ' + (currentQuestion + 1) + ' 題 / 共 ' + shuffledQuestions.length + ' 題';
   document.getElementById('questionType').textContent = typeNames[q.type];
   document.getElementById('questionText').textContent = q.question;
