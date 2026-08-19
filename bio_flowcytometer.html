@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>流式細胞儀測驗</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px 16px 60px;
+    background: #f5f5f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Nunito', sans-serif;
+    color: #2B3A55;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #2B3A55;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+  }
+  
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2B3A55;
+  }
+  
+  .question-container {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .question-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #2B3A55;
+    margin-bottom: 20px;
+  }
+  
+  .option-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 0.5px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    text-align: left;
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+  .option-btn:hover {
+    border-color: #999;
+    background: #f9f9f9;
+  }
+  .option-btn.correct {
+    background: #E8F9EF;
+    border-color: #4CAF7D;
+  }
+  .option-btn.incorrect {
+    background: #FDE8E8;
+    border-color: #E24B4A;
+  }
+  .option-btn:disabled {
+    cursor: default;
+  }
+  
+  .feedback {
+    display: none;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+  }
+  .feedback.show {
+    display: block;
+  }
+  .feedback.success {
+    background: #E8F9EF;
+    border: 0.5px solid #4CAF7D;
+    color: #2B6E4F;
+  }
+  .feedback.error {
+    background: #FDE8E8;
+    border: 0.5px solid #E24B4A;
+    color: #8B2323;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  
+  button.nav-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #378ADD;
+    color: white;
+    transition: all 0.2s;
+  }
+  button.nav-btn:hover {
+    background: #2970c7;
+  }
+  
+  .result-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .result-overlay.show {
+    display: flex;
+  }
+  
+  .result-modal {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .result-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2B3A55;
+    margin-bottom: 20px;
+  }
+  
+  .result-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .result-stat {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  
+  .result-stat-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 4px;
+  }
+  
+  .result-stat-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: #378ADD;
+  }
+  
+  .result-button {
+    background: #378ADD;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+  }
+  .result-button:hover {
+    background: #2970c7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>流式細胞儀測驗</h1>
+  <p class="subtitle">選出正確的胺基酸</p>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">題目</div>
+      <div class="stat-value" id="progress">1/3</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">⏱ 時間</div>
+      <div class="stat-value" id="timer">0:00</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">✓ 正確</div>
+      <div class="stat-value" id="correct">0</div>
+    </div>
+  </div>
+
+  <div class="question-container" id="questionContainer">
+    <div class="question-text" id="questionText"></div>
+    <div id="optionsArea"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="button-group">
+    <button class="nav-btn" id="nextBtn" style="display:none;" onclick="nextQuestion()">下一題</button>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-modal">
+      <div class="result-title">🎉 測驗完成！</div>
+      
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat-label">正確率</div>
+          <div class="result-stat-value" id="accuracy">0%</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-label">用時</div>
+          <div class="result-stat-value" id="finalTime">0:00</div>
+        </div>
+      </div>
+      
+      <button class="result-button" onclick="location.reload()">重新開始</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = [
+  { 
+    question: '流式細胞儀的PI染色法用來分析細胞週期，其根本原理建立在下列哪一個假設之上？', 
+    answer: '不同週期階段的細胞，其DNA總含量不同',
+    options: [
+      '不同週期階段的細胞，其細胞體積（cell size）不同',
+      '不同週期階段的細胞，其DNA總含量不同',
+      '不同週期階段的細胞，其細胞膜通透性不同',
+      '不同週期階段的細胞，其粒線體數量不同'
+    ],
+    explanation: 'PI是嵌入型螢光染劑，其螢光強度與DNA總量成正比。整個技術的原理就是利用「G1（2N）、S（2N~4N漸增）、G2/M（4N）」DNA含量不同這個特性，來反推細胞所處的週期階段。'
+  },
+  { 
+    question: '某藥物處理癌細胞96小時後，sub-G1族群明顯增加，同時G1、S、G2/M peak皆等比例下降。下列敘述何者正確？', 
+    answer: 'Sub-G1族群的出現，是因為細胞核DNA遭到片段化，流失部分遺傳物質，使其螢光訊號低於正常2N細胞',
+    options: [
+      '此現象代表細胞被阻擋在G1 checkpoint，無法進入S期',
+      'Sub-G1族群的出現，是因為細胞核DNA遭到片段化，流失部分遺傳物質，使其螢光訊號低於正常2N細胞',
+      '此結果代表藥物促進細胞快速通過細胞週期，提升增殖速率',
+      'Sub-G1族群與G1族群的DNA含量相同，只是螢光強度判讀誤差所致'
+    ],
+    explanation: '細胞凋亡過程中，caspase活化的核酸內切酶（如CAD）會將DNA切割成片段，部分DNA流失，使細胞的DNA總量低於正常2N，因此在histogram上落在G1 peak的左側。'
+  },
+  { 
+    question: '藥物X：G1 peak明顯增高，S、G2/M比例下降，無sub-G1增加。藥物Y：G1、S、G2/M peak皆等比例下降，sub-G1明顯增加。下列推論何者正確？', 
+    answer: '藥物X的作用機制較可能是抑制CDK4/6-CyclinD複合體，使細胞無法通過G1 checkpoint，但細胞本身仍存活',
+    options: [
+      '藥物X的作用機制較可能是抑制CDK4/6-CyclinD複合體，使細胞無法通過G1 checkpoint，但細胞本身仍存活',
+      '藥物Y的作用機制純粹是抑制CDK活性，不涉及凋亡路徑的活化',
+      '藥物X造成的細胞週期停滯，最終結果與藥物Y完全相同，只是時間early/late的差異',
+      '兩種藥物的作用機制無法透過DNA content histogram做出任何區分'
+    ],
+    explanation: 'G1 peak增高、其餘期下降、無sub-G1，正是典型的細胞週期停滯（cell cycle arrest）特徵——細胞被卡在G1，但DNA完整、細胞存活，尚未走向死亡。'
+  },
+  { 
+    question: '若想確認「G2/M peak增高」是由於DNA損傷引發的G2 checkpoint停滯，而非單純的M期分裂機制受阻，下列哪一種額外檢測方法最能達成此區分目的？', 
+    answer: '搭配phospho-Histone H3抗體螢光染色，因為此蛋白只在M期（尤其是染色質濃縮時）才會大量表現，G2期細胞則不表現',
+    options: [
+      '增加分析的細胞總數，以提高histogram的統計信度',
+      '搭配phospho-Histone H3抗體螢光染色，因為此蛋白只在M期（尤其是染色質濃縮時）才會大量表現，G2期細胞則不表現',
+      '使用Annexin V染色，區分細胞是否已經開始凋亡',
+      '重複多次PI染色，計算標準差來排除實驗誤差'
+    ],
+    explanation: 'G2期與M期細胞的DNA含量都是4N，光靠PI染色無法區分。但phospho-Histone H3是M期（尤其prophase以後）專一表現的蛋白，搭配這個抗體染色，可以在4N這群細胞中，進一步分辨「已進入M期」與「仍停留在G2期」的細胞。'
+  },
+  { 
+    question: '低劑量抗癌藥物處理後，細胞主要呈現「G2/M peak增高、sub-G1輕微上升」；高劑量處理後，則呈現「G1、S、G2/M peak皆明顯下降、sub-G1大幅增加」。下列解釋何者最合理？', 
+    answer: '低劑量時，DNA損傷程度較輕，細胞優先嘗試在G2 checkpoint進行修復；高劑量時，損傷過於嚴重，細胞大量轉向凋亡路徑',
+    options: [
+      '低劑量時，DNA損傷程度較輕，細胞優先嘗試在G2 checkpoint進行修復；高劑量時，損傷過於嚴重，細胞大量轉向凋亡路徑',
+      '低劑量與高劑量的作用機制完全不同，低劑量單純促進細胞增殖，與DNA損傷無關',
+      'Sub-G1的出現與藥物劑量無關，純粹是細胞培養時間過長導致的自然老化',
+      '高劑量處理後細胞週期各期比例下降，代表細胞已經恢復正常分裂，不再需要checkpoint監控'
+    ],
+    explanation: '這是典型的劑量-反應關係——輕度DNA損傷時，細胞會啟動修復機制並暫時停滯在checkpoint（G2/M增高）；但當損傷程度超過細胞修復能力時，細胞會轉向啟動凋亡程序（sub-G1大幅增加，其餘各期比例因細胞死亡而下降）。'
+  },
+  { 
+  question: '下列何主題與流式細胞儀無關？', 
+  answer: '西方墨點法（Western blot）分析蛋白質分子量',
+  options: [
+    '細胞週期分析（Cell cycle analysis）',
+    '細胞凋亡偵測（Apoptosis detection）',
+    '細胞表面標記物分析（Surface marker analysis）',
+    '西方墨點法（Western blot）分析蛋白質分子量'
+  ],
+  explanation: '流式細胞儀是分析單一細胞層級的螢光/散射光訊號（如DNA含量、表面抗原、凋亡標記等），而Western blot是分析蛋白質分子量與表現量的生化技術，兩者原理與應用範疇不同。'
+},
+];
+
+let currentQuestion = 0;
+let correctCount = 0;
+let startTime = Date.now();
+let timerInterval = null;
+let answered = false;
+let shuffledQuestions = [];
+
+function initGame() {
+  shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
+  showQuestion();
+  startTimer();
+
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && answered) {
+      nextQuestion();
+    }
+  });
+}
+
+function showQuestion() {
+  answered = false;
+  const q = shuffledQuestions[currentQuestion];
+  document.getElementById('progress').textContent = (currentQuestion + 1) + '/' + shuffledQuestions.length;
+  document.getElementById('questionText').textContent = q.question;
+  document.getElementById('feedback').classList.remove('show');
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const optionsArea = document.getElementById('optionsArea');
+  optionsArea.innerHTML = '';
+
+  const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+  shuffledOptions.forEach((opt) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(btn, opt === q.answer);
+    optionsArea.appendChild(btn);
+  });
+}
+
+function selectAnswer(btn, isCorrect) {
+  if (answered) return;
+
+  const feedback = document.getElementById('feedback');
+  feedback.classList.add('show');
+
+  if (isCorrect) {
+    answered = true;
+    btn.classList.add('correct');
+    btn.disabled = true;
+    correctCount++;
+    document.getElementById('correct').textContent = correctCount;
+    feedback.classList.add('success');
+    feedback.classList.remove('error');
+    feedback.textContent = '✓ 正確';
+    document.getElementById('nextBtn').style.display = 'inline-block';
+
+    const allBtns = document.querySelectorAll('.option-btn');
+    allBtns.forEach(b => b.disabled = true);
+  } else {
+    btn.classList.add('incorrect');
+    btn.disabled = true;
+    feedback.classList.add('error');
+    feedback.classList.remove('success');
+    feedback.textContent = '✗ 錯誤，再試一次';
+  }
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= shuffledQuestions.length) {
+    showResults();
+  } else {
+    showQuestion();
+  }
+}
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    document.getElementById('timer').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }, 100);
+}
+
+function showResults() {
+  clearInterval(timerInterval);
+
+  const accuracy = Math.round((correctCount / shuffledQuestions.length) * 100);
+  document.getElementById('accuracy').textContent = accuracy + '%';
+
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  document.getElementById('finalTime').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+
+  document.getElementById('resultOverlay').classList.add('show');
+}
+
+initGame();
+</script>
+</body>
+</html>
