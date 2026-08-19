@@ -347,7 +347,6 @@
 
 <script>
 const allQuestions = [
-
   { type: 3, question: '下列何者的Ca²⁺濃度低於細胞外液（extracellular fluid）？', 
     answer: 'Cytosol',
     options: [ 'Cytosol', 'Mitochondria', 'ER (Endoplasmic Reticulum)', 'Chloroplast' ], explanation: 0 },
@@ -364,9 +363,8 @@ const allQuestions = [
     'APC需要在M checkpoint（SAC）通過後才會被活化',
     'APC除了促進進入anaphase，也負責降解cyclin B，使CDK1活性下降，讓細胞得以離開M期',
     'APC的活化與MPF（M-phase Promoting Factor）無關，兩者是各自獨立、互不影響的調控系統'], explanation: 'MPF（CDK1+cyclin B）促使細胞進入M期並活化APC，而APC活化後又會降解cyclin B使MPF失活，兩者是緊密相關、互相調控的系統，並非各自獨立' },
-
-];
   { type: 3, question: '下列何者不是腫瘤抑制因子（Tumor Suppressor）？', answer: 'Growth factor', options: ['p53', 'p21', 'pRb', 'Growth factor'], explanation: 'p53、p21、pRb皆為腫瘤抑制因子，功能是抑制細胞週期進行、促進DNA修復或凋亡。Growth factor（生長因子）則是促進細胞增殖的訊號分子，透過活化RTK等受體啟動下游路徑（如Ras-MAPK）促進細胞分裂，屬於原致癌基因（proto-oncogene）範疇，而非腫瘤抑制因子。腫瘤抑制因子功能喪失會致癌，原致癌基因功能過度活化會致癌。' },
+];
 
 /*
 const allQuestions = [
@@ -402,16 +400,30 @@ let answers = [];
 let startTime = Date.now();
 let timerInterval = null;
 let selectedAnswer = null;
+let answered = false;
+let shuffledQuestions = [];
 
 function initGame() {
-  document.getElementById('progress').textContent = '1/' + allQuestions.length;
+  shuffledQuestions = [...allQuestions].sort(() => Math.random() - 0.5);
+  document.getElementById('progress').textContent = '1/' + shuffledQuestions.length;
   showQuestion();
   startTimer();
+
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      if (answered) {
+        nextQuestion();
+      } else {
+        submitAnswer();
+      }
+    }
+  });
 }
 
 function showQuestion() {
-  const q = allQuestions[currentQuestion];
-  document.getElementById('questionProgress').textContent = '第 ' + (currentQuestion + 1) + ' 題 / 共 ' + allQuestions.length + ' 題';
+  answered = false;
+  const q = shuffledQuestions[currentQuestion];
+  document.getElementById('questionProgress').textContent = '第 ' + (currentQuestion + 1) + ' 題 / 共 ' + shuffledQuestions.length + ' 題';
   document.getElementById('questionType').textContent = typeNames[q.type];
   document.getElementById('questionText').textContent = q.question;
   document.getElementById('feedback').classList.remove('show');
@@ -430,6 +442,9 @@ function showQuestion() {
   } else if (q.type === 9) {
     renderTrueFalse(q, contentArea);
   }
+
+  document.getElementById('submitBtn').textContent = '確認答案';
+  document.getElementById('submitBtn').onclick = submitAnswer;
 }
 
 function renderAutoSelect(q, container) {
@@ -445,7 +460,8 @@ function renderAutoSelect(q, container) {
 
 function renderSelect(q, container) {
   if (!q.options) return;
-  q.options.forEach(opt => {
+  const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+  shuffledOptions.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
     btn.textContent = opt;
@@ -461,6 +477,7 @@ function renderText(q, container) {
   input.placeholder = '輸入答案';
   input.onchange = () => selectedAnswer = input.value.trim();
   container.appendChild(input);
+  input.focus();
 }
 
 function renderTrueFalse(q, container) {
@@ -518,12 +535,15 @@ function shuffle(arr) {
 }
 
 function submitAnswer() {
+  if (answered) return;
+
   if (selectedAnswer === null && typeof selectedAnswer !== 'boolean') {
     alert('請選擇或輸入答案');
     return;
   }
   
-  const q = allQuestions[currentQuestion];
+  answered = true;
+  const q = shuffledQuestions[currentQuestion];
   const correct = checkAnswer(q, selectedAnswer);
   
   const feedback = document.getElementById('feedback');
@@ -543,6 +563,8 @@ function submitAnswer() {
     feedbackHTML = '✗ 錯誤';
     if (q.type === 9) {
       feedbackHTML += '，正確答案是：' + (q.answer ? 'O' : 'X');
+    } else {
+      feedbackHTML += '，正確答案是：' + q.answer;
     }
     answers.push({ q: currentQuestion + 1, correct: false });
   }
@@ -566,11 +588,9 @@ function checkAnswer(q, answer) {
 
 function nextQuestion() {
   currentQuestion++;
-  if (currentQuestion >= allQuestions.length) {
+  if (currentQuestion >= shuffledQuestions.length) {
     showResults();
   } else {
-    document.getElementById('submitBtn').textContent = '確認答案';
-    document.getElementById('submitBtn').onclick = submitAnswer;
     showQuestion();
   }
 }
@@ -588,9 +608,9 @@ function startTimer() {
 function showResults() {
   clearInterval(timerInterval);
   
-  const accuracy = Math.round((correctCount / allQuestions.length) * 100);
+  const accuracy = Math.round((correctCount / shuffledQuestions.length) * 100);
   document.getElementById('accuracy').textContent = accuracy + '%';
-  document.getElementById('finalCorrect').textContent = correctCount + '/' + allQuestions.length;
+  document.getElementById('finalCorrect').textContent = correctCount + '/' + shuffledQuestions.length;
   
   const elapsed = Math.floor((Date.now() - startTime) / 1000);
   const mins = Math.floor(elapsed / 60);
