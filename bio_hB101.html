@@ -394,16 +394,30 @@ let answers = [];
 let startTime = Date.now();
 let timerInterval = null;
 let selectedAnswer = null;
+let answered = false;
+let shuffledQuestions = [];
 
 function initGame() {
-  document.getElementById('progress').textContent = '1/' + allQuestions.length;
+  shuffledQuestions = [...allQuestions].sort(() => Math.random() - 0.5);
+  document.getElementById('progress').textContent = '1/' + shuffledQuestions.length;
   showQuestion();
   startTimer();
+
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      if (answered) {
+        nextQuestion();
+      } else {
+        submitAnswer();
+      }
+    }
+  });
 }
 
 function showQuestion() {
-  const q = allQuestions[currentQuestion];
-  document.getElementById('questionProgress').textContent = '第 ' + (currentQuestion + 1) + ' 題 / 共 ' + allQuestions.length + ' 題';
+  answered = false;
+  const q = shuffledQuestions[currentQuestion];
+  document.getElementById('questionProgress').textContent = '第 ' + (currentQuestion + 1) + ' 題 / 共 ' + shuffledQuestions.length + ' 題';
   document.getElementById('questionType').textContent = typeNames[q.type];
   document.getElementById('questionText').textContent = q.question;
   document.getElementById('feedback').classList.remove('show');
@@ -422,6 +436,9 @@ function showQuestion() {
   } else if (q.type === 9) {
     renderTrueFalse(q, contentArea);
   }
+
+  document.getElementById('submitBtn').textContent = '確認答案';
+  document.getElementById('submitBtn').onclick = submitAnswer;
 }
 
 function renderAutoSelect(q, container) {
@@ -437,7 +454,8 @@ function renderAutoSelect(q, container) {
 
 function renderSelect(q, container) {
   if (!q.options) return;
-  q.options.forEach(opt => {
+  const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+  shuffledOptions.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
     btn.textContent = opt;
@@ -453,6 +471,7 @@ function renderText(q, container) {
   input.placeholder = '輸入答案';
   input.onchange = () => selectedAnswer = input.value.trim();
   container.appendChild(input);
+  input.focus();
 }
 
 function renderTrueFalse(q, container) {
@@ -510,12 +529,15 @@ function shuffle(arr) {
 }
 
 function submitAnswer() {
+  if (answered) return;
+
   if (selectedAnswer === null && typeof selectedAnswer !== 'boolean') {
     alert('請選擇或輸入答案');
     return;
   }
   
-  const q = allQuestions[currentQuestion];
+  answered = true;
+  const q = shuffledQuestions[currentQuestion];
   const correct = checkAnswer(q, selectedAnswer);
   
   const feedback = document.getElementById('feedback');
@@ -535,6 +557,8 @@ function submitAnswer() {
     feedbackHTML = '✗ 錯誤';
     if (q.type === 9) {
       feedbackHTML += '，正確答案是：' + (q.answer ? 'O' : 'X');
+    } else {
+      feedbackHTML += '，正確答案是：' + q.answer;
     }
     answers.push({ q: currentQuestion + 1, correct: false });
   }
@@ -558,11 +582,9 @@ function checkAnswer(q, answer) {
 
 function nextQuestion() {
   currentQuestion++;
-  if (currentQuestion >= allQuestions.length) {
+  if (currentQuestion >= shuffledQuestions.length) {
     showResults();
   } else {
-    document.getElementById('submitBtn').textContent = '確認答案';
-    document.getElementById('submitBtn').onclick = submitAnswer;
     showQuestion();
   }
 }
@@ -580,9 +602,9 @@ function startTimer() {
 function showResults() {
   clearInterval(timerInterval);
   
-  const accuracy = Math.round((correctCount / allQuestions.length) * 100);
+  const accuracy = Math.round((correctCount / shuffledQuestions.length) * 100);
   document.getElementById('accuracy').textContent = accuracy + '%';
-  document.getElementById('finalCorrect').textContent = correctCount + '/' + allQuestions.length;
+  document.getElementById('finalCorrect').textContent = correctCount + '/' + shuffledQuestions.length;
   
   const elapsed = Math.floor((Date.now() - startTime) / 1000);
   const mins = Math.floor(elapsed / 60);
