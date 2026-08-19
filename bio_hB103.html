@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>基礎生化與細胞生物學1</title>
+<title>基礎生化與細胞生物學3</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -284,7 +284,7 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>基礎生化與細胞生物學1</h1>
+  <h1>基礎生化與細胞生物學3</h1>
   <p class="subtitle">完成所有題目</p>
 
   <div class="stats">
@@ -353,6 +353,11 @@ const allQuestions = [
     options: [ 'Cytosol', 'Mitochondria', 'ER (Endoplasmic Reticulum)', 'Chloroplast' ], explanation: 0 },
   { type: 3, question: 'What is the receptor of insulin？', answer: 'RTK', options: ['GPCR', 'RTK', 'G protein', 'ion channel receptor'], explanation: 'explaination' },
   { type: 3, question: 'Comodulin 用什麼 motif bond Ca2+？', answer: 'EF hand motif', options: ['EF Hand Motif', 'Zinc finger', 'Leucine Zipper', 'Helix Loop Helix'], explanation: 0 },
+  { type: 3, question: 'M checkpoint 是發生在哪一個階段？', answer: 'Metaphase', options: ['Metaphase', 'Prophase', 'Anaphase', 'Telophase'], explanation: 'M phase 後才會啟動 seperase，' },
+  { type: 3, question: '下列關於M checkpoint（Spindle Assembly Checkpoint, SAC）與姊妹染色分體分離機制的敘述，何者正確？', answer: 'M checkpoint通過後，APC/C促使securin被泛素化並降解，進而釋放separase去切割cohesin', options: ['Securin會直接切割cohesin，使姊妹染色分體分離',
+    'APC/C被活化後，會直接磷酸化cohesin，導致其構型改變而脫落',
+    'M checkpoint通過後，APC/C促使securin被泛素化並降解，進而釋放separase去切割cohesin',
+    'Separase平常处于活化狀態，需要securin進一步活化才能切割cohesin'], explanation: '正確機制路徑：M checkpoint通過 → APC/C活化 → securin被泛素化降解 → separase被釋放 → 切割cohesin → 姊妹染色分體分離。Securin本身不具切割酵素活性，真正切割cohesin的是separase；APC/C是泛素化securin而非直接磷酸化cohesin；separase平常被securin抑制，並非活化狀態。' },
 
 ];
 
