@@ -347,35 +347,15 @@
 
 <script>
 const allQuestions = [
-  { type: 9, question: '動物的細胞比植物細胞大', answer: false, explanation: '植物的比較大，因為植物有central vacuole' },
-  { type: 4, question: '植物的細胞壁___（是／不是）細胞外基質', answer: '是', explanation: 'ECM的成分在cell內產生，由exocytosis分泌到細胞膜外，只要過了細胞膜就是細胞外，所以細胞壁是ECM' },
-  { type: 3, question: '下列何者不是ECM？', answer: 'integrin', options: ['collagen', 'proteoglycan', 'integrin', 'laminin'], explanation: 'integrin是CAM細胞黏附分子，integti負責連接cell及ECM' },
-  { type: 4, question: '維生素A的前驅物為___', answer: '類胡蘿蔔素', explanation: 0 },
-  { type: 3, question: '由Na/K pump導致的secondary active transport 是？', answer: 'SGLT', options: ['GluT', 'SGLT', 'K⁺ leak channel', 'V-type ATPase'], explanation: '小腸吸收Glc不是使用一般GluT，而是使用由Na/K pump造成的次級主動運輸，將Na和Glc同時運進cell' },
-  { type: 3, question: '下列關於葡萄糖轉運蛋白（GLUT）的敘述，何者正確？', answer: 'GLUT2的Km值高，親和力低，適合作為血糖濃度的感應器', options: ['GLUT1主要表現於骨骼肌與脂肪組織，且需要insulin刺激才能運輸葡萄糖', 'GLUT5主要負責運輸葡萄糖，具有高度insulin依賴性', 'GLUT2的Km值高，親和力低，適合作為血糖濃度的感應器', 'GLUT4廣泛分布於全身細胞，屬於insulin-independent的轉運蛋白'], explanation: 0 },
   { type: 9, question: 'liver不用GluT4，所以肝臟使用Glc與insulin無關', answer: false, explanation: '肝臟不表現 GLUT4，而是表現 GLUT2，因此葡萄糖進入肝細胞不依賴胰島素。雖然 Glc 進入肝細胞不依賴 insulin，但肝臟接下來是否利用、儲存 glucose，仍然高度受到 insulin 調控。' },
-  { type: 3, 
-    question: '全酵素 (Holoenzyme) 的組成是？', 
-    answer: 'Apoenzyme + Cofactor',
-    options: ['Apoenzyme + Cofactor', 'Apoenzyme + Coenzyme only', 'Prosthetic group + Metal ion', 'Apoenzyme本身即具活性'],
-    explanation: '全酵素 = 主酶(蛋白質部分) + 輔助因子，缺少Cofactor則Apoenzyme無活性'
-  },
-  
-  { 
-    type: 9, 
-    question: 'Prosthetic group（輔基）與酵素蛋白是以共價鍵緊密結合的', 
-    answer: true,
-    explanation: '輔基特徵就是具有共價鍵(covalent bonding)，屬於緊密結合(tight)'
-  },
-  
-
-  { 
-    type: 4, 
-    question: 'Fe²⁺以Heme形式存在時，主要分布在____中', 
-    answer: 'Cytochrome',
-    explanation: 'Heme(血基質)存在於Cytochrome(細胞色素)中；Non-heme則存在於Fe-S cluster中'
-  },
-
+  { type: 3, question: '下列關於M checkpoint（Spindle Assembly Checkpoint, SAC）與姊妹染色分體分離機制的敘述，何者正確？', answer: 'M checkpoint通過後，APC/C促使securin被泛素化並降解，進而釋放separase去切割cohesin', options: ['Securin會直接切割cohesin，使姊妹染色分體分離', 'APC/C被活化後，會直接磷酸化cohesin，導致其構型改變而脫落', 'M checkpoint通過後，APC/C促使securin被泛素化並降解，進而釋放separase去切割cohesin', 'Separase平常处于活化狀態，需要securin進一步活化才能切割cohesin'], explanation: '正確機制路徑：M checkpoint通過 → APC/C活化 → securin被泛素化降解 → separase被釋放 → 切割cohesin → 姊妹染色分體分離。Securin本身不具切割酵素活性，真正切割cohesin的是separase；APC/C是泛素化securin而非直接磷酸化cohesin；separase平常被securin抑制，並非活化狀態。' },
+  { type: 3, question: 'M checkpoint 是發生在哪一個階段？', answer: 'Metaphase', options: ['Metaphase', 'Prophase', 'Anaphase', 'Telophase'], explanation: 'M phase 後才會啟動 seperase，' },
+  { type: 3, question: '神經元表現的GLUT3具有低Km值，此特性對腦部葡萄糖供應的生理意義為何？', answer: '即使血糖濃度偏低，GLUT3仍能有效率地運輸葡萄糖，確保腦部能量供應穩定', options: ['血糖濃度需要達到很高時，GLUT3才能開始運輸葡萄糖', 'GLUT3對葡萄糖親和力低，運輸效率會隨血糖濃度線性上升', '即使血糖濃度偏低，GLUT3仍能有效率地運輸葡萄糖，確保腦部能量供應穩定', '低Km值代表GLUT3需要insulin輔助才能達到最大運輸速率'], explanation: 0 },
+  { type: 9, question: 'Prosthetic group（輔基）與酵素蛋白是以共價鍵緊密結合的', answer: true, explanation: '輔基特徵就是具有共價鍵(covalent bonding)，屬於緊密結合(tight)' },
+  { type: 3, question: '原本在細胞內的vesicle，其內膜在vesicle要融合出cell時，會變成細胞膜的___', answer: '外膜', options: ['內膜', '外膜', '隨機'], explanation: '原先碰到細胞質的膜在融合後一樣是碰到細胞質' },
+  { type: 4, question: '不可逆抑制劑之所以不可逆是因為抑制劑與酵素產生___', answer: '共價鍵', explanation: 0 },
+  { type: 4, question: '維生素A的前驅物為___', answer: '類胡蘿蔔素', explanation: 0 },
+  { type: 4, question: '照光時，葉綠體內囊腔內pH值是___', answer: '5', explanation: 0 },
 ];
 
 /*
