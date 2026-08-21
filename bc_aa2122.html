@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>分類配對遊戲</title>
+    <title>辨識第21、22個AA</title>
     <style>
       * { box-sizing: border-box; }
       body {
@@ -102,6 +102,13 @@
         color: #2B3A55;
       }
 
+      .category-item img {
+        max-width: 100%;
+        max-height: 60px;
+        display: block;
+        object-fit: contain;
+      }
+
       .items-container {
         background: white;
         border: 0.5px solid #ddd;
@@ -137,6 +144,7 @@
         background: #f9f9f9;
       }
       .item-btn[data-selected="true"] {
+        flex: 1;
         background: #378ADD;
         color: white;
         border-color: #378ADD;
@@ -152,6 +160,13 @@
         color: #2B6E4F;
         cursor: default;
         opacity: 0.6;
+      }
+
+      .item-btn img {
+        max-width: 80px;
+        max-height: 80px;
+        display: block;
+        object-fit: contain;
       }
 
       .result-overlay {
@@ -204,6 +219,11 @@
         color: #378ADD;
       }
 
+      .result-button-group {
+        display: flex;
+        gap: 10px;
+      }
+
       .result-button {
         background: #378ADD;
         color: white;
@@ -219,6 +239,13 @@
       .result-button:hover {
         background: #2970c7;
       }
+
+      .result-button.secondary {
+        background: white;
+        color: #378ADD;
+        border: 1px solid #378ADD;
+      }
+      .result-button.secondary:hover { background: #EAF3FC; }
     </style>
   </head>
   <body>
@@ -255,12 +282,18 @@
             <div class="result-stat-value" id="finalTime">0:00</div>
           </div>
 
-          <button class="result-button" onclick="location.reload()">重新開始</button>
+          <div class="result-button-group">
+            <button class="result-button secondary" onclick="reviewAnswers()">複習</button>
+            <button class="result-button" onclick="location.reload()">重新開始</button>
+          </div>
         </div>
       </div>
     </div>
 
     <script>
+    // itemType: 'text' 或 'image'
+    const itemType = 'text';
+
     const categories = [
   { name: '#21', color: '#FFE135' },
   { name: '#22', color: '#B0C4DE' },
@@ -268,14 +301,24 @@
 
 const items = [
   { text: 'Sec', category: 0 },
+  { text: 'selenocysteine', category: 0 },
+  { text: 'U', category: 0 },
   { text: 'UGA', category: 0 },
   { text: 'opal codon', category: 0 },
   { text: 'Found in humans', category: 0 },
   { text: 'Pyl', category: 1 },
+  { text: 'pyrrolysine', category: 1 },
+  { text: 'O', category: 1 },
   { text: 'UAG', category: 1 },
   { text: 'amber codon', category: 1 },
   { text: 'Found in methanogen', category: 1 },
+  { text: 'UAA', category: -1 },
+  { text: 'ochre codon', category: -1 },
+
 ];
+
+      // 支援 category: -1 的干擾項；本題的 UAA及ochre codon 為干擾項
+      const totalToMatch = items.filter(item => item.category !== -1).length;
 
       let selectedItemIdx = null;
       let matchedCount = 0;
@@ -288,7 +331,7 @@ const items = [
         const shuffled = [...items].sort(() => Math.random() - 0.5);
 
         // 更新計數顯示
-        document.getElementById('matched').textContent = '0/' + items.length;
+        document.getElementById('matched').textContent = '0/' + totalToMatch;
 
         // 生成分類框
         const categoriesContainer = document.getElementById('categoriesContainer');
@@ -320,7 +363,9 @@ const items = [
           const realIdx = items.findIndex(i => i.text === item.text);
           const btn = document.createElement('button');
           btn.className = 'item-btn';
-          btn.textContent = item.text;
+          if (itemType === 'image') {
+            const img = document.createElement('img'); img.src = item.text; img.alt = 'item'; btn.appendChild(img);
+          } else { btn.textContent = item.text; }
           btn.dataset.index = realIdx;
           btn.onclick = () => selectItem(btn, realIdx);
           itemsContainer.appendChild(btn);
@@ -343,7 +388,15 @@ const items = [
       function selectCategory(catIdx) {
         if (selectedItemIdx === null) return;
 
-        const correctCategory = items[selectedItemIdx].category;
+        const item = items[selectedItemIdx];
+        const correctCategory = item.category;
+
+        if (correctCategory === -1) {
+          const selectedBtn = document.querySelector('.item-btn[data-selected="true"]');
+          selectedBtn.classList.add('incorrect');
+          setTimeout(() => selectedBtn.classList.remove('incorrect'), 500);
+          return;
+        }
 
         if (correctCategory === catIdx) {
           const selectedBtn = document.querySelector('.item-btn[data-selected="true"]');
@@ -353,15 +406,17 @@ const items = [
 
           const categoryItem = document.createElement('div');
           categoryItem.className = 'category-item';
-          categoryItem.textContent = items[selectedItemIdx].text;
+          if (itemType === 'image') {
+            const img = document.createElement('img'); img.src = item.text; img.alt = 'item'; categoryItem.appendChild(img);
+          } else { categoryItem.textContent = item.text; }
           categoryContainers[catIdx].appendChild(categoryItem);
 
           matchedCount++;
-          document.getElementById('matched').textContent = matchedCount + '/' + items.length;
+          document.getElementById('matched').textContent = matchedCount + '/' + totalToMatch;
 
           selectedItemIdx = null;
 
-          if (matchedCount === items.length) {
+          if (matchedCount === totalToMatch) {
             showResults();
           }
         } else {
@@ -393,6 +448,10 @@ const items = [
 
         document.getElementById('finalTime').textContent = timeStr;
         document.getElementById('resultOverlay').classList.add('show');
+      }
+
+      function reviewAnswers() {
+        document.getElementById('resultOverlay').classList.remove('show');
       }
 
       initGame();
