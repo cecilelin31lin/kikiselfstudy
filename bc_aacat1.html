@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>分類配對遊戲</title>
+    <title>AA結構特質分類</title>
     <style>
       * { box-sizing: border-box; }
       body {
@@ -101,6 +101,12 @@
         font-size: 12px;
         color: #2B3A55;
       }
+      .category-item img {
+        max-width: 100%;
+        max-height: 60px;
+        display: block;
+        object-fit: contain;
+      }
 
       .items-container {
         background: white;
@@ -153,6 +159,12 @@
         cursor: default;
         opacity: 0.6;
       }
+      .item-btn img {
+        max-width: 80px;
+        max-height: 80px;
+        display: block;
+        object-fit: contain;
+      }
 
       .result-overlay {
         display: none;
@@ -204,7 +216,13 @@
         color: #378ADD;
       }
 
+      .result-button-group {
+        display: flex;
+        gap: 10px;
+      }
+
       .result-button {
+        flex: 1;
         background: #378ADD;
         color: white;
         border: none;
@@ -219,11 +237,20 @@
       .result-button:hover {
         background: #2970c7;
       }
+
+      .result-button.secondary {
+        background: white;
+        color: #378ADD;
+        border: 1px solid #378ADD;
+      }
+      .result-button.secondary:hover {
+        background: #EAF3FC;
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
-      <h1>依AA結構特質分類</h1>
+      <h1>AA結構特質分類</h1>
       <p class="subtitle">點擊選項，然後點擊分類框</p>
 
       <div class="stats">
@@ -255,12 +282,18 @@
             <div class="result-stat-value" id="finalTime">0:00</div>
           </div>
 
-          <button class="result-button" onclick="location.reload()">重新開始</button>
+          <div class="result-button-group">
+            <button class="result-button secondary" onclick="reviewAnswers()">複習</button>
+            <button class="result-button" onclick="location.reload()">重新開始</button>
+          </div>
         </div>
       </div>
     </div>
 
     <script>
+      // itemType: 'text' 或 'image' — 決定 items 裡的內容要當文字顯示還是圖片顯示
+      const itemType = 'text';
+
 const categories = [
   { name: 'Polar but uncharged', color: '#FFE135' },
   { name: 'Acidic', color: '#4FA8D8' },
@@ -292,6 +325,9 @@ const items = [
   { text: 'Pro', category: 4 },
 ];
 
+      // 需要被分類完成的項目數（若未來加入 category: -1 的干擾項，會自動排除）
+      const totalToMatch = items.filter(item => item.category !== -1).length;
+
       let selectedItemIdx = null;
       let matchedCount = 0;
       let startTime = Date.now();
@@ -303,7 +339,7 @@ const items = [
         const shuffled = [...items].sort(() => Math.random() - 0.5);
 
         // 更新計數顯示
-        document.getElementById('matched').textContent = '0/' + items.length;
+        document.getElementById('matched').textContent = '0/' + totalToMatch;
 
         // 生成分類框
         const categoriesContainer = document.getElementById('categoriesContainer');
@@ -331,11 +367,20 @@ const items = [
 
         // 生成選項按鈕
         const itemsContainer = document.getElementById('itemsContainer');
-        shuffled.forEach((item, idx) => {
-          const realIdx = items.findIndex(i => i.text === item.text);
+        shuffled.forEach((item) => {
+          const realIdx = items.indexOf(item);
           const btn = document.createElement('button');
           btn.className = 'item-btn';
-          btn.textContent = item.text;
+
+          if (itemType === 'image') {
+            const img = document.createElement('img');
+            img.src = item.text;
+            img.alt = 'item';
+            btn.appendChild(img);
+          } else {
+            btn.textContent = item.text;
+          }
+
           btn.dataset.index = realIdx;
           btn.onclick = () => selectItem(btn, realIdx);
           itemsContainer.appendChild(btn);
@@ -358,7 +403,18 @@ const items = [
       function selectCategory(catIdx) {
         if (selectedItemIdx === null) return;
 
-        const correctCategory = items[selectedItemIdx].category;
+        const item = items[selectedItemIdx];
+        const correctCategory = item.category;
+
+        // 模板支援 category: -1 的干擾項；本題目前沒有干擾項
+        if (correctCategory === -1) {
+          const selectedBtn = document.querySelector('.item-btn[data-selected="true"]');
+          selectedBtn.classList.add('incorrect');
+          setTimeout(() => {
+            selectedBtn.classList.remove('incorrect');
+          }, 500);
+          return;
+        }
 
         if (correctCategory === catIdx) {
           const selectedBtn = document.querySelector('.item-btn[data-selected="true"]');
@@ -368,15 +424,22 @@ const items = [
 
           const categoryItem = document.createElement('div');
           categoryItem.className = 'category-item';
-          categoryItem.textContent = items[selectedItemIdx].text;
+          if (itemType === 'image') {
+            const img = document.createElement('img');
+            img.src = item.text;
+            img.alt = 'item';
+            categoryItem.appendChild(img);
+          } else {
+            categoryItem.textContent = item.text;
+          }
           categoryContainers[catIdx].appendChild(categoryItem);
 
           matchedCount++;
-          document.getElementById('matched').textContent = matchedCount + '/' + items.length;
+          document.getElementById('matched').textContent = matchedCount + '/' + totalToMatch;
 
           selectedItemIdx = null;
 
-          if (matchedCount === items.length) {
+          if (matchedCount === totalToMatch) {
             showResults();
           }
         } else {
@@ -408,6 +471,10 @@ const items = [
 
         document.getElementById('finalTime').textContent = timeStr;
         document.getElementById('resultOverlay').classList.add('show');
+      }
+
+      function reviewAnswers() {
+        document.getElementById('resultOverlay').classList.remove('show');
       }
 
       initGame();
