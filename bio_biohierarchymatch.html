@@ -203,8 +203,14 @@
     font-weight: 600;
     color: #378ADD;
   }
+
+  .result-button-group {
+    display: flex;
+    gap: 10px;
+  }
   
   .result-button {
+    flex: 1;
     background: #378ADD;
     color: white;
     border: none;
@@ -218,6 +224,15 @@
   
   .result-button:hover {
     background: #2970c7;
+  }
+
+  .result-button.secondary {
+    background: white;
+    color: #378ADD;
+    border: 1px solid #378ADD;
+  }
+  .result-button.secondary:hover {
+    background: #EAF3FC;
   }
 </style>
 </head>
@@ -252,14 +267,17 @@
         <div class="result-stat-value" id="finalTime">0:00</div>
       </div>
       
-      <button class="result-button" onclick="location.reload()">重新開始</button>
+      <div class="result-button-group">
+        <button class="result-button secondary" onclick="reviewAnswers()">複習</button>
+        <button class="result-button" onclick="location.reload()">重新開始</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
 // shuffleSentences: 1 = 打亂句子順序顯示，0 = 依照原本順序顯示（不打亂）
-const shuffleSentences = 1;
+const shuffleSentences = 0;
 
 const pairs = [
   { word: 'Atom（原子）', sentence: '構成物質的最小單位' },
@@ -290,7 +308,8 @@ function initGame() {
   document.getElementById('matched').textContent = '0/' + pairs.length;
 
   const wordButtonsContainer = document.getElementById('wordButtonsContainer');
-  pairs.forEach(item => {
+  const shuffledWords = [...pairs].sort(() => Math.random() - 0.5);
+  shuffledWords.forEach(item => {
     const btn = document.createElement('button');
     btn.className = 'word-btn';
     btn.textContent = item.word;
@@ -382,6 +401,10 @@ function showResults() {
 
   document.getElementById('finalTime').textContent = timeStr;
   document.getElementById('resultOverlay').classList.add('show');
+}
+
+function reviewAnswers() {
+  document.getElementById('resultOverlay').classList.remove('show');
 }
 
 initGame();
