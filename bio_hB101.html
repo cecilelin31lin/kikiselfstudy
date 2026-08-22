@@ -280,6 +280,55 @@
   .result-button:hover {
     background: #2970c7;
   }
+
+  .review-container {
+    display: none;
+  }
+  .review-container.show {
+    display: block;
+  }
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .review-header h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+  .review-card {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .review-card.first-correct { border-left: 4px solid #4CAF7D; }
+  .review-card.had-wrong { border-left: 4px solid #E24B4A; }
+  .review-q {
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .review-line {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+  .review-wrong { color: #8B2323; }
+  .review-correct { color: #2B6E4F; }
+  .back-btn {
+    background: #378ADD;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
 </style>
 </head>
 <body>
@@ -343,6 +392,15 @@
       <button class="result-button" onclick="location.reload()">重新開始</button>
     </div>
   </div>
+
+  <div class="review-container" id="reviewContainer">
+    <div class="review-header">
+      <h2>📋 答題複習</h2>
+      <button class="back-btn" onclick="location.reload()">重新開始</button>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+
 </div>
 
 <script>
@@ -358,27 +416,7 @@ const allQuestions = [
   { type: 9, question: '吃進身體的食物，無論是大分子或是小分子，只要是在分解就會生成ATP', answer: false, explanation: '大分子分解屬於消化階段，得小分子及產熱，小分子分解屬於氧化分解，得ATP及熱' },
 ];
 
-/*
-const allQuestions = [
-  // 類型 2：自動選擇（自動生成干擾項）
-  { type: 2, question: '1+1=__', answer: '2', explanation: '基本數學運算' },
-  
-  // 類型 3：選擇題（需提供 options）
-  { type: 3, question: 'Q？', answer: 'A1', options: ['A1', 'A2', 'A3', 'A4'], explanation: 'explaination' },
-  
-  // 類型 4：填空題（文字輸入）
-  { type: 4, question: 'Qaaa___', answer: 'A', explanation: 'explanation' },
-  
-  // 類型 9：是非題（answer: true 或 false）
-  { type: 9, question: 'Q', answer: true, explanation: 'explanation' },
-  { type: 9, question: 'Q', answer: false, explanation: 'explanation' },
 
-  
-  // 沒有解析的例子
-  { type: 2, question: '2+2=__', answer: '4', explanation: 0 },
-  { type: 9, question: 'CO是強場配體', answer: true, explanation: 0 },
-];
-*/
 const typeNames = {
   2: '自動選擇',
   3: '選擇題',
@@ -387,79 +425,89 @@ const typeNames = {
 };
 
 let currentQuestion = 0;
-let correctCount = 0;
-let answers = [];
+let correctCount = 0; // 第一次就答對的題數
 let startTime = Date.now();
 let timerInterval = null;
 let selectedAnswer = null;
 let answered = false;
 let shuffledQuestions = [];
+let reviewLog = [];
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
 
 function initGame() {
-  shuffledQuestions = [...allQuestions].sort(() => Math.random() - 0.5);
+  shuffledQuestions = shuffle(allQuestions);
+  reviewLog = shuffledQuestions.map(q => ({
+    question: q.question,
+    type: q.type,
+    correctAnswer: displayAnswer(q.answer),
+    wrongAttempts: [],
+    gotCorrect: false,
+    explanation: q.explanation
+  }));
   showQuestion();
   startTimer();
 
   document.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-      if (answered) {
-        nextQuestion();
-      } else {
-        submitAnswer();
-      }
+      if (answered) nextQuestion();
+      else submitAnswer();
     }
   });
 }
 
+function displayAnswer(value) {
+  if (value === true) return 'O';
+  if (value === false) return 'X';
+  return String(value);
+}
+
 function showQuestion() {
   answered = false;
+  selectedAnswer = null;
   const q = shuffledQuestions[currentQuestion];
-  document.getElementById('progress').textContent = (currentQuestion + 1) + '/' + shuffledQuestions.length;
-  document.getElementById('questionProgress').textContent = '第 ' + (currentQuestion + 1) + ' 題 / 共 ' + shuffledQuestions.length + ' 題';
+
+  document.getElementById('progress').textContent =
+    (currentQuestion + 1) + '/' + shuffledQuestions.length;
+  document.getElementById('questionProgress').textContent =
+    '第 ' + (currentQuestion + 1) + ' 題 / 共 ' + shuffledQuestions.length + ' 題';
   document.getElementById('questionType').textContent = typeNames[q.type];
   document.getElementById('questionText').textContent = q.question;
-  document.getElementById('feedback').classList.remove('show');
-  
-  selectedAnswer = null;
-  
+
+  const feedback = document.getElementById('feedback');
+  feedback.className = 'feedback';
+  feedback.innerHTML = '';
+
   const contentArea = document.getElementById('contentArea');
   contentArea.innerHTML = '';
-  
-  if (q.type === 2) {
-    renderAutoSelect(q, contentArea);
-  } else if (q.type === 3) {
-    renderSelect(q, contentArea);
-  } else if (q.type === 4) {
-    renderText(q, contentArea);
-  } else if (q.type === 9) {
-    renderTrueFalse(q, contentArea);
-  }
 
-  document.getElementById('submitBtn').textContent = '確認答案';
-  document.getElementById('submitBtn').onclick = submitAnswer;
+  if (q.type === 2) renderAutoSelect(q, contentArea);
+  else if (q.type === 3) renderSelect(q, contentArea);
+  else if (q.type === 4) renderText(q, contentArea);
+  else if (q.type === 9) renderTrueFalse(q, contentArea);
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.textContent = '確認答案';
+  submitBtn.onclick = submitAnswer;
 }
 
 function renderAutoSelect(q, container) {
-  const options = generateOptions(q.answer);
-  options.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.textContent = opt;
-    btn.onclick = () => selectOption(btn, opt);
-    container.appendChild(btn);
-  });
+  generateOptions(q.answer).forEach(opt => makeOptionButton(container, opt, opt));
 }
 
 function renderSelect(q, container) {
   if (!q.options) return;
-  const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
-  shuffledOptions.forEach(opt => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.textContent = opt;
-    btn.onclick = () => selectOption(btn, opt);
-    container.appendChild(btn);
-  });
+  shuffle(q.options).forEach(opt => makeOptionButton(container, opt, opt));
+}
+
+function makeOptionButton(container, label, value) {
+  const btn = document.createElement('button');
+  btn.className = 'option-btn';
+  btn.textContent = label;
+  btn.onclick = () => selectOption(btn, value);
+  container.appendChild(btn);
 }
 
 function renderText(q, container) {
@@ -467,124 +515,124 @@ function renderText(q, container) {
   input.type = 'text';
   input.className = 'input-field';
   input.placeholder = '輸入答案';
-  input.onchange = () => selectedAnswer = input.value.trim();
+  input.addEventListener('input', () => selectedAnswer = input.value.trim());
   container.appendChild(input);
   input.focus();
 }
 
 function renderTrueFalse(q, container) {
-  const btnTrue = document.createElement('button');
-  btnTrue.className = 'option-btn';
-  btnTrue.textContent = 'O';
-  btnTrue.dataset.value = 'true';
-  btnTrue.onclick = () => selectTrueFalse(btnTrue, true);
-  
-  const btnFalse = document.createElement('button');
-  btnFalse.className = 'option-btn';
-  btnFalse.textContent = 'X';
-  btnFalse.dataset.value = 'false';
-  btnFalse.onclick = () => selectTrueFalse(btnFalse, false);
-  
-  container.appendChild(btnTrue);
-  container.appendChild(btnFalse);
-}
-
-function selectTrueFalse(btn, value) {
-  const prev = document.querySelector('.option-btn[data-selected="true"]');
-  if (prev) {
-    prev.removeAttribute('data-selected');
-    prev.style.background = '';
-    prev.style.color = '';
-  }
-  btn.setAttribute('data-selected', 'true');
-  btn.style.background = btn.dataset.value === 'true' ? '#4CAF7D' : '#E24B4A';
-  btn.style.color = 'white';
-  selectedAnswer = value;
+  makeOptionButton(container, 'O', true);
+  makeOptionButton(container, 'X', false);
 }
 
 function selectOption(btn, value) {
-  const prev = document.querySelector('.option-btn[data-selected="true"]');
-  if (prev) prev.removeAttribute('data-selected');
+  if (answered || btn.disabled) return;
+  document.querySelectorAll('.option-btn[data-selected="true"]').forEach(b => {
+    b.removeAttribute('data-selected');
+  });
   btn.setAttribute('data-selected', 'true');
   selectedAnswer = value;
 }
 
 function generateOptions(answer) {
-  if (!isNaN(answer)) {
-    const num = parseInt(answer);
+  if (!isNaN(answer) && String(answer).trim() !== '') {
+    const num = Number(answer);
     return shuffle([
-      num.toString(),
-      (num + 1).toString(),
-      (num - 1).toString(),
-      (num + 2).toString()
+      String(answer),
+      String(num + 1),
+      String(num - 1),
+      String(num + 2)
     ]);
   }
-  return [answer];
+  return shuffle([String(answer), '以上皆是', '以上皆非', '不一定']);
 }
 
-function shuffle(arr) {
-  return arr.sort(() => Math.random() - 0.5);
+function normalize(v) {
+  return String(v).trim().toLowerCase();
+}
+
+function isAnswerCorrect(q, value) {
+  if (q.type === 9) return value === q.answer;
+  return normalize(value) === normalize(q.answer);
 }
 
 function submitAnswer() {
-  if (answered) return;
-
-  if (selectedAnswer === null && typeof selectedAnswer !== 'boolean') {
-    alert('請選擇或輸入答案');
+  if (answered) {
+    nextQuestion();
     return;
   }
-  
-  answered = true;
-  const q = shuffledQuestions[currentQuestion];
-  const correct = checkAnswer(q, selectedAnswer);
-  
-  const feedback = document.getElementById('feedback');
-  feedback.classList.add('show');
-  
-  let feedbackHTML = '';
-  if (correct) {
-    correctCount++;
-    document.getElementById('correct').textContent = correctCount;
-    feedback.classList.add('success');
-    feedback.classList.remove('error');
-    feedbackHTML = '✓ 正確';
-    answers.push({ q: currentQuestion + 1, correct: true });
-  } else {
-    feedback.classList.add('error');
-    feedback.classList.remove('success');
-    feedbackHTML = '✗ 錯誤';
-    if (q.type === 9) {
-      feedbackHTML += '，正確答案是：' + (q.answer ? 'O' : 'X');
-    } else {
-      feedbackHTML += '，正確答案是：' + q.answer;
-    }
-    answers.push({ q: currentQuestion + 1, correct: false });
-  }
-  
-  if (q.explanation && q.explanation !== 0 && q.explanation !== '0') {
-    feedbackHTML += '<span class="explanation">' + q.explanation + '</span>';
-  }
-  
-  feedback.innerHTML = feedbackHTML;
-  
-  document.getElementById('submitBtn').textContent = '下一題';
-  document.getElementById('submitBtn').onclick = nextQuestion;
-}
 
-function checkAnswer(q, answer) {
-  if (q.type === 4) {
-    return answer.toLowerCase() === q.answer.toLowerCase();
+  const q = shuffledQuestions[currentQuestion];
+  const log = reviewLog[currentQuestion];
+  const feedback = document.getElementById('feedback');
+
+  if (selectedAnswer === null || selectedAnswer === '') {
+    feedback.className = 'feedback show error';
+    feedback.textContent = '請先作答';
+    return;
   }
-  return answer === q.answer || String(answer) === String(q.answer);
+
+  if (isAnswerCorrect(q, selectedAnswer)) {
+    answered = true;
+    log.gotCorrect = true;
+
+    if (log.wrongAttempts.length === 0) {
+      correctCount++;
+      document.getElementById('correct').textContent = correctCount;
+    }
+
+    document.querySelectorAll('.option-btn').forEach(btn => {
+      btn.disabled = true;
+      const selected = btn.getAttribute('data-selected') === 'true';
+      if (selected) {
+        btn.style.background = '#E8F9EF';
+        btn.style.borderColor = '#4CAF7D';
+        btn.style.color = '#2B6E4F';
+      }
+    });
+
+    const input = document.querySelector('.input-field');
+    if (input) {
+      input.disabled = true;
+      input.style.background = '#E8F9EF';
+      input.style.borderColor = '#4CAF7D';
+    }
+
+    feedback.className = 'feedback show success';
+    feedback.innerHTML = '✓ 正確' +
+      (q.explanation ? '<span class="explanation">' + escapeHtml(String(q.explanation)) + '</span>' : '');
+
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.textContent = currentQuestion === shuffledQuestions.length - 1 ? '查看結果' : '下一題';
+    submitBtn.onclick = nextQuestion;
+  } else {
+    log.wrongAttempts.push(displayAnswer(selectedAnswer));
+
+    const selectedBtn = document.querySelector('.option-btn[data-selected="true"]');
+    if (selectedBtn) {
+      selectedBtn.disabled = true;
+      selectedBtn.removeAttribute('data-selected');
+      selectedBtn.style.background = '#FDE8E8';
+      selectedBtn.style.borderColor = '#E24B4A';
+      selectedBtn.style.color = '#8B2323';
+    }
+
+    const input = document.querySelector('.input-field');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+
+    selectedAnswer = null;
+    feedback.className = 'feedback show error';
+    feedback.textContent = '✗ 錯誤，再試一次';
+  }
 }
 
 function nextQuestion() {
   currentQuestion++;
-  if (currentQuestion >= shuffledQuestions.length) {
-    showResults();
-  } else {
-    showQuestion();
-  }
+  if (currentQuestion >= shuffledQuestions.length) showResults();
+  else showQuestion();
 }
 
 function startTimer() {
@@ -593,34 +641,102 @@ function startTimer() {
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
     const mins = Math.floor(elapsed / 60);
     const secs = elapsed % 60;
-    document.getElementById('timer').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    document.getElementById('timer').textContent =
+      mins + ':' + (secs < 10 ? '0' : '') + secs;
   }, 100);
 }
 
 function showResults() {
   clearInterval(timerInterval);
-  
+
   const accuracy = Math.round((correctCount / shuffledQuestions.length) * 100);
   document.getElementById('accuracy').textContent = accuracy + '%';
-  document.getElementById('finalCorrect').textContent = correctCount + '/' + shuffledQuestions.length;
-  
+  document.getElementById('finalCorrect').textContent =
+    correctCount + '/' + shuffledQuestions.length;
+
   const elapsed = Math.floor((Date.now() - startTime) / 1000);
   const mins = Math.floor(elapsed / 60);
   const secs = elapsed % 60;
-  document.getElementById('finalTime').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
-  
-  let detailsHTML = '';
-  answers.forEach(a => {
-    detailsHTML += '<div class="result-item ' + (a.correct ? 'correct' : 'incorrect') + '">';
-    detailsHTML += (a.correct ? '✓' : '✗') + ' 第 ' + a.q + ' 題';
-    detailsHTML += '</div>';
+  document.getElementById('finalTime').textContent =
+    mins + ':' + (secs < 10 ? '0' : '') + secs;
+
+  const details = document.getElementById('resultDetails');
+  details.innerHTML = '';
+  reviewLog.forEach((log, i) => {
+    const row = document.createElement('div');
+    row.className = 'result-item ' +
+      (log.wrongAttempts.length === 0 ? 'correct' : 'incorrect');
+    row.textContent = (i + 1) + '. ' +
+      (log.wrongAttempts.length === 0 ? '✓ 第一次答對' : '✗ 曾答錯 ' + log.wrongAttempts.length + ' 次');
+    details.appendChild(row);
   });
-  document.getElementById('resultDetails').innerHTML = detailsHTML;
-  
+
   document.getElementById('resultOverlay').classList.add('show');
+
+  let reviewBtn = document.getElementById('reviewBtn');
+  if (!reviewBtn) {
+    reviewBtn = document.createElement('button');
+    reviewBtn.id = 'reviewBtn';
+    reviewBtn.className = 'result-button';
+    reviewBtn.style.marginBottom = '10px';
+    reviewBtn.textContent = '查看答題複習';
+    reviewBtn.onclick = showReview;
+    const restart = document.querySelector('#resultOverlay .result-button');
+    restart.parentNode.insertBefore(reviewBtn, restart);
+  }
+}
+
+function showReview() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  document.querySelector('.stats').style.display = 'none';
+  document.getElementById('questionContainer').style.display = 'none';
+  document.querySelector('.button-group').style.display = 'none';
+
+  const reviewContainer = document.getElementById('reviewContainer');
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = '';
+
+  reviewLog.forEach((log, i) => {
+    const card = document.createElement('div');
+    card.className = 'review-card ' +
+      (log.wrongAttempts.length === 0 ? 'first-correct' : 'had-wrong');
+
+    let inner = '<div class="review-q">' + (i + 1) + '. ' +
+      escapeHtml(log.question) + '</div>';
+
+    if (log.wrongAttempts.length === 0) {
+      inner += '<div class="review-line review-correct">✓ 第一次答對</div>';
+    } else {
+      inner += '<div class="review-line review-wrong">答錯過：' +
+        log.wrongAttempts.map(escapeHtml).join('、') + '</div>';
+    }
+
+    inner += '<div class="review-line review-correct">正確答案：' +
+      escapeHtml(log.correctAnswer) + '</div>';
+
+    if (log.explanation) {
+      inner += '<div class="review-line">解析：' +
+        escapeHtml(String(log.explanation)) + '</div>';
+    }
+
+    card.innerHTML = inner;
+    reviewList.appendChild(card);
+  });
+
+  reviewContainer.classList.add('show');
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 initGame();
+
 </script>
 </body>
 </html>
