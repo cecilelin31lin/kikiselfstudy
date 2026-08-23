@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>glycolysis enzyme sequence</title>
+    <title>TCA cycle sequence</title>
     <style>
       * { box-sizing: border-box; }
       html, body {
@@ -225,7 +225,13 @@
         color: #378ADD;
       }
 
+      .result-button-group {
+        display: flex;
+        gap: 10px;
+      }
+
       .result-button {
+        flex: 1;
         background: #378ADD;
         color: white;
         border: none;
@@ -239,6 +245,15 @@
 
       .result-button:hover {
         background: #2970c7;
+      }
+
+      .result-button.secondary {
+        background: white;
+        color: #378ADD;
+        border: 1px solid #378ADD;
+      }
+      .result-button.secondary:hover {
+        background: #EAF3FC;
       }
     </style>
   </head>
@@ -278,179 +293,187 @@
             <div class="result-stat-value" id="finalTime">0:00</div>
           </div>
 
-          <button class="result-button" onclick="location.reload()">重新開始</button>
+          <div class="result-button-group">
+            <button class="result-button secondary" onclick="reviewAnswers()">複習</button>
+            <button class="result-button" onclick="location.reload()">重新開始</button>
+          </div>
         </div>
       </div>
     </div>
 
     <script>
-            const items = ['Citrate', 'Isocitrate', 'α-KG', 'Succinyl-CoA', 'Succinate', 'Fumarate', 'Malate', 'Oxaloacetate'];
-const correctOrder = ['Citrate', 'Isocitrate', 'α-KG', 'Succinyl-CoA', 'Succinate', 'Fumarate', 'Malate', 'Oxaloacetate'];
-            let startTime = Date.now();
-            let timerInterval = null;
-            let currentItems = [];
-            let itemsContainer = null;
+      const items = ['Citrate', 'Isocitrate', 'α-KG', 'Succinyl-CoA', 'Succinate', 'Fumarate', 'Malate', 'Oxaloacetate'];
+      const correctOrder = ['Citrate', 'Isocitrate', 'α-KG', 'Succinyl-CoA', 'Succinate', 'Fumarate', 'Malate', 'Oxaloacetate'];
 
-            let dragValue = null;
-            let dragStartY = 0;
-            let itemHeight = 0;
-            let orderAtDragStart = [];
+      let startTime = Date.now();
+      let timerInterval = null;
+      let currentItems = [];
+      let itemsContainer = null;
 
-            function initGame() {
-              currentItems = [...items].sort(() => Math.random() - 0.5);
-              itemsContainer = document.getElementById('itemsContainer');
-              render();
-              startTimer();
-            }
+      let dragValue = null;
+      let dragStartY = 0;
+      let itemHeight = 0;
+      let orderAtDragStart = [];
 
-            function render() {
-              itemsContainer.innerHTML = '';
-              currentItems.forEach((val) => {
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.dataset.value = val;
+      function initGame() {
+        currentItems = [...items].sort(() => Math.random() - 0.5);
+        itemsContainer = document.getElementById('itemsContainer');
+        render();
+        startTimer();
+      }
 
-                const text = document.createElement('span');
-                text.className = 'item-text';
-                text.textContent = val;
+      function render() {
+        itemsContainer.innerHTML = '';
+        currentItems.forEach((val) => {
+          const div = document.createElement('div');
+          div.className = 'item';
+          div.dataset.value = val;
 
-                const handle = document.createElement('span');
-                handle.className = 'item-handle';
-                handle.textContent = '≡';
+          const text = document.createElement('span');
+          text.className = 'item-text';
+          text.textContent = val;
 
-                div.appendChild(text);
-                div.appendChild(handle);
+          const handle = document.createElement('span');
+          handle.className = 'item-handle';
+          handle.textContent = '≡';
 
-                handle.addEventListener('mousedown', (e) => startDrag(e, val));
-                handle.addEventListener('touchstart', (e) => startDrag(e, val), { passive: false });
+          div.appendChild(text);
+          div.appendChild(handle);
 
-                itemsContainer.appendChild(div);
-              });
-            }
+          handle.addEventListener('mousedown', (e) => startDrag(e, val));
+          handle.addEventListener('touchstart', (e) => startDrag(e, val), { passive: false });
 
-            function getItemEls() {
-              return Array.from(itemsContainer.querySelectorAll('.item'));
-            }
+          itemsContainer.appendChild(div);
+        });
+      }
 
-            function startDrag(e, value) {
-              e.preventDefault();
-              e.stopPropagation();
+      function getItemEls() {
+        return Array.from(itemsContainer.querySelectorAll('.item'));
+      }
 
-              dragValue = value;
-              orderAtDragStart = [...currentItems];
+      function startDrag(e, value) {
+        e.preventDefault();
+        e.stopPropagation();
 
-              const point = e.touches ? e.touches[0] : e;
-              dragStartY = point.clientY;
+        dragValue = value;
+        orderAtDragStart = [...currentItems];
 
-              const els = getItemEls();
-              const draggedEl = els.find(el => el.dataset.value === value);
-              const rect = draggedEl.getBoundingClientRect();
-              itemHeight = rect.height + 8; // height + margin-bottom
+        const point = e.touches ? e.touches[0] : e;
+        dragStartY = point.clientY;
 
-              draggedEl.classList.add('dragging');
+        const els = getItemEls();
+        const draggedEl = els.find(el => el.dataset.value === value);
+        const rect = draggedEl.getBoundingClientRect();
+        itemHeight = rect.height + 8; // height + margin-bottom
 
-              document.addEventListener('mousemove', onDragMove, { passive: false });
-              document.addEventListener('touchmove', onDragMove, { passive: false });
-              document.addEventListener('mouseup', onDragEnd);
-              document.addEventListener('touchend', onDragEnd);
-            }
+        draggedEl.classList.add('dragging');
 
-            function onDragMove(e) {
-              if (!dragValue) return;
-              e.preventDefault();
+        document.addEventListener('mousemove', onDragMove, { passive: false });
+        document.addEventListener('touchmove', onDragMove, { passive: false });
+        document.addEventListener('mouseup', onDragEnd);
+        document.addEventListener('touchend', onDragEnd);
+      }
 
-              const point = e.touches ? e.touches[0] : e;
-              const deltaY = point.clientY - dragStartY;
+      function onDragMove(e) {
+        if (!dragValue) return;
+        e.preventDefault();
 
-              const els = getItemEls();
-              const draggedEl = els.find(el => el.dataset.value === dragValue);
+        const point = e.touches ? e.touches[0] : e;
+        const deltaY = point.clientY - dragStartY;
 
-              // 拖曳項目直接跟著手指走（transform，不脫離文件流）
-              draggedEl.style.transform = `translateY(${deltaY}px)`;
+        const els = getItemEls();
+        const draggedEl = els.find(el => el.dataset.value === dragValue);
 
-              const oldIndex = orderAtDragStart.indexOf(dragValue);
+        // 拖曳項目直接跟著手指走（transform，不脫離文件流）
+        draggedEl.style.transform = `translateY(${deltaY}px)`;
 
-              // 依照拖曳距離計算新的插入位置
-              let newIndex = oldIndex + Math.round(deltaY / itemHeight);
-              newIndex = Math.max(0, Math.min(newIndex, orderAtDragStart.length - 1));
+        const oldIndex = orderAtDragStart.indexOf(dragValue);
 
-              let newOrder = [...orderAtDragStart];
-              newOrder.splice(oldIndex, 1);
-              newOrder.splice(newIndex, 0, dragValue);
-              currentItems = newOrder;
+        // 依照拖曳距離計算新的插入位置
+        let newIndex = oldIndex + Math.round(deltaY / itemHeight);
+        newIndex = Math.max(0, Math.min(newIndex, orderAtDragStart.length - 1));
 
-              // 其他項目滑動到新位置（transform 位移量 = 新舊 slot 差 * 一格高度）
-              els.forEach((el) => {
-                if (el === draggedEl) return;
-                const val = el.dataset.value;
-                const newPos = newOrder.indexOf(val);
-                const oldPos = orderAtDragStart.indexOf(val);
-                const offset = (newPos - oldPos) * itemHeight;
-                el.classList.add('sliding');
-                el.style.transform = `translateY(${offset}px)`;
-              });
-            }
+        let newOrder = [...orderAtDragStart];
+        newOrder.splice(oldIndex, 1);
+        newOrder.splice(newIndex, 0, dragValue);
+        currentItems = newOrder;
 
-            function onDragEnd(e) {
-              document.removeEventListener('mousemove', onDragMove);
-              document.removeEventListener('touchmove', onDragMove);
-              document.removeEventListener('mouseup', onDragEnd);
-              document.removeEventListener('touchend', onDragEnd);
+        // 其他項目滑動到新位置（transform 位移量 = 新舊 slot 差 * 一格高度）
+        els.forEach((el) => {
+          if (el === draggedEl) return;
+          const val = el.dataset.value;
+          const newPos = newOrder.indexOf(val);
+          const oldPos = orderAtDragStart.indexOf(val);
+          const offset = (newPos - oldPos) * itemHeight;
+          el.classList.add('sliding');
+          el.style.transform = `translateY(${offset}px)`;
+        });
+      }
 
-              dragValue = null;
-              render();
-            }
+      function onDragEnd(e) {
+        document.removeEventListener('mousemove', onDragMove);
+        document.removeEventListener('touchmove', onDragMove);
+        document.removeEventListener('mouseup', onDragEnd);
+        document.removeEventListener('touchend', onDragEnd);
 
-            function checkOrder() {
-              const isCorrect = JSON.stringify(currentItems) === JSON.stringify(correctOrder);
+        dragValue = null;
+        render();
+      }
 
-              const feedback = document.getElementById('feedback');
-              feedback.classList.add('show');
+      function checkOrder() {
+        const isCorrect = JSON.stringify(currentItems) === JSON.stringify(correctOrder);
 
-              if (isCorrect) {
-                feedback.classList.add('success');
-                feedback.classList.remove('error');
-                feedback.textContent = '✓ 正確！';
+        const feedback = document.getElementById('feedback');
+        feedback.classList.add('show');
 
-                setTimeout(() => {
-                  showResults();
-                }, 500);
-              } else {
-                feedback.classList.add('error');
-                feedback.classList.remove('success');
-                feedback.textContent = '✗ 順序不對，再試一次';
-              }
-            }
+        if (isCorrect) {
+          feedback.classList.add('success');
+          feedback.classList.remove('error');
+          feedback.textContent = '✓ 正確！';
 
-            function resetOrder() {
-              const feedback = document.getElementById('feedback');
-              feedback.classList.remove('show');
-              initGame();
-            }
+          setTimeout(() => {
+            showResults();
+          }, 500);
+        } else {
+          feedback.classList.add('error');
+          feedback.classList.remove('success');
+          feedback.textContent = '✗ 順序不對，再試一次';
+        }
+      }
 
-            function startTimer() {
-              startTime = Date.now();
-              timerInterval = setInterval(() => {
-                const elapsed = Math.floor((Date.now() - startTime) / 1000);
-                const mins = Math.floor(elapsed / 60);
-                const secs = elapsed % 60;
-                document.getElementById('timer').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
-              }, 100);
-            }
+      function resetOrder() {
+        const feedback = document.getElementById('feedback');
+        feedback.classList.remove('show');
+        initGame();
+      }
 
-            function showResults() {
-              clearInterval(timerInterval);
+      function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const mins = Math.floor(elapsed / 60);
+          const secs = elapsed % 60;
+          document.getElementById('timer').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+        }, 100);
+      }
 
-              const elapsed = Math.floor((Date.now() - startTime) / 1000);
-              const mins = Math.floor(elapsed / 60);
-              const secs = elapsed % 60;
-              const timeStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+      function showResults() {
+        clearInterval(timerInterval);
 
-              document.getElementById('finalTime').textContent = timeStr;
-              document.getElementById('resultOverlay').classList.add('show');
-            }
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const mins = Math.floor(elapsed / 60);
+        const secs = elapsed % 60;
+        const timeStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
 
-            initGame();
+        document.getElementById('finalTime').textContent = timeStr;
+        document.getElementById('resultOverlay').classList.add('show');
+      }
+
+      function reviewAnswers() {
+        document.getElementById('resultOverlay').classList.remove('show');
+      }
+
+      initGame();
     </script>
   </body>
 </html>
