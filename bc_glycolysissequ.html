@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>配位基化學光譜序列</title>
+    <title>glycolysis</title>
     <style>
       * { box-sizing: border-box; }
       html, body {
@@ -225,7 +225,13 @@
         color: #378ADD;
       }
 
+      .result-button-group {
+        display: flex;
+        gap: 10px;
+      }
+
       .result-button {
+        flex: 1;
         background: #378ADD;
         color: white;
         border: none;
@@ -239,6 +245,15 @@
 
       .result-button:hover {
         background: #2970c7;
+      }
+
+      .result-button.secondary {
+        background: white;
+        color: #378ADD;
+        border: 1px solid #378ADD;
+      }
+      .result-button.secondary:hover {
+        background: #EAF3FC;
       }
     </style>
   </head>
@@ -278,15 +293,18 @@
             <div class="result-stat-value" id="finalTime">0:00</div>
           </div>
 
-          <button class="result-button" onclick="location.reload()">重新開始</button>
+          <div class="result-button-group">
+            <button class="result-button secondary" onclick="reviewAnswers()">複習</button>
+            <button class="result-button" onclick="location.reload()">重新開始</button>
+          </div>
         </div>
       </div>
     </div>
 
     <script>
-    const items = ['Glucose', 'Glucose-6-phosphate', 'Fructose-6-phosphate', 'Fructose-1,6-bisphosphate', 'Glyceraldehyde-3-phosphate (G3P) and Dihydroxyacetone phosphate (DHAP)', '1,3-bisphosphoglycerate', '3-phosphoglycerate', '2-phosphoglycerate', 'Phosphoenolpyruvate (PEP)', 'Pyruvate'];
+      const items = ['Glucose', 'Glucose-6-phosphate', 'Fructose-6-phosphate', 'Fructose-1,6-bisphosphate', 'Glyceraldehyde-3-phosphate (G3P) and Dihydroxyacetone phosphate (DHAP)', '1,3-bisphosphoglycerate', '3-phosphoglycerate', '2-phosphoglycerate', 'Phosphoenolpyruvate (PEP)', 'Pyruvate'];
       const correctOrder = ['Glucose', 'Glucose-6-phosphate', 'Fructose-6-phosphate', 'Fructose-1,6-bisphosphate', 'Glyceraldehyde-3-phosphate (G3P) and Dihydroxyacetone phosphate (DHAP)', '1,3-bisphosphoglycerate', '3-phosphoglycerate', '2-phosphoglycerate', 'Phosphoenolpyruvate (PEP)', 'Pyruvate'];
-            
+
       let startTime = Date.now();
       let timerInterval = null;
       let currentItems = [];
@@ -449,6 +467,10 @@
 
         document.getElementById('finalTime').textContent = timeStr;
         document.getElementById('resultOverlay').classList.add('show');
+      }
+
+      function reviewAnswers() {
+        document.getElementById('resultOverlay').classList.remove('show');
       }
 
       initGame();
