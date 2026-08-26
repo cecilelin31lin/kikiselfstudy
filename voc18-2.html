@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>單字搜尋遊戲 Word Search</title>
+<title>word puzzle</title>
 <style>
   * { box-sizing: border-box; }
   html, body { overscroll-behavior: none; }
@@ -107,9 +107,9 @@
     font-weight: 600;
   }
   .clue-item.found .clue-number {
-    background: #E8F9EF;
-    border-color: #4CAF7D;
-    color: #4CAF7D;
+    background: rgba(70,129,137,.16);
+    border-color: #468189;
+    color: #468189;
   }
 
   .grid-container {
@@ -176,10 +176,10 @@
     transition: all 0.2s;
   }
   .confirm-btn {
-    background: rgba(196,174,86,.85);
+    background: #B0C4DE;
     color: #2B3A55;
   }
-  .confirm-btn:hover { background: rgba(196,174,86,1); }
+  .confirm-btn:hover { background: #9FB5D1; }
   .confirm-btn:disabled {
     background: #eee;
     color: #aaa;
@@ -187,10 +187,10 @@
   }
   .clear-btn {
     background: white;
-    color: #7A6B2F;
-    border: 1px solid rgba(196,174,86,.85);
+    color: #2B3A55;
+    border: 1px solid #B0C4DE;
   }
-  .clear-btn:hover { background: rgba(230,216,156,.30); }
+  .clear-btn:hover { background: rgba(176,196,222,.30); }
 
   .feedback {
     display: none;
@@ -203,9 +203,9 @@
   }
   .feedback.show { display: block; }
   .feedback.success {
-    background: #E8F9EF;
-    border: 0.5px solid #4CAF7D;
-    color: #2B6E4F;
+    background: rgba(70,129,137,.16);
+    border: 0.5px solid #468189;
+    color: #468189;
   }
   .feedback.error {
     background: #FDE8E8;
@@ -311,7 +311,7 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>單字搜尋遊戲 Word Search</h1>
+  <h1>word puzzle</h1>
   <p class="subtitle">在字母格中找出隱藏的單字</p>
 
   <div class="stats">
@@ -384,7 +384,7 @@ const words = [
 ];
 
 // 配色（依序循環使用於已找到的單字標記）
-const palette = ['#e7d8c9', '#b2967d', '#e7d8c9', '#b2967d', '#e7d8c9', '#b2967d'];
+const palette = ['#e7d8c9', '#eee4e1', '#d3c0ad', '#e6beae', '#ebded5', '#cdbcac'];
 
 let gridSize = 0;
 let grid = [];
@@ -662,6 +662,13 @@ function initGame() {
   renderGrid();
   renderClueList();
   startTimer();
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      confirmSelection();
+    }
+  });
 }
 
 initGame();
