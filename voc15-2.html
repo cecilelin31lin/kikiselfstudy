@@ -372,7 +372,7 @@
 word: 英文單字（會自動轉大寫比對）
 meaning: 單字中文意思
 pos: 詞性，例如 n. / v. / adj. / adv.
-sentence: 英文例句
+sentence: 英文例句（可以是單字的任何變化形，如過去式/現在分詞，程式會自動用字根模糊比對找出並轉成底線提示）
 translation: 中文翻譯
 */
 const words = [
@@ -406,7 +406,8 @@ const DIRECTIONS = [
 ];
 
 function buildGrid() {
-  const upperWords = words.map(w => w.word.toUpperCase());
+  // compactWord：去除空白後的版本，用來放進字母格（片語會被當成連續字母處理）
+  const upperWords = words.map(w => w.word.toUpperCase().replace(/\s+/g, ''));
   const longest = Math.max(...upperWords.map(w => w.length));
   const totalLetters = upperWords.reduce((s,w)=>s+w.length,0);
   gridSize = Math.max(longest + 2, Math.ceil(Math.sqrt(totalLetters * 2.6)));
@@ -415,10 +416,10 @@ function buildGrid() {
   grid = Array.from({length: gridSize}, () => Array(gridSize).fill(null));
   placements = [];
 
-  const sorted = [...words].sort((a,b)=>b.word.length-a.word.length);
+  const sorted = [...words].sort((a,b)=> b.word.replace(/\s+/g,'').length - a.word.replace(/\s+/g,'').length);
 
   sorted.forEach((original, idx) => {
-    const w = original.word.toUpperCase();
+    const w = original.word.toUpperCase().replace(/\s+/g, ''); // 放進格子用的字母序列（無空白）
     let placed = false;
     let attempts = 0;
     while (!placed && attempts < 400) {
@@ -444,7 +445,8 @@ function buildGrid() {
 
       cells.forEach(([r,c], i) => { grid[r][c] = w[i]; });
       placements.push({
-        word: w,
+        word: w,                    // 無空白版本，用於格子比對
+        displayWord: original.word, // 原始版本（保留空白），用於複習頁面顯示
         meaning: original.meaning,
         pos: original.pos,
         sentence: original.sentence,
@@ -484,6 +486,70 @@ function renderGrid() {
   }
 }
 
+// 找出句子裡跟 word 相符的完整單字（不論時態、單複數等變化形），並替換成提示格式
+// 提示規則：底線數量固定依照 word 原形本身的長度（首字母 + 底線 + 尾字母）
+// 若句子裡的型態比原形多出字尾（如 -ing、-ed），多出來的部分會接在提示後面完整顯示
+// 若 displayWord 是片語（含空白，如 "chip away"），忽略空白整個當一串連續字母處理，
+// 比對句子中「第一個字可能有時態變化 + 後面字直接照原字」的片語型態，整段替換成單一段底線提示（不含空白）
+function replaceWordInClue(sentence, displayWord, compactWord) {
+  const isPhrase = /\s/.test(displayWord.trim());
+
+  if (isPhrase) {
+    const tokens = displayWord.trim().split(/\s+/);
+    const firstToken = tokens[0];
+    const restTokens = tokens.slice(1);
+
+    const stemLen = Math.max(3, firstToken.length - 2);
+    const stem = firstToken.slice(0, stemLen);
+    const stemEscaped = stem.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    let pattern = '\\b(' + stemEscaped + '[a-zA-Z]*)\\b';
+    restTokens.forEach(tok => {
+      const tokEscaped = tok.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      pattern += '\\s+(' + tokEscaped + ')\\b';
+    });
+
+    const regex = new RegExp(pattern, 'i');
+    const match = sentence.match(regex);
+    if (!match) return sentence; // 抓不到片語就原樣返回，避免誤刪內容
+
+    const matchedPhrase = match[0];
+
+    // 底線提示：忽略空白，只依照 compactWord（無空白版本）的字母數計算首尾字母+底線
+    const firstLetter = compactWord.charAt(0);
+    const lastLetter = compactWord.charAt(compactWord.length - 1);
+    const middleBlanks = '_'.repeat(Math.max(compactWord.length - 2, 1));
+    const hint = firstLetter + middleBlanks + lastLetter;
+
+    return sentence.replace(matchedPhrase, hint);
+  }
+
+  // 單一單字（無空白）：邏輯與原本完全相同，不受片語功能影響
+  const word = compactWord;
+  const stemLen = Math.max(3, word.length - 2);
+  const stem = word.slice(0, stemLen);
+  const stemEscaped = stem.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  const regex = new RegExp('\\b(' + stemEscaped + '[a-zA-Z]*)\\b', 'i');
+  const match = sentence.match(regex);
+
+  if (!match) return sentence;
+
+  const matchedWord = match[1];
+
+  const firstLetter = word.charAt(0);
+  const lastLetter = word.charAt(word.length - 1);
+  const middleBlanks = '_'.repeat(Math.max(word.length - 2, 1));
+  const baseHint = firstLetter + middleBlanks + lastLetter;
+
+  const extraLength = matchedWord.length - word.length;
+  const extraSuffix = extraLength > 0 ? matchedWord.slice(matchedWord.length - extraLength) : '';
+
+  const hint = baseHint + extraSuffix;
+
+  return sentence.replace(matchedWord, hint);
+}
+
 function renderClueList() {
   const container = document.getElementById('clueListContainer');
   container.innerHTML = '';
@@ -499,15 +565,7 @@ function renderClueList() {
     num.textContent = idx + 1;
 
     const text = document.createElement('div');
-    let displayClue = p.sentence;
-    const escaped = p.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(escaped, 'ig');
-    const firstLetter = p.word.charAt(0);
-    const lastLetter = p.word.charAt(p.word.length - 1);
-    const middleBlanks = '_'.repeat(Math.max(p.word.length - 2, 0));
-    const wordHint = firstLetter + middleBlanks + lastLetter;
-    displayClue = displayClue.replace(regex, wordHint);
-    text.textContent = displayClue;
+    text.textContent = replaceWordInClue(p.sentence, p.displayWord, p.word);
 
     item.appendChild(num);
     item.appendChild(text);
@@ -556,14 +614,24 @@ function cellsMatch(cellsA, cellsB) {
   return cellsA.every(([r,c]) => setB.has(`${r},${c}`));
 }
 
+function lettersMatch(selectedLetters, targetWord) {
+  if (selectedLetters.length !== targetWord.length) return false;
+  const sortedSelected = selectedLetters.split('').sort().join('');
+  const sortedTarget = targetWord.split('').sort().join('');
+  return sortedSelected === sortedTarget;
+}
+
 function confirmSelection() {
   if (selectedCells.length === 0) return;
+
+  // 把選取的格子字母湊起來，跟單字比對（不論點擊順序，只要字母組合相符即可）
+  const selectedLetters = selectedCells.map(([r,c]) => grid[r][c]).join('');
 
   for (let i=0;i<placements.length;i++){
     const p = placements[i];
     if (foundWords.has(i)) continue;
-    if (cellsMatch(p.cells, selectedCells)) {
-      markFound(i);
+    if (lettersMatch(selectedLetters, p.word)) {
+      markFoundByCells(i, selectedCells);
       showFeedback(true, '✓ 找到了：' + p.word);
       selectedCells = [];
       updateSelectedDisplay();
@@ -587,12 +655,12 @@ function hideFeedback() {
   document.getElementById('feedback').classList.remove('show');
 }
 
-function markFound(idx) {
+function markFoundByCells(idx, cells) {
   const p = placements[idx];
   foundWords.add(idx);
 
   const color = palette[p.colorIndex];
-  p.cells.forEach(([r,c]) => {
+  cells.forEach(([r,c]) => {
     const el = getCellEl(r,c);
     el.classList.add('found');
     el.classList.remove('selected');
@@ -642,7 +710,7 @@ function reviewAnswers() {
 
     const wm = document.createElement('div');
     wm.className = 'review-word-meaning';
-    wm.textContent = p.word + '（' + p.pos + '） ' + p.meaning;
+    wm.textContent = p.displayWord + '（' + p.pos + '） ' + p.meaning;
     item.appendChild(wm);
 
     const sentenceDiv = document.createElement('div');
