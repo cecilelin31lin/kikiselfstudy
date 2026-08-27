@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>句子挖空配對遊戲</title>
+<title>單字填空</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -135,6 +135,33 @@
     background: #FDE8E8;
     color: #8B2323;
   }
+
+  .sentence-translation {
+    display: none;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #ddd;
+    font-size: 12px;
+    color: #888;
+  }
+  .sentence-translation.show {
+    display: block;
+  }
+
+  .review-content {
+    display: none;
+  }
+  .review-content.show {
+    display: block;
+  }
+  .review-word-meaning {
+    font-weight: 600;
+    color: #378ADD;
+    margin-bottom: 6px;
+  }
+  .review-translation {
+    color: #2B3A55;
+  }
   
   .result-overlay {
     display: none;
@@ -215,8 +242,14 @@
     font-size: 12px;
     font-weight: 500;
   }
+
+  .result-button-group {
+    display: flex;
+    gap: 10px;
+  }
   
   .result-button {
+    flex: 1;
     background: #378ADD;
     color: white;
     border: none;
@@ -231,11 +264,20 @@
   .result-button:hover {
     background: #2970c7;
   }
+
+  .result-button.secondary {
+    background: white;
+    color: #378ADD;
+    border: 1px solid #378ADD;
+  }
+  .result-button.secondary:hover {
+    background: #EAF3FC;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>句子挖空配對遊戲</h1>
+  <h1>單字填空</h1>
   <p class="subtitle">選擇單字，點擊空白填入</p>
 
   <div class="stats">
@@ -249,7 +291,7 @@
     </div>
   </div>
 
-  <div class="instruction">選擇一個單字，然後點擊句子中的空白位置</div>
+  <div class="instruction">選擇一個單字，然後點擊句子中的空白位置。注意：部分單字可能是干擾項，沒有對應句子</div>
 
   <div class="word-buttons" id="wordButtonsContainer"></div>
 
@@ -269,20 +311,31 @@
         <div class="words-tags" id="finalWords"></div>
       </div>
       
-      <button class="result-button" onclick="location.reload()">重新開始</button>
+      <div class="result-button-group">
+        <button class="result-button secondary" onclick="reviewAnswers()">複習</button>
+        <button class="result-button" onclick="location.reload()">重新開始</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
+// shuffleSentences: 1 = 打亂句子順序，0 = 依照原本順序（不打亂）
+const shuffleSentences = 1;
+
 const sentences = [
-  { word: 'prowess', sentence: 'Having devoted decades to neuroscience research, she earned international recognition for her scientific ____ and groundbreaking discoveries.' },
-  { word: 'accelerate', sentence: 'Prolonged exposure to antibiotics may ____ the development of bacterial resistance, making infections increasingly difficult to treat.' },
-  { word: 'chicanery', sentence: 'The lawyer was accused of using legal ____ to delay the trial.' },
-  { word: 'inexorable', sentence: 'The ____ rise of technology has transformed modern society.' },
-  { word: 'deprecatory', sentence: 'Her tone was mildly ____, suggesting she did not fully agree.' },
-  { word: 'ridicule', sentence: 'He became the target of public ____ after his statement.' },
+  { word: 'prowess', wordMeaning: 'prowess 卓越的能力 n.', sentence: 'Having devoted decades to neuroscience research, she earned international recognition for her scientific ____ and groundbreaking discoveries.', translation: '她畢生投入神經科學研究，因此憑藉卓越的科研能力與突破性的發現獲得國際認可。' },
+  { word: 'exposure', wordMeaning: 'exposure 暴露 n.', sentence: 'Prolonged ____ to antibiotics may accelerate the development of bacterial resistance, making infections increasingly difficult to treat.', translation: '長期暴露於抗生素可能加速細菌產生抗藥性，使感染越來越難治療。' },
+  { word: 'chicanery', wordMeaning: 'chicanery 欺詐手段、詭計 n.', sentence: 'The lawyer was accused of using legal ____ to delay the trial.', translation: '這位律師被指控利用法律手段耍花招來拖延審判。' },
+  { word: 'inexorable', wordMeaning: 'inexorable 不可阻擋的 adj.', sentence: 'The ____ rise of technology has transformed modern society.', translation: '科技不可阻擋的發展已改變現代社會。' },
+  { word: 'deprecatory', wordMeaning: 'deprecatory 貶抑的 adj.', sentence: 'Her tone was mildly ____, suggesting she did not fully agree.', translation: '她的語氣略帶貶抑，顯示她並不完全同意。' },
+  { word: 'unemployment', wordMeaning: 'unemployment 失業 n.', sentence: 'Long-term ____ can have serious psychological effects.', translation: '長期失業可能造成嚴重的心理影響。' },
 ];
+
+// 干擾選項：這些字會出現在上方，但永遠沒有對應句子，點擊配對永遠失敗
+//const distractors = ['', '', '', '', '干擾5'];
+// 沒有干擾項時保持空陣列 []
+const distractors = [];
 
 let selectedWord = null;
 let matchedWords = [];
@@ -290,39 +343,63 @@ let startTime = Date.now();
 let timerInterval = null;
 
 function initGame() {
-  const shuffled = [...sentences].sort(() => Math.random() - 0.5);
+  const displaySentences = shuffleSentences === 1
+    ? [...sentences].sort(() => Math.random() - 0.5)
+    : [...sentences];
   
-  // 更新配對計數顯示
   document.getElementById('matched').textContent = '0/' + sentences.length;
   
-  // 生成單字按鈕
   const wordButtonsContainer = document.getElementById('wordButtonsContainer');
-  sentences.forEach(item => {
+  const allWords = [...sentences.map(s => ({ word: s.word, isDistractor: false })),
+                     ...distractors.map(d => ({ word: d, isDistractor: true }))];
+  const shuffledWords = allWords.sort(() => Math.random() - 0.5);
+
+  shuffledWords.forEach(item => {
     const btn = document.createElement('button');
     btn.className = 'word-btn';
     btn.textContent = item.word;
+    btn.dataset.distractor = item.isDistractor ? 'true' : 'false';
     btn.onclick = () => selectWord(btn, item.word);
     wordButtonsContainer.appendChild(btn);
   });
   
-  // 生成句子
   const sentencesContainer = document.getElementById('sentencesContainer');
-  shuffled.forEach((item, idx) => {
+  displaySentences.forEach((item, idx) => {
     const div = document.createElement('div');
     div.className = 'sentence';
+    div.dataset.index = idx;
+    
+    const textWrap = document.createElement('div');
     
     const text = document.createTextNode(item.sentence.substring(0, item.sentence.indexOf('____')));
-    div.appendChild(text);
+    textWrap.appendChild(text);
     
     const blank = document.createElement('span');
     blank.className = 'blank';
     blank.textContent = '____';
     blank.setAttribute('data-word', item.word);
     blank.onclick = () => fillBlank(blank);
-    div.appendChild(blank);
+    textWrap.appendChild(blank);
     
     const textAfter = document.createTextNode(item.sentence.substring(item.sentence.indexOf('____') + 4));
-    div.appendChild(textAfter);
+    textWrap.appendChild(textAfter);
+
+    div.appendChild(textWrap);
+
+    // 複習時顯示：單字+詞性、中文翻譯（虛線下方）
+    const translationDiv = document.createElement('div');
+    translationDiv.className = 'sentence-translation';
+
+    const wordMeaningLine = document.createElement('div');
+    wordMeaningLine.className = 'review-word-meaning';
+    wordMeaningLine.textContent = item.wordMeaning || item.word;
+    translationDiv.appendChild(wordMeaningLine);
+
+    const translationLine = document.createElement('div');
+    translationLine.textContent = item.translation || '';
+    translationDiv.appendChild(translationLine);
+
+    div.appendChild(translationDiv);
     
     sentencesContainer.appendChild(div);
   });
@@ -342,6 +419,17 @@ function selectWord(btn, word) {
 
 function fillBlank(blankEl) {
   if (!selectedWord) return;
+
+  const selectedBtn = document.querySelector('.word-btn[data-selected="true"]');
+
+  // 若選到的是干擾項，永遠判定錯誤
+  if (selectedBtn && selectedBtn.dataset.distractor === 'true') {
+    blankEl.classList.add('incorrect');
+    setTimeout(() => {
+      blankEl.classList.remove('incorrect');
+    }, 500);
+    return;
+  }
   
   const correctWord = blankEl.getAttribute('data-word');
   
@@ -354,7 +442,6 @@ function fillBlank(blankEl) {
     matchedWords.push(selectedWord);
     document.getElementById('matched').textContent = matchedWords.length + '/' + sentences.length;
     
-    const selectedBtn = document.querySelector('.word-btn[data-selected="true"]');
     if (selectedBtn) {
       selectedBtn.remove();
     }
@@ -398,6 +485,14 @@ function showResults() {
   document.getElementById('finalWords').innerHTML = wordsHTML;
   
   document.getElementById('resultOverlay').classList.add('show');
+}
+
+function reviewAnswers() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  
+  document.querySelectorAll('.sentence-translation').forEach(el => {
+    el.classList.add('show');
+  });
 }
 
 initGame();
