@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>基礎生化與細胞生物學3</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px 16px 60px;
+    background: #f5f5f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Nunito', sans-serif;
+    color: #2B3A55;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #2B3A55;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+  }
+  
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2B3A55;
+  }
+  
+  .question-container {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    min-height: 200px;
+  }
+  
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 0.5px solid #ddd;
+  }
+  
+  .question-progress {
+    font-size: 13px;
+    color: #999;
+  }
+  
+  .question-type {
+    background: #378ADD;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  
+  .question-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #2B3A55;
+    margin-bottom: 20px;
+  }
+  
+  .content-area {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .input-field {
+    padding: 10px;
+    border: 0.5px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .option-btn {
+    padding: 10px;
+    border: 0.5px solid #ddd;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .option-btn:hover {
+    border-color: #999;
+    background: #f9f9f9;
+  }
+  .option-btn[data-selected="true"] {
+    background: #378ADD;
+    color: white;
+    border-color: #378ADD;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  
+  button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .btn-submit {
+    background: #378ADD;
+    color: white;
+  }
+  .btn-submit:hover {
+    background: #2970c7;
+  }
+  
+  .feedback {
+    display: none;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+  .feedback.show {
+    display: block;
+  }
+  .feedback.success {
+    background: #E8F9EF;
+    border: 0.5px solid #4CAF7D;
+    color: #2B6E4F;
+  }
+  .feedback.error {
+    background: #FDE8E8;
+    border: 0.5px solid #E24B4A;
+    color: #8B2323;
+  }
+  
+  .explanation {
+    font-size: 13px;
+    margin-top: 8px;
+    display: block;
+  }
+  
+  .result-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .result-overlay.show {
+    display: flex;
+  }
+  
+  .result-modal {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .result-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2B3A55;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  
+  .result-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .result-stat {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .result-stat-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 4px;
+  }
+  
+  .result-stat-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2B3A55;
+  }
+  
+  .result-details {
+    margin-bottom: 20px;
+  }
+  
+  .result-details-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  
+  .result-item {
+    display: flex;
+    gap: 8px;
+    padding: 6px;
+    font-size: 12px;
+    border-bottom: 0.5px solid #eee;
+  }
+  
+  .result-item.correct {
+    color: #4CAF7D;
+  }
+  
+  .result-item.incorrect {
+    color: #E24B4A;
+  }
+  
+  .result-button {
+    background: #378ADD;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .result-button:hover {
+    background: #2970c7;
+  }
+
+  .review-container {
+    display: none;
+  }
+  .review-container.show {
+    display: block;
+  }
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .review-header h2 {
+    margin: 0;
+    font-size: 22px;
+  }
+  .review-card {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .review-card.first-correct { border-left: 4px solid #4CAF7D; }
+  .review-card.had-wrong { border-left: 4px solid #E24B4A; }
+  .review-q {
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .review-line {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+  .review-wrong { color: #8B2323; }
+  .review-correct { color: #2B6E4F; }
+  .back-btn {
+    background: #378ADD;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>基礎生化與細胞生物學3</h1>
+  <p class="subtitle">完成所有題目</p>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">題目</div>
+      <div class="stat-value" id="progress">1/2</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">⏱ 時間</div>
+      <div class="stat-value" id="timer">0:00</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">✓ 正確</div>
+      <div class="stat-value" id="correct">0</div>
+    </div>
+  </div>
+
+  <div class="question-container" id="questionContainer">
+    <div class="question-header">
+      <div class="question-progress" id="questionProgress">第 1 題</div>
+      <div class="question-type" id="questionType">類型</div>
+    </div>
+    <div class="question-text" id="questionText">題目文字</div>
+    <div class="content-area" id="contentArea"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="button-group">
+    <button class="btn-submit" id="submitBtn" onclick="submitAnswer()">確認答案</button>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-modal">
+      <div class="result-title">🎉 測驗完成！</div>
+      
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat-label">正確率</div>
+          <div class="result-stat-value" id="accuracy">0%</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-label">正確數</div>
+          <div class="result-stat-value" id="finalCorrect">0</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-label">用時</div>
+          <div class="result-stat-value" id="finalTime">0:00</div>
+        </div>
+      </div>
+      
+      <div class="result-details">
+        <div class="result-details-title">答題記錄</div>
+        <div id="resultDetails"></div>
+      </div>
+      
+      <button class="result-button" onclick="location.reload()">重新開始</button>
+    </div>
+  </div>
+
+  <div class="review-container" id="reviewContainer">
+    <div class="review-header">
+      <h2>📋 答題複習</h2>
+      <button class="back-btn" onclick="location.reload()">重新開始</button>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+
+</div>
+
+<script>
+const allQuestions = [
+  { type: 9, question: 'Cyclin D–CDK4/6-mediated phosphorylation of pRb enhances the ability of pRb to inhibit E2F.', answer: false, explanation: 'Cyclin D–CDK4/6 對 pRb 的磷酸化（phosphorylation）實際上會抑制（inhibit）pRb 的功能，使其釋放（release）E2F，進而促進細胞週期進展（cell cycle progression）。因此，磷酸化會降低（reduce）pRb 抑制 E2F 的能力，而非增強（enhance）。' },
+  { type: 3, question: '關於 pRb–E2F pathway 調控 G1 → S transition，請從下列事件中選出正確事件，並依正常發生順序排列：\n1. E2F promotes transcription of Cyclin E and other S-phase genes.\n2. Phosphorylated pRb binds more strongly to E2F and suppresses S-phase gene transcription.\n3. Cyclin D–CDK4/6 phosphorylates pRb.\n4. Cyclin E–CDK2 further phosphorylates pRb and promotes progression toward S phase.\n5. E2F directly dephosphorylates pRb and restores pRb activity.\n6. Hypophosphorylated pRb binds E2F and inhibits E2F activity.\n7. Phosphorylation of pRb causes release of E2F.', answer: '6 → 3 → 7 → 1 → 4', options: ['6 → 3 → 7 → 1 → 4', '6 → 1 → 3 → 7 → 4', '3 → 6 → 7 → 1 → 4', '6 → 3 → 2 → 1 → 4', '6 → 3 → 7 → 5 → 1'], explanation: '一開始 pRb 為 hypophosphorylated、active 狀態並抑制 E2F（事件6）；之後 Cyclin D–CDK4/6 磷酸化 pRb（事件3），使 E2F 被釋放（事件7）。E2F 接著促進 Cyclin E 與其他 S-phase genes 的 transcription（事件1），形成的 Cyclin E–CDK2 再進一步磷酸化 pRb（事件4），推動細胞進入 S phase。' },
+  { type: 4, question: '具有活性的 pRb 處於 __________ 狀態，並透過與轉錄因子（transcription factor）E2F 結合來阻止 G1 → S 期的轉變（transition）。', answer: '未磷酸化', explanation: '具有活性的 pRb 處於未磷酸化（unphosphorylated）狀態，此時 pRb 能與 E2F 結合（bind），抑制 E2F 的轉錄活性（transcriptional activity），進而阻止細胞從 G1 期進入 S 期（G1 → S transition）。當 pRb 被 CDK 磷酸化（phosphorylation）後，會釋放（release）E2F，允許細胞週期進展（cell cycle progression）。' },
+  { type: 3, question: '關於 maturation-promoting factor（MPF）及 cyclin B，下列何者錯誤？', answer: 'Cyclin B 在進入 M phase 前逐漸累積，因此 MPF activity 也會與 cyclin B 濃度同步逐漸上升', options: ['MPF 是由 cyclin B 與 Cdk1 組成的複合體', 'Cyclin B 會在細胞週期進行過程中逐漸累積，並在 M phase 後期被降解', 'MPF 可藉由 phosphorylating target proteins，促進 chromosome condensation 及 nuclear envelope breakdown', 'MPF activity 在細胞進入 M phase 時上升，之後隨 cyclin B 被降解而下降', 'Cyclin B 在進入 M phase 前逐漸累積，因此 MPF activity 也會與 cyclin B 濃度同步逐漸上升'], explanation: 'Cyclin B 的濃度與 MPF activity 並非同步變化。Cyclin B 可先逐漸累積並與 Cdk1 結合，但 MPF 還受到 phosphorylation / dephosphorylation 調控；直到 G2/M transition 才快速活化。M phase 後期 cyclin B 被降解，MPF activity 隨之下降。' },
+  { type: 3, question: '關於 MPF（maturation-promoting factor）中的 cyclin B，cyclin B 從 _____ 開始 synthesis，濃度從 _____ 開始漸增，並於 _____ 達到 peak。', answer: 'S phase；G2 phase；metaphase', options: ['G1 phase；S phase；prophase', 'S phase；G2 phase；metaphase', 'S phase；G2 phase；anaphase', 'G2 phase；M phase；metaphase'], explanation: 'S phase 開始 synthesis → G2 phase 濃度開始漸增 → metaphase 達 peak → 之後快速下降。' },
+  { type: 9, question: 'liver不用GluT4，所以肝臟使用Glc與insulin無關', answer: false, explanation: '肝臟不表現 GLUT4，而是表現 GLUT2，因此葡萄糖進入肝細胞不依賴胰島素。雖然 Glc 進入肝細胞不依賴 insulin，但肝臟接下來是否利用、儲存 glucose，仍然高度受到 insulin 調控。' },
+  { type: 3, question: '下列關於M checkpoint（Spindle Assembly Checkpoint, SAC）與姊妹染色分體分離機制的敘述，何者正確？', answer: 'M checkpoint通過後，APC/C促使securin被泛素化並降解，進而釋放separase去切割cohesin', options: ['Securin會直接切割cohesin，使姊妹染色分體分離', 'APC/C被活化後，會直接磷酸化cohesin，導致其構型改變而脫落', 'M checkpoint通過後，APC/C促使securin被泛素化並降解，進而釋放separase去切割cohesin', 'Separase平常處於活化狀態，需要securin進一步活化才能切割cohesin'], explanation: '正確機制路徑：M checkpoint通過 → APC/C活化 → securin被泛素化降解 → separase被釋放 → 切割cohesin → 姊妹染色分體分離。Securin本身不具切割酵素活性，真正切割cohesin的是separase；APC/C是泛素化securin而非直接磷酸化cohesin；separase平常被securin抑制，並非活化狀態。' },
+  { type: 3, question: 'M checkpoint 是發生在哪一個階段？', answer: 'Metaphase', options: ['Metaphase', 'Prophase', 'Anaphase', 'Telophase'], explanation: 'M phase 後才會啟動 seperase，' },
+  { type: 3, question: '神經元表現的GLUT3具有低Km值，此特性對腦部葡萄糖供應的生理意義為何？', answer: '即使血糖濃度偏低，GLUT3仍能有效率地運輸葡萄糖，確保腦部能量供應穩定', options: ['血糖濃度需要達到很高時，GLUT3才能開始運輸葡萄糖', 'GLUT3對葡萄糖親和力低，運輸效率會隨血糖濃度線性上升', '即使血糖濃度偏低，GLUT3仍能有效率地運輸葡萄糖，確保腦部能量供應穩定', '低Km值代表GLUT3需要insulin輔助才能達到最大運輸速率'], explanation: 0 },
+  { type: 9, question: 'Prosthetic group（輔基）與酵素蛋白是以共價鍵緊密結合的', answer: true, explanation: '輔基特徵就是具有共價鍵(covalent bonding)，屬於緊密結合(tight)' },
+  { type: 3, question: '原本在細胞內的vesicle，其內膜在vesicle要融合出cell時，會變成細胞膜的___', answer: '外膜', options: ['內膜', '外膜', '隨機'], explanation: '原先碰到細胞質的膜在融合後一樣是碰到細胞質' },
+  { type: 4, question: '不可逆抑制劑之所以不可逆是因為抑制劑與酵素產生___', answer: '共價鍵', explanation: 0 },
+  { type: 4, question: '維生素A的前驅物為___', answer: '類胡蘿蔔素', explanation: 0 },
+  { type: 4, question: '照光時，葉綠體內囊腔內pH值是___', answer: '5', explanation: 0 },
+  { type: 3, question: '下列何者不是ECM？', answer: 'integrin', options: ['collagen', 'proteoglycan', 'integrin', 'laminin'], explanation: 'integrin是CAM細胞黏附分子，integti負責連接cell及ECM' },
+  { type: 3, question: '下列何者的Ca²⁺濃度低於細胞外液（extracellular fluid）？', answer: 'Cytosol', options: ['Cytosol', 'Mitochondria', 'ER (Endoplasmic Reticulum)', 'Chloroplast'], explanation: 0 },
+  { type: 3, question: 'Comodulin 用什麼 motif bond Ca2+？', answer: 'EF Hand Motif', options: ['EF Hand Motif', 'Zinc finger', 'Leucine Zipper', 'Helix Loop Helix'], explanation: 0 },
+  { type: 9, question: '化學滲透磷酸化一定要與ETC一起', answer: false, explanation: '不需要，只需要有跨膜的H+濃度差、ATP synthase以及ATP synthase' },
+  { type: 9, question: '細胞內生成的hormone或NTM從生成到分泌出cell，會穿過多層膜', answer: false, explanation: '物質一直在vesicle中，先是被包入vesicle，再經由vesicle與plasma membrane融合吐出去。所以未穿過任何膜' },
+  { type: 3, question: '運輸大分子使用何種運輸方式？', answer: 'bulk transport', options: ['active transport', 'facilitated diffusion', 'simple diffusion', 'bulk transport'], explanation: 'explaination' },
+  { type: 3, question: '由Na/K pump導致的secondary active transport 是？', answer: 'SGLT', options: ['GluT', 'SGLT', 'K⁺ leak channel', 'V-type ATPase'], explanation: '小腸吸收Glc不是使用一般GluT，而是使用由Na/K pump造成的次級主動運輸，將Na和Glc同時運進cell' },
+  { type: 3, question: 'What is the receptor of insulin？', answer: 'RTK', options: ['GPCR', 'RTK', 'G protein', 'ion channel receptor'], explanation: 'explaination' },
+  { type: 9, question: '吃進身體的食物，無論是大分子或是小分子，只要是在分解就會生成ATP', answer: false, explanation: '大分子分解屬於消化階段，得小分子及產熱，小分子分解屬於氧化分解，得ATP及熱' },
+  { type: 3, question: '下列何者不是腫瘤抑制因子（Tumor Suppressor）？', answer: 'Growth factor', options: ['p53', 'p21', 'pRb', 'Growth factor'], explanation: 'p53、p21、pRb皆為腫瘤抑制因子，功能是抑制細胞週期進行、促進DNA修復或凋亡。Growth factor（生長因子）則是促進細胞增殖的訊號分子，透過活化RTK等受體啟動下游路徑（如Ras-MAPK）促進細胞分裂，屬於原致癌基因（proto-oncogene）範疇，而非腫瘤抑制因子。腫瘤抑制因子功能喪失會致癌，原致癌基因功能過度活化會致癌。' },
+  { type: 3, question: 'Fe²⁺以non-heme形式存在時，主要分布在____中', answer: 'Fe-S cluster', options: ['Fe-S cluster', 'Cytochrome', 'Hemoglobin', 'Myoglobin'], explanation: 'Heme(血基質)存在於Cytochrome(細胞色素)、Hb、Mb 中；Non-heme則存在於Fe-S cluster中' },
+  { type: 9, question: '動物的細胞比植物細胞大', answer: false, explanation: '植物的比較大，因為植物有central vacuole' },
+  { type: 3, question: '下列關於葡萄糖轉運蛋白（GLUT）的敘述，何者正確？', answer: 'GLUT2的Km值高，親和力低，適合作為血糖濃度的感應器', options: ['GLUT1主要表現於骨骼肌與脂肪組織，且需要insulin刺激才能運輸葡萄糖', 'GLUT5主要負責運輸葡萄糖，具有高度insulin依賴性', 'GLUT2的Km值高，親和力低，適合作為血糖濃度的感應器', 'GLUT4廣泛分布於全身細胞，屬於insulin-independent的轉運蛋白'], explanation: 0 },
+  { type: 3, question: '下列有關APC（Anaphase Promoting Complex）的敘述，何者錯誤？', answer: 'APC的活化與MPF（M-phase Promoting Factor）無關，兩者是各自獨立、互不影響的調控系統', options: ['APC是一種E3泛素連接酶（ubiquitin ligase），能將受質蛋白標記上泛素鏈', 'APC活化後，會促使securin被泛素化並送往蛋白酶體降解，進而釋放separase', 'APC需要在M checkpoint（SAC）通過後才會被活化', 'APC除了促進進入anaphase，也負責降解cyclin B，使CDK1活性下降，讓細胞得以離開M期', 'APC的活化與MPF（M-phase Promoting Factor）無關，兩者是各自獨立、互不影響的調控系統'], explanation: 'MPF（CDK1+cyclin B）促使細胞進入M期並活化APC，而APC活化後又會降解cyclin B使MPF失活，兩者是緊密相關、互相調控的系統，並非各自獨立' },
+  { type: 4, question: '植物的細胞壁___（是／不是）細胞外基質', answer: '是', explanation: 'ECM的成分在cell內產生，由exocytosis分泌到細胞膜外，只要過了細胞膜就是細胞外，所以細胞壁是ECM' },
+  { type: 9, question: '身上所有蛋白質都有一定構型並執行固定功能', answer: false, explanation: 'Intrinsically disordered proteins (IDPs) 是一類在天然生理條件下缺乏穩定三維結構的蛋白質，但依然具有重要的生物學功能' },
+  { type: 4, question: 'lysosome 環境為 pH___，其中H+是透過V-type ATPase進入lysosome ', answer: '5', explanation: 0 },
+  { type: 3, question: 'MPF的活性在哪個階段最高？', answer: 'M期', options: ['M期', 'G1期', 'S期', 'G2期'], explanation: 'MPF是G2進M需要的調控物質，它會使核膜裂解、DNA濃縮，同時他也會促進meta進到ana，所以他在M phase的meta活性最高' },
+  { type: 3, question: '全酵素 (Holoenzyme) 的組成是？', answer: 'Apoenzyme + Cofactor', options: ['Apoenzyme + Cofactor', 'Apoenzyme only', 'Prosthetic group + Metal ion', 'Apoenzyme本身即具活性'], explanation: '全酵素 = 主酶(蛋白質部分) + 輔助因子，缺少Cofactor則Apoenzyme無活性' },
+  { type: 3, question: '關於細胞週期（cell cycle）中不同物質的合成或複製時期，ribosome 主要於 _____ phase 合成，histone 主要於 _____ phase 合成，而 centriole 則於 _____ 進行複製。', answer: 'G1；S；interphase', options: ['G1；S；interphase', 'S；G1；interphase', 'G1；G2；M phase', 'G2；S；M phase'], explanation: 'Ribosome（核糖體）主要於 G1 phase 合成；histone（組織蛋白）主要於 S phase 合成，因 S phase 正在進行 DNA 複製（DNA replication），需要 histone 來組裝染色質（chromatin）；centriole（中心粒）則於 interphase（包含 G1、S、G2 phase）中進行複製（duplication），通常於 G1/S 或 G2 phase 完成複製。' }
+];
+
+/*
+const allQuestions = [
+  // 類型 2：自動選擇（自動生成干擾項）
+  { type: 2, question: '1+1=__', answer: '2', explanation: '基本數學運算' },
+  
+  // 類型 3：選擇題（需提供 options）
+  { type: 3, question: 'Q？', answer: 'A1', options: ['A1', 'A2', 'A3', 'A4'], explanation: 'explaination' },
+  
+  // 類型 4：填空題（文字輸入）
+  { type: 4, question: 'Qaaa___', answer: 'A', explanation: 'explanation' },
+  
+  // 類型 9：是非題（answer: true 或 false）
+  { type: 9, question: 'Q', answer: true, explanation: 'explanation' },
+  { type: 9, question: 'Q', answer: false, explanation: 'explanation' },
+
+  
+  // 沒有解析的例子
+  { type: 2, question: '2+2=__', answer: '4', explanation: 0 },
+  { type: 9, question: 'CO是強場配體', answer: true, explanation: 0 },
+];
+*/
+
+// 每次遊戲隨機抽幾題，只要改這個數字即可
+const QUESTIONS_PER_GAME = 7;
+
+const typeNames = {
+  2: '自動選擇',
+  3: '選擇題',
+  4: '填空題',
+  9: '是非題'
+};
+
+let currentQuestion = 0;
+let correctCount = 0; // 第一次就答對的題數
+let startTime = Date.now();
+let timerInterval = null;
+let selectedAnswer = null;
+let answered = false;
+let shuffledQuestions = [];
+let reviewLog = [];
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function initGame() {
+  const questionCount = Math.min(Math.max(1, QUESTIONS_PER_GAME), allQuestions.length);
+  shuffledQuestions = shuffle(allQuestions).slice(0, questionCount);
+  reviewLog = shuffledQuestions.map(q => ({
+    question: q.question,
+    type: q.type,
+    correctAnswer: displayAnswer(q.answer),
+    wrongAttempts: [],
+    gotCorrect: false,
+    explanation: q.explanation
+  }));
+  showQuestion();
+  startTimer();
+
+  document.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      if (answered) nextQuestion();
+      else submitAnswer();
+    }
+  });
+}
+
+function displayAnswer(value) {
+  if (value === true) return 'O';
+  if (value === false) return 'X';
+  return String(value);
+}
+
+function showQuestion() {
+  answered = false;
+  selectedAnswer = null;
+  const q = shuffledQuestions[currentQuestion];
+
+  document.getElementById('progress').textContent =
+    (currentQuestion + 1) + '/' + shuffledQuestions.length;
+  document.getElementById('questionProgress').textContent =
+    '第 ' + (currentQuestion + 1) + ' 題 / 共 ' + shuffledQuestions.length + ' 題';
+  document.getElementById('questionType').textContent = typeNames[q.type];
+  document.getElementById('questionText').textContent = q.question;
+
+  const feedback = document.getElementById('feedback');
+  feedback.className = 'feedback';
+  feedback.innerHTML = '';
+
+  const contentArea = document.getElementById('contentArea');
+  contentArea.innerHTML = '';
+
+  if (q.type === 2) renderAutoSelect(q, contentArea);
+  else if (q.type === 3) renderSelect(q, contentArea);
+  else if (q.type === 4) renderText(q, contentArea);
+  else if (q.type === 9) renderTrueFalse(q, contentArea);
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.textContent = '確認答案';
+  submitBtn.onclick = submitAnswer;
+}
+
+function renderAutoSelect(q, container) {
+  generateOptions(q.answer).forEach(opt => makeOptionButton(container, opt, opt));
+}
+
+function renderSelect(q, container) {
+  if (!q.options) return;
+  shuffle(q.options).forEach(opt => makeOptionButton(container, opt, opt));
+}
+
+function makeOptionButton(container, label, value) {
+  const btn = document.createElement('button');
+  btn.className = 'option-btn';
+  btn.textContent = label;
+  btn.onclick = () => selectOption(btn, value);
+  container.appendChild(btn);
+}
+
+function renderText(q, container) {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'input-field';
+  input.placeholder = '輸入答案';
+  input.addEventListener('input', () => selectedAnswer = input.value.trim());
+  container.appendChild(input);
+  input.focus();
+}
+
+function renderTrueFalse(q, container) {
+  makeOptionButton(container, 'O', true);
+  makeOptionButton(container, 'X', false);
+}
+
+function selectOption(btn, value) {
+  if (answered || btn.disabled) return;
+  document.querySelectorAll('.option-btn[data-selected="true"]').forEach(b => {
+    b.removeAttribute('data-selected');
+  });
+  btn.setAttribute('data-selected', 'true');
+  selectedAnswer = value;
+}
+
+function generateOptions(answer) {
+  if (!isNaN(answer) && String(answer).trim() !== '') {
+    const num = Number(answer);
+    return shuffle([
+      String(answer),
+      String(num + 1),
+      String(num - 1),
+      String(num + 2)
+    ]);
+  }
+  return shuffle([String(answer), '以上皆是', '以上皆非', '不一定']);
+}
+
+function normalize(v) {
+  return String(v).trim().toLowerCase();
+}
+
+function isAnswerCorrect(q, value) {
+  if (q.type === 9) return value === q.answer;
+  return normalize(value) === normalize(q.answer);
+}
+
+function submitAnswer() {
+  if (answered) {
+    nextQuestion();
+    return;
+  }
+
+  const q = shuffledQuestions[currentQuestion];
+  const log = reviewLog[currentQuestion];
+  const feedback = document.getElementById('feedback');
+
+  if (selectedAnswer === null || selectedAnswer === '') {
+    feedback.className = 'feedback show error';
+    feedback.textContent = '請先作答';
+    return;
+  }
+
+  if (isAnswerCorrect(q, selectedAnswer)) {
+    answered = true;
+    log.gotCorrect = true;
+
+    if (log.wrongAttempts.length === 0) {
+      correctCount++;
+      document.getElementById('correct').textContent = correctCount;
+    }
+
+    document.querySelectorAll('.option-btn').forEach(btn => {
+      btn.disabled = true;
+      const selected = btn.getAttribute('data-selected') === 'true';
+      if (selected) {
+        btn.style.background = '#E8F9EF';
+        btn.style.borderColor = '#4CAF7D';
+        btn.style.color = '#2B6E4F';
+      }
+    });
+
+    const input = document.querySelector('.input-field');
+    if (input) {
+      input.disabled = true;
+      input.style.background = '#E8F9EF';
+      input.style.borderColor = '#4CAF7D';
+    }
+
+    feedback.className = 'feedback show success';
+    feedback.innerHTML = '✓ 正確' +
+      (q.explanation ? '<span class="explanation">' + escapeHtml(String(q.explanation)) + '</span>' : '');
+
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.textContent = currentQuestion === shuffledQuestions.length - 1 ? '查看結果' : '下一題';
+    submitBtn.onclick = nextQuestion;
+  } else {
+    log.wrongAttempts.push(displayAnswer(selectedAnswer));
+
+    const selectedBtn = document.querySelector('.option-btn[data-selected="true"]');
+    if (selectedBtn) {
+      selectedBtn.disabled = true;
+      selectedBtn.removeAttribute('data-selected');
+      selectedBtn.style.background = '#FDE8E8';
+      selectedBtn.style.borderColor = '#E24B4A';
+      selectedBtn.style.color = '#8B2323';
+    }
+
+    const input = document.querySelector('.input-field');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+
+    selectedAnswer = null;
+    feedback.className = 'feedback show error';
+    feedback.textContent = '✗ 錯誤，再試一次';
+  }
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= shuffledQuestions.length) showResults();
+  else showQuestion();
+}
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    document.getElementById('timer').textContent =
+      mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }, 100);
+}
+
+function showResults() {
+  clearInterval(timerInterval);
+
+  const accuracy = Math.round((correctCount / shuffledQuestions.length) * 100);
+  document.getElementById('accuracy').textContent = accuracy + '%';
+  document.getElementById('finalCorrect').textContent =
+    correctCount + '/' + shuffledQuestions.length;
+
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  document.getElementById('finalTime').textContent =
+    mins + ':' + (secs < 10 ? '0' : '') + secs;
+
+  const details = document.getElementById('resultDetails');
+  details.innerHTML = '';
+  reviewLog.forEach((log, i) => {
+    const row = document.createElement('div');
+    row.className = 'result-item ' +
+      (log.wrongAttempts.length === 0 ? 'correct' : 'incorrect');
+    row.textContent = (i + 1) + '. ' +
+      (log.wrongAttempts.length === 0 ? '✓ 第一次答對' : '✗ 曾答錯 ' + log.wrongAttempts.length + ' 次');
+    details.appendChild(row);
+  });
+
+  document.getElementById('resultOverlay').classList.add('show');
+
+  let reviewBtn = document.getElementById('reviewBtn');
+  if (!reviewBtn) {
+    reviewBtn = document.createElement('button');
+    reviewBtn.id = 'reviewBtn';
+    reviewBtn.className = 'result-button';
+    reviewBtn.style.marginBottom = '10px';
+    reviewBtn.textContent = '查看答題複習';
+    reviewBtn.onclick = showReview;
+    const restart = document.querySelector('#resultOverlay .result-button');
+    restart.parentNode.insertBefore(reviewBtn, restart);
+  }
+}
+
+function showReview() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  document.querySelector('.stats').style.display = 'none';
+  document.getElementById('questionContainer').style.display = 'none';
+  document.querySelector('.button-group').style.display = 'none';
+
+  const reviewContainer = document.getElementById('reviewContainer');
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = '';
+
+  reviewLog.forEach((log, i) => {
+    const q = shuffledQuestions[i];
+    const card = document.createElement('div');
+    card.className = 'review-card ' +
+      (log.wrongAttempts.length === 0 ? 'first-correct' : 'had-wrong');
+
+    let inner = '<div class="review-q">' + (i + 1) + '. ' +
+      escapeHtml(log.question) + '</div>';
+
+    // 題型標示
+    inner += '<div class="review-line">題型：' + escapeHtml(typeNames[log.type]) + '</div>';
+
+    // 選擇題：把所有選項一起列出，並標記正確答案與曾答錯選項
+    if (log.type === 3 && q.options) {
+      inner += '<div class="review-line">選項：</div>';
+      q.options.forEach(opt => {
+        const isCorrect = normalize(opt) === normalize(q.answer);
+        const wasWrong = log.wrongAttempts.some(w => normalize(w) === normalize(opt));
+
+        let mark = '';
+        let cls = '';
+        if (isCorrect) {
+          mark = '✓ ';
+          cls = ' review-correct';
+        } else if (wasWrong) {
+          mark = '✗ ';
+          cls = ' review-wrong';
+        }
+
+        inner += '<div class="review-line' + cls + '">' +
+          mark + escapeHtml(String(opt)) + '</div>';
+      });
+    }
+
+    // 是非題：顯示 O / X
+    if (log.type === 9) {
+      inner += '<div class="review-line review-correct">正確答案：' +
+        escapeHtml(displayAnswer(q.answer)) + '</div>';
+    }
+
+    // 填空題：顯示標準答案
+    if (log.type === 4) {
+      inner += '<div class="review-line review-correct">正確答案：' +
+        escapeHtml(String(q.answer)) + '</div>';
+    }
+
+    // 自動選擇題：顯示標準答案
+    if (log.type === 2) {
+      inner += '<div class="review-line review-correct">正確答案：' +
+        escapeHtml(String(q.answer)) + '</div>';
+    }
+
+    if (log.wrongAttempts.length === 0) {
+      inner += '<div class="review-line review-correct">✓ 第一次答對</div>';
+    } else {
+      inner += '<div class="review-line review-wrong">答錯過：' +
+        log.wrongAttempts.map(escapeHtml).join('、') + '</div>';
+    }
+
+    if (log.explanation) {
+      inner += '<div class="review-line">解析：' +
+        escapeHtml(String(log.explanation)) + '</div>';
+    }
+
+    card.innerHTML = inner;
+    reviewList.appendChild(card);
+  });
+
+  reviewContainer.classList.add('show');
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+initGame();
+
+</script>
+</body>
+</html>
