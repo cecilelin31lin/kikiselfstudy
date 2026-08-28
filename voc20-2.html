@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>word puzzle</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overscroll-behavior: none; }
+  body {
+    margin: 0;
+    padding: 24px 16px 60px;
+    background: #f5f5f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Nunito', sans-serif;
+    color: #2B3A55;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #2B3A55;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .stat-card {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2B3A55;
+  }
+
+  .instruction {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .clue-list {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  .clue-list-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .clue-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    background: #fafafa;
+  }
+  .clue-item.found {
+    text-decoration: line-through;
+    color: #999;
+    background: #f5f5f5;
+  }
+  .clue-number {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .clue-item.found .clue-number {
+    background: rgba(70,129,137,.16);
+    border-color: #468189;
+    color: #468189;
+  }
+
+  .grid-container {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .grid {
+    display: grid;
+    gap: 3px;
+    margin: 0 auto;
+    width: fit-content;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .cell {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2B3A55;
+    background: #fafafa;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  @media (min-width: 480px) {
+    .cell { width: 34px; height: 34px; font-size: 15px; }
+  }
+  .cell.selected {
+    background: rgba(120,120,120,.35);
+    color: #2B3A55;
+  }
+  .cell.found {
+    color: #2B3A55;
+  }
+  .cell.found.selected {
+    box-shadow: inset 0 0 0 2px rgba(55,138,221,.75);
+  }
+
+  .confirm-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .confirm-btn, .clear-btn {
+    flex: 1;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .confirm-btn {
+    background: #B0C4DE;
+    color: #2B3A55;
+  }
+  .confirm-btn:hover { background: #9FB5D1; }
+  .confirm-btn:disabled {
+    background: #eee;
+    color: #aaa;
+    cursor: not-allowed;
+  }
+  .clear-btn {
+    background: white;
+    color: #2B3A55;
+    border: 1px solid #B0C4DE;
+  }
+  .clear-btn:hover { background: rgba(176,196,222,.30); }
+
+  .feedback {
+    display: none;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .feedback.show { display: block; }
+  .feedback.success {
+    background: rgba(70,129,137,.16);
+    border: 0.5px solid #468189;
+    color: #468189;
+  }
+  .feedback.error {
+    background: #FDE8E8;
+    border: 0.5px solid #E24B4A;
+    color: #8B2323;
+  }
+
+  .result-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .result-overlay.show { display: flex; }
+
+  .result-modal {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .result-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2B3A55;
+    margin-bottom: 12px;
+  }
+  .result-stat { margin-bottom: 16px; }
+  .result-stat-label { font-size: 12px; color: #999; margin-bottom: 4px; }
+  .result-stat-value { font-size: 24px; font-weight: 600; color: #378ADD; }
+
+  .result-button-group { display: flex; gap: 10px; }
+  .result-button {
+    flex: 1;
+    background: rgba(176,196,222,.82);
+    color: #2B3A55;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .result-button:hover { background: rgba(176,196,222,1); }
+  .result-button.secondary {
+    background: rgba(230,216,156,.22);
+    color: #2B3A55;
+    border: 1px solid rgba(196,174,86,.65);
+  }
+  .result-button.secondary:hover { background: rgba(230,216,156,.40); }
+
+  .review-container { display: none; margin-top: 20px; }
+  .review-container.show { display: block; }
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .review-header h2 { margin: 0; font-size: 20px; }
+  .back-btn {
+    background: rgba(176,196,222,.82);
+    color: #2B3A55;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .back-btn:hover { background: rgba(176,196,222,1); }
+  .review-item {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .review-word-meaning {
+    font-weight: 700;
+    color: #6F86A3;
+    margin-bottom: 6px;
+  }
+  .review-sentence {
+    color: #2B3A55;
+    margin-bottom: 4px;
+  }
+  .review-translation {
+    color: #666;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>word puzzle</h1>
+  <p class="subtitle">在字母格中找出隱藏的單字</p>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">⏱ 時間</div>
+      <div class="stat-value" id="timer">0:00</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">✓ 找到</div>
+      <div class="stat-value" id="foundCount">0/0</div>
+    </div>
+  </div>
+
+  <div class="instruction">依序點擊字母格拼出單字，點擊已選的格子可以取消，選好後按「確認」送出</div>
+
+  <div class="clue-list">
+    <div class="clue-list-label">提示清單</div>
+    <div id="clueListContainer"></div>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+
+  <div class="grid-container">
+    <div class="grid" id="gridContainer"></div>
+  </div>
+
+  <div class="confirm-bar">
+    <button class="clear-btn" onclick="clearSelection()">清除選取</button>
+    <button class="confirm-btn" id="confirmBtn" onclick="confirmSelection()">確認</button>
+  </div>
+
+  <div class="review-container" id="reviewContainer">
+    <div class="review-header">
+      <h2>📋 複習</h2>
+      <button class="back-btn" onclick="location.reload()">重新開始</button>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-modal">
+      <div class="result-title">🎉 完成！</div>
+      <div class="result-stat">
+        <div class="result-stat-label">答題時間</div>
+        <div class="result-stat-value" id="finalTime">0:00</div>
+      </div>
+      <div class="result-button-group">
+        <button class="result-button secondary" onclick="reviewAnswers()">複習</button>
+        <button class="result-button" onclick="location.reload()">重新開始</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+出題方式：
+word: 英文單字（會自動轉大寫比對）
+meaning: 單字中文意思
+pos: 詞性，例如 n. / v. / adj. / adv.
+sentence: 英文例句（可以是單字的任何變化形，如過去式/現在分詞，程式會自動用字根模糊比對找出並轉成底線提示）
+translation: 中文翻譯
+*/
+const words = [
+  { word: 'opulent', meaning: '奢華的', pos: 'adj.', sentence: 'The ceremony was an opulent display of wealth and power.', translation: '該典禮是一場財富與權力的奢華展示。' },
+  { word: 'gem', meaning: '寶藏、珍品', pos: 'n.', sentence: 'This small café is a hidden gem that few tourists know about.', translation: '這家小咖啡館是一個很少遊客知道的隱藏寶藏。' },
+  { word: 'force out', meaning: '迫使退出', pos: 'phr. v.', sentence: 'The new policy forced many small businesses out of the market.', translation: '新政策迫使許多小型企業退出市場。' },
+  { word: 'interest rate', meaning: '利率', pos: 'n.', sentence: 'The central bank decided to raise interest rates to curb inflation.', translation: '中央銀行決定升息以抑制通貨膨脹。' },
+  { word: 'perceive', meaning: '認為、視為', pos: 'v.', sentence: 'The new policy was perceived as a threat to individual freedom.', translation: '該新政策被認為是對個人自由的威脅。' },
+  { word: 'prosecute', meaning: '起訴', pos: 'v.', sentence: 'The government will prosecute anyone found selling illegal drugs.', translation: '政府將起訴任何被發現販賣非法藥物的人。' },
+];
+
+// 配色（依序循環使用於已找到的單字標記）
+const palette = ['#e7d8c9', '#eee4e1', '#d3c0ad', '#e6beae', '#ebded5', '#cdbcac'];
+
+let gridSize = 0;
+let grid = [];
+let placements = []; // {word, meaning, pos, sentence, translation, cells, colorIndex}
+let foundWords = new Set();
+let selectedCells = []; // [[r,c], ...]
+let startTime = Date.now();
+let timerInterval = null;
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+const DIRECTIONS = [
+  [0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]
+];
+
+function buildGrid() {
+  // compactWord：去除空白後的版本，用來放進字母格（片語會被當成連續字母處理）
+  const upperWords = words.map(w => w.word.toUpperCase().replace(/\s+/g, ''));
+  const longest = Math.max(...upperWords.map(w => w.length));
+  const totalLetters = upperWords.reduce((s,w)=>s+w.length,0);
+  gridSize = Math.max(longest + 2, Math.ceil(Math.sqrt(totalLetters * 2.6)));
+  gridSize = Math.min(Math.max(gridSize, 10), 16);
+
+  grid = Array.from({length: gridSize}, () => Array(gridSize).fill(null));
+  placements = [];
+
+  const sorted = [...words].sort((a,b)=> b.word.replace(/\s+/g,'').length - a.word.replace(/\s+/g,'').length);
+
+  sorted.forEach((original, idx) => {
+    const w = original.word.toUpperCase().replace(/\s+/g, ''); // 放進格子用的字母序列（無空白）
+    let placed = false;
+    let attempts = 0;
+    while (!placed && attempts < 400) {
+      attempts++;
+      const dir = DIRECTIONS[Math.floor(Math.random()*DIRECTIONS.length)];
+      const row = Math.floor(Math.random()*gridSize);
+      const col = Math.floor(Math.random()*gridSize);
+
+      const endRow = row + dir[0]*(w.length-1);
+      const endCol = col + dir[1]*(w.length-1);
+      if (endRow < 0 || endRow >= gridSize || endCol < 0 || endCol >= gridSize) continue;
+
+      let fits = true;
+      const cells = [];
+      for (let i=0;i<w.length;i++){
+        const r = row + dir[0]*i;
+        const c = col + dir[1]*i;
+        const existing = grid[r][c];
+        if (existing !== null && existing !== w[i]) { fits = false; break; }
+        cells.push([r,c]);
+      }
+      if (!fits) continue;
+
+      cells.forEach(([r,c], i) => { grid[r][c] = w[i]; });
+      placements.push({
+        word: w,                    // 無空白版本，用於格子比對
+        displayWord: original.word, // 原始版本（保留空白），用於複習頁面顯示
+        meaning: original.meaning,
+        pos: original.pos,
+        sentence: original.sentence,
+        translation: original.translation,
+        cells,
+        colorIndex: idx % palette.length
+      });
+      placed = true;
+    }
+  });
+
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let r=0;r<gridSize;r++){
+    for (let c=0;c<gridSize;c++){
+      if (grid[r][c] === null) {
+        grid[r][c] = letters[Math.floor(Math.random()*letters.length)];
+      }
+    }
+  }
+}
+
+function renderGrid() {
+  const container = document.getElementById('gridContainer');
+  container.style.gridTemplateColumns = `repeat(${gridSize}, 32px)`;
+  container.innerHTML = '';
+
+  for (let r=0;r<gridSize;r++){
+    for (let c=0;c<gridSize;c++){
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.textContent = grid[r][c];
+      cell.dataset.row = r;
+      cell.dataset.col = c;
+      cell.onclick = () => onCellClick(r, c, cell);
+      container.appendChild(cell);
+    }
+  }
+}
+
+// 找出句子裡跟 word 相符的完整單字（不論時態、單複數等變化形），並替換成提示格式
+// 提示規則：底線數量固定依照 word 原形本身的長度（首字母 + 底線 + 尾字母）
+// 若句子裡的型態比原形多出字尾（如 -ing、-ed），多出來的部分會接在提示後面完整顯示
+// 若 displayWord 是片語（含空白，如 "chip away"），忽略空白整個當一串連續字母處理，
+// 比對句子中「第一個字可能有時態變化 + 後面字直接照原字」的片語型態，整段替換成單一段底線提示（不含空白）
+function replaceWordInClue(sentence, displayWord, compactWord) {
+  const isPhrase = /\s/.test(displayWord.trim());
+
+  if (isPhrase) {
+    const tokens = displayWord.trim().split(/\s+/);
+    const firstToken = tokens[0];
+    const restTokens = tokens.slice(1);
+
+    const stemLen = Math.max(3, firstToken.length - 2);
+    const stem = firstToken.slice(0, stemLen);
+    const stemEscaped = stem.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    let pattern = '\\b(' + stemEscaped + '[a-zA-Z]*)\\b';
+    restTokens.forEach(tok => {
+      const tokEscaped = tok.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      pattern += '\\s+(' + tokEscaped + ')\\b';
+    });
+
+    const regex = new RegExp(pattern, 'i');
+    const match = sentence.match(regex);
+    if (!match) return sentence; // 抓不到片語就原樣返回，避免誤刪內容
+
+    const matchedPhrase = match[0];
+
+    // 底線提示：忽略空白，只依照 compactWord（無空白版本）的字母數計算首尾字母+底線
+    const firstLetter = compactWord.charAt(0);
+    const lastLetter = compactWord.charAt(compactWord.length - 1);
+    const middleBlanks = '_'.repeat(Math.max(compactWord.length - 2, 1));
+    const hint = firstLetter + middleBlanks + lastLetter;
+
+    return sentence.replace(matchedPhrase, hint);
+  }
+
+  // 單一單字（無空白）：邏輯與原本完全相同，不受片語功能影響
+  const word = compactWord;
+  const stemLen = Math.max(3, word.length - 2);
+  const stem = word.slice(0, stemLen);
+  const stemEscaped = stem.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  const regex = new RegExp('\\b(' + stemEscaped + '[a-zA-Z]*)\\b', 'i');
+  const match = sentence.match(regex);
+
+  if (!match) return sentence;
+
+  const matchedWord = match[1];
+
+  const firstLetter = word.charAt(0);
+  const lastLetter = word.charAt(word.length - 1);
+  const middleBlanks = '_'.repeat(Math.max(word.length - 2, 1));
+  const baseHint = firstLetter + middleBlanks + lastLetter;
+
+  const extraLength = matchedWord.length - word.length;
+  const extraSuffix = extraLength > 0 ? matchedWord.slice(matchedWord.length - extraLength) : '';
+
+  const hint = baseHint + extraSuffix;
+
+  return sentence.replace(matchedWord, hint);
+}
+
+function renderClueList() {
+  const container = document.getElementById('clueListContainer');
+  container.innerHTML = '';
+  document.getElementById('foundCount').textContent = '0/' + placements.length;
+
+  placements.forEach((p, idx) => {
+    const item = document.createElement('div');
+    item.className = 'clue-item';
+    item.id = 'clue-' + idx;
+
+    const num = document.createElement('div');
+    num.className = 'clue-number';
+    num.textContent = idx + 1;
+
+    const text = document.createElement('div');
+    text.textContent = replaceWordInClue(p.sentence, p.displayWord, p.word);
+
+    item.appendChild(num);
+    item.appendChild(text);
+    container.appendChild(item);
+  });
+}
+
+function getCellEl(r, c) {
+  return document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+}
+
+function onCellClick(r, c, cellEl) {
+  const idxInSelection = selectedCells.findIndex(cell => cell[0] === r && cell[1] === c);
+
+  if (idxInSelection !== -1) {
+    // 已選取過，點擊取消它（連同其後的選取一併移除，維持順序連貫）
+    selectedCells = selectedCells.slice(0, idxInSelection);
+    updateSelectedDisplay();
+    return;
+  }
+
+  selectedCells.push([r, c]);
+  updateSelectedDisplay();
+}
+
+function updateSelectedDisplay() {
+  document.querySelectorAll('.cell.selected').forEach(el => {
+    el.classList.remove('selected');
+  });
+  selectedCells.forEach(([r,c]) => {
+    const el = getCellEl(r,c);
+    if (el) el.classList.add('selected');
+  });
+  document.getElementById('confirmBtn').disabled = selectedCells.length === 0;
+}
+
+function clearSelection() {
+  selectedCells = [];
+  updateSelectedDisplay();
+  hideFeedback();
+}
+
+function cellsMatch(cellsA, cellsB) {
+  if (cellsA.length !== cellsB.length) return false;
+  const setB = new Set(cellsB.map(([r,c]) => `${r},${c}`));
+  return cellsA.every(([r,c]) => setB.has(`${r},${c}`));
+}
+
+function lettersMatch(selectedLetters, targetWord) {
+  if (selectedLetters.length !== targetWord.length) return false;
+  const sortedSelected = selectedLetters.split('').sort().join('');
+  const sortedTarget = targetWord.split('').sort().join('');
+  return sortedSelected === sortedTarget;
+}
+
+function confirmSelection() {
+  if (selectedCells.length === 0) return;
+
+  // 把選取的格子字母湊起來，跟單字比對（不論點擊順序，只要字母組合相符即可）
+  const selectedLetters = selectedCells.map(([r,c]) => grid[r][c]).join('');
+
+  for (let i=0;i<placements.length;i++){
+    const p = placements[i];
+    if (foundWords.has(i)) continue;
+    if (lettersMatch(selectedLetters, p.word)) {
+      markFoundByCells(i, selectedCells);
+      showFeedback(true, '✓ 找到了：' + p.word);
+      selectedCells = [];
+      updateSelectedDisplay();
+      return;
+    }
+  }
+
+  showFeedback(false, '✗ 這不是正確的單字，再試一次');
+  selectedCells = [];
+  updateSelectedDisplay();
+}
+
+function showFeedback(success, msg) {
+  const fb = document.getElementById('feedback');
+  fb.textContent = msg;
+  fb.className = 'feedback show ' + (success ? 'success' : 'error');
+  setTimeout(hideFeedback, 1200);
+}
+
+function hideFeedback() {
+  document.getElementById('feedback').classList.remove('show');
+}
+
+function markFoundByCells(idx, cells) {
+  const p = placements[idx];
+  foundWords.add(idx);
+
+  const color = palette[p.colorIndex];
+  cells.forEach(([r,c]) => {
+    const el = getCellEl(r,c);
+    el.classList.add('found');
+    el.classList.remove('selected');
+    el.style.background = hexToRgba(color, 0.75);
+  });
+
+  const clueEl = document.getElementById('clue-' + idx);
+  clueEl.classList.add('found');
+
+  document.getElementById('foundCount').textContent = foundWords.size + '/' + placements.length;
+
+  if (foundWords.size === placements.length) {
+    setTimeout(showResults, 400);
+  }
+}
+
+function startTimer() {
+  startTime = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    document.getElementById('timer').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  }, 100);
+}
+
+function showResults() {
+  clearInterval(timerInterval);
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  document.getElementById('finalTime').textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  document.getElementById('resultOverlay').classList.add('show');
+}
+
+function reviewAnswers() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  document.querySelector('.grid-container').style.display = 'none';
+  document.querySelector('.clue-list').style.display = 'none';
+  document.querySelector('.confirm-bar').style.display = 'none';
+
+  const reviewList = document.getElementById('reviewList');
+  reviewList.innerHTML = '';
+  placements.forEach((p) => {
+    const item = document.createElement('div');
+    item.className = 'review-item';
+
+    const wm = document.createElement('div');
+    wm.className = 'review-word-meaning';
+    wm.textContent = p.displayWord + '（' + p.pos + '） ' + p.meaning;
+    item.appendChild(wm);
+
+    const sentenceDiv = document.createElement('div');
+    sentenceDiv.className = 'review-sentence';
+    sentenceDiv.textContent = p.sentence;
+    item.appendChild(sentenceDiv);
+
+    const translationDiv = document.createElement('div');
+    translationDiv.className = 'review-translation';
+    translationDiv.textContent = p.translation;
+    item.appendChild(translationDiv);
+
+    reviewList.appendChild(item);
+  });
+
+  document.getElementById('reviewContainer').classList.add('show');
+}
+
+function initGame() {
+  buildGrid();
+  renderGrid();
+  renderClueList();
+  startTimer();
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      confirmSelection();
+    }
+  });
+}
+
+initGame();
+</script>
+</body>
+</html>
