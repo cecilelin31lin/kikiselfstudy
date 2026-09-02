@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四關單字挑戰｜抽考版</title>
+<style>
+*{box-sizing:border-box}
+html,body{overscroll-behavior:none}
+body{margin:0;padding:24px 16px 60px;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Nunito',sans-serif;color:#2B3A55;min-height:100vh}
+.wrap{max-width:720px;margin:0 auto}
+h1{text-align:center;font-size:28px;margin:0 0 8px}
+.subtitle{text-align:center;font-size:14px;color:#666;margin-bottom:24px}
+.card{background:#fff;border:.5px solid #ddd;border-radius:12px;padding:16px;margin-bottom:16px}
+.stage-picker h2{font-size:18px;margin:0 0 12px}
+.stage-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stage-check{display:flex;gap:8px;align-items:flex-start;background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:10px;cursor:pointer}
+.stage-check input{margin-top:3px}
+.stage-check strong{display:block;font-size:14px}
+.stage-check span{display:block;font-size:12px;color:#777;margin-top:2px}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+button{font-family:inherit}
+.primary,.secondary,.option-btn,.word-btn,.confirm-btn,.clear-btn{border:none;border-radius:8px;padding:10px 16px;font-size:14px;cursor:pointer}
+.primary{background:#B0C4DE;color:#2B3A55}
+.primary:hover{background:#9AB3D0}
+.secondary{background:#fff;color:#2B3A55;border:1px solid #B0C4DE}
+.secondary:hover{background:rgba(176,196,222,.22)}
+.hidden{display:none!important}
+.stage-indicator{display:flex;justify-content:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.stage-dot{width:34px;height:34px;border-radius:50%;border:2px solid #ddd;background:#fff;color:#999;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600}
+.stage-dot.active{border-color:#B0C4DE;background:rgba(176,196,222,.30);color:#2B3A55}
+.stage-dot.done{border-color:#468189;background:rgba(70,129,137,.14);color:#468189}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat-card{background:#fff;border:.5px solid #ddd;border-radius:8px;padding:12px;text-align:center}
+.stat-label{font-size:12px;color:#999;margin-bottom:6px}
+.stat-value{font-size:18px;font-weight:600}
+.instruction{background:#fff;border:.5px solid #ddd;border-radius:12px;padding:12px;margin-bottom:16px;font-size:13px;color:#666;line-height:1.6}
+.question-container{background:#fff;border:.5px solid #ddd;border-radius:12px;padding:20px;margin-bottom:16px}
+.question-text{font-size:18px;font-weight:500;text-align:center;margin-bottom:18px}
+.option-btn{display:block;width:100%;margin-bottom:10px;background:#fff;border:.5px solid #ddd;text-align:left;color:#2B3A55}
+.option-btn[data-selected="true"]{background:rgba(176,196,222,.30);border-color:#B0C4DE}
+.option-btn.correct{background:rgba(70,129,137,.14);border-color:#468189}
+.option-btn.incorrect{background:rgba(232,130,140,.16);border-color:#E8828C}
+.feedback{display:none;padding:10px;border-radius:8px;margin:12px 0;text-align:center;font-size:13px;font-weight:600}
+.feedback.show{display:block}
+.feedback.success{background:rgba(70,129,137,.14);border:.5px solid #468189;color:#468189}
+.feedback.error{background:rgba(232,130,140,.16);border:.5px solid #E8828C;color:#E8828C}
+.grid-container{background:#fff;border:.5px solid #ddd;border-radius:12px;padding:16px;margin-bottom:16px;overflow-x:auto}
+.grid{display:grid;gap:3px;margin:0 auto;width:fit-content;touch-action:manipulation;user-select:none}
+.cell{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;background:#fafafa;border-radius:6px;cursor:pointer}
+.cell.selected{background:rgba(120,120,120,.35)}
+.clue-list{background:#fff;border:.5px solid #ddd;border-radius:12px;padding:12px;margin-bottom:16px}
+.clue-item{padding:9px;border-radius:8px;background:#fafafa;margin-bottom:7px;font-size:13px;line-height:1.5}
+.clue-item.found{text-decoration:line-through;color:#999}
+.confirm-bar{display:flex;gap:10px;margin-bottom:16px}
+.confirm-btn,.clear-btn{flex:1}
+.confirm-btn{background:#B0C4DE;color:#2B3A55}
+.clear-btn{background:#fff;color:#2B3A55;border:1px solid #B0C4DE}
+.word-buttons{background:#fff;border:.5px solid #ddd;border-radius:12px;padding:12px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px}
+.word-btn{background:#fff;border:.5px solid #ccc;color:#2B3A55}
+.word-btn[data-selected="true"]{background:#B0C4DE;color:#fff;border-color:#B0C4DE}
+.sentences{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.sentence{background:#fff;border:.5px solid #ddd;border-radius:12px;padding:12px;font-size:13px;line-height:1.6}
+.blank{background:#FFF4E6;color:#D9860E;padding:4px 8px;border-radius:6px;cursor:pointer;font-weight:500;display:inline-block;min-width:80px;text-align:center}
+.blank.correct{background:rgba(70,129,137,.14);color:#468189;cursor:default}
+.blank.incorrect{background:rgba(232,130,140,.16);color:#E8828C}
+.result-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);align-items:center;justify-content:center;z-index:1000;padding:18px}
+.result-overlay.show{display:flex}
+.result-modal{background:#fff;border-radius:12px;padding:22px;max-width:460px;width:100%;max-height:88vh;overflow:auto}
+.result-title{font-size:20px;font-weight:700;text-align:center;margin-bottom:14px}
+.stage-summary-row{background:#f9f9f9;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px}
+.summary-name{font-weight:700}
+.summary-detail{color:#666;margin-top:3px}
+.total-time{font-size:24px;font-weight:700;text-align:center;margin:12px 0}
+.review-container{display:none;margin-top:20px}
+.review-container.show{display:block}
+.review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.review-item{background:#fff;border:.5px solid #ddd;border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:13px;line-height:1.6}
+.review-word-meaning{font-weight:700;color:#6F86A3;margin-bottom:5px}
+.review-sentence{margin-bottom:3px}
+.review-translation{color:#666}
+
+.hint-btn{margin-left:8px;border:1px solid #E6D89C;background:rgba(230,216,156,.22);color:#2B3A55;border-radius:6px;padding:5px 9px;font-size:12px;cursor:pointer;white-space:nowrap}
+.hint-btn:hover{background:rgba(230,216,156,.40)}
+.hint-btn.used{border-color:#d3c0ad;background:#eee4e1}
+.clue-row{display:flex;align-items:flex-start;gap:8px}
+.clue-text{flex:1}
+.hint-options{margin-top:7px;padding:7px 9px;background:#fff;border:1px dashed #d3c0ad;border-radius:6px;font-size:12px;color:#666}
+.hint-tag{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:rgba(230,216,156,.28);color:#7a6731;font-size:11px;font-weight:600}
+
+@media(max-width:560px){.stage-options{grid-template-columns:1fr}.cell{width:30px;height:30px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>四關單字挑戰｜抽考版</h1>
+  <p class="subtitle">開始前可自由選擇要玩的關卡，也可以四關全玩</p>
+
+  <div id="startScreen" class="card stage-picker">
+    <h2>選擇這次要玩的關卡</h2>
+    <div class="stage-options">
+      <label class="stage-check"><input type="checkbox" value="1" checked><div><strong>第一關｜看單字選中文</strong><span>看到英文單字，選出正確中文意思</span></div></label>
+      <label class="stage-check"><input type="checkbox" value="2" checked><div><strong>第二關｜看句子找單字</strong><span>依例句提示，在字母格中找出單字</span></div></label>
+      <label class="stage-check"><input type="checkbox" value="3" checked><div><strong>第三關｜看中文選英文</strong><span>看到中文意思，選出正確英文單字</span></div></label>
+      <label class="stage-check"><input type="checkbox" value="4" checked><div><strong>第四關｜單字填進句子</strong><span>選擇單字，再填入對應句子的空格</span></div></label>
+    </div>
+    <div class="btn-row">
+      <button class="secondary" onclick="selectAllStages()">四關全玩</button>
+      <button class="primary" onclick="startGame()">開始</button>
+    </div>
+  </div>
+
+  <div id="gameArea" class="hidden">
+    <div class="stage-indicator" id="stageIndicator"></div>
+
+    <div id="stage1" class="hidden">
+      <div class="stats"><div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="s1progress"></div></div><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s1timer">0:00</div></div></div>
+      <div class="instruction">第一關：看英文單字，選出正確的中文意思。</div>
+      <div class="question-container"><div class="question-text" id="s1question"></div><div id="s1options"></div><div class="feedback" id="s1feedback"></div></div>
+      <div class="btn-row"><button class="primary" id="s1submitBtn" onclick="s1submit()">確認答案</button></div>
+    </div>
+
+    <div id="stage2" class="hidden">
+      <div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s2timer">0:00</div></div><div class="stat-card"><div class="stat-label">✓ 找到</div><div class="stat-value" id="s2found">0/0</div></div></div>
+      <div class="instruction">第二關：看句子提示，在字母格中找出正確單字。選好後按「確認」；Enter 也可確認。</div>
+      <div class="clue-list"><div id="s2clues"></div></div>
+      <div class="feedback" id="s2feedback"></div>
+      <div class="grid-container"><div class="grid" id="s2grid"></div></div>
+      <div class="confirm-bar"><button class="clear-btn" onclick="s2clear()">清除選取</button><button class="confirm-btn" id="s2confirmBtn" onclick="s2confirm()">確認</button></div>
+    </div>
+
+    <div id="stage3" class="hidden">
+      <div class="stats"><div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="s3progress"></div></div><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s3timer">0:00</div></div></div>
+      <div class="instruction">第三關：看中文意思，選出正確的英文單字。</div>
+      <div class="question-container"><div class="question-text" id="s3question"></div><div id="s3options"></div><div class="feedback" id="s3feedback"></div></div>
+      <div class="btn-row"><button class="primary" id="s3submitBtn" onclick="s3submit()">確認答案</button></div>
+    </div>
+
+    <div id="stage4" class="hidden">
+      <div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s4timer">0:00</div></div><div class="stat-card"><div class="stat-label">✓ 配對</div><div class="stat-value" id="s4matched">0/0</div></div></div>
+      <div class="instruction">第四關：選擇一個單字，再點擊句子中的空白填入。</div>
+      <div class="word-buttons" id="s4wordButtons"></div>
+      <div class="sentences" id="s4sentences"></div>
+    </div>
+  </div>
+
+  <div class="review-container" id="reviewContainer">
+    <div class="review-header"><h2>📋 複習</h2><button class="secondary" onclick="location.reload()">重新開始</button></div>
+    <div id="reviewList"></div>
+  </div>
+
+  <div class="result-overlay" id="stageOverlay"><div class="result-modal">
+    <div class="result-title" id="stageOverlayTitle">🎉 過關！</div>
+    <div class="total-time" id="stageOverlayTime">0:00</div>
+    <div class="btn-row"><button class="primary" id="stageNextBtn">下一關</button></div>
+  </div></div>
+
+  <div class="result-overlay" id="finalOverlay"><div class="result-modal">
+    <div class="result-title">🏆 全部完成！</div>
+    <div id="finalStats"></div>
+    <div class="stage-summary-row"><div class="summary-name">總時間</div><div class="total-time" id="totalTime">0:00</div></div>
+    <div class="btn-row"><button class="secondary" onclick="showReview()">複習</button><button class="primary" onclick="location.reload()">重新開始</button></div>
+  </div></div>
+</div>
+
+<script>
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function formatTime(sec){const m=Math.floor(sec/60),s=sec%60;return m+':'+(s<10?'0':'')+s}
+function escReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+
+/*
+所有關卡共用同一份 data：
+word: 英文單字
+meaning: 中文意思
+pos: 詞性
+sentence: 英文例句
+translation: 中文翻譯
+*/
+const words = [
+  { word: 'pursue', meaning: '追求、從事', pos: 'v.', sentence: 'She decided to pursue a career in medicine after volunteering at the hospital.', translation: '她在醫院當志工後，決定從事醫療相關的職業。' },
+  { word: 'undocumented', meaning: '未記錄的、無正式紀錄的', pos: 'adj.', sentence: 'The report revealed several undocumented cases of the disease in rural areas.', translation: '這份報告揭露了農村地區數起未被記錄的疾病病例。' },
+  { word: 'meddle', meaning: '干涉、插手', pos: 'v.', sentence: 'He warned his brother not to meddle in his personal affairs.', translation: '他警告他的兄弟不要干涉他的私事。' },
+  { word: 'sphere', meaning: '領域、範圍', pos: 'n.', sentence: 'Her influence extended far beyond the political sphere.', translation: '她的影響力遠遠超出了政治領域。' },
+  { word: 'overrule', meaning: '否決、駁回', pos: 'v.', sentence: 'The judge decided to overrule the objection raised by the defense.', translation: '法官決定駁回辯方提出的異議。' },
+  { word: 'extract', meaning: '提取、擷取', pos: 'v.', sentence: 'We need to extract relevant information from the report.', translation: '我們需要從報告中提取相關資訊。' },
+  { word: 'beleaguered', meaning: '陷入困境的', pos: 'adj.', sentence: 'The beleaguered company is struggling to survive in a competitive market.', translation: '這家陷入困境的公司正在競爭激烈的市場中掙扎求生。' },
+  { word: 'sordid', meaning: '骯髒的、卑劣的', pos: 'adj.', sentence: 'The scandal revealed the sordid truth behind the company’s success.', translation: '這起醜聞揭露了公司成功背後骯髒的真相。' },
+  { word: 'yoke', meaning: '枷鎖、束縛', pos: 'n.', sentence: 'Many people lived under the yoke of tyranny.', translation: '許多人生活在暴政的枷鎖之下。' },
+  { word: 'stifle', meaning: '壓制、抑制', pos: 'v.', sentence: 'The government attempted to stifle any criticism of its new policy by controlling the media.', translation: '該政府試圖通過控制媒體來壓制對其新政策的任何批評。' },
+  { word: 'omnibus', meaning: '文集、公車、綜括的、多項的、多用途的', pos: 'n., adj.', sentence: "The omnibus contains all of the author's short stories.", translation: '這本文集包含了作者的所有短篇故事。' },
+  { word: 'millennium', meaning: '千禧年、一千年（複數 millennia）', pos: 'n.', sentence: 'We are at the beginning of the third millennium.', translation: '我們處於第三個千禧年的開始。' },
+  { word: 'megaphone', meaning: '擴音器', pos: 'n.', sentence: 'The leader of the parade uses a megaphone to keep order.', translation: '遊行隊伍的領導者用擴音器維持秩序。' },
+  { word: 'megalomania', meaning: '自大狂', pos: 'n.', sentence: 'The man suffers from megalomania and believes he must save the world.', translation: '這個人患有自大狂，相信他必須拯救世界。' },
+  { word: 'gigantic', meaning: '巨大的', pos: 'adj.', sentence: 'The budget for national defense is gigantic.', translation: '國防預算是巨大的。' },
+  { word: 'median', meaning: '中等的、中間值的', pos: 'adj.', sentence: 'Median household income has increased, but not as fast as inflation.', translation: '中位數家庭收入有所增加，但增長速度不如通貨膨脹快。' },
+  { word: 'intermediate', meaning: '中間的、中等程度的', pos: 'adj.', sentence: "This class is at the intermediate level, which means it's neither too hard nor too easy.", translation: '這個班級處於中級水平，意味著既不太難也不太容易。' },
+  { word: 'mediation', meaning: '調停、調解', pos: 'n.', sentence: 'The mediation successfully averted disaster.', translation: '調解成功地避免了災難。' },
+  { word: 'medieval', meaning: '中古時代的', pos: 'adj.', sentence: 'This cathedral is a medieval building.', translation: '這座大教堂是一座中古時代的建築。' },
+  { word: 'minus', meaning: '減、負數、缺點', pos: 'prep., n.', sentence: 'Profit is revenue minus cost.', translation: '利潤是收入減去成本。' },
+  { word: 'minuscule', meaning: '微小的', pos: 'adj.', sentence: 'The cactus only requires a minuscule amount of water to survive.', translation: '仙人掌只需要微小的水量就能存活。' },
+  { word: 'administration', meaning: '行政、政府', pos: 'n.', sentence: "I like teaching, but don't like administration.", translation: '我喜歡教學，但不喜歡行政工作。' },
+  { word: 'diminish', meaning: '減少、變小', pos: 'v.', sentence: 'The sound of the parade diminished in the distance.', translation: '遊行的聲音在遠處漸漸消退。' },
+  { word: 'fort', meaning: '堡壘、要塞', pos: 'n.', sentence: 'The military fort gradually developed into a city.', translation: '軍事堡壘逐漸發展成了一座城市。' },
+  { word: 'fortify', meaning: '加強、增強', pos: 'v.', sentence: 'In the baby formula, milk is fortified with more than a dozen nutrients.', translation: '在嬰兒配方奶粉中，牛奶中加強了十多種營養物質。' },
+  { word: 'enforcement', meaning: '強制執行', pos: 'n.', sentence: 'Policemen are law enforcement officers.', translation: '警察是執法人員。' },
+  { word: 'forte', meaning: '強音、強項、拿手項目', pos: 'n.', sentence: "Math is my forte, but English is my Achilles' heel.", translation: '數學是我的強項，但英語是我的弱點。' },
+  { word: 'fortitude', meaning: '堅韌、堅毅', pos: 'n.', sentence: 'The orphans demonstrated admirable fortitude and learned to support themselves.', translation: '孤兒們展現了令人欽佩的堅毅精神，學會了自給自足。' },
+  { word: 'reinforce', meaning: '加強、增援', pos: 'v.', sentence: 'The general decided to reinforce the troops with 2,000 new men.', translation: '將軍決定用2000名新兵增援部隊。' },
+  { word: 'endure', meaning: '持續、忍耐', pos: 'v.', sentence: 'Chinese writing has endured for thousands of years.', translation: '中文書寫已經持續了幾千年。' },
+  { word: 'duration', meaning: '持續期間', pos: 'n.', sentence: 'We had to stay home for the duration of the quarantine.', translation: '我們必須在隔離期間待在家裡。' },
+  { word: 'duress', meaning: '強制、強迫', pos: 'n.', sentence: 'Contracts signed under duress are null and void.', translation: '在強迫下簽訂的合約無效。' },
+  { word: 'relieve', meaning: '緩和、減輕、接替', pos: 'v.', sentence: 'She was given a shot of morphine to relieve the pain.', translation: '她被注射了嗎啡以緩解疼痛。' },
+  { word: 'assign', meaning: '指派、分配', pos: 'v.', sentence: 'The case has been assigned to our most senior officer.', translation: '這個案件已被分配給我們最資深的官員。' },
+  { word: 'significance', meaning: '意義、重要性', pos: 'n.', sentence: 'The significance of this finding is beyond comprehension.', translation: '這項發現的重要性超出理解。' },
+  { word: 'insignia', meaning: '標誌、徽章', pos: 'n.', sentence: "Their jackets have the school's insignia on the front.", translation: '他們的夾克前面有學校的徽章。' },
+  { word: 'designate', meaning: '標示、委任、指派', pos: 'v.', sentence: 'The wooden stakes designate the edge of the building site.', translation: '木樁標示了建築工地的邊界。' },
+  { word: 'affinity', meaning: '相像、喜好', pos: 'n.', sentence: 'Many people really feel an affinity for dolphins.', translation: '許多人真的對海豚有好感。' },
+  { word: 'determine', meaning: '決定、判定', pos: 'v.', sentence: 'How do you determine the age of this antique desk?', translation: '你如何判定這張古董桌子的年代？' },
+  { word: 'term', meaning: '條件、術語、學期、任期', pos: 'n.', sentence: 'The company has agreed to bail us out, but what are its terms?', translation: '公司同意幫助我們，但條件是什麼？' },
+  { word: 'conterminous', meaning: '有交界的、相鄰的', pos: 'adj.', sentence: 'The two countries are conterminous for over 1,000 miles.', translation: '這兩個國家相鄰超過1000英里。' },
+  { word: 'exterminate', meaning: '消滅、根除', pos: 'v.', sentence: 'The government launched a campaign to exterminate the disease-carrying insects.', translation: '政府發起了一項行動，以消滅攜帶疾病的昆蟲。' },
+  { word: 'terminal', meaning: '末期的、終點站、終端機', pos: 'adj., n.', sentence: 'The terminal patient has decided to check out of the hospital.', translation: '末期患者已決定出院。' },
+  { word: 'fluent', meaning: '流利的', pos: 'adj.', sentence: 'I am fluent in oral and written English.', translation: '我能流利地說和寫英文。' },
+  { word: 'fluctuation', meaning: '波動、起伏', pos: 'n.', sentence: "Don't worry too much about the normal fluctuations on the stock market.", translation: '不要太擔心股票市場的正常波動。' },
+  { word: 'affluent', meaning: '富裕的', pos: 'adj.', sentence: 'Waste is a sign of an affluent society.', translation: '浪費是富裕社會的標誌。' },
+  { word: 'confluence', meaning: '匯流、匯合', pos: 'n.', sentence: 'A city developed at the confluence of the two rivers.', translation: '一座城市在兩條河的匯合處發展。' },
+  { word: 'influx', meaning: '流入、湧入', pos: 'n.', sentence: 'The influx of hot money boosted stock prices.', translation: '熱錢的湧入推高了股票價格。' },
+  { word: 'fluid', meaning: '流體、液體、流暢的、流動的', pos: 'n., adj.', sentence: 'I drink a lot of fluids when I have a cold.', translation: '我感冒時喝很多液體。' },
+  { word: 'flush', meaning: '一陣、臉紅、沖水', pos: 'n., v.', sentence: 'In a flush of anger, he left the room.', translation: '在一陣憤怒中，他離開了房間。' },
+  { word: 'superfluous', meaning: '多餘的、不必要的', pos: 'adj.', sentence: "While you're running in a race, all superfluous movements should be eliminated.", translation: '在賽跑時，所有多餘的動作都應該被消除。' },
+  { word: 'effluent', meaning: '流出物、廢水、排水', pos: 'n.', sentence: 'Effluents from local factories are finding their way into the river.', translation: '當地工廠的廢水正流入河流。' },
+  { word: 'anniversary', meaning: '週年紀念、週年的', pos: 'n., adj.', sentence: 'The old couple will soon be celebrating their 50th wedding anniversary.', translation: '這對老夫婦很快將慶祝他們的第50個結婚週年紀念。' },
+  { word: 'annual', meaning: '年度的、一年生植物', pos: 'adj., n.', sentence: 'Welcome to our annual conference.', translation: '歡迎來到我們的年度會議。' },
+  { word: 'chronological', meaning: '按時間順序的', pos: 'adj.', sentence: 'Events in the narrative are arranged in chronological order.', translation: '敘述中的事件按時間順序排列。' },
+  { word: 'chronic', meaning: '慢性的、長期的、習慣性的', pos: 'adj.', sentence: 'Arthritis is a chronic disease.', translation: '關節炎是一種慢性疾病。' },
+  { word: 'chronicle', meaning: '編年史、記事、（依時間順序）記錄', pos: 'n., v.', sentence: 'The book is a chronicle of the American Civil War.', translation: '這本書是美國內戰的編年史。' },
+  { word: 'synchronous', meaning: '同時的、同步的', pos: 'adj.', sentence: 'The synchronous arrival of a baby sister and loss of a beloved grandmother strongly affected the child.', translation: '妹妹的同時出生和所愛祖母的去世深深影響了這個孩子。' },
+  { word: 'recital', meaning: '背誦、獨奏會', pos: 'n.', sentence: "There's a piano recital at the music hall tonight.", translation: '今晚音樂廳有鋼琴獨奏會。' },
+  { word: 'kinetic', meaning: '動能的', pos: 'adj.', sentence: 'The kinetic energy in the tides can be harnessed for power generation.', translation: '潮汐中的動能可以被利用來發電。' },
+  { word: 'solicit', meaning: '懇請、請求', pos: 'v.', sentence: 'The social worker is soliciting donations for the earthquake victims.', translation: '社工正在為地震受害者募捐。' },
+  { word: 'solicitous', meaning: '熱心的、關心的', pos: 'adj.', sentence: 'I appreciate his solicitous inquiry about my health.', translation: '我感謝他關切地詢問我的健康狀況。' },
+  { word: 'cite', meaning: '引用、舉證、表揚', pos: 'v.', sentence: 'She cites T.S. Eliot in her work.', translation: '她在她的作品中引用了T.S. 艾略特。' },
+];
+
+
+
+const WORDS_PER_GAME = 6; // 抽考版：在這裡改每次要抽幾題
+const gameWords = shuffle([...words]).slice(0, Math.min(WORDS_PER_GAME, words.length));
+
+
+const palette=['#e7d8c9','#eee4e1','#E8828C','#DDA0DD','#A8D5BA','#468189','#E6D89C'];
+let selectedStages=[], stagePos=0, currentStage=null, stageStart=0, timer=null;
+let stats={}, totalStart=0;
+let hintRecords = []; // 第二關使用提示紀錄：{word, sentence, options}
+
+function selectAllStages(){document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true)}
+function startGame(){
+  selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);
+  if(!selectedStages.length){alert('請至少選一關');return}
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('gameArea').classList.remove('hidden');
+  totalStart=Date.now(); stagePos=0; stats={};
+  startSelectedStage();
+}
+function renderIndicator(){
+  const el=document.getElementById('stageIndicator');el.innerHTML='';
+  selectedStages.forEach((s,i)=>{const d=document.createElement('div');d.className='stage-dot'+(i<stagePos?' done':i===stagePos?' active':'');d.textContent=s;el.appendChild(d)})
+}
+function hideStages(){[1,2,3,4].forEach(n=>document.getElementById('stage'+n).classList.add('hidden'))}
+function startTimer(id){clearInterval(timer);stageStart=Date.now();timer=setInterval(()=>{document.getElementById(id).textContent=formatTime(Math.floor((Date.now()-stageStart)/1000))},100)}
+function stopTimer(){clearInterval(timer);return Math.floor((Date.now()-stageStart)/1000)}
+function startSelectedStage(){
+  hideStages(); currentStage=selectedStages[stagePos]; renderIndicator(); document.getElementById('stage'+currentStage).classList.remove('hidden');
+  if(currentStage===1)initS1(); if(currentStage===2)initS2(); if(currentStage===3)initS3(); if(currentStage===4)initS4();
+}
+function finishStage(stageNum, wrongDetails=[]){
+  const elapsed=stopTimer(); stats[stageNum]={time:elapsed,wrongDetails};
+  document.getElementById('stageOverlayTitle').textContent='🎉 第 '+stageNum+' 關過關！';
+  document.getElementById('stageOverlayTime').textContent=formatTime(elapsed);
+  document.getElementById('stageOverlay').classList.add('show');
+  const btn=document.getElementById('stageNextBtn');
+  if(stagePos===selectedStages.length-1){btn.textContent='查看結果';btn.onclick=()=>{document.getElementById('stageOverlay').classList.remove('show');showFinal()}}
+  else{btn.textContent='下一關';btn.onclick=()=>{document.getElementById('stageOverlay').classList.remove('show');stagePos++;startSelectedStage()}}
+}
+function showFinal(){
+  hideStages(); renderIndicator();
+  const names={1:'第一關｜看單字選中文',2:'第二關｜看句子找單字',3:'第三關｜看中文選英文',4:'第四關｜單字填進句子'};
+  let html='';
+  selectedStages.forEach(s=>{const st=stats[s]||{time:0,wrongDetails:[]};html+=`<div class="stage-summary-row"><div class="summary-name">${names[s]}</div><div class="summary-detail">用時 ${formatTime(st.time)}　答錯 ${st.wrongDetails.length} 次</div>${st.wrongDetails.length?'<div class="summary-detail">錯誤：'+st.wrongDetails.map(x=>String(x)).join('、')+'</div>':''}</div>`});
+  if(hintRecords.length){
+    html += `<div class="stage-summary-row"><div class="summary-name">💡 使用提示</div><div class="summary-detail">共 ${hintRecords.length} 題</div>` +
+      hintRecords.map(h=>`<div class="summary-detail">${h.sentence}<br>提示：${h.options.join(' / ')}</div>`).join('') +
+      `</div>`;
+  } else {
+    html += `<div class="stage-summary-row"><div class="summary-name">💡 使用提示</div><div class="summary-detail">0 題</div></div>`;
+  }
+  document.getElementById('finalStats').innerHTML=html;
+  document.getElementById('totalTime').textContent=formatTime(Math.floor((Date.now()-totalStart)/1000));
+  document.getElementById('finalOverlay').classList.add('show');
+}
+
+/* 第一關 */
+let s1qs=[],s1i=0,s1sel=null,s1answered=false,s1wrong=[];
+function initS1(){s1qs=shuffle(gameWords.map(w=>({q:w.word,a:w.meaning,opts:shuffle([w.meaning,...shuffle(words.filter(x=>x.word!==w.word)).slice(0,3).map(x=>x.meaning)])})));s1i=0;s1wrong=[];showS1();startTimer('s1timer')}
+function showS1(){s1answered=false;s1sel=null;const q=s1qs[s1i];document.getElementById('s1progress').textContent=(s1i+1)+'/'+s1qs.length;document.getElementById('s1question').textContent=q.q;const area=document.getElementById('s1options');area.innerHTML='';document.getElementById('s1feedback').className='feedback';q.opts.forEach(o=>{const b=document.createElement('button');b.className='option-btn';b.textContent=o;b.onclick=()=>{if(s1answered)return;document.querySelectorAll('#s1options .option-btn').forEach(x=>x.removeAttribute('data-selected'));b.setAttribute('data-selected','true');s1sel=o};area.appendChild(b)});const btn=document.getElementById('s1submitBtn');btn.textContent='確認答案';btn.onclick=s1submit}
+function s1submit(){if(s1answered)return;if(s1sel===null){alert('請先選答案');return}const q=s1qs[s1i],b=document.querySelector('#s1options .option-btn[data-selected="true"]'),fb=document.getElementById('s1feedback');fb.classList.add('show');if(s1sel===q.a){s1answered=true;b.classList.add('correct');document.querySelectorAll('#s1options .option-btn').forEach(x=>x.disabled=true);fb.className='feedback show success';fb.textContent='✓ 正確';const btn=document.getElementById('s1submitBtn');if(s1i===s1qs.length-1){btn.textContent='完成第一關';btn.onclick=()=>finishStage(1,s1wrong)}else{btn.textContent='下一題';btn.onclick=()=>{s1i++;showS1()}}}else{b.classList.add('incorrect');b.disabled=true;b.removeAttribute('data-selected');fb.className='feedback show error';fb.textContent='✗ 錯誤，再試一次';s1wrong.push(q.q+' → '+s1sel);s1sel=null}}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&currentStage===1)document.getElementById('s1submitBtn').click()});
+
+/* 第二關：看句子找單字 */
+let s2size=0,s2grid=[],s2placements=[],s2found=new Set(),s2sel=[],s2wrong=[];
+const DIRS=[[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+function replaceWordInClue(sentence,displayWord,compactWord){
+  const isPhrase=/\s/.test(displayWord.trim());
+  if(isPhrase){const toks=displayWord.trim().split(/\s+/),first=toks[0],rest=toks.slice(1),stem=first.slice(0,Math.max(3,first.length-2));let pattern='\\b('+escReg(stem)+'[a-zA-Z]*)\\b';rest.forEach(t=>pattern+='\\s+('+escReg(t)+')\\b');const m=sentence.match(new RegExp(pattern,'i'));if(!m)return sentence;const hint=compactWord[0]+'_'.repeat(Math.max(compactWord.length-2,1))+compactWord.at(-1);return sentence.replace(m[0],hint)}
+  const stem=compactWord.slice(0,Math.max(3,compactWord.length-2));const m=sentence.match(new RegExp('\\b('+escReg(stem)+'[a-zA-Z]*)\\b','i'));if(!m)return sentence;const matched=m[1],base=compactWord[0]+'_'.repeat(Math.max(compactWord.length-2,1))+compactWord.at(-1),extra=matched.length>compactWord.length?matched.slice(compactWord.length):'';return sentence.replace(matched,base+extra)
+}
+function initS2(){
+  const ups=gameWords.map(w=>w.word.toUpperCase().replace(/\s+/g,'')),longest=Math.max(...ups.map(w=>w.length)),total=ups.reduce((a,b)=>a+b.length,0);
+  s2size=Math.min(Math.max(Math.max(longest+2,Math.ceil(Math.sqrt(total*2.6))),10),16);s2grid=Array.from({length:s2size},()=>Array(s2size).fill(null));s2placements=[];s2found=new Set();s2sel=[];s2wrong=[];
+  [...gameWords].sort((a,b)=>b.word.replace(/\s+/g,'').length-a.word.replace(/\s+/g,'').length).forEach((orig,idx)=>{const w=orig.word.toUpperCase().replace(/\s+/g,'');let placed=false,attempts=0;while(!placed&&attempts<500){attempts++;const d=DIRS[Math.floor(Math.random()*DIRS.length)],r=Math.floor(Math.random()*s2size),c=Math.floor(Math.random()*s2size),er=r+d[0]*(w.length-1),ec=c+d[1]*(w.length-1);if(er<0||er>=s2size||ec<0||ec>=s2size)continue;let fits=true,cells=[];for(let i=0;i<w.length;i++){const rr=r+d[0]*i,cc=c+d[1]*i,ex=s2grid[rr][cc];if(ex!==null&&ex!==w[i]){fits=false;break}cells.push([rr,cc])}if(!fits)continue;cells.forEach(([rr,cc],i)=>s2grid[rr][cc]=w[i]);s2placements.push({...orig,compact:w,cells,colorIndex:idx%palette.length});placed=true}});
+  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';for(let r=0;r<s2size;r++)for(let c=0;c<s2size;c++)if(s2grid[r][c]===null)s2grid[r][c]=letters[Math.floor(Math.random()*26)];
+  renderS2();startTimer('s2timer')
+}
+function renderS2(){const g=document.getElementById('s2grid');g.style.gridTemplateColumns=`repeat(${s2size},32px)`;g.innerHTML='';for(let r=0;r<s2size;r++)for(let c=0;c<s2size;c++){const el=document.createElement('div');el.className='cell';el.textContent=s2grid[r][c];el.dataset.r=r;el.dataset.c=c;el.onclick=()=>s2cell(r,c);g.appendChild(el)}const clues=document.getElementById('s2clues');clues.innerHTML='';s2placements.forEach((p,i)=>{const d=document.createElement('div');d.className='clue-item';d.id='s2clue'+i;const row=document.createElement('div');row.className='clue-row';const t=document.createElement('div');t.className='clue-text';t.textContent=(i+1)+'. '+replaceWordInClue(p.sentence,p.word,p.compact);const hb=document.createElement('button');hb.className='hint-btn';hb.textContent='提示';hb.onclick=()=>showS2Hint(i,hb,d);row.appendChild(t);row.appendChild(hb);d.appendChild(row);clues.appendChild(d)});document.getElementById('s2found').textContent='0/'+s2placements.length}
+function showS2Hint(i,btn,clueEl){
+  const p=s2placements[i];
+  let existing=clueEl.querySelector('.hint-options');
+  if(existing){existing.classList.toggle('hidden');return}
+  const distractorPool=shuffle(words.filter(x=>x.word!==p.word).map(x=>x.word));
+  const opts=shuffle([p.word,...distractorPool.slice(0,2)]);
+  const box=document.createElement('div');
+  box.className='hint-options';
+  box.textContent='提示選項：'+opts.join(' / ');
+  clueEl.appendChild(box);
+  btn.classList.add('used');
+  btn.textContent='已提示';
+  if(!hintRecords.some(h=>h.word===p.word)){
+    hintRecords.push({word:p.word,sentence:p.sentence,options:opts});
+  }
+}
+function s2cell(r,c){const k=s2sel.findIndex(x=>x[0]===r&&x[1]===c);if(k!==-1)s2sel=s2sel.slice(0,k);else s2sel.push([r,c]);document.querySelectorAll('#s2grid .cell.selected').forEach(x=>x.classList.remove('selected'));s2sel.forEach(([rr,cc])=>document.querySelector(`#s2grid .cell[data-r="${rr}"][data-c="${cc}"]`).classList.add('selected'))}
+function s2clear(){s2sel=[];document.querySelectorAll('#s2grid .cell.selected').forEach(x=>x.classList.remove('selected'))}
+function s2confirm(){if(!s2sel.length)return;const letters=s2sel.map(([r,c])=>s2grid[r][c]).join('');let hit=-1;for(let i=0;i<s2placements.length;i++){if(s2found.has(i))continue;const target=s2placements[i].compact;if(letters.length===target.length&&letters.split('').sort().join('')===target.split('').sort().join('')){hit=i;break}}const fb=document.getElementById('s2feedback');if(hit>=0){s2found.add(hit);const p=s2placements[hit],color=palette[p.colorIndex];s2sel.forEach(([r,c])=>{const el=document.querySelector(`#s2grid .cell[data-r="${r}"][data-c="${c}"]`);el.classList.remove('selected');el.style.background=color});document.getElementById('s2clue'+hit).classList.add('found');document.getElementById('s2found').textContent=s2found.size+'/'+s2placements.length;fb.className='feedback show success';fb.textContent='✓ 找到了：'+p.word;s2sel=[];if(s2found.size===s2placements.length)setTimeout(()=>finishStage(2,s2wrong),400)}else{fb.className='feedback show error';fb.textContent='✗ 這不是正確的單字，再試一次';s2wrong.push(letters);s2clear()}}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&currentStage===2){e.preventDefault();s2confirm()}});
+
+/* 第三關 */
+let s3qs=[],s3i=0,s3sel=null,s3answered=false,s3wrong=[];
+function initS3(){s3qs=shuffle(gameWords.map(w=>({q:w.meaning,a:w.word,opts:shuffle([w.word,...shuffle(words.filter(x=>x.word!==w.word)).slice(0,3).map(x=>x.word)])})));s3i=0;s3wrong=[];showS3();startTimer('s3timer')}
+function showS3(){s3answered=false;s3sel=null;const q=s3qs[s3i];document.getElementById('s3progress').textContent=(s3i+1)+'/'+s3qs.length;document.getElementById('s3question').textContent=q.q;const area=document.getElementById('s3options');area.innerHTML='';document.getElementById('s3feedback').className='feedback';q.opts.forEach(o=>{const b=document.createElement('button');b.className='option-btn';b.textContent=o;b.onclick=()=>{if(s3answered)return;document.querySelectorAll('#s3options .option-btn').forEach(x=>x.removeAttribute('data-selected'));b.setAttribute('data-selected','true');s3sel=o};area.appendChild(b)});const btn=document.getElementById('s3submitBtn');btn.textContent='確認答案';btn.onclick=s3submit}
+function s3submit(){if(s3answered)return;if(s3sel===null){alert('請先選答案');return}const q=s3qs[s3i],b=document.querySelector('#s3options .option-btn[data-selected="true"]'),fb=document.getElementById('s3feedback');if(s3sel===q.a){s3answered=true;b.classList.add('correct');document.querySelectorAll('#s3options .option-btn').forEach(x=>x.disabled=true);fb.className='feedback show success';fb.textContent='✓ 正確';const btn=document.getElementById('s3submitBtn');if(s3i===s3qs.length-1){btn.textContent='完成第三關';btn.onclick=()=>finishStage(3,s3wrong)}else{btn.textContent='下一題';btn.onclick=()=>{s3i++;showS3()}}}else{b.classList.add('incorrect');b.disabled=true;b.removeAttribute('data-selected');fb.className='feedback show error';fb.textContent='✗ 錯誤，再試一次';s3wrong.push(q.q+' → '+s3sel);s3sel=null}}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&currentStage===3)document.getElementById('s3submitBtn').click()});
+
+/* 第四關：單字配對；上方額外加入 2 個從完整 data 抽出的干擾單字 */
+let s4selected=null,s4matched=[],s4wrong=[];
+function sentenceWithBlank(item){const sentence=item.sentence,word=item.word;const stem=word.split(/\s+/)[0].slice(0,Math.max(3,word.split(/\s+/)[0].length-2));const rx=new RegExp('\\b'+escReg(stem)+'[a-zA-Z]*(?:\\s+'+word.split(/\s+/).slice(1).map(escReg).join('\\s+')+')?\\b','i');const m=sentence.match(rx);if(!m)return sentence+' ____';return sentence.replace(m[0],'____')}
+function initS4(){s4selected=null;s4matched=[];s4wrong=[];document.getElementById('s4matched').textContent='0/'+gameWords.length;const wb=document.getElementById('s4wordButtons');wb.innerHTML='';
+  const gameSet=new Set(gameWords.map(x=>x.word));
+  const extraDistractors=shuffle(words.filter(x=>!gameSet.has(x.word)).map(x=>x.word)).slice(0,2);
+  const stage4Choices=shuffle([...gameWords.map(x=>x.word),...extraDistractors]);
+  stage4Choices.forEach(w=>{const b=document.createElement('button');b.className='word-btn';b.textContent=w;b.dataset.distractor=gameSet.has(w)?'false':'true';b.onclick=()=>{document.querySelectorAll('#s4wordButtons .word-btn').forEach(x=>x.removeAttribute('data-selected'));b.setAttribute('data-selected','true');s4selected=w};wb.appendChild(b)});
+  const sc=document.getElementById('s4sentences');sc.innerHTML='';shuffle([...gameWords]).forEach(item=>{const d=document.createElement('div');d.className='sentence';const txt=sentenceWithBlank(item);const k=txt.indexOf('____');d.append(document.createTextNode(txt.slice(0,k)));const blank=document.createElement('span');blank.className='blank';blank.textContent='____';blank.dataset.word=item.word;blank.onclick=()=>s4fill(blank,item);d.appendChild(blank);d.append(document.createTextNode(txt.slice(k+4)));sc.appendChild(d)});startTimer('s4timer')}
+function s4fill(blank,item){if(!s4selected)return;const btn=document.querySelector('#s4wordButtons .word-btn[data-selected="true"]');if(s4selected===item.word){blank.textContent=s4selected;blank.classList.add('correct');blank.onclick=null;s4matched.push(s4selected);if(btn)btn.remove();s4selected=null;document.getElementById('s4matched').textContent=s4matched.length+'/'+gameWords.length;if(s4matched.length===gameWords.length)setTimeout(()=>finishStage(4,s4wrong),300)}else{blank.classList.add('incorrect');s4wrong.push(item.sentence+' → '+s4selected);setTimeout(()=>blank.classList.remove('incorrect'),500)}}
+
+/* RV：沿用單字配對的顯示方式 */
+function showReview(){
+  document.getElementById('finalOverlay').classList.remove('show');
+  document.getElementById('gameArea').classList.add('hidden');
+  const list=document.getElementById('reviewList');list.innerHTML='';
+  gameWords.forEach(w=>{const item=document.createElement('div');item.className='review-item';const hr=hintRecords.find(h=>h.word===w.word);item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}</div><div class="review-sentence">${w.sentence}</div><div class="review-translation">${w.translation||''}</div>${hr?`<div class="hint-tag">💡 第二關使用提示：${hr.options.join(' / ')}</div>`:''}`;list.appendChild(item)});
+  document.getElementById('reviewContainer').classList.add('show');
+}
+</script>
+</body>
+</html>
