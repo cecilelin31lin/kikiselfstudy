@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>後醫英文單字集合</title>
+<title>後醫英文單字養成</title>
 <style>
 :root{
   --theme-main:#B0C4DE;
   --theme-hover:#9AB3D0;
   --theme-soft:rgba(176,196,222,.22);
   --theme-selected:rgba(176,196,222,.30);
+  --theme-rgb:176,196,222;
 }
 *{box-sizing:border-box}
 html,body{overscroll-behavior:none}
@@ -70,8 +71,8 @@ button{font-family:inherit}
 .word-btn[data-selected="true"]{background:var(--theme-main);color:#fff;border-color:var(--theme-main)}
 .sentences{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
 .sentence{background:#fff;border:.5px solid #ddd;border-radius:12px;padding:12px;font-size:13px;line-height:1.6}
-.blank{background:#FFF4E6;color:#D9860E;padding:4px 8px;border-radius:6px;cursor:pointer;font-weight:500;display:inline-block;min-width:80px;text-align:center}
-.blank.correct{background:rgba(70,129,137,.14);color:#468189;cursor:default}
+.blank{background:rgba(var(--theme-rgb),.16);color:#56627a;border:1px solid rgba(var(--theme-rgb),.38);padding:4px 8px;border-radius:6px;cursor:pointer;font-weight:500;display:inline-block;min-width:80px;text-align:center;transition:background .2s,border-color .2s,box-shadow .2s}
+.blank.correct{background:rgba(var(--theme-rgb),.48);color:#2B3A55;border-color:rgba(var(--theme-rgb),.78);box-shadow:0 1px 5px rgba(var(--theme-rgb),.18);cursor:default}
 .blank.incorrect{background:rgba(232,130,140,.16);color:#E8828C}
 .result-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);align-items:center;justify-content:center;z-index:1000;padding:18px}
 .result-overlay.show{display:flex}
@@ -150,15 +151,237 @@ button{font-family:inherit}
 .record-summary{font-size:13px;color:#666;text-align:center;margin-bottom:12px}
 .record-row{background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.55}
 .record-row strong{font-size:14px}.record-meta{color:#666;margin-top:3px}.skipped-tag{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:#eee;color:#777;font-size:11px;font-weight:600}.record-flags{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.flag-btn{padding:5px 9px;border:1px solid #ccc;border-radius:999px;background:#fff;font-size:12px;cursor:pointer;color:#555}.flag-btn.on{background:var(--theme-selected);border-color:var(--theme-main);font-weight:700}.record-row.excluded{opacity:.68}
-.daily-quote,.review-quote{text-align:center;margin:8px auto 20px;color:#667085;font-size:15px;font-style:italic;line-height:1.75;font-family:Georgia,'STKaiti','Kaiti TC','DFKai-SB','BiauKai',serif}.daily-quote::before,.review-quote::before{content:"|  "}.daily-quote::after,.review-quote::after{content:"  |"}.review-quote{margin:24px auto 6px;padding-top:18px;border-top:1px solid #eee;max-width:620px}
+.daily-quote,.review-quote{text-align:center;margin:8px auto 20px;color:var(--theme-hover);font-size:15px;font-style:normal;line-height:1.75;font-family:Georgia,'STKaiti','Kaiti TC','DFKai-SB','BiauKai',serif}.daily-quote::before,.review-quote::before{content:"|  "}.daily-quote::after,.review-quote::after{content:"  |"}.review-quote{margin:24px auto 6px;padding-top:18px;border-top:1px solid #eee;max-width:620px}
 .record-history{margin-top:18px;padding-top:14px;border-top:1px solid #eee}.record-history h3{font-size:15px;margin:0 0 9px}.history-row{font-size:13px;color:#666;padding:8px 2px;border-bottom:1px solid #eee}.history-empty{font-size:13px;color:#999;padding:6px 0}
 
+
+/* ===== VOC 美編升級：只調整視覺，不改遊戲邏輯 ===== */
+:root{
+  --ink:#2B3A55;
+  --muted:#748096;
+  --paper:rgba(255,255,255,.94);
+  --line:rgba(43,58,85,.10);
+  --shadow:0 12px 34px rgba(43,58,85,.08);
+  --shadow-soft:0 5px 18px rgba(43,58,85,.06);
+}
+html{scroll-behavior:smooth}
+body{
+  padding:34px 16px 72px;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 0%,var(--theme-soft) 0,transparent 28%),
+    radial-gradient(circle at 92% 12%,rgba(255,255,255,.92) 0,transparent 25%),
+    #f5f6f8;
+  background-attachment:fixed;
+}
+.wrap{max-width:760px}
+h1{
+  position:relative;
+  font-size:31px;
+  font-weight:700;
+  letter-spacing:.06em;
+  margin-bottom:10px;
+  text-shadow:0 1px 0 rgba(255,255,255,.8);
+}
+h1::after{
+  content:"";
+  display:block;
+  width:100%;
+  height:3px;
+  margin:11px auto 0;
+  border-radius:999px;
+  background:var(--theme-main);
+  opacity:.8;
+}
+.subtitle{font-size:15px;color:#687386;margin-bottom:8px;letter-spacing:.03em}
+.daily-quote,.review-quote{
+  position:relative;
+  max-width:650px;
+  padding:12px 22px;
+  margin:7px auto 24px;
+  color:var(--theme-hover);
+  background:rgba(var(--theme-rgb),.10);
+  border-radius:999px;
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+.daily-quote::before,.review-quote::before{content:"│  ";color:var(--theme-hover);font-style:normal}
+.daily-quote::after,.review-quote::after{content:"  │";color:var(--theme-hover);font-style:normal}
+.card,.question-container,.memory-card,.clue-list,.grid-container,.word-buttons,.sentence,.stat-card,.review-item{
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+}
+.card{
+  background:var(--paper);
+  border-radius:20px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.stage-picker h2,.word-mode h2,.player-section h2{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:18px;
+  letter-spacing:.06em;
+  margin-bottom:13px;
+}
+.stage-picker h2::before,.word-mode h2::before,.player-section h2::before{
+  content:"";
+  width:5px;
+  height:19px;
+  border-radius:999px;
+  background:var(--theme-main);
+  box-shadow:0 0 0 4px var(--theme-soft);
+}
+.player-section,.settings-section{border-color:var(--line)}
+.player-grid{gap:11px}
+.player-card{
+  flex:0 1 154px;
+  min-height:90px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(43,58,85,.11);
+  border-radius:16px;
+  padding:14px 10px;
+  box-shadow:0 3px 10px rgba(43,58,85,.035);
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease;
+}
+.player-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(43,58,85,.09)}
+.player-card.selected{
+  border:1.5px solid var(--theme-main);
+  background:linear-gradient(145deg,#fff,var(--theme-soft));
+  transform:translateY(-2px);
+  box-shadow:0 8px 22px rgba(43,58,85,.10),0 0 0 3px var(--theme-soft);
+}
+.player-icon{font-size:31px;margin-bottom:6px}.player-name{font-size:14px;letter-spacing:.05em}
+.cloud-status{margin-top:10px}
+.stage-options{gap:11px}
+.stage-check,.mode-option,.word-select-item{
+  position:relative;
+  background:rgba(255,255,255,.68);
+  border:1px solid rgba(43,58,85,.10);
+  border-radius:14px;
+  padding:13px 14px;
+  transition:transform .16s ease,border-color .16s ease,background .16s ease,box-shadow .16s ease;
+}
+.stage-check:hover,.mode-option:hover,.word-select-item:hover{transform:translateY(-1px);border-color:var(--theme-main);box-shadow:0 5px 14px rgba(43,58,85,.06)}
+.stage-check:has(input:checked),.mode-option:has(input:checked){
+  background:linear-gradient(145deg,#fff,var(--theme-soft));
+  border-color:var(--theme-main);
+  box-shadow:0 0 0 2px var(--theme-soft);
+}
+.stage-check input,.mode-option input,.word-select-item input{accent-color:var(--theme-hover);width:16px;height:16px}
+.primary,.secondary,.option-btn,.word-btn,.confirm-btn,.clear-btn,.sentence-choice,.az-btn,.flag-btn,.hint-btn{
+  transition:transform .14s ease,box-shadow .14s ease,background .14s ease,border-color .14s ease,opacity .14s ease;
+}
+.primary,.confirm-btn{
+  border-radius:11px;
+  font-weight:700;
+  letter-spacing:.035em;
+  box-shadow:0 5px 14px var(--theme-soft);
+}
+.primary:hover,.confirm-btn:hover{transform:translateY(-1px);box-shadow:0 7px 18px var(--theme-soft)}
+.primary:active,.secondary:active,.option-btn:active,.word-btn:active,.sentence-choice:active{transform:translateY(1px)}
+.secondary,.clear-btn{border-radius:11px;background:rgba(255,255,255,.88)}
+.option-btn,.sentence-choice{
+  border:1px solid rgba(43,58,85,.10);
+  border-radius:13px;
+  padding:13px 15px;
+  box-shadow:0 2px 8px rgba(43,58,85,.035);
+}
+.option-btn:hover,.sentence-choice:hover{border-color:var(--theme-main);transform:translateY(-1px)}
+.option-btn[data-selected="true"],.sentence-choice[data-selected="true"]{box-shadow:0 0 0 2px var(--theme-soft)}
+.stats{gap:10px}
+.stat-card{border-radius:15px;padding:13px;background:rgba(255,255,255,.80)}
+.stat-label{font-size:12px;letter-spacing:.06em}.stat-value{font-size:20px}
+.instruction{
+  border:0;
+  border-left:4px solid var(--theme-main);
+  border-radius:12px;
+  padding:12px 15px;
+  background:linear-gradient(90deg,var(--theme-soft),rgba(255,255,255,.72));
+  color:#657086;
+}
+.question-container,.memory-card,.clue-list,.grid-container,.word-buttons{border-radius:18px;background:rgba(255,255,255,.92)}
+.question-container{padding:24px}.question-text{font-size:20px;font-weight:700;letter-spacing:.025em;margin-bottom:20px}
+.memory-word{font-size:38px}.memory-meaning{color:#657086}
+.text-answer,.setting-row select,.setting-row input[type=number],.word-search{
+  border:1px solid rgba(43,58,85,.14);
+  border-radius:11px;
+  background:rgba(255,255,255,.92);
+  box-shadow:inset 0 1px 2px rgba(43,58,85,.03);
+}
+.text-answer:focus,.setting-row input[type=number]:focus,.word-search:focus{outline:none;border-color:var(--theme-main);box-shadow:0 0 0 3px var(--theme-soft)}
+.stage-indicator{gap:8px;margin:0 0 16px;justify-content:center}
+.stage-dot{
+  width:36px;height:36px;
+  border:1.5px solid rgba(43,58,85,.13);
+  box-shadow:0 3px 9px rgba(43,58,85,.045);
+}
+.stage-dot.active{box-shadow:0 0 0 4px var(--theme-soft);transform:scale(1.06)}
+.skip-stage-btn{background:rgba(255,255,255,.65);border-radius:999px}
+.grid{gap:4px}.cell{border-radius:8px;background:#f7f8fa;transition:transform .1s ease,background .1s ease}.cell:hover{transform:scale(1.05)}
+.clue-item{border-radius:10px;background:#f7f8fa}
+.word-btn{border-radius:999px;padding:9px 14px;box-shadow:0 2px 7px rgba(43,58,85,.04)}
+.sentence{border-radius:15px;padding:14px 15px;background:rgba(255,255,255,.90)}
+.blank{border-radius:8px;padding:4px 10px}
+.feedback{border-radius:11px}
+.review-container.show{animation:vocFade .22s ease}
+.review-header{padding:2px 2px 8px;border-bottom:1px solid var(--line)}
+.review-header h2{margin:0;font-size:22px}
+.review-completed{border-radius:13px;background:var(--theme-soft);border:0;color:#657086}
+.review-item{border-radius:15px;padding:14px 16px;margin-bottom:10px;background:rgba(255,255,255,.90)}
+.review-word-meaning{font-size:14px;color:#5f7697}.review-sentence{font-size:14px}.review-translation{margin-top:3px}
+.review-quote{border-top:0;margin-top:28px;background:var(--theme-soft)}
+.result-overlay{backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.result-modal{
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:22px;
+  box-shadow:0 24px 70px rgba(43,58,85,.20);
+  background:rgba(255,255,255,.97);
+}
+.result-title{font-size:22px;letter-spacing:.04em}
+.stage-summary-row,.record-row{border:1px solid var(--line);border-radius:13px;background:#fafbfc}
+.record-modal-list{padding-right:3px}
+.record-row{padding:12px 13px;margin-bottom:9px}
+.record-flags{gap:8px}.flag-btn{border-radius:999px;padding:6px 10px}
+.record-history{border-color:var(--line)}.history-row{padding:9px 4px;border-color:var(--line)}
+.az-btn{border-radius:999px;padding:6px 9px}.az-btn:hover{border-color:var(--theme-main);background:var(--theme-soft)}
+@keyframes vocFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(max-width:560px){
+  body{padding:24px 12px 56px}
+  h1{font-size:27px}
+  .card{padding:17px;border-radius:17px}
+  .daily-quote,.review-quote{border-radius:16px;padding:10px 14px;font-size:14px}
+  .player-grid{display:flex;grid-template-columns:none;justify-content:center}
+  .player-card{flex:0 1 calc(50% - 7px);max-width:180px;min-height:82px}
+  .stage-check,.mode-option{border-radius:12px}
+  .question-container{padding:18px 15px}
+  .question-text{font-size:19px}
+  .review-actions{gap:6px}.review-actions button{font-size:12px;padding:9px 10px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* 第四關：固定版面高度，避免單字消失前後頁面上下跳動 */
+#stage4 .memory-card{min-height:270px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;padding:28px 22px 22px}
+#stage4 .memory-word{min-height:58px;margin-bottom:8px;flex:0 0 58px}
+#stage4 .memory-meaning{min-height:28px;margin:8px 0 12px}
+#stage4 #s4input{min-height:46px;margin:2px auto 0;display:block;width:min(100%,520px);text-align:center}
+#stage4 .memory-meaning.hidden,#stage4 #s4input.hidden{display:block!important;visibility:hidden!important;pointer-events:none!important}
+#stage4 .btn-row{min-height:44px}
+#stage4 .btn-row button.hidden{display:inline-block!important;visibility:hidden!important;pointer-events:none!important}
+@media(max-width:560px){#stage4 .memory-card{min-height:255px;padding:24px 16px 18px}}
 </style>
+
 </head>
 <body>
 <div class="wrap">
-  <h1>後醫英文單字集合</h1>
-  <p class="subtitle">How we spend our days is, of course, how we spend our lives.</p>
+  <h1>後醫英文單字養成</h1>
   <div class="daily-quote" id="dailyQuote"></div>
   <div id="startScreen" class="card stage-picker">
 
@@ -198,8 +421,7 @@ button{font-family:inherit}
     <div class="btn-row center-row" style="margin-top:16px"><button class="secondary" onclick="backToStart()">返回</button><button class="primary" onclick="startManualGame()">開始練習</button></div>
   </div>
 
-  <div id="gameArea" class="hidden"><div class="player-badge" id="activePlayerBadge"></div>
-    <div class="stage-indicator" id="stageIndicator"></div>
+  <div id="gameArea" class="hidden"><div class="game-topbar"><div class="stage-indicator" id="stageIndicator"></div></div>
     <div class="skip-stage-row"><button class="secondary skip-stage-btn" onclick="skipCurrentStage()">直接跳過該關卡</button></div>
     <div id="stage1" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="s1progress"></div></div><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s1timer">0:00</div></div></div><div class="instruction">第一關｜認識單字：看英文單字，選出正確的中文意思。</div><div class="question-container"><div class="question-text" id="s1question"></div><div id="s1options"></div><div class="feedback" id="s1feedback"></div></div><div class="btn-row center-row"><button class="primary" id="s1submitBtn" onclick="s1submit()">確認答案</button></div></div>
     <div id="stage2" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s2timer">0:00</div></div><div class="stat-card"><div class="stat-label">✓ 找到</div><div class="stat-value" id="s2found">0/0</div></div></div><div class="instruction">第二關｜尋找單字：看句子提示，在字母格中找出正確單字。選好後按「確認」；Enter 也可確認。</div><div class="clue-list"><div id="s2clues"></div></div><div class="feedback" id="s2feedback"></div><div class="grid-container"><div class="grid" id="s2grid"></div></div><div class="confirm-bar"><button class="clear-btn" onclick="s2clear()">清除選取</button><button class="confirm-btn" id="s2confirmBtn" onclick="s2confirm()">確認</button></div></div>
@@ -261,7 +483,7 @@ const blueThemes=[
 {main:'#D1B9E6',hover:'#BE9ED8',rgb:'209,185,230'},
 {main:'#E7B9CF',hover:'#D79DBA',rgb:'231,185,207'}
 ];
-let lastTheme=-1;function applyRandomTheme(){let i=Math.floor(Math.random()*blueThemes.length);if(blueThemes.length>1&&i===lastTheme)i=(i+1+Math.floor(Math.random()*(blueThemes.length-1)))%blueThemes.length;lastTheme=i;const t=blueThemes[i],r=document.documentElement.style;r.setProperty('--theme-main',t.main);r.setProperty('--theme-hover',t.hover);r.setProperty('--theme-soft',`rgba(${t.rgb},.22)`);r.setProperty('--theme-selected',`rgba(${t.rgb},.30)`)}applyRandomTheme();
+let lastTheme=-1;function applyRandomTheme(){let i=Math.floor(Math.random()*blueThemes.length);if(blueThemes.length>1&&i===lastTheme)i=(i+1+Math.floor(Math.random()*(blueThemes.length-1)))%blueThemes.length;lastTheme=i;const t=blueThemes[i],r=document.documentElement.style;r.setProperty('--theme-main',t.main);r.setProperty('--theme-hover',t.hover);r.setProperty('--theme-soft',`rgba(${t.rgb},.22)`);r.setProperty('--theme-selected',`rgba(${t.rgb},.30)`);r.setProperty('--theme-rgb',t.rgb)}applyRandomTheme();
 const words = [
   { word: 'pursue', meaning: '追求、從事', pos: 'v.', sentence: 'She decided to pursue a career in medicine after volunteering at the hospital.', translation: '她在醫院當志工後，決定從事醫療相關的職業。' },
   { word: 'undocumented', meaning: '未記錄的、無正式紀錄的', pos: 'adj.', sentence: 'The report revealed several undocumented cases of the disease in rural areas.', translation: '這份報告揭露了農村地區數起未被記錄的疾病病例。' },
@@ -387,10 +609,10 @@ function s3submit(){if(s3answered)return;if(s3sel===null){alert('請先選答案
 const S4_DISPLAY_MS=1500; // 固定 1.5 秒
 let s4qs=[],s4i=0,s4wrong=[],s4ready=false,s4answered=false,s4hideTimer=null;
 function initS4(){s4qs=shuffle([...gameWords]);s4i=0;s4wrong=[];showS4();startTimer('s4timer')}
-function hideS4Word(){const w=document.getElementById('s4word'),m=document.getElementById('s4meaning'),inp=document.getElementById('s4input'),b=document.getElementById('s4submitBtn'),r=document.getElementById('s4rewatchBtn');w.classList.add('hidden-word');m.classList.remove('hidden');inp.classList.remove('hidden');b.classList.remove('hidden');r.classList.remove('hidden');s4ready=true;setTimeout(()=>inp.focus(),30)}
-function showS4(){clearTimeout(s4hideTimer);s4ready=false;s4answered=false;const q=s4qs[s4i],w=document.getElementById('s4word'),m=document.getElementById('s4meaning'),inp=document.getElementById('s4input'),b=document.getElementById('s4submitBtn'),r=document.getElementById('s4rewatchBtn'),f=document.getElementById('s4feedback');document.getElementById('s4progress').textContent=(s4i+1)+'/'+s4qs.length;w.textContent=q.word;w.classList.remove('hidden-word');m.textContent=`${q.meaning}（${q.pos||''}）`;m.classList.add('hidden');inp.value='';inp.classList.add('hidden');b.classList.add('hidden');r.classList.add('hidden');r.classList.remove('used');r.textContent='再看一次';b.textContent='確認答案';b.onclick=s4submit;f.className='feedback';s4hideTimer=setTimeout(hideS4Word,S4_DISPLAY_MS)}
-function s4rewatch(){if(!s4ready||s4answered)return;const q=s4qs[s4i],w=document.getElementById('s4word'),r=document.getElementById('s4rewatchBtn');s4HintWords.add(q.word);w.classList.remove('hidden-word');r.textContent='已使用提示';r.classList.add('used');clearTimeout(s4hideTimer);s4hideTimer=setTimeout(()=>{w.classList.add('hidden-word');document.getElementById('s4input').focus()},S4_DISPLAY_MS)}
-function s4submit(){if(!s4ready||s4answered)return;const q=s4qs[s4i],inp=document.getElementById('s4input'),ans=inp.value.trim().toLowerCase(),correct=q.word.trim().toLowerCase(),f=document.getElementById('s4feedback'),b=document.getElementById('s4submitBtn'),r=document.getElementById('s4rewatchBtn');if(!ans)return;if(ans===correct){s4answered=true;r.classList.add('hidden');f.className='feedback show success';f.textContent='✓ 正確';if(s4i===s4qs.length-1){b.textContent='完成第四關';b.onclick=()=>finishStage(4,s4wrong)}else{b.textContent='下一題';b.onclick=()=>{s4i++;showS4()}}}else{f.className='feedback show error';f.textContent='✗ 錯誤，再試一次';s4wrong.push(q.meaning+' → '+inp.value.trim());inp.value='';inp.focus()}}
+function hideS4Word(){const w=document.getElementById('s4word'),m=document.getElementById('s4meaning'),inp=document.getElementById('s4input'),b=document.getElementById('s4submitBtn'),r=document.getElementById('s4rewatchBtn');w.classList.add('hidden-word');m.classList.remove('hidden');inp.classList.remove('hidden');b.classList.remove('hidden');r.classList.remove('hidden');s4ready=true;setTimeout(()=>{try{inp.focus({preventScroll:true})}catch(e){inp.focus()}},30)}
+function showS4(){clearTimeout(s4hideTimer);s4ready=false;s4answered=false;const q=s4qs[s4i],w=document.getElementById('s4word'),m=document.getElementById('s4meaning'),inp=document.getElementById('s4input'),b=document.getElementById('s4submitBtn'),r=document.getElementById('s4rewatchBtn'),f=document.getElementById('s4feedback');document.getElementById('s4progress').textContent=(s4i+1)+'/'+s4qs.length;w.textContent=q.word;w.classList.remove('hidden-word');m.textContent=`${q.meaning}（${q.pos||''}）`;m.classList.add('hidden');inp.value='';inp.classList.add('hidden');b.classList.add('hidden');r.classList.add('hidden');r.classList.remove('used');r.style.removeProperty('display');r.textContent='再看一次';b.textContent='確認答案';b.onclick=s4submit;f.className='feedback';s4hideTimer=setTimeout(hideS4Word,S4_DISPLAY_MS)}
+function s4rewatch(){if(!s4ready||s4answered)return;const q=s4qs[s4i],w=document.getElementById('s4word'),r=document.getElementById('s4rewatchBtn');s4HintWords.add(q.word);w.classList.remove('hidden-word');r.textContent='已使用提示';r.classList.add('used');clearTimeout(s4hideTimer);s4hideTimer=setTimeout(()=>{w.classList.add('hidden-word');(()=>{const i=document.getElementById('s4input');try{i.focus({preventScroll:true})}catch(e){i.focus()}})()},S4_DISPLAY_MS)}
+function s4submit(){if(!s4ready||s4answered)return;const q=s4qs[s4i],inp=document.getElementById('s4input'),ans=inp.value.trim().toLowerCase(),correct=q.word.trim().toLowerCase(),f=document.getElementById('s4feedback'),b=document.getElementById('s4submitBtn'),r=document.getElementById('s4rewatchBtn');if(!ans)return;if(ans===correct){s4answered=true;r.classList.add('hidden');r.style.setProperty('display','none','important');f.className='feedback show success';f.textContent='✓ 正確';if(s4i===s4qs.length-1){b.textContent='完成第四關';b.onclick=()=>finishStage(4,s4wrong)}else{b.textContent='下一題';b.onclick=()=>{s4i++;showS4()}}}else{f.className='feedback show error';f.textContent='✗ 錯誤，再試一次';s4wrong.push(q.meaning+' → '+inp.value.trim());inp.value='';inp.focus()}}
 
 /* 5 單字放哪裡：兩個干擾例句從完整 words 抽 */
 let s5qs=[],s5i=0,s5sel=null,s5answered=false,s5wrong=[];
@@ -435,13 +657,13 @@ const QUOTES=[
 ];
 function randomQuote(){return QUOTES.length?QUOTES[Math.floor(Math.random()*QUOTES.length)]:''}
 function showRandomQuote(){const el=document.getElementById('dailyQuote');if(el)el.textContent=randomQuote()}
-function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el)el.textContent=randomQuote()}
+function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el)el.textContent='你很棒！加油加油！'}
 showRandomQuote();
 
 const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5}},
-  {id:'YSH',name:'楊',icon:'🐱',password:'1234',active:1,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5}},
-  {id:'CTY',name:'張',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5}},
+  {id:'LKF',name:'西',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5}},
+  {id:'YSH',name:'楊',icon:'🐱',password:'1234',active:1,defaults:{stages:[1,2,5,6],mode:'random',count:5}},
+  {id:'CTY',name:'張',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5}},
   {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5}}
 ];
 /* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。defaults可設定每位玩家預設遊戲：stages關卡、mode可用random或weak、count單字數。*/
@@ -463,7 +685,7 @@ function renderAZ(){const row=document.getElementById('azRow');if(!row)return;co
 function renderWordSelector(){const grid=document.getElementById('wordSelectGrid');grid.innerHTML='';[...eligibleWords()].sort((a,b)=>a.word.localeCompare(b.word,'en',{sensitivity:'base'})).forEach(w=>{const label=document.createElement('label');label.className='word-select-item';label.dataset.word=w.word.toLowerCase();label.dataset.search=(w.word+' '+w.meaning+' '+(w.pos||'')).toLowerCase();const c=document.createElement('input');c.type='checkbox';c.value=w.word;c.onchange=updateManualCount;const d=document.createElement('div');d.innerHTML=`<strong>${w.word}</strong><span>${w.pos||''} ${w.meaning}</span>`;label.append(c,d);grid.appendChild(label)});renderAZ();filterWordSelector();updateManualCount()}
 function filterWordSelector(){const q=(document.getElementById('wordSearch')?.value||'').trim().toLowerCase();document.querySelectorAll('#wordSelectGrid .word-select-item').forEach(el=>{const byText=!q||el.dataset.search.includes(q),byLetter=!manualFilterLetter||(el.dataset.word[0]||'').toUpperCase()===manualFilterLetter;el.classList.toggle('hidden',!(byText&&byLetter))})}
 const _beginGame=beginGame;
-beginGame=function(){sessionWordStats={};sessionStageResult={};lastSessionWrongWords=new Set();practiceWrongMode=false;document.getElementById('activePlayerBadge').textContent=(PLAYERS.find(x=>x.id===currentPlayer)?.icon||'')+' '+currentPlayer;_beginGame()}
+beginGame=function(){sessionWordStats={};sessionStageResult={};lastSessionWrongWords=new Set();practiceWrongMode=false;_beginGame()}
 const _startGame=startGame;
 startGame=function(){if(!currentPlayer){alert('請先選擇玩家');return}if(!eligibleWords().length){alert('目前沒有可出現的單字，請到個人紀錄取消「不用再出」標記');return}_startGame()}
 const _startManualGame=startManualGame;
