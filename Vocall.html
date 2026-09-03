@@ -14,7 +14,7 @@
 }
 *{box-sizing:border-box}
 html,body{overscroll-behavior:none}
-body{margin:0;padding:24px 16px 60px;background:#f5f5f5;font-family:'Times New Roman','DFKai-SB','BiauKai','Kaiti TC','KaiTi',serif;color:#2B3A55;min-height:100vh}
+body{margin:0;padding:24px 16px 60px;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC','Noto Sans TC','Helvetica Neue',Arial,sans-serif;color:#2B3A55;min-height:100vh}
 .wrap{max-width:720px;margin:0 auto}
 h1{text-align:center;font-size:28px;margin:0 0 8px}
 .subtitle{text-align:center;font-size:14px;color:#666;margin-bottom:24px}
@@ -151,7 +151,7 @@ button{font-family:inherit}
 .record-summary{font-size:13px;color:#666;text-align:center;margin-bottom:12px}
 .record-row{background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.55}
 .record-row strong{font-size:14px}.record-meta{color:#666;margin-top:3px}.skipped-tag{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:#eee;color:#777;font-size:11px;font-weight:600}.record-flags{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.flag-btn{padding:5px 9px;border:1px solid #ccc;border-radius:999px;background:#fff;font-size:12px;cursor:pointer;color:#555}.flag-btn.on{background:var(--theme-selected);border-color:var(--theme-main);font-weight:700}.record-row.excluded{opacity:.68}
-.daily-quote,.review-quote{text-align:center;margin:8px auto 20px;color:var(--theme-hover);font-size:15px;font-style:normal;line-height:1.75;font-family:Georgia,'STKaiti','Kaiti TC','DFKai-SB','BiauKai',serif}.daily-quote::before,.review-quote::before{content:"|  "}.daily-quote::after,.review-quote::after{content:"  |"}.review-quote{margin:24px auto 6px;padding-top:18px;border-top:1px solid #eee;max-width:620px}
+.daily-quote,.review-quote{text-align:center;margin:8px auto 20px;color:var(--theme-hover);font-size:15px;font-style:normal;line-height:1.75;font-family:'Iowan Old Style','Songti TC','STSong',Georgia,serif}.daily-quote::before,.review-quote::before{content:"|  "}.daily-quote::after,.review-quote::after{content:"  |"}.review-quote{margin:24px auto 6px;padding-top:18px;border-top:1px solid #eee;max-width:620px}
 .record-history{margin-top:18px;padding-top:14px;border-top:1px solid #eee}.record-history h3{font-size:15px;margin:0 0 9px}.history-row{font-size:13px;color:#666;padding:8px 2px;border-bottom:1px solid #eee}.history-empty{font-size:13px;color:#999;padding:6px 0}
 
 
@@ -376,6 +376,13 @@ h1::after{
 #stage4 .btn-row{min-height:44px}
 #stage4 .btn-row button.hidden{display:inline-block!important;visibility:hidden!important;pointer-events:none!important}
 @media(max-width:560px){#stage4 .memory-card{min-height:255px;padding:24px 16px 18px}}
+
+/* 字體：介面使用乾淨系統字；英文學習內容保留較有書卷感的 serif */
+#s1question,#s5word,#stage4 .memory-word,#s3options .option-btn,#stage6 .word-btn,#wordSelectGrid .word-select-item strong,#stage2 .cell{
+  font-family:Georgia,'Times New Roman',serif;
+}
+#s1question,#s5word,#stage4 .memory-word{letter-spacing:.025em}
+
 </style>
 
 </head>
@@ -677,7 +684,16 @@ function buildRandomCountOptions(){const s=document.getElementById('randomCount'
 function isExcluded(word){return !!(cloudStats[word]&&cloudStats[word].excluded)}
 function eligibleWords(){return words.filter(w=>!isExcluded(w.word))}
 function weightedSample(arr,count){let pool=[...arr],out=[];while(out.length<count&&pool.length){const weights=pool.map(w=>{const sc=cloudStats[w.word]||{};return 1+Math.max(0,5-familiarityScore(w.word))*2+Number(sc.wrong||0)*.5});const total=weights.reduce((a,b)=>a+b,0);let r=Math.random()*total,i=0;for(;i<weights.length-1&&r>=weights[i];i++)r-=weights[i];out.push(pool.splice(i,1)[0])}return out}
-function drawNewGameWords(){const source=eligibleWords();const count=Math.min(Number(document.getElementById('randomCount')?.value||randomWordCount||5),source.length);if(!source.length){gameWords=[];return}gameWords=wordMode==='weak'?weightedSample(source,count):shuffle(source).slice(0,count)}
+function fairRandomSample(source,count){
+  // random 模式採「最少練習次數優先、同次數內隨機」：先輪到尚未/較少練過的字，避免一直抽到同一批。
+  // cloudStats 會跨裝置同步，因此完成練習後，下一次會優先抽目前累積練習次數較少的字。
+  const buckets=new Map();
+  source.forEach(w=>{const n=Number(cloudStats[w.word]?.practice||0);if(!buckets.has(n))buckets.set(n,[]);buckets.get(n).push(w)});
+  const out=[];
+  [...buckets.keys()].sort((a,b)=>a-b).forEach(n=>{if(out.length>=count)return;const pool=shuffle([...buckets.get(n)]);out.push(...pool.slice(0,count-out.length))});
+  return shuffle(out);
+}
+function drawNewGameWords(){const source=eligibleWords();const count=Math.min(Number(document.getElementById('randomCount')?.value||randomWordCount||5),source.length);if(!source.length){gameWords=[];return}gameWords=wordMode==='weak'?weightedSample(source,count):fairRandomSample(source,count)}
 function renderAZ(){const row=document.getElementById('azRow');if(!row)return;const letters=[...new Set(eligibleWords().map(w=>(w.word[0]||'').toUpperCase()).filter(x=>/[A-Z]/.test(x)))].sort();row.innerHTML='';const all=document.createElement('button');all.className='az-btn'+(!manualFilterLetter?' active':'');all.textContent='全部';all.onclick=()=>{manualFilterLetter='';filterWordSelector();renderAZ()};row.appendChild(all);letters.forEach(l=>{const b=document.createElement('button');b.className='az-btn'+(manualFilterLetter===l?' active':'');b.textContent=l;b.onclick=()=>{manualFilterLetter=l;filterWordSelector();renderAZ()};row.appendChild(b)})}
 function renderWordSelector(){const grid=document.getElementById('wordSelectGrid');grid.innerHTML='';[...eligibleWords()].sort((a,b)=>a.word.localeCompare(b.word,'en',{sensitivity:'base'})).forEach(w=>{const label=document.createElement('label');label.className='word-select-item';label.dataset.word=w.word.toLowerCase();label.dataset.search=(w.word+' '+w.meaning+' '+(w.pos||'')).toLowerCase();const c=document.createElement('input');c.type='checkbox';c.value=w.word;c.onchange=updateManualCount;const d=document.createElement('div');d.innerHTML=`<strong>${w.word}</strong><span>${w.pos||''} ${w.meaning}</span>`;label.append(c,d);grid.appendChild(label)});renderAZ();filterWordSelector();updateManualCount()}
 function filterWordSelector(){const q=(document.getElementById('wordSearch')?.value||'').trim().toLowerCase();document.querySelectorAll('#wordSelectGrid .word-select-item').forEach(el=>{const byText=!q||el.dataset.search.includes(q),byLetter=!manualFilterLetter||(el.dataset.word[0]||'').toUpperCase()===manualFilterLetter;el.classList.toggle('hidden',!(byText&&byLetter))})}
