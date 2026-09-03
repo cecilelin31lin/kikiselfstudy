@@ -675,9 +675,9 @@ function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el
 showRandomQuote();
 
 const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
-  {id:'YSH',name:'楊',icon:'🐱',password:'',active:1,defaults:{stages:[1,2,5,6],mode:'random',count:5,memorySeconds:1.5}},
-  {id:'CTY',name:'張',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
+  {id:'LKF',name:'西',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.2}},
+  {id:'YSH',name:'楊',icon:'🐱',password:'1234',active:1,defaults:{stages:[1,2,5,6],mode:'random',count:5,memorySeconds:1.5}},
+  {id:'CTY',name:'張',icon:'🐶',password:'1234',active:0,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}}
 ];
 /* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。password留空字串表示個人紀錄不需密碼。defaults可設定每位玩家預設遊戲：stages關卡、mode可用random或weak、count單字數、memorySeconds第四關單字顯示秒數。*/
