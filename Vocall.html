@@ -631,8 +631,8 @@ function showReview(){document.getElementById('finalOverlay').classList.remove('
 /* ===== 多人雲端學習紀錄＋動態升級功能 ===== */
 const CLOUD_URL='https://script.google.com/macros/s/AKfycbyOjSe-PX-oqFsem7FfjeX3kFk1fZrYoHvLsPf9ZJ0Dt9dsqEE-W3X0Yg5jJtR-U9Rx_w/exec';
 const QUOTES=[
-  '今天背下來的單字，會在未來某一題等你。',
   '每天進步一點點，也是在往前走。',
+  'How we spend our days is, of course, how we spend our lives.',
   '多認識一個單字，就多一個拿分的機會。',
   '不用一次記住全部，今天記住一些就很好。',
   '你現在背的，可能就是考場上救你的一題。',
@@ -644,20 +644,17 @@ const QUOTES=[
   '錯過的題目再做一次，就不是白錯。',
   '讀一點也算讀，記一個也算進步。',
   '現在覺得難的字，以後會變成一眼就認得。',
-  '穩穩地背，比偶爾一次背很多更有力量。',
-  '希望今天背到的，剛好就是考試考到的。',
   '每一個深夜的苦讀，都是為了迎接黎明的曙光。',
   '無論結果如何，你勇於面對考試的勇氣已經值得驕傲。',
   '考試不是人生的全部，但它絕對是你現在能掌握的最大機會。',
   '焦慮是浪費時間的奢侈行為，把那份力氣拿來翻開下一頁課本。',
-  '寧可辛苦一陣子，也不要辛苦一輩子。',
   '未來的你會感謝現在拚命的自己。',
   '讀書不是為了考試，而是為了將來擁有選擇的權利。',
   '爬山的過程很累，但山頂的風景值得你流下的每一滴汗。'
 ];
 function randomQuote(){return QUOTES.length?QUOTES[Math.floor(Math.random()*QUOTES.length)]:''}
 function showRandomQuote(){const el=document.getElementById('dailyQuote');if(el)el.textContent=randomQuote()}
-function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el)el.textContent='你很棒！加油加油！'}
+function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el)el.textContent='真厲害～大腦又多吃一些單字啦！'}
 showRandomQuote();
 
 const PLAYERS=[
