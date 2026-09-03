@@ -13,7 +13,7 @@
 }
 *{box-sizing:border-box}
 html,body{overscroll-behavior:none}
-body{margin:0;padding:24px 16px 60px;background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Nunito',sans-serif;color:#2B3A55;min-height:100vh}
+body{margin:0;padding:24px 16px 60px;background:#f5f5f5;font-family:'Times New Roman','DFKai-SB','BiauKai','Kaiti TC','KaiTi',serif;color:#2B3A55;min-height:100vh}
 .wrap{max-width:720px;margin:0 auto}
 h1{text-align:center;font-size:28px;margin:0 0 8px}
 .subtitle{text-align:center;font-size:14px;color:#666;margin-bottom:24px}
@@ -150,7 +150,7 @@ button{font-family:inherit}
 .record-summary{font-size:13px;color:#666;text-align:center;margin-bottom:12px}
 .record-row{background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.55}
 .record-row strong{font-size:14px}.record-meta{color:#666;margin-top:3px}.skipped-tag{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:#eee;color:#777;font-size:11px;font-weight:600}.record-flags{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.flag-btn{padding:5px 9px;border:1px solid #ccc;border-radius:999px;background:#fff;font-size:12px;cursor:pointer;color:#555}.flag-btn.on{background:var(--theme-selected);border-color:var(--theme-main);font-weight:700}.record-row.excluded{opacity:.68}
-.daily-quote{text-align:center;margin:8px auto 20px;color:#667085;font-size:14px;font-style:italic;line-height:1.6}.daily-quote::before{content:"|  "}.daily-quote::after{content:"  |"}
+.daily-quote,.review-quote{text-align:center;margin:8px auto 20px;color:#667085;font-size:15px;font-style:italic;line-height:1.75;font-family:Georgia,'STKaiti','Kaiti TC','DFKai-SB','BiauKai',serif}.daily-quote::before,.review-quote::before{content:"|  "}.daily-quote::after,.review-quote::after{content:"  |"}.review-quote{margin:24px auto 6px;padding-top:18px;border-top:1px solid #eee;max-width:620px}
 .record-history{margin-top:18px;padding-top:14px;border-top:1px solid #eee}.record-history h3{font-size:15px;margin:0 0 9px}.history-row{font-size:13px;color:#666;padding:8px 2px;border-bottom:1px solid #eee}.history-empty{font-size:13px;color:#999;padding:6px 0}
 
 </style>
@@ -158,7 +158,7 @@ button{font-family:inherit}
 <body>
 <div class="wrap">
   <h1>後醫英文單字集合</h1>
-  <p class="subtitle">每天多背一點單字，希望考試都考有背到的</p>
+  <p class="subtitle">How we spend our days is, of course, how we spend our lives.</p>
   <div class="daily-quote" id="dailyQuote"></div>
   <div id="startScreen" class="card stage-picker">
 
@@ -209,7 +209,7 @@ button{font-family:inherit}
     <div id="stage6" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s6timer">0:00</div></div><div class="stat-card"><div class="stat-label">✓ 配對</div><div class="stat-value" id="s6matched">0/0</div></div></div><div class="instruction">第六關｜例句填空：選擇一個單字，再點擊句子中的空白填入。</div><div class="word-buttons" id="s6wordButtons"></div><div class="sentences" id="s6sentences"></div></div>
   </div>
 
-  <div class="review-container" id="reviewContainer"><div class="review-header"><h2>📋 複習</h2><div class="review-actions"><button class="secondary" onclick="showPersonalRecord()">🔒 個人紀錄</button><button class="secondary" id="wrongPracticeBtn" onclick="practiceWrongWords()">錯題再練習</button><button class="secondary" onclick="restartPractice(false)">再練習一次</button><button class="primary" onclick="restartPractice(true)">新的練習</button></div></div><div class="review-completed" id="reviewCompleted"></div><div id="reviewList"></div></div>
+  <div class="review-container" id="reviewContainer"><div class="review-header"><h2>📋 複習</h2><div class="review-actions"><button class="secondary" onclick="showPersonalRecord()">🔒 個人紀錄</button><button class="secondary" id="wrongPracticeBtn" onclick="practiceWrongWords()">錯題再練習</button><button class="secondary" onclick="restartPractice(false)">再練習一次</button><button class="primary" onclick="restartPractice(true)">新的練習</button></div></div><div class="review-completed" id="reviewCompleted"></div><div id="reviewList"></div><div class="review-quote" id="reviewQuote"></div></div>
 
   <div class="result-overlay" id="recordOverlay"><div class="result-modal"><div class="result-title" id="recordTitle">個人學習紀錄</div><div class="record-summary" id="recordSummary"></div><div class="record-modal-list" id="recordList"></div><div class="btn-row center-row" style="margin-top:14px"><button class="primary" onclick="closePersonalRecord()">關閉</button></div></div></div>
   <div class="result-overlay" id="stageOverlay"><div class="result-modal"><div class="result-title" id="stageOverlayTitle">🎉 過關！</div><div class="total-time" id="stageOverlayTime">0:00</div><div class="btn-row center-row"><button class="primary" id="stageNextBtn">下一關</button></div></div></div>
@@ -418,19 +418,21 @@ const QUOTES=[
   '今天多看一次，考試就少陌生一次。',
   '把不會的留下來練，就是在縮小弱點。',
   '錯過的題目再做一次，就不是白錯。',
-  '每一個深夜的苦讀，都是在為黎明的曙光積攢力量。',
-  '勇於站上考場的你，就已經值得為自己驕傲。',
-  '考試不是人生全部，卻是你當下最能掌控的轉機。',
-  '別把時間浪費給焦慮，多翻一頁課本才是真本事。',
-  '現在多辛苦一陣子，以後就少辛苦一輩子。',
-  '現在拚盡全力的你，會換來未來感謝自己的你。',
-  '讀書不是為了應付考試，是為了以後能自由選擇。',
-  '爬山的過程再累，山頂的風景都會讓你覺得值得。'
   '讀一點也算讀，記一個也算進步。',
+  '現在覺得難的字，以後會變成一眼就認得。',
   '穩穩地背，比偶爾一次背很多更有力量。',
-  '希望今天背到的，剛好就是考試考到的。'
+  '每一個深夜的苦讀，都是為了迎接黎明的曙光。',
+  '無論結果如何，你勇於面對考試的勇氣已經值得驕傲。',
+  '考試不是人生的全部，但它絕對是你現在能掌握的最大機會。',
+  '焦慮是浪費時間的奢侈行為，把那份力氣拿來翻開下一頁課本。',
+  '寧可辛苦一陣子，也不要辛苦一輩子。',
+  '未來的你會感謝現在拚命的自己。',
+  '讀書不是為了考試，而是為了將來擁有選擇的權利。',
+  '爬山的過程很累，但山頂的風景值得你流下的每一滴汗。'
 ];
-function showRandomQuote(){const el=document.getElementById('dailyQuote');if(el&&QUOTES.length)el.textContent=QUOTES[Math.floor(Math.random()*QUOTES.length)]}
+function randomQuote(){return QUOTES.length?QUOTES[Math.floor(Math.random()*QUOTES.length)]:''}
+function showRandomQuote(){const el=document.getElementById('dailyQuote');if(el)el.textContent=randomQuote()}
+function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el)el.textContent=randomQuote()}
 showRandomQuote();
 
 const PLAYERS=[
@@ -480,7 +482,7 @@ const _s4submit=s4submit;s4submit=function(){const q=s4qs[s4i],ans=document.getE
 const _s5submit=s5submit;s5submit=function(){const q=s5qs[s5i],sel=s5sel,before=s5answered;if(!q||!sel){_s5submit();return}const ok=sel.word===q.correct.word;_s5submit();if(!before)markStage(q.word,5,ok)}
 const _s6fill=s6fill;s6fill=function(blank,item){if(!s6selected)return;const chosen=s6selected,ok=chosen===item.word;_s6fill(blank,item);markStage(item.word,6,ok)}
 const _showReview=showReview;
-showReview=function(){_showReview();const list=document.getElementById('reviewList');[...list.querySelectorAll('.review-item')].slice(0,gameWords.length).forEach((el,i)=>{const w=gameWords[i],x=getSW(w.word),parts=selectedStages.map(st=>{if(stats[st]?.skipped)return `${stageNames[st]} ⏭ 跳過`;const r=x.stages[st];if(!r)return `${stageNames[st]} —`;return `${stageNames[st]} ${r.correct?(r.wrong?'△':'✓'):'✕'}${r.wrong?'('+r.wrong+')':''}`});const d=document.createElement('div');d.className='stage-status';d.innerHTML=`<div>${parts.join(' ｜ ')}</div>`;el.appendChild(d)});document.getElementById('wrongPracticeBtn').classList.toggle('hidden',!lastSessionWrongWords.size)}
+showReview=function(){_showReview();showReviewQuote();const list=document.getElementById('reviewList');[...list.querySelectorAll('.review-item')].slice(0,gameWords.length).forEach((el,i)=>{const w=gameWords[i],x=getSW(w.word),parts=selectedStages.map(st=>{if(stats[st]?.skipped)return `${stageNames[st]} ⏭ 跳過`;const r=x.stages[st];if(!r)return `${stageNames[st]} —`;return `${stageNames[st]} ${r.correct?(r.wrong?'△':'✓'):'✕'}${r.wrong?'('+r.wrong+')':''}`});const d=document.createElement('div');d.className='stage-status';d.innerHTML=`<div>${parts.join(' ｜ ')}</div>`;el.appendChild(d)});document.getElementById('wrongPracticeBtn').classList.toggle('hidden',!lastSessionWrongWords.size)}
 
 async function showPersonalRecord(){
   if(!currentPlayer){alert('請先選擇玩家');return}
