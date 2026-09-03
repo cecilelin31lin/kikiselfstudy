@@ -131,7 +131,7 @@ button{font-family:inherit}
 
 .player-section,.settings-section{margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid #eee}
 .player-section h2,.settings-section h2{font-size:18px;margin:0 0 10px}
-.player-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.player-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.player-card{flex:0 1 150px}
 .player-card{background:#fafafa;border:1px solid #ddd;border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;transition:.15s}
 .player-card:hover{border-color:var(--theme-main);background:var(--theme-soft)}
 .player-card.selected{border:2px solid var(--theme-main);background:var(--theme-selected)}
@@ -150,22 +150,25 @@ button{font-family:inherit}
 .record-summary{font-size:13px;color:#666;text-align:center;margin-bottom:12px}
 .record-row{background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.55}
 .record-row strong{font-size:14px}.record-meta{color:#666;margin-top:3px}.skipped-tag{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:#eee;color:#777;font-size:11px;font-weight:600}.record-flags{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.flag-btn{padding:5px 9px;border:1px solid #ccc;border-radius:999px;background:#fff;font-size:12px;cursor:pointer;color:#555}.flag-btn.on{background:var(--theme-selected);border-color:var(--theme-main);font-weight:700}.record-row.excluded{opacity:.68}
+.daily-quote{text-align:center;margin:8px auto 20px;color:#667085;font-size:14px;font-style:italic;line-height:1.6}.daily-quote::before{content:"|  "}.daily-quote::after{content:"  |"}
+.record-history{margin-top:18px;padding-top:14px;border-top:1px solid #eee}.record-history h3{font-size:15px;margin:0 0 9px}.history-row{font-size:13px;color:#666;padding:8px 2px;border-bottom:1px solid #eee}.history-empty{font-size:13px;color:#999;padding:6px 0}
 
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>後醫英文單字集合</h1>
-  <p class="subtitle">選擇玩家、關卡與單字</p>
+  <p class="subtitle">每天多背一點單字，希望考試都考有背到的</p>
+  <div class="daily-quote" id="dailyQuote"></div>
   <div id="startScreen" class="card stage-picker">
 
     <div class="player-section">
-      <h2>每天多背一點單字，希望考試都考有背到的</h2>
+      <h2>玩家</h2>
       <div class="player-grid" id="playerGrid"></div>
       <div class="cloud-status" id="cloudStatus"></div> 
       <button class="secondary personal-record-btn hidden" id="homeRecordBtn" onclick="showPersonalRecord()">🔒 讀取個人紀錄</button>
     </div>
-    <h2>選擇關卡</h2>
+    <h2>關卡</h2>
     <div class="stage-options">
       <label class="stage-check"><input type="checkbox" value="1" checked><div><strong>第一關｜認識單字</strong></div></label>
       <label class="stage-check"><input type="checkbox" value="2" checked><div><strong>第二關｜尋找單字</strong></div></label>
@@ -176,7 +179,7 @@ button{font-family:inherit}
     </div>
     <div class="btn-row"><button class="secondary" onclick="selectAllStages()">六關全選</button><button class="secondary" onclick="clearAllStages()">全部清除</button></div>
     <div class="word-mode">
-      <h2>挑選單字</h2>
+      <h2>單字</h2>
       <div class="mode-options">
         <label class="mode-option"><input type="radio" name="wordMode" value="random" checked><div><strong>隨機挑選</strong></div></label>
         <label class="mode-option"><input type="radio" name="wordMode" value="weak"><div><strong>隨機・優先不熟</strong></div></label>
@@ -405,19 +408,45 @@ function showReview(){document.getElementById('finalOverlay').classList.remove('
 
 /* ===== 多人雲端學習紀錄＋動態升級功能 ===== */
 const CLOUD_URL='https://script.google.com/macros/s/AKfycbyOjSe-PX-oqFsem7FfjeX3kFk1fZrYoHvLsPf9ZJ0Dt9dsqEE-W3X0Yg5jJtR-U9Rx_w/exec';
-const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'1234',active:1},
-  {id:'YSH',name:'楊',icon:'🐱',password:'1234',active:1},
-  {id:'CTY',name:'張',icon:'🐶',password:'1234',active:1},
-  {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0}
+const QUOTES=[
+  '今天背下來的單字，會在未來某一題等你。',
+  '每天進步一點點，也是在往前走。',
+  '多認識一個單字，就多一個拿分的機會。',
+  '不用一次記住全部，今天記住一些就很好。',
+  '你現在背的，可能就是考場上救你的一題。',
+  '重複不是浪費時間，是記憶正在變牢固。',
+  '今天多看一次，考試就少陌生一次。',
+  '把不會的留下來練，就是在縮小弱點。',
+  '錯過的題目再做一次，就不是白錯。',
+  '每一個深夜的苦讀，都是在為黎明的曙光積攢力量。',
+  '勇於站上考場的你，就已經值得為自己驕傲。',
+  '考試不是人生全部，卻是你當下最能掌控的轉機。',
+  '別把時間浪費給焦慮，多翻一頁課本才是真本事。',
+  '現在多辛苦一陣子，以後就少辛苦一輩子。',
+  '現在拚盡全力的你，會換來未來感謝自己的你。',
+  '讀書不是為了應付考試，是為了以後能自由選擇。',
+  '爬山的過程再累，山頂的風景都會讓你覺得值得。'
+  '讀一點也算讀，記一個也算進步。',
+  '穩穩地背，比偶爾一次背很多更有力量。',
+  '希望今天背到的，剛好就是考試考到的。'
 ];
-/* id是系統標記人的，不要改，改了資料不會同步。要改遊戲中顯示名字可以改name就好*/
-let currentPlayer=null,cloudStats={},sessionWordStats={},sessionStageResult={},manualFilterLetter='',randomWordCount=Math.min(5,words.length),practiceWrongMode=false,lastSessionWrongWords=new Set();
+function showRandomQuote(){const el=document.getElementById('dailyQuote');if(el&&QUOTES.length)el.textContent=QUOTES[Math.floor(Math.random()*QUOTES.length)]}
+showRandomQuote();
+
+const PLAYERS=[
+  {id:'LKF',name:'西',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5}},
+  {id:'YSH',name:'楊',icon:'🐱',password:'1234',active:1,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5}},
+  {id:'CTY',name:'張',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5}},
+  {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5}}
+];
+/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。defaults可設定每位玩家預設遊戲：stages關卡、mode可用random或weak、count單字數。*/
+let currentPlayer=null,cloudStats={},sessionWordStats={},sessionStageResult={},manualFilterLetter='',randomWordCount=Math.min(5,words.length),practiceWrongMode=false,lastSessionWrongWords=new Set(),sessionHistory=[];
 const stageNames={1:'認識單字',2:'尋找單字',3:'複習單字',4:'記憶單字',5:'單字例句',6:'例句填空'};
 function getSW(word){if(!sessionWordStats[word])sessionWordStats[word]={practice:0,wrong:0,hint:0,rewatch:0,stages:{}};return sessionWordStats[word]}
 function markStage(word,stage,ok){const x=getSW(word);if(!x.stages[stage])x.stages[stage]={wrong:0,correct:false};if(ok)x.stages[stage].correct=true;else{x.stages[stage].wrong++;x.wrong++;lastSessionWrongWords.add(word)}}
 function renderPlayers(){const g=document.getElementById('playerGrid');g.innerHTML='';PLAYERS.filter(p=>p.active!==0).forEach(p=>{const b=document.createElement('div');b.className='player-card'+(currentPlayer===p.id?' selected':'');b.innerHTML=`<span class="player-icon">${p.icon}</span><span class="player-name">${p.name}</span>`;b.onclick=()=>selectPlayer(p.id);g.appendChild(b)})}
-async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}}
+function applyPlayerDefaults(p){const d=p?.defaults||{};const stages=Array.isArray(d.stages)&&d.stages.length?d.stages:[1,2,3,4,5,6];document.querySelectorAll('.stage-check input').forEach(x=>x.checked=stages.includes(Number(x.value)));const mode=['random','weak'].includes(d.mode)?d.mode:'random';const radio=document.querySelector(`input[name="wordMode"][value="${mode}"]`);if(radio)radio.checked=true;const count=document.getElementById('randomCount');if(count){const max=Math.max(1,eligibleWords().length||words.length);const n=Math.max(1,Math.min(Number(d.count)||5,max));count.value=n;randomWordCount=n}updateModeVisibility()}
+async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}}
 function familiarityScore(word){const s=cloudStats[word]||{};const p=Number(s.practice||0),w=Number(s.wrong||0),h=Number(s.hint||0),r=Number(s.rewatch||0);if(!p)return 0;return Math.max(0,Math.min(5,Math.round(5*(p/(p+w*1.6+h*.8+r*.8))*(1-Math.exp(-p/4)))))}
 function stars(word){const n=familiarityScore(word);return '★'.repeat(n)+'☆'.repeat(5-n)}
 function buildRandomCountOptions(){const s=document.getElementById('randomCount');if(!s)return;s.max=Math.max(1,words.length);s.value=Math.min(5,Math.max(1,words.length));randomWordCount=Number(s.value);s.onchange=()=>{let n=Math.round(Number(s.value)||5);n=Math.max(1,Math.min(n,words.length));s.value=n;randomWordCount=n}}
@@ -453,12 +482,14 @@ const _s6fill=s6fill;s6fill=function(blank,item){if(!s6selected)return;const cho
 const _showReview=showReview;
 showReview=function(){_showReview();const list=document.getElementById('reviewList');[...list.querySelectorAll('.review-item')].slice(0,gameWords.length).forEach((el,i)=>{const w=gameWords[i],x=getSW(w.word),parts=selectedStages.map(st=>{if(stats[st]?.skipped)return `${stageNames[st]} ⏭ 跳過`;const r=x.stages[st];if(!r)return `${stageNames[st]} —`;return `${stageNames[st]} ${r.correct?(r.wrong?'△':'✓'):'✕'}${r.wrong?'('+r.wrong+')':''}`});const d=document.createElement('div');d.className='stage-status';d.innerHTML=`<div>${parts.join(' ｜ ')}</div>`;el.appendChild(d)});document.getElementById('wrongPracticeBtn').classList.toggle('hidden',!lastSessionWrongWords.size)}
 
-function showPersonalRecord(){
+async function showPersonalRecord(){
   if(!currentPlayer){alert('請先選擇玩家');return}
   const p=PLAYERS.find(x=>x.id===currentPlayer);
   const entered=prompt('請輸入 '+p.name+' 的個人紀錄密碼：');
   if(entered===null)return;
   if(String(entered)!==String(p.password)){alert('密碼錯誤');return}
+  sessionHistory=[];
+  try{const r=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(currentPlayer)+'&_='+Date.now());const data=await r.json();if(data.ok)sessionHistory=Array.isArray(data.sessions)?data.sessions:[]}catch(e){}
   renderPersonalRecord();
   document.getElementById('recordOverlay').classList.add('show');
 }
@@ -475,6 +506,10 @@ function renderPersonalRecord(){
     d.innerHTML=`<strong>${s.important?'⭐ ':''}${w.word}（${w.pos||''}） ${w.meaning}</strong><div class="record-meta"><span class="stars">${stars(w.word)}</span>　練習 ${Number(s.practice||0)}｜答錯 ${Number(s.wrong||0)}｜提示 ${Number(s.hint||0)}｜再看一次 ${Number(s.rewatch||0)}</div><div class="record-flags"><button class="flag-btn ${s.important?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','important')">⭐ 重要</button><button class="flag-btn ${s.excluded?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','excluded')">🚫 不用再出</button></div>`;
     list.appendChild(d);
   });
+  const history=document.createElement('div');history.className='record-history';history.innerHTML='<h3>練習紀錄</h3>';
+  if(sessionHistory.length){sessionHistory.forEach(item=>{const d=document.createElement('div');d.className='history-row';const dt=new Date(item.time);d.textContent=isNaN(dt)?String(item.time||''):dt.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});history.appendChild(d)})}
+  else{const d=document.createElement('div');d.className='history-empty';d.textContent='目前沒有已完成的練習紀錄';history.appendChild(d)}
+  list.appendChild(history);
 }
 async function toggleWordFlag(word,flag){
   if(!currentPlayer)return;
