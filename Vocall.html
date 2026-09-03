@@ -675,12 +675,12 @@ function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el
 showRandomQuote();
 
 const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.2}},
-  {id:'YSH',name:'楊',icon:'🐱',password:'1234',active:1,defaults:{stages:[1,2,5,6],mode:'random',count:5,memorySeconds:1.5}},
-  {id:'CTY',name:'張',icon:'🐶',password:'1234',active:0,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
+  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
+  {id:'YSH',name:'楊',icon:'🐱',password:'',active:1,defaults:{stages:[1,2,5,6],mode:'random',count:5,memorySeconds:1.5}},
+  {id:'CTY',name:'張',icon:'🐶',password:'1234',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}}
 ];
-/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。defaults可設定每位玩家預設遊戲：stages關卡、mode可用random或weak、count單字數、memorySeconds第四關單字顯示秒數。*/
+/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。password留空字串表示個人紀錄不需密碼。defaults可設定每位玩家預設遊戲：stages關卡、mode可用random或weak、count單字數、memorySeconds第四關單字顯示秒數。*/
 let currentPlayer=null,cloudStats={},sessionWordStats={},sessionStageResult={},manualFilterLetter='',randomWordCount=Math.min(5,words.length),practiceWrongMode=false,lastSessionWrongWords=new Set(),sessionHistory=[];
 const stageNames={1:'認識單字',2:'尋找單字',3:'複習單字',4:'記憶單字',5:'單字例句',6:'例句填空'};
 function getSW(word){if(!sessionWordStats[word])sessionWordStats[word]={practice:0,wrong:0,hint:0,rewatch:0,stages:{}};return sessionWordStats[word]}
@@ -730,14 +730,18 @@ const _s4submit=s4submit;s4submit=function(){const q=s4qs[s4i],ans=document.getE
 const _s5submit=s5submit;s5submit=function(){const q=s5qs[s5i],sel=s5sel,before=s5answered;if(!q||!sel){_s5submit();return}const ok=sel.word===q.correct.word;_s5submit();if(!before)markStage(q.word,5,ok)}
 const _s6fill=s6fill;s6fill=function(blank,item){if(!s6selected)return;const chosen=s6selected,ok=chosen===item.word;_s6fill(blank,item);markStage(item.word,6,ok)}
 const _showReview=showReview;
-showReview=function(){_showReview();showReviewQuote();const list=document.getElementById('reviewList');[...list.querySelectorAll('.review-item')].slice(0,gameWords.length).forEach((el,i)=>{const w=gameWords[i],x=getSW(w.word),parts=selectedStages.map(st=>{if(stats[st]?.skipped)return `${stageNames[st]} ⏭ 跳過`;const r=x.stages[st];if(!r)return `${stageNames[st]} —`;return `${stageNames[st]} ${r.correct?(r.wrong?'△':'✓'):'✕'}${r.wrong?'('+r.wrong+')':''}`});const d=document.createElement('div');d.className='stage-status';d.innerHTML=`<div>${parts.join(' ｜ ')}</div>`;el.appendChild(d)});document.getElementById('wrongPracticeBtn').classList.toggle('hidden',!lastSessionWrongWords.size)}
+function reviewFlagButtons(word){const s=cloudStats[word]||{},safe=word.replace(/'/g,"\\'");return `<div class="record-flags review-flags"><button class="flag-btn ${s.important?'on':''}" onclick="toggleReviewFlag('${safe}','important',this)">⭐ 重要</button><button class="flag-btn ${s.excluded?'on':''}" onclick="toggleReviewFlag('${safe}','excluded',this)">🚫 不用再出</button></div>`}
+async function toggleReviewFlag(word,flag,btn){if(!currentPlayer)return;const s=cloudStats[word]||(cloudStats[word]={});s[flag]=!s[flag];if(btn)btn.classList.toggle('on',!!s[flag]);const ok=await cloudPost({action:'setWordFlags',player:currentPlayer,word,important:!!s.important,excluded:!!s.excluded});if(!ok)alert('標記已暫時更新，但雲端儲存失敗，請稍後再試。')}
+showReview=function(){_showReview();showReviewQuote();const list=document.getElementById('reviewList'),items=[...list.querySelectorAll('.review-item')];items.slice(0,gameWords.length).forEach((el,i)=>{const w=gameWords[i],x=getSW(w.word),parts=selectedStages.map(st=>{if(stats[st]?.skipped)return `${stageNames[st]} ⏭ 跳過`;const r=x.stages[st];if(!r)return `${stageNames[st]} —`;return `${stageNames[st]} ${r.correct?(r.wrong?'△':'✓'):'✕'}${r.wrong?'('+r.wrong+')':''}`});const d=document.createElement('div');d.className='stage-status';d.innerHTML=`<div>${parts.join(' ｜ ')}</div>`;el.appendChild(d);el.insertAdjacentHTML('beforeend',reviewFlagButtons(w.word))});if(items.length>gameWords.length){const extras=[...distractorWords.values()];items.slice(gameWords.length).forEach((el,i)=>{if(extras[i])el.insertAdjacentHTML('beforeend',reviewFlagButtons(extras[i].word))})}document.getElementById('wrongPracticeBtn').classList.toggle('hidden',!lastSessionWrongWords.size)}
 
 async function showPersonalRecord(){
   if(!currentPlayer){alert('請先選擇玩家');return}
   const p=PLAYERS.find(x=>x.id===currentPlayer);
-  const entered=prompt('請輸入 '+p.name+' 的個人紀錄密碼：');
-  if(entered===null)return;
-  if(String(entered)!==String(p.password)){alert('密碼錯誤');return}
+  if(String(p?.password||'')!==''){
+    const entered=prompt('請輸入 '+p.name+' 的個人紀錄密碼：');
+    if(entered===null)return;
+    if(String(entered)!==String(p.password)){alert('密碼錯誤');return}
+  }
   sessionHistory=[];
   try{const r=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(currentPlayer)+'&_='+Date.now());const data=await r.json();if(data.ok)sessionHistory=Array.isArray(data.sessions)?data.sessions:[]}catch(e){}
   renderPersonalRecord();
