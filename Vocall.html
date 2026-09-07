@@ -424,6 +424,7 @@ h1::after{
         <label class="mode-option"><input type="radio" name="wordMode" value="random" checked><div><strong>隨機挑選</strong></div></label>
         <label class="mode-option"><input type="radio" name="wordMode" value="weak"><div><strong>隨機・優先不熟</strong></div></label>
         <label class="mode-option"><input type="radio" name="wordMode" value="manual"><div><strong>自己挑選</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="staronly"><div><strong>複習星號</strong></div></label>
       </div>
       <div class="settings-section">
         <div class="setting-row" id="randomCountRow"><label for="randomCount">複習單字</label><input type="number" id="randomCount" min="1" value="5" inputmode="numeric"><span style="font-size:12px;color:#777">個</span></div>
@@ -642,6 +643,26 @@ const words = [
   { word: 'erupt', meaning: '爆發', pos: 'v.', sentence: 'Violence erupted when the pro-life and pro-choice crowds came to the same square.', translation: '當贊成生命權和贊成選擇權的人群來到同一廣場時，暴力爆發了。' },
   { word: 'rupture', meaning: '破裂', pos: 'n., v.', sentence: 'The weight-lifter had a muscle rupture.', translation: '舉重運動員肌肉破裂。' },
   { word: 'destroy', meaning: '毀滅、破壞', pos: 'v.', sentence: 'An earthquake destroyed most of the city.', translation: '地震摧毀了城市的大部分地區。' },
+  { word: 'precursor', meaning: '前身、先導', pos: 'n.', sentence: 'SO is a precursor of acid rain.', translation: '二氧化硫是酸雨的前驅物。' },
+  { word: 'recourse', meaning: '依靠、退路、手段', pos: 'n.', sentence: 'It is best to resolve the case without recourse to law.', translation: '最好不訴諸法律來解決此案。' },
+  { word: 'confusion', meaning: '混亂、混淆', pos: 'n.', sentence: 'To avoid confusion, the twins never wore the same clothes.', translation: '為了避免混淆，這對雙胞胎從不穿相同的衣服。' },
+  { word: 'infuse', meaning: '注入、浸泡', pos: 'v.', sentence: 'His arrival infused new life and energy into the group.', translation: '他的到來為團體注入了新的生命和能量。' },
+  { word: 'effusive', meaning: '熱情洋溢的', pos: 'adj.', sentence: "She blushed at her supervisor's effusive praise.", translation: '她因監督員熱情洋溢的表揚而臉紅。' },
+  { word: 'futile', meaning: '徒勞的、無效的', pos: 'adj.', sentence: 'All our efforts proved futile.', translation: '我們所有的努力都白費了。' },
+  { word: 'confound', meaning: '使困惑', pos: 'v.', sentence: 'The strategy confounded our opponents.', translation: '這個策略讓我們的對手困惑。' },
+  { word: 'profuse', meaning: '豐富的、大量的', pos: 'adj.', sentence: 'The victims were profuse in their thanks to the donors.', translation: '受害者對捐獻者表達了豐富的感謝。' },
+  { word: 'perfusion', meaning: '布滿、灌注', pos: 'n.', sentence: 'Perfusion of an organ during transplant can improve the outcome of the operation.', translation: '移植期間器官灌注可以改善手術效果。' },
+  { word: 'intermission', meaning: '中場休息時間', pos: 'n.', sentence: 'The man went out to have a smoke during the intermission.', translation: '那個人在中場休息時出去抽煙。' },
+  { word: 'intermittent', meaning: '斷續的、間歇的', pos: 'adj.', sentence: 'There was intermittent rain all night.', translation: '整晚都有間歇性的雨。' },
+  { word: 'dismiss', meaning: '遣散、免職、不理會', pos: 'v.', sentence: 'He has been dismissed from his job for incompetence.', translation: '他因無能而被解雇。' },
+  { word: 'emit', meaning: '發出', pos: 'v.', sentence: 'All living organisms emit heat, which can be picked up by infrared sensors.', translation: '所有生物體都會發出熱，可被紅外傳感器檢測到。' },
+  { word: 'permission', meaning: '允許、許可', pos: 'n.', sentence: "I have the author's permission to quote from his article.", translation: '我有作者的許可引用他的文章。' },
+  { word: 'permit', meaning: '允許、許可證', pos: 'v., n.', sentence: 'Smoking is not permitted in this restaurant.', translation: '此餐廳不允許吸煙。' },
+  { word: 'remit', meaning: '匯（款）、寬恕、緩解', pos: 'v.', sentence: 'The young man remits half his monthly salary to his parents back home.', translation: '年輕人每月將一半的薪水匯給他在家的父母。' },
+  { word: 'remission', meaning: '寬恕、緩解', pos: 'n.', sentence: 'The cancer is currently in remission.', translation: '癌症目前處於緩解期。' },
+  { word: 'transmit', meaning: '傳送、傳播', pos: 'v.', sentence: 'The message is transmitted over short-wave radio.', translation: '該信息通過短波無線電傳輸。' },
+  { word: 'transmission', meaning: '傳送、傳播', pos: 'n.', sentence: 'Malaria is transmitted by mosquitoes.', translation: '瘧疾由蚊子傳播。' },
+  { word: 'neurotransmitter', meaning: '神經傳導物質', pos: 'n.', sentence: 'Serotonin is an important neurotransmitter.', translation: '血清素是一種重要的神經遞質。' },
 ];
 const WORDS_PER_GAME=5;
 let gameWords=shuffle([...words]).slice(0,Math.min(WORDS_PER_GAME,words.length));
@@ -658,8 +679,8 @@ function clearAllWords(){document.querySelectorAll('#wordSelectGrid input').forE
 function backToStart(){document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})}
 function beginGame(){document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');totalStart=Date.now();completionTime=null;stagePos=0;stats={};hintRecords=[];s4HintWords=new Set();distractorWords=new Map();startSelectedStage()}
 function startManualGame(){const picked=[...document.querySelectorAll('#wordSelectGrid input:checked')].map(x=>x.value);if(!picked.length){alert('請至少選一個單字');return}const set=new Set(picked);gameWords=eligibleWords().filter(w=>set.has(w.word));wordMode='manual';beginGame()}
-function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(newWords&&['random','weak'].includes(wordMode))drawNewGameWords();if(wordMode==='manual'){document.querySelector('input[name="wordMode"][value="manual"]').checked=true}else if(wordMode==='weak'){document.querySelector('input[name="wordMode"][value="weak"]').checked=true}else{document.querySelector('input[name="wordMode"][value="random"]').checked=true}window.scrollTo({top:0,behavior:'smooth'})}
-function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}drawNewGameWords();beginGame()}
+function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(newWords&&['random','weak','staronly'].includes(wordMode))drawNewGameWords();if(wordMode==='manual'){document.querySelector('input[name="wordMode"][value="manual"]').checked=true}else if(wordMode==='weak'){document.querySelector('input[name="wordMode"][value="weak"]').checked=true}else if(wordMode==='staronly'){document.querySelector('input[name="wordMode"][value="staronly"]').checked=true}else{document.querySelector('input[name="wordMode"][value="random"]').checked=true}window.scrollTo({top:0,behavior:'smooth'})}
+function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(wordMode==='staronly'&&!eligibleWords().some(w=>cloudStats[w.word]&&cloudStats[w.word].important)){alert('目前沒有標記星號重要的單字');return}drawNewGameWords();beginGame()}
 function renderIndicator(){const el=document.getElementById('stageIndicator');el.innerHTML='';selectedStages.forEach((s,i)=>{const d=document.createElement('div');d.className='stage-dot'+(i<stagePos?' done':i===stagePos?' active':'');d.textContent=s;el.appendChild(d)})}
 function hideStages(){[1,2,3,4,5,6].forEach(n=>document.getElementById('stage'+n).classList.add('hidden'))}
 function startTimer(id){clearInterval(timer);stageStart=Date.now();timer=setInterval(()=>{const e=document.getElementById(id);if(e)e.textContent=formatTime(Math.floor((Date.now()-stageStart)/1000))},100)}
@@ -780,7 +801,15 @@ function fairRandomSample(source,count){
 
   return shuffle([...trueRandomPart,...fairPart]);
 }
-function drawNewGameWords(){const source=eligibleWords();const count=Math.min(Number(document.getElementById('randomCount')?.value||randomWordCount||5),source.length);if(!source.length){gameWords=[];return}gameWords=wordMode==='weak'?weightedSample(source,count):fairRandomSample(source,count)}
+function drawNewGameWords(){
+  let source=eligibleWords();
+  if(wordMode==='staronly'){
+    source=source.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
+  }
+  const count=Math.min(Number(document.getElementById('randomCount')?.value||randomWordCount||5),source.length);
+  if(!source.length){gameWords=[];return}
+  gameWords=wordMode==='weak'?weightedSample(source,count):fairRandomSample(source,count)
+}
 function renderAZ(){const row=document.getElementById('azRow');if(!row)return;const letters=[...new Set(eligibleWords().map(w=>(w.word[0]||'').toUpperCase()).filter(x=>/[A-Z]/.test(x)))].sort();row.innerHTML='';const all=document.createElement('button');all.className='az-btn'+(!manualFilterLetter?' active':'');all.textContent='全部';all.onclick=()=>{manualFilterLetter='';filterWordSelector();renderAZ()};row.appendChild(all);letters.forEach(l=>{const b=document.createElement('button');b.className='az-btn'+(manualFilterLetter===l?' active':'');b.textContent=l;b.onclick=()=>{manualFilterLetter=l;filterWordSelector();renderAZ()};row.appendChild(b)})}
 function renderWordSelector(){const grid=document.getElementById('wordSelectGrid');grid.innerHTML='';[...eligibleWords()].sort((a,b)=>a.word.localeCompare(b.word,'en',{sensitivity:'base'})).forEach(w=>{const label=document.createElement('label');label.className='word-select-item';label.dataset.word=w.word.toLowerCase();label.dataset.search=(w.word+' '+w.meaning+' '+(w.pos||'')).toLowerCase();const c=document.createElement('input');c.type='checkbox';c.value=w.word;c.onchange=updateManualCount;const d=document.createElement('div');d.innerHTML=`<strong>${w.word}</strong><span>${w.pos||''} ${w.meaning}</span>`;label.append(c,d);grid.appendChild(label)});renderAZ();filterWordSelector();updateManualCount()}
 function filterWordSelector(){const q=(document.getElementById('wordSearch')?.value||'').trim().toLowerCase();document.querySelectorAll('#wordSelectGrid .word-select-item').forEach(el=>{const byText=!q||el.dataset.search.includes(q),byLetter=!manualFilterLetter||(el.dataset.word[0]||'').toUpperCase()===manualFilterLetter;el.classList.toggle('hidden',!(byText&&byLetter))})}
@@ -859,7 +888,7 @@ async function toggleWordFlag(word,flag){
   if(!ok)alert('標記已暫時更新，但雲端儲存失敗，請稍後再試。');
 }
 
-function updateModeVisibility(){const mode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';document.getElementById('randomCountRow').classList.toggle('hidden',!['random','weak'].includes(mode))}
+function updateModeVisibility(){const mode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';document.getElementById('randomCountRow').classList.toggle('hidden',!['random','weak','staronly'].includes(mode))}
 document.querySelectorAll('input[name="wordMode"]').forEach(r=>r.addEventListener('change',updateModeVisibility));
 buildRandomCountOptions();renderPlayers();updateModeVisibility();
 
