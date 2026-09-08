@@ -154,6 +154,15 @@ button{font-family:inherit}
 .record-section-box h3{font-size:15px;margin:0 0 10px}
 .record-scroll{max-height:38vh;overflow-y:auto;padding-right:4px;border-top:1px solid #eee;padding-top:10px}
 .learned-tag{display:inline-block;font-size:11px;font-weight:600;color:#468189;background:rgba(70,129,137,.14);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+.progress-block{margin-bottom:16px}
+.progress-row{margin-bottom:12px}
+.progress-row:last-child{margin-bottom:0}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:#666;margin-bottom:5px}
+.progress-label strong{color:#2B3A55}
+.progress-track{height:10px;border-radius:999px;background:#eee;overflow:hidden}
+.progress-fill{height:100%;border-radius:999px;transition:width .4s ease}
+.progress-fill.learned{background:linear-gradient(90deg,var(--theme-main),var(--theme-hover))}
+.progress-fill.star{background:linear-gradient(90deg,#F0D48A,#E0B94A)}
 .record-summary{font-size:13px;color:#666;text-align:center;margin-bottom:12px}
 .record-row{background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.55}
 .record-row strong{font-size:14px}.record-meta{color:#666;margin-top:3px}.skipped-tag{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:#eee;color:#777;font-size:11px;font-weight:600}.record-flags{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.flag-btn{padding:5px 9px;border:1px solid #ccc;border-radius:999px;background:#fff;font-size:12px;cursor:pointer;color:#555}.flag-btn.on{background:var(--theme-selected);border-color:var(--theme-main);font-weight:700}.record-row.excluded{opacity:.68}
@@ -436,6 +445,10 @@ h1::after{
       </div>
       <div class="settings-section">
         <div class="setting-row" id="randomCountRow"><label for="randomCount">複習單字</label><input type="number" id="randomCount" min="1" value="5" inputmode="numeric"><span style="font-size:12px;color:#777">個</span><span id="randomCountMax" style="font-size:12px;color:#999;margin-left:4px"></span></div>
+        <div class="mode-options hidden" id="learnedSubOptions" style="margin-top:8px">
+          <label class="mode-option"><input type="radio" name="learnedSub" value="all" checked><div><strong>所有已學過</strong></div></label>
+          <label class="mode-option"><input type="radio" name="learnedSub" value="recent"><div><strong>近兩次已學過</strong></div></label>
+        </div>
       </div>
       <div class="btn-row center-row"><button class="primary" onclick="startGame()">下一步</button></div>
     </div>
@@ -464,6 +477,8 @@ h1::after{
       <div class="result-title" style="margin:0;text-align:left">📖 單字總覽</div>
       <button class="secondary" onclick="closeAllWordsScreen()">回首頁</button>
     </div>
+    <div id="allWordsProgress"></div>
+    <input id="allWordsSearch" class="word-search" placeholder="搜尋單字或中文意思" oninput="renderAllWordsContent()">
     <div class="az-row" id="allWordsFilterRow"></div>
     <div id="allWordsContent"></div>
   </div>
@@ -714,6 +729,23 @@ const words = [
   { word: 'retribution', meaning: '報復、報應', pos: 'n.', sentence: 'The killer acted without fear of retribution.', translation: '殺手不怕報復。' },
   { word: 'ensue', meaning: '接著發生', pos: 'v.', sentence: 'Trouble ensued after the new law took effect.', translation: '新法律生效後，麻煩隨之而來。' },
   { word: 'terrain', meaning: '地形、地勢', pos: 'n.', sentence: 'The army chose its position based on the defensive advantages of the surrounding terrain.', translation: '軍隊根據周圍地形的防禦優勢選擇了其陣地。' },
+  { word: 'disclose', meaning: '透露、揭曉', pos: 'v.', sentence: 'The winner will be disclosed in a minute.', translation: '獲勝者將在一分鐘內揭曉。' },
+  { word: 'disorder', meaning: '混亂、疾病', pos: 'n.', sentence: 'The classroom fell into disorder after the teacher left.', translation: '老師離開後教室陷入混亂。' },
+  { word: 'display', meaning: '展現、陳列', pos: 'v., n.', sentence: 'Family photos are displayed on the wall.', translation: '家庭照片展示在牆上。' },
+  { word: 'disembodied', meaning: '無形的', pos: 'adj.', sentence: 'A disembodied voice came from the radio.', translation: '一個幽靈般的聲音從收音機裡傳來。' },
+  { word: 'diffident', meaning: '缺乏自信的', pos: 'adj.', sentence: 'My kid sister is a shy, diffident girl.', translation: '我的妹妹是一個害羞、自信不足的女孩。' },
+  { word: 'diffuse', meaning: '散漫的、滲透、撒散', pos: 'adj., v.', sentence: 'The lecturer spoke in a wordy, diffuse style.', translation: '演講者用冗長、散漫的風格說話。' },
+  { word: 'dilate', meaning: '擴張', pos: 'v.', sentence: 'The pupils of the eyes dilate in darkness.', translation: '眼睛的瞳孔在黑暗中擴張。' },
+  { word: 'discrepancy', meaning: '差異、不一致', pos: 'n.', sentence: 'There is some discrepancy between the two accounts.', translation: '這兩個帳戶之間存在一些差異。' },
+  { word: 'uncontested', meaning: '無異議的、無爭議的', pos: 'adj.', sentence: 'The pole-vaulter is the uncontested world champion.', translation: '這位撐竿跳高運動員是無可爭議的世界冠軍。' },
+  { word: 'undaunted', meaning: '不怕的、無懼的', pos: 'adj.', sentence: 'Undaunted by the warning, the man pressed ahead.', translation: '不被警告所阻嚇，這個人繼續前進。' },
+  { word: 'unkempt', meaning: '滂亂、不整的', pos: 'adj.', sentence: 'The lawn is neglected and quite unkempt.', translation: '草坪被忽視且相當凌亂。' },
+  { word: 'unnerving', meaning: '令人膽怯的', pos: 'adj.', sentence: 'Facing a gun for the first time is quite an unnerving experience.', translation: '第一次面對槍支是一個相當令人不安的經歷。' },
+  { word: 'unscathed', meaning: '毫髮無損', pos: 'adj.', sentence: 'He survived the car crash unscathed.', translation: '他在汽車碰撞中毫髮無損地倖存下來。' },
+  { word: 'unleash', meaning: '釋放、放出', pos: 'v.', sentence: 'At worst, nuclear war could be unleashed.', translation: '最糟的情況下，核戰爭可能被引發。' },
+  { word: 'unravel', meaning: '解開、破壞', pos: 'v.', sentence: 'Scientists are still trying to unravel the secrets of genetics.', translation: '科學家仍在努力解開遺傳學的秘密。' },
+  { word: 'unbridled', meaning: '毫無節制的、如脫韁野馬的', pos: 'adj.', sentence: 'Unbridled growth may end in economic collapse.', translation: '無節制的增長可能導致經濟崩潰。' },
+  { word: 'nonprofit', meaning: '非營利的', pos: 'adj.', sentence: 'The CFCT is a nonprofit, nongovernmental organization.', translation: 'CFCT是一個非營利、非政府組織。' },
 ];
 const WORDS_PER_GAME=5;
 let gameWords=shuffle([...words]).slice(0,Math.min(WORDS_PER_GAME,words.length));
@@ -731,7 +763,7 @@ function backToStart(){document.getElementById('wordSelectScreen').classList.add
 function beginGame(){document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');totalStart=Date.now();completionTime=null;stagePos=0;stats={};hintRecords=[];s4HintWords=new Set();distractorWords=new Map();startSelectedStage()}
 function startManualGame(){const picked=[...document.querySelectorAll('#wordSelectGrid input:checked')].map(x=>x.value);if(!picked.length){alert('請至少選一個單字');return}const set=new Set(picked);gameWords=eligibleWords().filter(w=>set.has(w.word));wordMode='manual';beginGame()}
 function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(newWords&&['random','weak','staronly','learned'].includes(wordMode))drawNewGameWords();if(wordMode==='manual'){document.querySelector('input[name="wordMode"][value="manual"]').checked=true}else if(wordMode==='weak'){document.querySelector('input[name="wordMode"][value="weak"]').checked=true}else if(wordMode==='staronly'){document.querySelector('input[name="wordMode"][value="staronly"]').checked=true}else if(wordMode==='learned'){document.querySelector('input[name="wordMode"][value="learned"]').checked=true}else{document.querySelector('input[name="wordMode"][value="random"]').checked=true}window.scrollTo({top:0,behavior:'smooth'})}
-function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(wordMode==='staronly'&&!eligibleWords().some(w=>cloudStats[w.word]&&cloudStats[w.word].important)){alert('目前沒有標記星號重要的單字');return}if(wordMode==='learned'&&!eligibleWords().some(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0)){alert('目前沒有過去學過的單字');return}drawNewGameWords();beginGame()}
+function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(wordMode==='staronly'&&!eligibleWords().some(w=>cloudStats[w.word]&&cloudStats[w.word].important)){alert('目前沒有標記星號重要的單字');return}if(wordMode==='learned'){const sub=document.querySelector('input[name="learnedSub"]:checked')?.value||'all';const pool=sub==='recent'?eligibleWords().filter(w=>getRecentTwoSessionWords().has(w.word)):eligibleWords().filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);if(!pool.length){alert(sub==='recent'?'目前沒有近兩次學過的單字':'目前沒有過去學過的單字');return}}drawNewGameWords();beginGame()}
 function renderIndicator(){const el=document.getElementById('stageIndicator');el.innerHTML='';selectedStages.forEach((s,i)=>{const d=document.createElement('div');d.className='stage-dot'+(i<stagePos?' done':i===stagePos?' active':'');d.textContent=s;el.appendChild(d)})}
 function hideStages(){[1,2,3,4,5,6].forEach(n=>document.getElementById('stage'+n).classList.add('hidden'))}
 function startTimer(id){clearInterval(timer);stageStart=Date.now();timer=setInterval(()=>{const e=document.getElementById(id);if(e)e.textContent=formatTime(Math.floor((Date.now()-stageStart)/1000))},100)}
@@ -827,7 +859,7 @@ function getSW(word){if(!sessionWordStats[word])sessionWordStats[word]={practice
 function markStage(word,stage,ok){const x=getSW(word);if(!x.stages[stage])x.stages[stage]={wrong:0,correct:false};if(ok)x.stages[stage].correct=true;else{x.stages[stage].wrong++;x.wrong++;lastSessionWrongWords.add(word)}}
 function renderPlayers(){const g=document.getElementById('playerGrid');g.innerHTML='';PLAYERS.filter(p=>p.active!==0).forEach(p=>{const b=document.createElement('div');b.className='player-card'+(currentPlayer===p.id?' selected':'');b.innerHTML=`<span class="player-icon">${p.icon}</span><span class="player-name">${p.name}</span>`;b.onclick=()=>selectPlayer(p.id);g.appendChild(b)})}
 function applyPlayerDefaults(p){const d=p?.defaults||{};const stages=Array.isArray(d.stages)&&d.stages.length?d.stages:[1,2,3,4,5,6];document.querySelectorAll('.stage-check input').forEach(x=>x.checked=stages.includes(Number(x.value)));const mode=['random','weak'].includes(d.mode)?d.mode:'random';const radio=document.querySelector(`input[name="wordMode"][value="${mode}"]`);if(radio)radio.checked=true;const count=document.getElementById('randomCount');if(count){const max=Math.max(1,eligibleWords().length||words.length);const n=Math.max(1,Math.min(Number(d.count)||5,max));count.value=n;randomWordCount=n}updateModeVisibility()}
-async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('homeAllWordsBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}updateModeVisibility()}
+async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('homeAllWordsBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};sessionHistory=[];try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}try{const r2=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(id)+'&_='+Date.now());const data2=await r2.json();if(data2.ok)sessionHistory=Array.isArray(data2.sessions)?data2.sessions:[]}catch(e){}updateModeVisibility()}
 function familiarityScore(word){const s=cloudStats[word]||{};const p=Number(s.practice||0),w=Number(s.wrong||0),h=Number(s.hint||0),r=Number(s.rewatch||0);if(!p)return 0;return Math.max(0,Math.min(5,Math.round(5*(p/(p+w*1.6+h*.8+r*.8))*(1-Math.exp(-p/4)))))}
 function stars(word){const n=familiarityScore(word);return '★'.repeat(n)+'☆'.repeat(5-n)}
 function buildRandomCountOptions(){const s=document.getElementById('randomCount');if(!s)return;s.max=Math.max(1,words.length);s.value=Math.min(5,Math.max(1,words.length));randomWordCount=Number(s.value);s.onchange=()=>{let n=Math.round(Number(s.value)||5);n=Math.max(1,Math.min(n,words.length));s.value=n;randomWordCount=n}}
@@ -835,9 +867,40 @@ function isExcluded(word){return !!(cloudStats[word]&&cloudStats[word].excluded)
 function eligibleWords(){return words.filter(w=>!isExcluded(w.word))}
 
 let allWordsFilter='';
+function getRecentTwoSessionWords(){
+  const recent=[...sessionHistory].sort((a,b)=>new Date(b.time)-new Date(a.time)).slice(0,2);
+  const set=new Set();
+  recent.forEach(item=>{
+    const list=String(item.words||'').split(',').map(s=>s.trim()).filter(Boolean);
+    list.forEach(w=>set.add(w));
+  });
+  return set;
+}
+function renderAllWordsProgress(){
+  const box=document.getElementById('allWordsProgress');
+  const total=words.length;
+  const learnedCount=words.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0).length;
+  const starCount=words.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important).length;
+  const pct1=total?Math.round(learnedCount/total*100):0;
+  const pct2=learnedCount?Math.round(starCount/learnedCount*100):0;
+  box.innerHTML=`
+    <div class="progress-block">
+      <div class="progress-row">
+        <div class="progress-label"><span>學過單字／所有單字</span><strong>${learnedCount} ／ ${total}</strong></div>
+        <div class="progress-track"><div class="progress-fill learned" style="width:${pct1}%"></div></div>
+      </div>
+      <div class="progress-row">
+        <div class="progress-label"><span>星號單字／學過單字</span><strong>${starCount} ／ ${learnedCount}</strong></div>
+        <div class="progress-track"><div class="progress-fill star" style="width:${pct2}%"></div></div>
+      </div>
+    </div>`;
+}
 function showAllWordsScreen(){
   if(!currentPlayer){alert('請先選擇玩家');return}
   allWordsFilter='';
+  const searchInput=document.getElementById('allWordsSearch');
+  if(searchInput)searchInput.value='';
+  renderAllWordsProgress();
   renderAllWordsFilterRow();
   renderAllWordsContent();
   document.getElementById('startScreen').classList.add('hidden');
@@ -882,6 +945,8 @@ function renderAllWordsContent(){
   if(allWordsFilter==='star')list=list.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
   else if(allWordsFilter==='learned')list=list.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);
   else if(allWordsFilter)list=list.filter(w=>(w.word[0]||'').toUpperCase()===allWordsFilter);
+  const q=(document.getElementById('allWordsSearch')?.value||'').trim().toLowerCase();
+  if(q)list=list.filter(w=>(w.word+' '+w.meaning+' '+(w.pos||'')).toLowerCase().includes(q));
   list.sort((a,b)=>a.word.localeCompare(b.word,'en',{sensitivity:'base'}));
   content.innerHTML='';
   if(!list.length){content.innerHTML='<div class="history-empty">目前沒有符合的單字</div>';return}
@@ -918,7 +983,13 @@ function drawNewGameWords(){
     source=source.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
   }
   if(wordMode==='learned'){
-    source=source.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);
+    const sub=document.querySelector('input[name="learnedSub"]:checked')?.value||'all';
+    if(sub==='recent'){
+      const recentSet=getRecentTwoSessionWords();
+      source=source.filter(w=>recentSet.has(w.word));
+    }else{
+      source=source.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);
+    }
   }
   const count=Math.min(Number(document.getElementById('randomCount')?.value||randomWordCount||5),source.length);
   if(!source.length){gameWords=[];return}
@@ -959,7 +1030,7 @@ const _s5submit=s5submit;s5submit=function(){const q=s5qs[s5i],sel=s5sel,before=
 const _s6fill=s6fill;s6fill=function(blank,item){if(!s6selected)return;const chosen=s6selected,ok=chosen===item.word;_s6fill(blank,item);markStage(item.word,6,ok)}
 const _showReview=showReview;
 function reviewFlagButtons(word){const s=cloudStats[word]||{},safe=word.replace(/'/g,"\\'");return `<div class="record-flags review-flags"><button class="flag-btn ${s.important?'on':''}" onclick="toggleReviewFlag('${safe}','important',this)">⭐ 重要</button><button class="flag-btn ${s.excluded?'on':''}" onclick="toggleReviewFlag('${safe}','excluded',this)">🚫 不用再出</button></div>`}
-async function toggleReviewFlag(word,flag,btn){if(!currentPlayer)return;const s=cloudStats[word]||(cloudStats[word]={});s[flag]=!s[flag];if(btn)btn.classList.toggle('on',!!s[flag]);const ok=await cloudPost({action:'setWordFlags',player:currentPlayer,word,important:!!s.important,excluded:!!s.excluded});if(!ok)alert('標記已暫時更新，但雲端儲存失敗，請稍後再試。')}
+async function toggleReviewFlag(word,flag,btn){if(!currentPlayer)return;const s=cloudStats[word]||(cloudStats[word]={});s[flag]=!s[flag];if(btn)btn.classList.toggle('on',!!s[flag]);if(!document.getElementById('allWordsScreen').classList.contains('hidden'))renderAllWordsProgress();const ok=await cloudPost({action:'setWordFlags',player:currentPlayer,word,important:!!s.important,excluded:!!s.excluded});if(!ok)alert('標記已暫時更新，但雲端儲存失敗，請稍後再試。')}
 showReview=function(){_showReview();showReviewQuote();const list=document.getElementById('reviewList'),items=[...list.querySelectorAll('.review-item')];items.slice(0,gameWords.length).forEach((el,i)=>{const w=gameWords[i],x=getSW(w.word),parts=selectedStages.map(st=>{if(stats[st]?.skipped)return `${stageNames[st]} ⏭ 跳過`;const r=x.stages[st];if(!r)return `${stageNames[st]} —`;return `${stageNames[st]} ${r.correct?(r.wrong?'△':'✓'):'✕'}${r.wrong?'('+r.wrong+')':''}`});const d=document.createElement('div');d.className='stage-status';d.innerHTML=`<div>${parts.join(' ｜ ')}</div>`;el.appendChild(d);el.insertAdjacentHTML('beforeend',reviewFlagButtons(w.word))});if(items.length>gameWords.length){const extras=[...distractorWords.values()];items.slice(gameWords.length).forEach((el,i)=>{if(extras[i])el.insertAdjacentHTML('beforeend',reviewFlagButtons(extras[i].word))})}document.getElementById('wrongPracticeBtn').classList.toggle('hidden',!lastSessionWrongWords.size)}
 
 async function showPersonalRecord(){
@@ -1013,16 +1084,26 @@ async function toggleWordFlag(word,flag){
 function updateModeVisibility(){
   const mode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';
   document.getElementById('randomCountRow').classList.toggle('hidden',!['random','weak','staronly','learned'].includes(mode));
+  document.getElementById('learnedSubOptions').classList.toggle('hidden',mode!=='learned');
   const maxEl=document.getElementById('randomCountMax');
   if(!maxEl)return;
   let pool=eligibleWords();
   if(mode==='staronly')pool=pool.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
-  else if(mode==='learned')pool=pool.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);
+  else if(mode==='learned'){
+    const sub=document.querySelector('input[name="learnedSub"]:checked')?.value||'all';
+    if(sub==='recent'){
+      const recentSet=getRecentTwoSessionWords();
+      pool=pool.filter(w=>recentSet.has(w.word));
+    }else{
+      pool=pool.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);
+    }
+  }
   maxEl.textContent=`（最多 ${pool.length} 個）`;
   const input=document.getElementById('randomCount');
   if(input)input.max=pool.length||1;
 }
 document.querySelectorAll('input[name="wordMode"]').forEach(r=>r.addEventListener('change',updateModeVisibility));
+document.querySelectorAll('input[name="learnedSub"]').forEach(r=>r.addEventListener('change',updateModeVisibility));
 buildRandomCountOptions();renderPlayers();updateModeVisibility();
 
 document.addEventListener('keydown',e=>{
