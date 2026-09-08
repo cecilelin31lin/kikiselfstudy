@@ -85,6 +85,8 @@ button{font-family:inherit}
 .review-container{display:none;margin-top:20px}
 .review-container.show{display:block}
 .review-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.wordlist-header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}
+.wordlist-header button{flex:0 0 auto;white-space:nowrap}
 .review-item{background:#fff;border:.5px solid #ddd;border-radius:8px;padding:12px 14px;margin-bottom:8px;font-size:13px;line-height:1.6}
 .review-word-meaning{font-weight:700;color:#6F86A3;margin-bottom:5px}
 .review-sentence{margin-bottom:3px}
@@ -116,8 +118,8 @@ button{font-family:inherit}
 @media(max-width:560px){.review-header{align-items:flex-start;gap:10px;flex-direction:column}.review-actions{width:100%}.review-actions button{flex:1}.memory-word{font-size:30px}}
 .word-mode{margin-top:18px;padding-top:16px;border-top:1px solid #eee}
 .word-mode h2{font-size:18px;margin:0 0 10px}
-.mode-options{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.mode-option{flex:1;min-width:150px;display:flex;gap:8px;align-items:center;background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:11px;cursor:pointer}
+.mode-options{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.mode-option{flex:1;min-width:100px;display:flex;gap:6px;align-items:center;justify-content:center;text-align:center;background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:9px 6px;cursor:pointer;font-size:13px}
 .mode-option input{margin:0}
 .mode-option span{display:none}
 .word-select-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
@@ -148,6 +150,10 @@ button{font-family:inherit}
 .skip-stage-row{display:flex;justify-content:flex-end;margin:0 0 12px}
 .skip-stage-btn{font-size:12px;padding:7px 11px;color:#777;border-color:#ccc}
 .record-modal-list{max-height:58vh;overflow:auto;margin-top:12px}
+.record-section-box{margin-top:20px}
+.record-section-box h3{font-size:15px;margin:0 0 10px}
+.record-scroll{max-height:38vh;overflow-y:auto;padding-right:4px;border-top:1px solid #eee;padding-top:10px}
+.learned-tag{display:inline-block;font-size:11px;font-weight:600;color:#468189;background:rgba(70,129,137,.14);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
 .record-summary{font-size:13px;color:#666;text-align:center;margin-bottom:12px}
 .record-row{background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.55}
 .record-row strong{font-size:14px}.record-meta{color:#666;margin-top:3px}.skipped-tag{display:inline-block;margin-top:6px;padding:3px 7px;border-radius:999px;background:#eee;color:#777;font-size:11px;font-weight:600}.record-flags{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.flag-btn{padding:5px 9px;border:1px solid #ccc;border-radius:999px;background:#fff;font-size:12px;cursor:pointer;color:#555}.flag-btn.on{background:var(--theme-selected);border-color:var(--theme-main);font-weight:700}.record-row.excluded{opacity:.68}
@@ -406,7 +412,8 @@ h1::after{
       <h2>玩家</h2>
       <div class="player-grid" id="playerGrid"></div>
       <div class="cloud-status" id="cloudStatus"></div> 
-      <button class="secondary personal-record-btn hidden" id="homeRecordBtn" onclick="showPersonalRecord()">🔒 讀取個人紀錄</button>
+      <button class="secondary personal-record-btn hidden" id="homeRecordBtn" onclick="showPersonalRecord()">🔒 個人紀錄</button>
+      <button class="secondary personal-record-btn hidden" id="homeAllWordsBtn" onclick="showAllWordsScreen()">📖 單字總覽</button>
     </div>
     <h2>關卡</h2>
     <div class="stage-options">
@@ -421,13 +428,14 @@ h1::after{
     <div class="word-mode">
       <h2>單字</h2>
       <div class="mode-options">
-        <label class="mode-option"><input type="radio" name="wordMode" value="random" checked><div><strong>隨機挑選</strong></div></label>
-        <label class="mode-option"><input type="radio" name="wordMode" value="weak"><div><strong>隨機・優先不熟</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="random" checked><div><strong>全體隨機</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="weak"><div><strong>不熟者隨機</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="staronly"><div><strong>星號隨機</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="learned"><div><strong>已學過隨機</strong></div></label>
         <label class="mode-option"><input type="radio" name="wordMode" value="manual"><div><strong>自己挑選</strong></div></label>
-        <label class="mode-option"><input type="radio" name="wordMode" value="staronly"><div><strong>複習星號</strong></div></label>
       </div>
       <div class="settings-section">
-        <div class="setting-row" id="randomCountRow"><label for="randomCount">複習單字</label><input type="number" id="randomCount" min="1" value="5" inputmode="numeric"><span style="font-size:12px;color:#777">個</span></div>
+        <div class="setting-row" id="randomCountRow"><label for="randomCount">複習單字</label><input type="number" id="randomCount" min="1" value="5" inputmode="numeric"><span style="font-size:12px;color:#777">個</span><span id="randomCountMax" style="font-size:12px;color:#999;margin-left:4px"></span></div>
       </div>
       <div class="btn-row center-row"><button class="primary" onclick="startGame()">下一步</button></div>
     </div>
@@ -451,7 +459,29 @@ h1::after{
 
   <div class="review-container" id="reviewContainer"><div class="review-header"><h2>📋 查看解析</h2><div class="review-actions"><button class="secondary" onclick="showPersonalRecord()">個人紀錄</button><button class="secondary" id="wrongPracticeBtn" onclick="practiceWrongWords()">錯題再練習</button><button class="secondary" onclick="restartPractice(false)">再練習一次</button><button class="primary" onclick="restartPractice(true)">學新的單字</button></div></div><div class="review-completed" id="reviewCompleted"></div><div id="reviewList"></div><div class="review-quote" id="reviewQuote"></div></div>
 
-  <div class="result-overlay" id="recordOverlay"><div class="result-modal"><div class="result-title" id="recordTitle">個人學習紀錄</div><div class="record-summary" id="recordSummary"></div><div class="record-modal-list" id="recordList"></div><div class="btn-row center-row" style="margin-top:14px"><button class="primary" onclick="closePersonalRecord()">關閉</button></div></div></div>
+  <div id="allWordsScreen" class="card hidden">
+    <div class="wordlist-header">
+      <div class="result-title" style="margin:0;text-align:left">📖 單字總覽</div>
+      <button class="secondary" onclick="closeAllWordsScreen()">回首頁</button>
+    </div>
+    <div class="az-row" id="allWordsFilterRow"></div>
+    <div id="allWordsContent"></div>
+  </div>
+  <div id="recordScreen" class="card hidden">
+    <div class="wordlist-header">
+      <div id="recordTitle" class="result-title" style="margin:0;text-align:left">個人學習紀錄</div>
+      <button class="secondary" onclick="closePersonalRecord()">回首頁</button>
+    </div>
+    <div class="record-summary" id="recordSummary"></div>
+    <div class="record-section-box">
+      <h3>📘 單字紀錄</h3>
+      <div class="record-scroll" id="recordWordList"></div>
+    </div>
+    <div class="record-section-box">
+      <h3>📅 複習紀錄</h3>
+      <div class="record-scroll" id="recordHistoryList"></div>
+    </div>
+  </div>
   <div class="result-overlay" id="stageOverlay"><div class="result-modal"><div class="result-title" id="stageOverlayTitle">🎉 過關！</div><div class="total-time" id="stageOverlayTime">0:00</div><div class="btn-row center-row"><button class="primary" id="stageNextBtn">下一關</button></div></div></div>
   <div class="result-overlay" id="finalOverlay"><div class="result-modal"><div class="result-title">🏆 全部完成！</div><div id="finalStats"></div><div class="stage-summary-row"><div class="summary-name">總時間</div><div class="total-time" id="totalTime">0:00</div></div><div class="btn-row"><button class="secondary" onclick="showReview()">查看解析</button><button class="primary" onclick="restartPractice(true)">學新的單字</button></div></div></div>
 </div>
@@ -700,8 +730,8 @@ function clearAllWords(){document.querySelectorAll('#wordSelectGrid input').forE
 function backToStart(){document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})}
 function beginGame(){document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');totalStart=Date.now();completionTime=null;stagePos=0;stats={};hintRecords=[];s4HintWords=new Set();distractorWords=new Map();startSelectedStage()}
 function startManualGame(){const picked=[...document.querySelectorAll('#wordSelectGrid input:checked')].map(x=>x.value);if(!picked.length){alert('請至少選一個單字');return}const set=new Set(picked);gameWords=eligibleWords().filter(w=>set.has(w.word));wordMode='manual';beginGame()}
-function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(newWords&&['random','weak','staronly'].includes(wordMode))drawNewGameWords();if(wordMode==='manual'){document.querySelector('input[name="wordMode"][value="manual"]').checked=true}else if(wordMode==='weak'){document.querySelector('input[name="wordMode"][value="weak"]').checked=true}else if(wordMode==='staronly'){document.querySelector('input[name="wordMode"][value="staronly"]').checked=true}else{document.querySelector('input[name="wordMode"][value="random"]').checked=true}window.scrollTo({top:0,behavior:'smooth'})}
-function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(wordMode==='staronly'&&!eligibleWords().some(w=>cloudStats[w.word]&&cloudStats[w.word].important)){alert('目前沒有標記星號重要的單字');return}drawNewGameWords();beginGame()}
+function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(newWords&&['random','weak','staronly','learned'].includes(wordMode))drawNewGameWords();if(wordMode==='manual'){document.querySelector('input[name="wordMode"][value="manual"]').checked=true}else if(wordMode==='weak'){document.querySelector('input[name="wordMode"][value="weak"]').checked=true}else if(wordMode==='staronly'){document.querySelector('input[name="wordMode"][value="staronly"]').checked=true}else if(wordMode==='learned'){document.querySelector('input[name="wordMode"][value="learned"]').checked=true}else{document.querySelector('input[name="wordMode"][value="random"]').checked=true}window.scrollTo({top:0,behavior:'smooth'})}
+function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(wordMode==='staronly'&&!eligibleWords().some(w=>cloudStats[w.word]&&cloudStats[w.word].important)){alert('目前沒有標記星號重要的單字');return}if(wordMode==='learned'&&!eligibleWords().some(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0)){alert('目前沒有過去學過的單字');return}drawNewGameWords();beginGame()}
 function renderIndicator(){const el=document.getElementById('stageIndicator');el.innerHTML='';selectedStages.forEach((s,i)=>{const d=document.createElement('div');d.className='stage-dot'+(i<stagePos?' done':i===stagePos?' active':'');d.textContent=s;el.appendChild(d)})}
 function hideStages(){[1,2,3,4,5,6].forEach(n=>document.getElementById('stage'+n).classList.add('hidden'))}
 function startTimer(id){clearInterval(timer);stageStart=Date.now();timer=setInterval(()=>{const e=document.getElementById(id);if(e)e.textContent=formatTime(Math.floor((Date.now()-stageStart)/1000))},100)}
@@ -797,12 +827,72 @@ function getSW(word){if(!sessionWordStats[word])sessionWordStats[word]={practice
 function markStage(word,stage,ok){const x=getSW(word);if(!x.stages[stage])x.stages[stage]={wrong:0,correct:false};if(ok)x.stages[stage].correct=true;else{x.stages[stage].wrong++;x.wrong++;lastSessionWrongWords.add(word)}}
 function renderPlayers(){const g=document.getElementById('playerGrid');g.innerHTML='';PLAYERS.filter(p=>p.active!==0).forEach(p=>{const b=document.createElement('div');b.className='player-card'+(currentPlayer===p.id?' selected':'');b.innerHTML=`<span class="player-icon">${p.icon}</span><span class="player-name">${p.name}</span>`;b.onclick=()=>selectPlayer(p.id);g.appendChild(b)})}
 function applyPlayerDefaults(p){const d=p?.defaults||{};const stages=Array.isArray(d.stages)&&d.stages.length?d.stages:[1,2,3,4,5,6];document.querySelectorAll('.stage-check input').forEach(x=>x.checked=stages.includes(Number(x.value)));const mode=['random','weak'].includes(d.mode)?d.mode:'random';const radio=document.querySelector(`input[name="wordMode"][value="${mode}"]`);if(radio)radio.checked=true;const count=document.getElementById('randomCount');if(count){const max=Math.max(1,eligibleWords().length||words.length);const n=Math.max(1,Math.min(Number(d.count)||5,max));count.value=n;randomWordCount=n}updateModeVisibility()}
-async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}}
+async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('homeAllWordsBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}updateModeVisibility()}
 function familiarityScore(word){const s=cloudStats[word]||{};const p=Number(s.practice||0),w=Number(s.wrong||0),h=Number(s.hint||0),r=Number(s.rewatch||0);if(!p)return 0;return Math.max(0,Math.min(5,Math.round(5*(p/(p+w*1.6+h*.8+r*.8))*(1-Math.exp(-p/4)))))}
 function stars(word){const n=familiarityScore(word);return '★'.repeat(n)+'☆'.repeat(5-n)}
 function buildRandomCountOptions(){const s=document.getElementById('randomCount');if(!s)return;s.max=Math.max(1,words.length);s.value=Math.min(5,Math.max(1,words.length));randomWordCount=Number(s.value);s.onchange=()=>{let n=Math.round(Number(s.value)||5);n=Math.max(1,Math.min(n,words.length));s.value=n;randomWordCount=n}}
 function isExcluded(word){return !!(cloudStats[word]&&cloudStats[word].excluded)}
 function eligibleWords(){return words.filter(w=>!isExcluded(w.word))}
+
+let allWordsFilter='';
+function showAllWordsScreen(){
+  if(!currentPlayer){alert('請先選擇玩家');return}
+  allWordsFilter='';
+  renderAllWordsFilterRow();
+  renderAllWordsContent();
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('allWordsScreen').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function closeAllWordsScreen(){
+  document.getElementById('allWordsScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderAllWordsFilterRow(){
+  const row=document.getElementById('allWordsFilterRow');
+  const letters=[...new Set(words.map(w=>(w.word[0]||'').toUpperCase()).filter(x=>/[A-Z]/.test(x)))].sort();
+  row.innerHTML='';
+  const all=document.createElement('button');
+  all.className='az-btn'+(!allWordsFilter?' active':'');
+  all.textContent='全部';
+  all.onclick=()=>{allWordsFilter='';renderAllWordsFilterRow();renderAllWordsContent()};
+  row.appendChild(all);
+  letters.forEach(l=>{
+    const b=document.createElement('button');
+    b.className='az-btn'+(allWordsFilter===l?' active':'');
+    b.textContent=l;
+    b.onclick=()=>{allWordsFilter=l;renderAllWordsFilterRow();renderAllWordsContent()};
+    row.appendChild(b);
+  });
+  const star=document.createElement('button');
+  star.className='az-btn'+(allWordsFilter==='star'?' active':'');
+  star.textContent='⭐ 星號';
+  star.onclick=()=>{allWordsFilter='star';renderAllWordsFilterRow();renderAllWordsContent()};
+  row.appendChild(star);
+  const learned=document.createElement('button');
+  learned.className='az-btn'+(allWordsFilter==='learned'?' active':'');
+  learned.textContent='✓ 已學過';
+  learned.onclick=()=>{allWordsFilter='learned';renderAllWordsFilterRow();renderAllWordsContent()};
+  row.appendChild(learned);
+}
+function renderAllWordsContent(){
+  const content=document.getElementById('allWordsContent');
+  let list=[...words];
+  if(allWordsFilter==='star')list=list.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
+  else if(allWordsFilter==='learned')list=list.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);
+  else if(allWordsFilter)list=list.filter(w=>(w.word[0]||'').toUpperCase()===allWordsFilter);
+  list.sort((a,b)=>a.word.localeCompare(b.word,'en',{sensitivity:'base'}));
+  content.innerHTML='';
+  if(!list.length){content.innerHTML='<div class="history-empty">目前沒有符合的單字</div>';return}
+  list.forEach(w=>{
+    const isLearned=cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0;
+    const item=document.createElement('div');
+    item.className='review-item';
+    item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}${isLearned?' <span class=\"learned-tag\">已學過</span>':''}</div><div class="review-sentence">${w.sentence||''}</div><div class="review-translation">${w.translation||''}</div>`+reviewFlagButtons(w.word);
+    content.appendChild(item);
+  });
+}
 function weightedSample(arr,count){let pool=[...arr],out=[];while(out.length<count&&pool.length){const weights=pool.map(w=>{const sc=cloudStats[w.word]||{};return 1+Math.max(0,5-familiarityScore(w.word))*2+Number(sc.wrong||0)*.5});const total=weights.reduce((a,b)=>a+b,0);let r=Math.random()*total,i=0;for(;i<weights.length-1&&r>=weights[i];i++)r-=weights[i];out.push(pool.splice(i,1)[0])}return out}
 function fairRandomSample(source,count){
   // random 模式：80% 名額採「最少練習次數優先、同次數內隨機」，20% 名額採「不管次數，全體真隨機」。
@@ -827,13 +917,16 @@ function drawNewGameWords(){
   if(wordMode==='staronly'){
     source=source.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
   }
+  if(wordMode==='learned'){
+    source=source.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);
+  }
   const count=Math.min(Number(document.getElementById('randomCount')?.value||randomWordCount||5),source.length);
   if(!source.length){gameWords=[];return}
   gameWords=wordMode==='weak'?weightedSample(source,count):fairRandomSample(source,count)
 }
-function renderAZ(){const row=document.getElementById('azRow');if(!row)return;const letters=[...new Set(eligibleWords().map(w=>(w.word[0]||'').toUpperCase()).filter(x=>/[A-Z]/.test(x)))].sort();row.innerHTML='';const all=document.createElement('button');all.className='az-btn'+(!manualFilterLetter?' active':'');all.textContent='全部';all.onclick=()=>{manualFilterLetter='';filterWordSelector();renderAZ()};row.appendChild(all);letters.forEach(l=>{const b=document.createElement('button');b.className='az-btn'+(manualFilterLetter===l?' active':'');b.textContent=l;b.onclick=()=>{manualFilterLetter=l;filterWordSelector();renderAZ()};row.appendChild(b)})}
-function renderWordSelector(){const grid=document.getElementById('wordSelectGrid');grid.innerHTML='';[...eligibleWords()].sort((a,b)=>a.word.localeCompare(b.word,'en',{sensitivity:'base'})).forEach(w=>{const label=document.createElement('label');label.className='word-select-item';label.dataset.word=w.word.toLowerCase();label.dataset.search=(w.word+' '+w.meaning+' '+(w.pos||'')).toLowerCase();const c=document.createElement('input');c.type='checkbox';c.value=w.word;c.onchange=updateManualCount;const d=document.createElement('div');d.innerHTML=`<strong>${w.word}</strong><span>${w.pos||''} ${w.meaning}</span>`;label.append(c,d);grid.appendChild(label)});renderAZ();filterWordSelector();updateManualCount()}
-function filterWordSelector(){const q=(document.getElementById('wordSearch')?.value||'').trim().toLowerCase();document.querySelectorAll('#wordSelectGrid .word-select-item').forEach(el=>{const byText=!q||el.dataset.search.includes(q),byLetter=!manualFilterLetter||(el.dataset.word[0]||'').toUpperCase()===manualFilterLetter;el.classList.toggle('hidden',!(byText&&byLetter))})}
+function renderAZ(){const row=document.getElementById('azRow');if(!row)return;const letters=[...new Set(eligibleWords().map(w=>(w.word[0]||'').toUpperCase()).filter(x=>/[A-Z]/.test(x)))].sort();row.innerHTML='';const all=document.createElement('button');all.className='az-btn'+(!manualFilterLetter?' active':'');all.textContent='全部';all.onclick=()=>{manualFilterLetter='';filterWordSelector();renderAZ()};row.appendChild(all);letters.forEach(l=>{const b=document.createElement('button');b.className='az-btn'+(manualFilterLetter===l?' active':'');b.textContent=l;b.onclick=()=>{manualFilterLetter=l;filterWordSelector();renderAZ()};row.appendChild(b)});const star=document.createElement('button');star.className='az-btn'+(manualFilterLetter==='star'?' active':'');star.textContent='⭐ 星號';star.onclick=()=>{manualFilterLetter='star';filterWordSelector();renderAZ()};row.appendChild(star)}
+function renderWordSelector(){const grid=document.getElementById('wordSelectGrid');grid.innerHTML='';[...eligibleWords()].sort((a,b)=>a.word.localeCompare(b.word,'en',{sensitivity:'base'})).forEach(w=>{const label=document.createElement('label');label.className='word-select-item';label.dataset.word=w.word.toLowerCase();label.dataset.wordOriginal=w.word;label.dataset.search=(w.word+' '+w.meaning+' '+(w.pos||'')).toLowerCase();const c=document.createElement('input');c.type='checkbox';c.value=w.word;c.onchange=updateManualCount;const d=document.createElement('div');d.innerHTML=`<strong>${w.word}</strong><span>${w.pos||''} ${w.meaning}</span>`;label.append(c,d);grid.appendChild(label)});renderAZ();filterWordSelector();updateManualCount()}
+function filterWordSelector(){const q=(document.getElementById('wordSearch')?.value||'').trim().toLowerCase();document.querySelectorAll('#wordSelectGrid .word-select-item').forEach(el=>{const byText=!q||el.dataset.search.includes(q);let byLetter;if(manualFilterLetter==='star')byLetter=!!(cloudStats[el.dataset.wordOriginal]&&cloudStats[el.dataset.wordOriginal].important);else byLetter=!manualFilterLetter||(el.dataset.word[0]||'').toUpperCase()===manualFilterLetter;el.classList.toggle('hidden',!(byText&&byLetter))})}
 const _beginGame=beginGame;
 beginGame=function(){sessionWordStats={};sessionStageResult={};lastSessionWrongWords=new Set();practiceWrongMode=false;_beginGame()}
 const _startGame=startGame;
@@ -880,25 +973,33 @@ async function showPersonalRecord(){
   sessionHistory=[];
   try{const r=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(currentPlayer)+'&_='+Date.now());const data=await r.json();if(data.ok)sessionHistory=Array.isArray(data.sessions)?data.sessions:[]}catch(e){}
   renderPersonalRecord();
-  document.getElementById('recordOverlay').classList.add('show');
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('recordScreen').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-function closePersonalRecord(){document.getElementById('recordOverlay').classList.remove('show')}
+function closePersonalRecord(){
+  document.getElementById('recordScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 function renderPersonalRecord(){
-  const p=PLAYERS.find(x=>x.id===currentPlayer),list=document.getElementById('recordList'),summary=document.getElementById('recordSummary');
+  const p=PLAYERS.find(x=>x.id===currentPlayer),wordList=document.getElementById('recordWordList'),historyList=document.getElementById('recordHistoryList'),summary=document.getElementById('recordSummary');
   document.getElementById('recordTitle').textContent=(p?.icon||'')+' '+(p?.name||currentPlayer)+'｜個人學習紀錄';
   const rows=words.map(w=>({w,s:cloudStats[w.word]||{}})).filter(x=>Number(x.s.practice||0)>0||Number(x.s.wrong||0)>0||Number(x.s.hint||0)>0||Number(x.s.rewatch||0)>0||x.s.important||x.s.excluded);
   const totalPractice=rows.reduce((n,x)=>n+Number(x.s.practice||0),0),totalWrong=rows.reduce((n,x)=>n+Number(x.s.wrong||0),0),totalHint=rows.reduce((n,x)=>n+Number(x.s.hint||0)+Number(x.s.rewatch||0),0);
   summary.textContent=rows.length?`累積練習 ${totalPractice} 次｜答錯 ${totalWrong} 次｜提示 ${totalHint} 次`:'目前還沒有學習紀錄';
-  list.innerHTML='';
+
+  wordList.innerHTML='';
   rows.sort((a,b)=>Number(!!b.s.important)-Number(!!a.s.important)||Number(!!a.s.excluded)-Number(!!b.s.excluded)||familiarityScore(a.w.word)-familiarityScore(b.w.word)||a.w.word.localeCompare(b.w.word,'en',{sensitivity:'base'})).forEach(({w,s})=>{
     const d=document.createElement('div');d.className='record-row'+(s.excluded?' excluded':'');
     d.innerHTML=`<strong>${s.important?'⭐ ':''}${w.word}（${w.pos||''}） ${w.meaning}</strong><div class="record-meta">練習 ${Number(s.practice||0)}｜答錯 ${Number(s.wrong||0)}｜提示 ${Number(s.hint||0)+Number(s.rewatch||0)}</div><div class="record-flags"><button class="flag-btn ${s.important?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','important')">⭐ 重要</button><button class="flag-btn ${s.excluded?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','excluded')">🚫 不用再出</button></div>`;
-    list.appendChild(d);
+    wordList.appendChild(d);
   });
-  const history=document.createElement('div');history.className='record-history';history.innerHTML='<h3>練習紀錄</h3>';
-  if(sessionHistory.length){sessionHistory.forEach(item=>{const d=document.createElement('div');d.className='history-row';const dt=new Date(item.time);d.textContent=isNaN(dt)?String(item.time||''):dt.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});history.appendChild(d)})}
-  else{const d=document.createElement('div');d.className='history-empty';d.textContent='目前沒有已完成的練習紀錄';history.appendChild(d)}
-  list.appendChild(history);
+  if(!rows.length){const empty=document.createElement('div');empty.className='history-empty';empty.textContent='目前還沒有單字紀錄';wordList.appendChild(empty)}
+
+  historyList.innerHTML='';
+  if(sessionHistory.length){sessionHistory.forEach(item=>{const d=document.createElement('div');d.className='history-row';const dt=new Date(item.time);d.textContent=isNaN(dt)?String(item.time||''):dt.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});historyList.appendChild(d)})}
+  else{const d=document.createElement('div');d.className='history-empty';d.textContent='目前沒有已完成的練習紀錄';historyList.appendChild(d)}
 }
 async function toggleWordFlag(word,flag){
   if(!currentPlayer)return;
@@ -909,7 +1010,18 @@ async function toggleWordFlag(word,flag){
   if(!ok)alert('標記已暫時更新，但雲端儲存失敗，請稍後再試。');
 }
 
-function updateModeVisibility(){const mode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';document.getElementById('randomCountRow').classList.toggle('hidden',!['random','weak','staronly'].includes(mode))}
+function updateModeVisibility(){
+  const mode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';
+  document.getElementById('randomCountRow').classList.toggle('hidden',!['random','weak','staronly','learned'].includes(mode));
+  const maxEl=document.getElementById('randomCountMax');
+  if(!maxEl)return;
+  let pool=eligibleWords();
+  if(mode==='staronly')pool=pool.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
+  else if(mode==='learned')pool=pool.filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);
+  maxEl.textContent=`（最多 ${pool.length} 個）`;
+  const input=document.getElementById('randomCount');
+  if(input)input.max=pool.length||1;
+}
 document.querySelectorAll('input[name="wordMode"]').forEach(r=>r.addEventListener('change',updateModeVisibility));
 buildRandomCountOptions();renderPlayers();updateModeVisibility();
 
