@@ -537,6 +537,16 @@ function initGame() {
       else submitAnswer();
     }
   });
+
+  document.addEventListener('keydown', (e) => {
+    if (!['1', '2', '3', '4'].includes(e.key)) return;
+    const idx = Number(e.key) - 1;
+    const buttons = document.querySelectorAll('#contentArea .option-btn');
+    if (buttons[idx] && !buttons[idx].disabled) {
+      e.preventDefault();
+      buttons[idx].click();
+    }
+  });
 }
 
 function displayAnswer(value) {
