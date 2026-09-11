@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>生化B6</title>
+<title>B1基礎生化與細胞生物學</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -340,7 +340,7 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>生化B6</h1>
+  <h1>B1基礎生化與細胞生物學</h1>
   <p class="subtitle">完成所有題目</p>
 
   <div class="stats">
@@ -412,22 +412,11 @@
 
 <script>
 const allQuestions = [
-{ type: 3, question: '下列何者負責將 DNA 中 GATC site 的 adenine 進行 methylation？', answer: 'Dam methyltransferase', options: ['SeqA', 'Dam methyltransferase', 'SAM', 'DNA gyrase'], explanation: { text: 'Dam methyltransferase 會將 GATC site 中的 adenine 進行 methylation；SAM 則是 methyl group donor。', image: '' } },
-{ type: 3, question: '下列何者負責辨識並結合 hemimethylated GATC，暫時抑制 oriC 再次 initiation？', answer: 'SeqA', options: ['DnaA', 'DnaC', 'SeqA', 'Dam methyltransferase'], explanation: { text: 'DNA replication 後，新生 DNA 暫時形成 hemimethylated GATC；SeqA 會辨識並結合這些區域，在 oriC 處暫時抑制再次 initiation。', image: '' } },
-{ type: 3, question: '下列何者負責調控 DNA supercoiling，並可緩解 replication fork 前方的 positive supercoiling？', answer: 'DNA gyrase', options: ['DNA gyrase', 'DnaB helicase', 'DNA ligase', 'SSB'], explanation: { text: 'DNA gyrase 屬於 bacterial topoisomerase II，可調控 DNA supercoiling，並消除 replication fork 前方因 DNA 解旋所產生的 positive supercoiling。', image: '' } },
-{ type: 3, question: '下列何者負責結合 oriC 的 9-mer（DnaA box），啟動 DNA replication？', answer: 'DnaA', options: ['DnaB', 'DnaA', 'DnaC', 'Primase'], explanation: { text: 'DnaA 會結合 oriC 中的 9-mer DnaA boxes，促進 initiation complex 形成並啟動 bacterial DNA replication。', image: '' } },
-{ type: 3, question: '下列何者負責在 replication initiation 時將 DnaB helicase 裝載至 DNA 上？', answer: 'DnaC', options: ['DnaA', 'DnaB', 'DnaC', 'SSB'], explanation: { text: 'DnaC 是 helicase loader，在 replication initiation 時協助將 DnaB helicase 裝載至 DNA 上。', image: '' } },
-{ type: 3, question: '下列何者負責在 DNA replication 中解開 double-stranded DNA，使兩股 DNA 分離？', answer: 'DnaB helicase', options: ['DNA gyrase', 'DnaB helicase', 'SSB', 'DNA ligase'], explanation: { text: 'DnaB helicase 位於 replication fork，利用 ATP 驅動 DNA unwinding，使 double-stranded DNA 的兩股分離。', image: '' } },
-{ type: 3, question: '下列何者負責結合並穩定已解開的 single-stranded DNA，防止其重新配對？', answer: 'SSB', options: ['Primase', 'DnaC', 'SSB', 'DNA Pol I'], explanation: { text: 'SSB（single-strand DNA-binding protein）會結合暴露的 ssDNA，穩定 single-stranded DNA 並防止其重新配對。', image: '' } },
-{ type: 3, question: '下列何者負責以 ssDNA 為 template，合成 RNA primer 以提供 DNA polymerase 所需的 3′-OH？', answer: 'Primase', options: ['DNA Pol I', 'Primase', 'DNA ligase', 'DnaA'], explanation: { text: 'Primase 以 ssDNA 為 template 合成短的 RNA primer，提供可供 DNA polymerase 延伸的 3′-OH。', image: '' } },
-{ type: 3, question: '下列何者是細菌 DNA replication 中負責 leading strand 與 lagging strand 主要 DNA synthesis 的酵素？', answer: 'DNA Pol III', options: ['DNA Pol I', 'DNA Pol II', 'DNA Pol III', 'Primase'], explanation: { text: 'DNA Pol III 是細菌 DNA replication 的主要 replicative polymerase，負責 leading strand 與 lagging strand 的主要 DNA synthesis。', image: '' } },
-{ type: 3, question: '下列何者負責在 Okazaki fragment maturation 過程中移除 RNA primer，並以 DNA 補上該區域？', answer: 'DNA Pol I', options: ['DNA Pol I', 'DNA Pol III', 'DNA ligase', 'SSB'], explanation: { text: 'DNA Pol I 可利用 5′→3′ exonuclease activity 移除 RNA primer，並利用 polymerase activity 以 DNA 補上該區域。', image: '' } },
-{ type: 3, question: '下列何者負責在 Okazaki fragments 處理完成後，封閉 DNA backbone 中剩餘的 nick？', answer: 'DNA ligase', options: ['DNA Pol I', 'Primase', 'DNA ligase', 'DNA gyrase'], explanation: { text: 'RNA primer 被移除並補成 DNA 後，DNA ligase 會形成 phosphodiester bond，封閉相鄰 DNA fragments 之間剩餘的 nick。', image: '' } },
-{ type: 3, question: '關於 signal peptide 與 SRP，下列何者正確？', options: ['Signal peptide 通常位於蛋白質的 C-terminus', 'SRP 負責辨識 ribosome 上正在合成的 N-terminal signal peptide', 'SRP 會將沒有 signal peptide 的蛋白質送入 ER', 'Signal peptide 的主要功能是讓 ribosome 進入 nucleus'], answer: 'SRP 負責辨識 ribosome 上正在合成的 N-terminal signal peptide', explanation: { text: 'N-terminal signal peptide 在 translation 過程中會被 SRP 辨識，SRP 接著協助將 ribosome 導向 ER。', image: '' } },
-{ type: 3, question: '一個蛋白質具有 N-terminal signal peptide，在 translation 過程中被 SRP 辨識。接下來最可能發生什麼？', options: ['Ribosome 立即停止 translation，蛋白質留在 cytosol', 'Ribosome 被送往 ER，translation 繼續並將蛋白質送入 ER', '蛋白質直接進入 lysosome', '蛋白質直接進入 peroxisome'], answer: 'Ribosome 被送往 ER，translation 繼續並將蛋白質送入 ER', explanation: { text: 'SRP 辨識 N-terminal signal peptide 後，將 ribosome 導向 ER，使 translation 與 translocation 可以同時進行。', image: '' } },
-{ type: 3, question: '下列何者最適合描述 co-translational translocation？', options: ['蛋白質完全合成後才被送入 ER', '蛋白質在 cytosol 完成 translation 後才進入 nucleus', 'translation 進行的同時，蛋白質被送入 ER', '蛋白質進入 Golgi 後才開始 translation'], answer: 'translation 進行的同時，蛋白質被送入 ER', explanation: { text: 'Co-translational translocation 指蛋白質在 translation 進行的同時，便被送入 ER。', image: '' } },
-{ type: 3, question: '若一個蛋白質沒有 N-terminal signal peptide，但具有 NLS（nuclear localization signal），下列何者最可能是它的 destination？', options: ['ER', 'Golgi apparatus', 'Nucleus', 'Peroxisome'], answer: 'Nucleus', explanation: { text: 'NLS 是 nuclear localization signal，可使具有 NLS 的蛋白質被辨識並運送至 nucleus。', image: '' } },
-{ type: 3, question: '下列有關蛋白質 targeting signal 的敘述，何者正確？', options: ['具有 N-terminal signal peptide 的蛋白質通常在 translation 完成後，才由 cytosol 被送入 ER', '具有 NLS 的蛋白質會在 translation 過程中由 SRP 辨識，並送入 ER', '沒有 N-terminal signal peptide 的蛋白質，仍可能因為具有其他特定 signal，而在 translation 完成後被送往特定 organelle', '所有沒有 signal 的蛋白質都會進入 nucleus'], answer: '沒有 N-terminal signal peptide 的蛋白質，仍可能因為具有其他特定 signal，而在 translation 完成後被送往特定 organelle', explanation: { text: '蛋白質不一定都依靠 N-terminal signal peptide；某些蛋白質具有其他 targeting signal，可在 translation 完成後被運送至特定 organelle。', image: '' } },
+  { type: 9, question: 'Cyclin D–CDK4/6-mediated phosphorylation of pRb enhances the ability of pRb to inhibit E2F.', answer: false, explanation: { text: 'Cyclin D–CDK4/6 對 pRb 的磷酸化（phosphorylation）實際上會抑制（inhibit）pRb 的功能，使其釋放（release）E2F，進而促進細胞週期進展（cell cycle progression）。因此，磷酸化會降低（reduce）pRb 抑制 E2F 的能力，而非增強（enhance）。', image: '' } },
+  { type: 3, question: '關於 pRb–E2F pathway 調控 G1 → S transition，請從下列事件中選出正確事件，並依正常發生順序排列：\n1. E2F promotes transcription of Cyclin E and other S-phase genes.\n2. Phosphorylated pRb binds more strongly to E2F and suppresses S-phase gene transcription.\n3. Cyclin D–CDK4/6 phosphorylates pRb.\n4. Cyclin E–CDK2 further phosphorylates pRb and promotes progression toward S phase.\n5. E2F directly dephosphorylates pRb and restores pRb activity.\n6. Hypophosphorylated pRb binds E2F and inhibits E2F activity.\n7. Phosphorylation of pRb causes release of E2F.', answer: '6 → 3 → 7 → 1 → 4', options: ['6 → 3 → 7 → 1 → 4', '6 → 1 → 3 → 7 → 4', '3 → 6 → 7 → 1 → 4', '6 → 3 → 2 → 1 → 4', '6 → 3 → 7 → 5 → 1'], explanation: { text: '一開始 pRb 為 hypophosphorylated、active 狀態並抑制 E2F（事件6）；之後 Cyclin D–CDK4/6 磷酸化 pRb（事件3），使 E2F 被釋放（事件7）。E2F 接著促進 Cyclin E 與其他 S-phase genes 的 transcription（事件1），形成的 Cyclin E–CDK2 再進一步磷酸化 pRb（事件4），推動細胞進入 S phase。', image: '' } },
+  { type: 3, question: '關於 maturation-promoting factor（MPF）及 cyclin B，下列何者錯誤？', answer: 'Cyclin B 在進入 M phase 前逐漸累積，因此 MPF activity 也會與 cyclin B 濃度同步逐漸上升', options: ['MPF 是由 cyclin B 與 Cdk1 組成的複合體', 'Cyclin B 會在細胞週期進行過程中逐漸累積，並在 M phase 後期被降解', 'MPF 可藉由 phosphorylating target proteins，促進 chromosome condensation 及 nuclear envelope breakdown', 'MPF activity 在細胞進入 M phase 時上升，之後隨 cyclin B 被降解而下降', 'Cyclin B 在進入 M phase 前逐漸累積，因此 MPF activity 也會與 cyclin B 濃度同步逐漸上升'], explanation: { text: 'Cyclin B 的濃度與 MPF activity 並非同步變化。Cyclin B 可先逐漸累積並與 Cdk1 結合，但 MPF 還受到 phosphorylation / dephosphorylation 調控；直到 G2/M transition 才快速活化。M phase 後期 cyclin B 被降解，MPF activity 隨之下降。', image: '' } },
+  { type: 9, question: '生物的體溫是來自水解 ATP 以維持。', answer: false, explanation: { text: 'ATP 水解及其他代謝反應會伴隨熱的產生，這些放出來的熱能維持生物體溫，但並非生物水解 ATP 是為了維持體溫；體溫主要來自代謝過程中的能量以熱的形式散失。', image: '' } },
+  { type: 3, question: '在 mitochondria 中，H+ 濃度累積在 ____；在 chloroplast 中，H+ 濃度累積在 ____。', answer: 'intermembrane space ; thylakoid lumen', options: ['matrix ; stroma', 'intermembrane space ; stroma', 'intermembrane space ; thylakoid lumen', 'matrix ; thylakoid lumen'], explanation: { text: '粒線體：電子傳遞鏈將 H+ 從基質（matrix）泵入膜間隙（intermembrane space）累積，形成高 H+ 濃度。葉綠體：光反應過程將 H+ 從基質（stroma）泵入類囊體腔（thylakoid lumen）累積，形成高 H+ 濃度。', image: '' } },
 ];
 
 /*
@@ -453,7 +442,7 @@ const allQuestions = [
 */
 
 // 每次遊戲隨機抽幾題，只要改這個數字即可
-const QUESTIONS_PER_GAME = 6;
+const QUESTIONS_PER_GAME = 7;
 
 const typeNames = {
   2: '自動選擇',
@@ -472,7 +461,12 @@ let shuffledQuestions = [];
 let reviewLog = [];
 
 function shuffle(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
 }
 
 function initGame() {
@@ -493,6 +487,16 @@ function initGame() {
     if (e.key === 'Enter') {
       if (answered) nextQuestion();
       else submitAnswer();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!['1', '2', '3', '4'].includes(e.key)) return;
+    const idx = Number(e.key) - 1;
+    const buttons = document.querySelectorAll('#contentArea .option-btn');
+    if (buttons[idx] && !buttons[idx].disabled) {
+      e.preventDefault();
+      buttons[idx].click();
     }
   });
 }
