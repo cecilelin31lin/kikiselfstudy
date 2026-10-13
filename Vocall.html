@@ -438,11 +438,12 @@ h1::after{
     <div class="word-mode">
       <h2>單字</h2>
       <div class="mode-options">
-        <label class="mode-option"><input type="radio" name="wordMode" value="random" checked><div><strong>全體隨機</strong></div></label>
-        <label class="mode-option"><input type="radio" name="wordMode" value="weak"><div><strong>不熟者隨機</strong></div></label>
-        <label class="mode-option"><input type="radio" name="wordMode" value="staronly"><div><strong>星號隨機</strong></div></label>
-        <label class="mode-option"><input type="radio" name="wordMode" value="learned"><div><strong>已學過隨機</strong></div></label>
-        <label class="mode-option"><input type="radio" name="wordMode" value="manual"><div><strong>自己挑選</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="random" checked><div><strong>全體R</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="weak"><div><strong>不熟者R</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="staronly"><div><strong>星號R</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="markonly"><div><strong>標記R</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="learned"><div><strong>已學過R</strong></div></label>
+        <label class="mode-option"><input type="radio" name="wordMode" value="manual"><div><strong>自己挑</strong></div></label>
       </div>
       <div class="settings-section">
         <div class="setting-row" id="randomCountRow"><label for="randomCount">複習單字</label><input type="number" id="randomCount" min="1" value="5" inputmode="numeric"><span style="font-size:12px;color:#777">個</span><span id="randomCountMax" style="font-size:12px;color:#999;margin-left:4px"></span></div>
@@ -857,8 +858,8 @@ function clearAllWords(){document.querySelectorAll('#wordSelectGrid input').forE
 function backToStart(){document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})}
 function beginGame(){document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('gameArea').classList.remove('hidden');totalStart=Date.now();completionTime=null;stagePos=0;stats={};hintRecords=[];s4HintWords=new Set();distractorWords=new Map();startSelectedStage()}
 function startManualGame(){const picked=[...document.querySelectorAll('#wordSelectGrid input:checked')].map(x=>x.value);if(!picked.length){alert('請至少選一個單字');return}const set=new Set(picked);gameWords=eligibleWords().filter(w=>set.has(w.word));wordMode='manual';beginGame()}
-function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(newWords&&['random','weak','staronly','learned'].includes(wordMode))drawNewGameWords();if(wordMode==='manual'){document.querySelector('input[name="wordMode"][value="manual"]').checked=true}else if(wordMode==='weak'){document.querySelector('input[name="wordMode"][value="weak"]').checked=true}else if(wordMode==='staronly'){document.querySelector('input[name="wordMode"][value="staronly"]').checked=true}else if(wordMode==='learned'){document.querySelector('input[name="wordMode"][value="learned"]').checked=true}else{document.querySelector('input[name="wordMode"][value="random"]').checked=true}window.scrollTo({top:0,behavior:'smooth'})}
-function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(wordMode==='staronly'&&!eligibleWords().some(w=>cloudStats[w.word]&&cloudStats[w.word].important)){alert('目前沒有標記星號重要的單字');return}if(wordMode==='learned'){const sub=document.querySelector('input[name="learnedSub"]:checked')?.value||'all';const pool=sub==='recent'?eligibleWords().filter(w=>getRecentTwoSessionWords().has(w.word)):eligibleWords().filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);if(!pool.length){alert(sub==='recent'?'目前沒有近兩次學過的單字':'目前沒有過去學過的單字');return}}drawNewGameWords();beginGame()}
+function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(newWords&&['random','weak','staronly','markonly','learned'].includes(wordMode))drawNewGameWords();if(wordMode==='manual'){document.querySelector('input[name="wordMode"][value="manual"]').checked=true}else if(wordMode==='weak'){document.querySelector('input[name="wordMode"][value="weak"]').checked=true}else if(wordMode==='staronly'){document.querySelector('input[name="wordMode"][value="staronly"]').checked=true}else if(wordMode==='markonly'){document.querySelector('input[name="wordMode"][value="markonly"]').checked=true}else if(wordMode==='learned'){document.querySelector('input[name="wordMode"][value="learned"]').checked=true}else{document.querySelector('input[name="wordMode"][value="random"]').checked=true}window.scrollTo({top:0,behavior:'smooth'})}
+function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(wordMode==='staronly'&&!eligibleWords().some(w=>cloudStats[w.word]&&cloudStats[w.word].important)){alert('目前沒有標記星號重要的單字');return}if(wordMode==='markonly'&&!eligibleWords().some(w=>cloudStats[w.word]&&cloudStats[w.word].marked)){alert('目前沒有🔖標記的單字');return}if(wordMode==='learned'){const sub=document.querySelector('input[name="learnedSub"]:checked')?.value||'all';const pool=sub==='recent'?eligibleWords().filter(w=>getRecentTwoSessionWords().has(w.word)):eligibleWords().filter(w=>cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0);if(!pool.length){alert(sub==='recent'?'目前沒有近兩次學過的單字':'目前沒有過去學過的單字');return}}drawNewGameWords();beginGame()}
 function renderIndicator(){const el=document.getElementById('stageIndicator');el.innerHTML='';selectedStages.forEach((s,i)=>{const d=document.createElement('div');d.className='stage-dot'+(i<stagePos?' done':i===stagePos?' active':'');d.textContent=s;el.appendChild(d)})}
 function hideStages(){[1,2,3,4,5,6].forEach(n=>document.getElementById('stage'+n).classList.add('hidden'))}
 function startTimer(id){clearInterval(timer);stageStart=Date.now();timer=setInterval(()=>{const e=document.getElementById(id);if(e)e.textContent=formatTime(Math.floor((Date.now()-stageStart)/1000))},100)}
@@ -914,7 +915,7 @@ function s6fill(blank,item){if(!s6selected)return;const b=document.querySelector
 function showReview(){document.getElementById('finalOverlay').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');const when=completionTime||new Date();document.getElementById('reviewCompleted').textContent='完成時間：'+when.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});const list=document.getElementById('reviewList');list.innerHTML='';gameWords.forEach(w=>{const item=document.createElement('div');item.className='review-item';const hr=hintRecords.find(h=>h.word===w.word),m4=s4HintWords.has(w.word);item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}</div><div class="review-sentence">${w.sentence}</div><div class="review-translation">${w.translation||''}</div>${hr?`<div class="hint-tag">💡 第二關使用提示：${hr.options.join(' / ')}</div>`:''}${m4?`<div class="hint-tag">💡 第四關使用「再看一次」</div>`:''}`;list.appendChild(item)});if((selectedStages.includes(5)||selectedStages.includes(6))&&distractorWords.size){const title=document.createElement('h3');title.textContent='出現的干擾單字';title.style.margin='24px 0 10px';list.appendChild(title);[...distractorWords.values()].forEach(w=>{const item=document.createElement('div');item.className='review-item';item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}</div><div class="review-sentence">${w.sentence}</div><div class="review-translation">${w.translation||''}</div>`;list.appendChild(item)})}document.getElementById('reviewContainer').classList.add('show');window.scrollTo({top:0,behavior:'smooth'})}
 
 /* ===== 多人雲端學習紀錄＋動態升級功能 ===== */
-const CLOUD_URL='https://script.google.com/macros/s/AKfycbyOjSe-PX-oqFsem7FfjeX3kFk1fZrYoHvLsPf9ZJ0Dt9dsqEE-W3X0Yg5jJtR-U9Rx_w/exec';
+const CLOUD_URL='https://script.google.com/macros/s/AKfycbxmKpFPVgZauhFDiAW-NlCGptTKMfbU1FXtdKbkPWEjY7lOaSBCFMXa3_75pGpJJyRWoQ/exec';
 const QUOTES=[
   '每天進步一點點，也是在往前走。',
   'How we spend our days is, of course, how we spend our lives.',
@@ -1079,6 +1080,9 @@ function drawNewGameWords(){
   if(wordMode==='staronly'){
     source=source.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
   }
+  if(wordMode==='markonly'){
+    source=source.filter(w=>cloudStats[w.word]&&cloudStats[w.word].marked);
+  }
   if(wordMode==='learned'){
     const sub=document.querySelector('input[name="learnedSub"]:checked')?.value||'all';
     if(sub==='recent'){
@@ -1133,8 +1137,8 @@ const _s4submit=s4submit;s4submit=function(){const q=s4qs[s4i],ans=document.getE
 const _s5submit=s5submit;s5submit=function(){const q=s5qs[s5i],sel=s5sel,before=s5answered;if(!q||!sel){_s5submit();return}const ok=sel.word===q.correct.word;_s5submit();if(!before)markStage(q.word,5,ok)}
 const _s6fill=s6fill;s6fill=function(blank,item){if(!s6selected)return;const chosen=s6selected,ok=chosen===item.word;_s6fill(blank,item);markStage(item.word,6,ok)}
 const _showReview=showReview;
-function reviewFlagButtons(word){const s=cloudStats[word]||{},safe=word.replace(/'/g,"\\'");return `<div class="record-flags review-flags"><button class="flag-btn ${s.important?'on':''}" onclick="toggleReviewFlag('${safe}','important',this)">⭐ 重要</button><button class="flag-btn ${s.excluded?'on':''}" onclick="toggleReviewFlag('${safe}','excluded',this)">🚫 不用再出</button></div>`}
-async function toggleReviewFlag(word,flag,btn){if(!currentPlayer)return;const s=cloudStats[word]||(cloudStats[word]={});s[flag]=!s[flag];if(btn)btn.classList.toggle('on',!!s[flag]);if(!document.getElementById('allWordsScreen').classList.contains('hidden'))renderAllWordsProgress();const ok=await cloudPost({action:'setWordFlags',player:currentPlayer,word,important:!!s.important,excluded:!!s.excluded});if(!ok)alert('標記已暫時更新，但雲端儲存失敗，請稍後再試。')}
+function reviewFlagButtons(word){const s=cloudStats[word]||{},safe=word.replace(/'/g,"\\'");return `<div class="record-flags review-flags"><button class="flag-btn ${s.important?'on':''}" onclick="toggleReviewFlag('${safe}','important',this)">⭐ 重要</button><button class="flag-btn ${s.marked?'on':''}" onclick="toggleReviewFlag('${safe}','marked',this)">🔖 標記</button><button class="flag-btn ${s.excluded?'on':''}" onclick="toggleReviewFlag('${safe}','excluded',this)">🚫 不用再出</button></div>`}
+async function toggleReviewFlag(word,flag,btn){if(!currentPlayer)return;const s=cloudStats[word]||(cloudStats[word]={});s[flag]=!s[flag];if(btn)btn.classList.toggle('on',!!s[flag]);if(!document.getElementById('allWordsScreen').classList.contains('hidden'))renderAllWordsProgress();const ok=await cloudPost({action:'setWordFlags',player:currentPlayer,word,important:!!s.important,excluded:!!s.excluded,marked:!!s.marked});if(!ok)alert('標記已暫時更新，但雲端儲存失敗，請稍後再試。')}
 showReview=function(){_showReview();showReviewQuote();const list=document.getElementById('reviewList'),items=[...list.querySelectorAll('.review-item')];items.slice(0,gameWords.length).forEach((el,i)=>{const w=gameWords[i],x=getSW(w.word),parts=selectedStages.map(st=>{if(stats[st]?.skipped)return `${stageNames[st]} ⏭ 跳過`;const r=x.stages[st];if(!r)return `${stageNames[st]} —`;return `${stageNames[st]} ${r.correct?(r.wrong?'△':'✓'):'✕'}${r.wrong?'('+r.wrong+')':''}`});const d=document.createElement('div');d.className='stage-status';d.innerHTML=`<div>${parts.join(' ｜ ')}</div>`;el.appendChild(d);el.insertAdjacentHTML('beforeend',reviewFlagButtons(w.word))});if(items.length>gameWords.length){const extras=[...distractorWords.values()];items.slice(gameWords.length).forEach((el,i)=>{if(extras[i])el.insertAdjacentHTML('beforeend',reviewFlagButtons(extras[i].word))})}document.getElementById('wrongPracticeBtn').classList.toggle('hidden',!lastSessionWrongWords.size)}
 
 async function showPersonalRecord(){
@@ -1160,14 +1164,14 @@ function closePersonalRecord(){
 function renderPersonalRecord(){
   const p=PLAYERS.find(x=>x.id===currentPlayer),wordList=document.getElementById('recordWordList'),historyList=document.getElementById('recordHistoryList'),summary=document.getElementById('recordSummary');
   document.getElementById('recordTitle').textContent=(p?.icon||'')+' '+(p?.name||currentPlayer)+'｜個人學習紀錄';
-  const rows=words.map(w=>({w,s:cloudStats[w.word]||{}})).filter(x=>Number(x.s.practice||0)>0||Number(x.s.wrong||0)>0||Number(x.s.hint||0)>0||Number(x.s.rewatch||0)>0||x.s.important||x.s.excluded);
+  const rows=words.map(w=>({w,s:cloudStats[w.word]||{}})).filter(x=>Number(x.s.practice||0)>0||Number(x.s.wrong||0)>0||Number(x.s.hint||0)>0||Number(x.s.rewatch||0)>0||x.s.important||x.s.excluded||x.s.marked);
   const totalPractice=rows.reduce((n,x)=>n+Number(x.s.practice||0),0),totalWrong=rows.reduce((n,x)=>n+Number(x.s.wrong||0),0),totalHint=rows.reduce((n,x)=>n+Number(x.s.hint||0)+Number(x.s.rewatch||0),0);
   summary.textContent=rows.length?`累積練習 ${totalPractice} 次｜答錯 ${totalWrong} 次｜提示 ${totalHint} 次`:'目前還沒有學習紀錄';
 
   wordList.innerHTML='';
   rows.sort((a,b)=>Number(!!b.s.important)-Number(!!a.s.important)||Number(!!a.s.excluded)-Number(!!b.s.excluded)||familiarityScore(a.w.word)-familiarityScore(b.w.word)||a.w.word.localeCompare(b.w.word,'en',{sensitivity:'base'})).forEach(({w,s})=>{
     const d=document.createElement('div');d.className='record-row'+(s.excluded?' excluded':'');
-    d.innerHTML=`<strong>${s.important?'⭐ ':''}${w.word}（${w.pos||''}） ${w.meaning}</strong><div class="record-meta">練習 ${Number(s.practice||0)}｜答錯 ${Number(s.wrong||0)}｜提示 ${Number(s.hint||0)+Number(s.rewatch||0)}</div><div class="record-flags"><button class="flag-btn ${s.important?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','important')">⭐ 重要</button><button class="flag-btn ${s.excluded?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','excluded')">🚫 不用再出</button></div>`;
+    d.innerHTML=`<strong>${s.important?'⭐ ':''}${w.word}（${w.pos||''}） ${w.meaning}</strong><div class="record-meta">練習 ${Number(s.practice||0)}｜答錯 ${Number(s.wrong||0)}｜提示 ${Number(s.hint||0)+Number(s.rewatch||0)}</div><div class="record-flags"><button class="flag-btn ${s.important?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','important')">⭐ 重要</button><button class="flag-btn ${s.marked?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','marked')">🔖 標記</button><button class="flag-btn ${s.excluded?'on':''}" onclick="toggleWordFlag('${w.word.replace(/'/g,"\\'")}','excluded')">🚫 不用再出</button></div>`;
     wordList.appendChild(d);
   });
   if(!rows.length){const empty=document.createElement('div');empty.className='history-empty';empty.textContent='目前還沒有單字紀錄';wordList.appendChild(empty)}
@@ -1181,18 +1185,19 @@ async function toggleWordFlag(word,flag){
   const s=cloudStats[word]||(cloudStats[word]={});
   s[flag]=!s[flag];
   renderPersonalRecord();
-  const ok=await cloudPost({action:'setWordFlags',player:currentPlayer,word,important:!!s.important,excluded:!!s.excluded});
+  const ok=await cloudPost({action:'setWordFlags',player:currentPlayer,word,important:!!s.important,excluded:!!s.excluded,marked:!!s.marked});
   if(!ok)alert('標記已暫時更新，但雲端儲存失敗，請稍後再試。');
 }
 
 function updateModeVisibility(){
   const mode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';
-  document.getElementById('randomCountRow').classList.toggle('hidden',!['random','weak','staronly','learned'].includes(mode));
+  document.getElementById('randomCountRow').classList.toggle('hidden',!['random','weak','staronly','markonly','learned'].includes(mode));
   document.getElementById('learnedSubOptions').classList.toggle('hidden',mode!=='learned');
   const maxEl=document.getElementById('randomCountMax');
   if(!maxEl)return;
   let pool=eligibleWords();
   if(mode==='staronly')pool=pool.filter(w=>cloudStats[w.word]&&cloudStats[w.word].important);
+  else if(mode==='markonly')pool=pool.filter(w=>cloudStats[w.word]&&cloudStats[w.word].marked);
   else if(mode==='learned'){
     const sub=document.querySelector('input[name="learnedSub"]:checked')?.value||'all';
     if(sub==='recent'){
