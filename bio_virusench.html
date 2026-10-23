@@ -23,9 +23,12 @@ h1 { text-align:center; font-size:28px; margin:0 0 16px; }
 .zh-btn:hover { border-color:#999; background:#f9f9f9; }
 .zh-btn[data-selected="true"] { background:rgba(176,196,222,.30); border-color:#B0C4DE; }
 
+.zh-btn.incorrect { background:rgba(232,130,140,.16); border-color:#E8828C; color:#E8828C; }
+
 .en-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
 .en-cell { background:white; border:.5px solid #ddd; border-radius:8px; padding:6px 8px; font-size:13px; line-height:1.35; cursor:pointer; text-align:center; display:flex; align-items:center; justify-content:center; min-height:44px; color:#2B3A55; font-family:inherit; word-break:break-word; }
 .en-cell:hover { border-color:#999; background:#f9f9f9; }
+.en-cell[data-selected="true"] { background:rgba(176,196,222,.30); border-color:#B0C4DE; }
 .en-cell.incorrect { background:rgba(232,130,140,.16); border-color:#E8828C; color:#E8828C; }
 
 .done-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; margin-top:12px; display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
@@ -66,7 +69,7 @@ h1 { text-align:center; font-size:28px; margin:0 0 16px; }
       <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="timer">0:00</div></div>
       <div class="stat-card"><div class="stat-label">✓ 配對</div><div class="stat-value" id="matched">0/0</div></div>
     </div>
-    <div class="instruction">先點上面的中文，再點下面對應的英文。</div>
+    <div class="instruction">點上面的中文和下面對應的英文，先點哪一個都可以。</div>
     <div class="zh-area" id="zhArea"></div>
     <div class="en-area" id="enArea"></div>
     <div class="done-area hidden" id="doneArea"></div>
@@ -156,7 +159,7 @@ function fmt(sec) { const m = Math.floor(sec / 60), s = sec % 60; return m + ':'
 /* ============================================================
    遊戲
    ============================================================ */
-let selectedBtn = null;
+let selected = null;   // { el, side: 'zh' | 'en' }
 let matchedCount = 0;
 let startTime = Date.now();
 let timerId = null;
@@ -172,7 +175,7 @@ function initGame() {
     btn.className = 'zh-btn';
     btn.textContent = v.zh;
     btn.dataset.n = v.n;
-    btn.onclick = () => selectZh(btn);
+    btn.onclick = () => pick(btn, 'zh');
     zhArea.appendChild(btn);
   });
 
@@ -182,7 +185,7 @@ function initGame() {
     cell.className = 'en-cell';
     cell.textContent = v.en;
     cell.dataset.n = v.n;
-    cell.onclick = () => pickEn(cell);
+    cell.onclick = () => pick(cell, 'en');
     enArea.appendChild(cell);
   });
 
@@ -192,27 +195,30 @@ function initGame() {
   }, 200);
 }
 
-function selectZh(btn) {
-  if (selectedBtn) selectedBtn.removeAttribute('data-selected');
-  selectedBtn = btn;
-  btn.dataset.selected = 'true';
+function setSelected(el, side) {
+  if (selected) selected.el.removeAttribute('data-selected');
+  selected = { el, side };
+  el.dataset.selected = 'true';
 }
 
-function pickEn(cell) {
-  if (!selectedBtn) return;
+// 上面的中文、下面的英文，先點哪一邊都可以；點到另一邊就判定是否配對
+function pick(el, side) {
+  if (!selected) { setSelected(el, side); return; }
+  if (selected.el === el) return;
+  if (selected.side === side) { setSelected(el, side); return; }   // 同一邊：改選這一個
 
-  if (selectedBtn.dataset.n === cell.dataset.n) {
-    const v = viruses.find(x => String(x.n) === cell.dataset.n);
-    selectedBtn.remove();
-    cell.remove();
-    selectedBtn = null;
+  if (selected.el.dataset.n === el.dataset.n) {
+    const v = viruses.find(x => String(x.n) === el.dataset.n);
+    selected.el.remove();
+    el.remove();
+    selected = null;
     addDone(v);
     matchedCount++;
     document.getElementById('matched').textContent = matchedCount + '/' + viruses.length;
     if (matchedCount === viruses.length) finish();
   } else {
-    cell.classList.add('incorrect');
-    setTimeout(() => cell.classList.remove('incorrect'), 500);
+    el.classList.add('incorrect');
+    setTimeout(() => el.classList.remove('incorrect'), 500);
   }
 }
 
