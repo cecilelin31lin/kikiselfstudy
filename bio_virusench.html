@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>病毒中英配對</title>
+<style>
+* { box-sizing: border-box; }
+html, body { overscroll-behavior: none; }
+body { margin:0; padding:24px 16px 60px; background:#f5f5f5; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Nunito',sans-serif; color:#2B3A55; min-height:100vh; }
+.wrap { max-width:900px; margin:0 auto; }
+h1 { text-align:center; font-size:28px; margin:0 0 16px; }
+.hidden { display:none !important; }
+
+.stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.stat-card { background:white; border:.5px solid #ddd; border-radius:8px; padding:10px; text-align:center; }
+.stat-label { font-size:12px; color:#999; margin-bottom:4px; }
+.stat-value { font-size:18px; font-weight:600; }
+.instruction { background:white; border:.5px solid #ddd; border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:13px; color:#666; line-height:1.6; }
+
+.zh-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; margin-bottom:12px; display:flex; flex-wrap:wrap; gap:8px; }
+.zh-btn { background:white; border:.5px solid #ccc; border-radius:6px; padding:7px 11px; font-size:14px; cursor:pointer; color:#2B3A55; font-family:inherit; }
+.zh-btn:hover { border-color:#999; background:#f9f9f9; }
+.zh-btn[data-selected="true"] { background:rgba(176,196,222,.30); border-color:#B0C4DE; }
+
+.en-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
+.en-cell { background:white; border:.5px solid #ddd; border-radius:8px; padding:6px 8px; font-size:13px; line-height:1.35; cursor:pointer; text-align:center; display:flex; align-items:center; justify-content:center; min-height:44px; color:#2B3A55; font-family:inherit; word-break:break-word; }
+.en-cell:hover { border-color:#999; background:#f9f9f9; }
+.en-cell.incorrect { background:rgba(232,130,140,.16); border-color:#E8828C; color:#E8828C; }
+
+.done-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; margin-top:12px; display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
+.done-item { background:rgba(70,129,137,.14); border:.5px solid #468189; border-radius:8px; padding:6px 8px; text-align:center; color:#468189; line-height:1.35; display:flex; flex-direction:column; justify-content:center; min-height:44px; word-break:break-word; }
+.done-item .zh { font-size:14px; font-weight:600; }
+.done-item .en { font-size:12px; }
+
+.result-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.3); align-items:center; justify-content:center; z-index:1000; padding:20px; }
+.result-overlay.show { display:flex; }
+.result-modal { background:white; border-radius:12px; padding:24px; max-width:400px; width:100%; text-align:center; box-shadow:0 4px 12px rgba(0,0,0,.15); }
+.result-title { font-size:18px; font-weight:600; margin-bottom:12px; }
+.result-stat-label { font-size:12px; color:#999; margin-bottom:4px; }
+.result-stat-value { font-size:24px; font-weight:600; color:#B0C4DE; margin-bottom:16px; }
+.result-button-group { display:flex; gap:10px; }
+.result-button { flex:1; background:#B0C4DE; color:#2B3A55; border:none; border-radius:6px; padding:10px 20px; font-size:14px; font-weight:500; cursor:pointer; font-family:inherit; }
+.result-button:hover { background:#9AB3D0; }
+
+.review-header { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:16px; }
+.review-header h2 { margin:0; font-size:20px; }
+.review-header button { background:white; color:#2B3A55; border:1px solid #ccc; border-radius:8px; padding:8px 16px; font-size:14px; cursor:pointer; font-family:inherit; }
+.review-item { background:white; border:.5px solid #ddd; border-radius:8px; padding:11px 14px; margin-bottom:8px; display:flex; justify-content:space-between; gap:12px; font-size:14px; line-height:1.5; }
+.review-item .en { font-weight:700; }
+.review-item .zh { color:#666; text-align:right; }
+
+@media (max-width: 640px) {
+  .en-area, .done-area { grid-template-columns:repeat(2, 1fr); }
+  .review-item { flex-direction:column; gap:2px; }
+  .review-item .zh { text-align:left; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>病毒中英配對</h1>
+
+  <div id="gameArea">
+    <div class="stats">
+      <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="timer">0:00</div></div>
+      <div class="stat-card"><div class="stat-label">✓ 配對</div><div class="stat-value" id="matched">0/0</div></div>
+    </div>
+    <div class="instruction">先點上面的中文，再點下面對應的英文。</div>
+    <div class="zh-area" id="zhArea"></div>
+    <div class="en-area" id="enArea"></div>
+    <div class="done-area hidden" id="doneArea"></div>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-modal">
+      <div class="result-title">🎉 全部配對完成！</div>
+      <div class="result-stat-label">用時</div>
+      <div class="result-stat-value" id="finalTime">0:00</div>
+      <div class="result-button-group">
+        <button class="result-button" onclick="showReview()">查看解析</button>
+        <button class="result-button" onclick="location.reload()">重新開始</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="review" class="hidden">
+    <div class="review-header">
+      <h2>📋 查看解析</h2>
+      <button onclick="location.reload()">重新開始</button>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   設定
+   ============================================================ */
+const ENGLISH_COLUMNS = 5;                          // 下方英文每列幾欄
+const EXCLUDE = [6, 7, 9, 15, 23, 27, 28, 31, 33, 37, 48, 53];  // 不出題的編號（對照表上的序號）
+
+/* ============================================================
+   資料（編號 n 是對照表上的序號）
+   ============================================================ */
+const table = [
+  { n: 1, en: 'Adenovirus', zh: '腺病毒' },
+  { n: 2, en: 'Papovavirus', zh: '乳頭瘤病毒' },
+  { n: 3, en: 'Papillomavirus（HPV）', zh: '人類乳突病毒' },
+  { n: 4, en: 'Polyomavirus', zh: '多瘤病毒' },
+  { n: 5, en: 'Herpesvirus', zh: '疱疹病毒' },
+  { n: 6, en: 'Herpes Type 1（HSV-1）', zh: '第一型單純疱疹病毒' },
+  { n: 7, en: 'Herpes Type 2（HSV-2）', zh: '第二型單純疱疹病毒' },
+  { n: 8, en: 'Varicella-zoster virus', zh: '水痘帶狀疱疹病毒' },
+  { n: 9, en: 'Epstein-Barr virus（EBV）', zh: 'EB 病毒' },
+  { n: 10, en: 'Herpes simplex virus（HSV）', zh: '單純疱疹病毒' },
+  { n: 11, en: 'Poxvirus', zh: '痘病毒' },
+  { n: 12, en: 'Cowpox virus', zh: '牛痘病毒' },
+  { n: 13, en: 'Smallpox virus', zh: '天花病毒' },
+  { n: 14, en: 'Parvovirus', zh: '微小 DNA 病毒' },
+  { n: 15, en: 'B19 virus', zh: '微小病毒 B19' },
+  { n: 16, en: 'Adeno-associated virus（AAV）', zh: '腺病毒相關病毒' },
+  { n: 17, en: 'Reovirus', zh: '呼腸孤病毒' },
+  { n: 18, en: 'Rotavirus', zh: '輪狀病毒' },
+  { n: 19, en: 'Picornavirus', zh: '小 RNA 病毒' },
+  { n: 20, en: 'Rhinovirus', zh: '鼻病毒' },
+  { n: 21, en: 'Poliovirus', zh: '脊髓灰質炎病毒' },
+  { n: 22, en: 'Enteric / intestinal virus', zh: '腸病毒' },
+  { n: 23, en: 'Hepatitis A virus', zh: 'A 型肝炎病毒' },
+  { n: 24, en: 'Calicivirus', zh: '杯狀病毒' },
+  { n: 25, en: 'Norwalk virus / Norovirus', zh: '諾羅病毒' },
+  { n: 26, en: 'Coronavirus', zh: '冠狀病毒' },
+  { n: 27, en: 'SARS-related coronavirus', zh: '嚴重急性呼吸道症候群相關冠狀病毒' },
+  { n: 28, en: 'MERS coronavirus', zh: '中東呼吸症候群冠狀病毒' },
+  { n: 29, en: 'Flavivirus', zh: '黃病毒' },
+  { n: 30, en: 'Yellow fever virus（YFV）', zh: '黃熱病毒' },
+  { n: 31, en: 'Zika virus', zh: '茲卡病毒' },
+  { n: 33, en: 'Hepatitis C virus', zh: 'C 型肝炎病毒' },
+  { n: 34, en: 'Togavirus', zh: '套膜病毒' },
+  { n: 35, en: 'Rubella virus', zh: '德國麻疹病毒' },
+  { n: 36, en: 'Filovirus', zh: '絲狀病毒' },
+  { n: 37, en: 'Ebola virus', zh: '伊波拉病毒' },
+  { n: 38, en: 'Orthomyxovirus', zh: '正黏液病毒' },
+  { n: 39, en: 'Influenza virus', zh: '流感病毒' },
+  { n: 40, en: 'Paramyxovirus', zh: '副黏液病毒' },
+  { n: 41, en: 'Measles virus', zh: '麻疹病毒' },
+  { n: 42, en: 'Mumps virus', zh: '腮腺炎病毒' },
+  { n: 43, en: 'Orthopneumovirus', zh: '正肺炎病毒' },
+  { n: 44, en: 'Respiratory syncytial virus（RSV）', zh: '呼吸道融合病毒' },
+  { n: 45, en: 'Rhabdovirus', zh: '桿狀病毒' },
+  { n: 46, en: 'Rabies virus', zh: '狂犬病毒' },
+  { n: 47, en: 'Orthohantavirus', zh: '正漢他病毒' },
+  { n: 48, en: 'Hantavirus', zh: '漢他病毒' },
+  { n: 49, en: 'Retrovirus', zh: '反轉錄病毒' },
+  { n: 50, en: 'Human immunodeficiency virus（HIV）', zh: '人類免疫缺乏病毒' },
+  { n: 51, en: 'Human T-lymphotropic virus type 1（HTLV-1）', zh: '第一型人類 T 細胞白血病病毒' },
+  { n: 52, en: 'Hepadnavirus', zh: '嗜肝病毒' },
+  { n: 53, en: 'Hepatitis B virus', zh: 'B 型肝炎病毒' }
+];
+const viruses = table.filter(v => !EXCLUDE.includes(v.n));
+
+/* ============================================================
+   小工具
+   ============================================================ */
+function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
+function fmt(sec) { const m = Math.floor(sec / 60), s = sec % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
+
+/* ============================================================
+   遊戲
+   ============================================================ */
+let selectedBtn = null;
+let matchedCount = 0;
+let startTime = Date.now();
+let timerId = null;
+
+function initGame() {
+  document.getElementById('matched').textContent = '0/' + viruses.length;
+  document.getElementById('enArea').style.setProperty('--cols', ENGLISH_COLUMNS);
+  document.getElementById('doneArea').style.setProperty('--cols', ENGLISH_COLUMNS);
+
+  const zhArea = document.getElementById('zhArea');
+  shuffle(viruses).forEach(v => {
+    const btn = document.createElement('button');
+    btn.className = 'zh-btn';
+    btn.textContent = v.zh;
+    btn.dataset.n = v.n;
+    btn.onclick = () => selectZh(btn);
+    zhArea.appendChild(btn);
+  });
+
+  const enArea = document.getElementById('enArea');
+  shuffle(viruses).forEach(v => {
+    const cell = document.createElement('button');
+    cell.className = 'en-cell';
+    cell.textContent = v.en;
+    cell.dataset.n = v.n;
+    cell.onclick = () => pickEn(cell);
+    enArea.appendChild(cell);
+  });
+
+  startTime = Date.now();
+  timerId = setInterval(() => {
+    document.getElementById('timer').textContent = fmt(Math.floor((Date.now() - startTime) / 1000));
+  }, 200);
+}
+
+function selectZh(btn) {
+  if (selectedBtn) selectedBtn.removeAttribute('data-selected');
+  selectedBtn = btn;
+  btn.dataset.selected = 'true';
+}
+
+function pickEn(cell) {
+  if (!selectedBtn) return;
+
+  if (selectedBtn.dataset.n === cell.dataset.n) {
+    const v = viruses.find(x => String(x.n) === cell.dataset.n);
+    selectedBtn.remove();
+    cell.remove();
+    selectedBtn = null;
+    addDone(v);
+    matchedCount++;
+    document.getElementById('matched').textContent = matchedCount + '/' + viruses.length;
+    if (matchedCount === viruses.length) finish();
+  } else {
+    cell.classList.add('incorrect');
+    setTimeout(() => cell.classList.remove('incorrect'), 500);
+  }
+}
+
+// 配對成功的移到最下面，中英文一起顯示
+function addDone(v) {
+  const area = document.getElementById('doneArea');
+  const item = document.createElement('div');
+  item.className = 'done-item';
+  const zh = document.createElement('span'); zh.className = 'zh'; zh.textContent = v.zh;
+  const en = document.createElement('span'); en.className = 'en'; en.textContent = v.en;
+  item.append(zh, en);
+  area.appendChild(item);
+  area.classList.remove('hidden');
+}
+
+function finish() {
+  document.getElementById('zhArea').classList.add('hidden');
+  document.getElementById('enArea').classList.add('hidden');
+  clearInterval(timerId);
+  document.getElementById('finalTime').textContent = fmt(Math.floor((Date.now() - startTime) / 1000));
+  document.getElementById('resultOverlay').classList.add('show');
+}
+
+function showReview() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  document.getElementById('gameArea').classList.add('hidden');
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  viruses.forEach(v => {
+    const row = document.createElement('div');
+    row.className = 'review-item';
+    const en = document.createElement('span'); en.className = 'en'; en.textContent = v.en;
+    const zh = document.createElement('span'); zh.className = 'zh'; zh.textContent = v.zh;
+    row.append(en, zh);
+    list.appendChild(row);
+  });
+  document.getElementById('review').classList.remove('hidden');
+  window.scrollTo({ top: 0 });
+}
+
+initGame();
+</script>
+</body>
+</html>
