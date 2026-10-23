@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>病毒中英配對</title>
+<title>病毒分類點選</title>
 <style>
 * { box-sizing: border-box; }
 html, body { overscroll-behavior: none; }
@@ -18,20 +18,31 @@ h1 { text-align:center; font-size:28px; margin:0 0 16px; }
 .stat-value { font-size:18px; font-weight:600; }
 .instruction { background:white; border:.5px solid #ddd; border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:13px; color:#666; line-height:1.6; }
 
-.zh-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; margin-bottom:12px; display:flex; flex-wrap:wrap; gap:8px; }
-.zh-btn { background:white; border:.5px solid #ccc; border-radius:6px; padding:7px 11px; font-size:14px; cursor:pointer; color:#2B3A55; font-family:inherit; }
-.zh-btn:hover { border-color:#999; background:#f9f9f9; }
-.zh-btn[data-selected="true"] { background:rgba(176,196,222,.30); border-color:#B0C4DE; }
+.virus-grid { display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
+.virus-cell { background:white; border:.5px solid #ccc; border-radius:8px; padding:7px 8px; cursor:pointer; color:#2B3A55; font-family:inherit; text-align:center; line-height:1.35; word-break:break-word; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:50px; }
+.virus-cell:hover { border-color:#999; background:#f9f9f9; }
+.virus-cell[data-selected="true"] { background:rgba(176,196,222,.30); border-color:#B0C4DE; }
+.virus-cell .en { font-size:13px; font-weight:600; }
+.virus-cell .zh { font-size:12px; color:#666; margin-top:2px; }
 
-.en-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
-.en-cell { background:white; border:.5px solid #ddd; border-radius:8px; padding:6px 8px; font-size:13px; line-height:1.35; cursor:pointer; text-align:center; display:flex; align-items:center; justify-content:center; min-height:44px; color:#2B3A55; font-family:inherit; word-break:break-word; }
-.en-cell:hover { border-color:#999; background:#f9f9f9; }
-.en-cell.incorrect { background:rgba(232,130,140,.16); border-color:#E8828C; color:#E8828C; }
-
-.done-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; margin-top:12px; display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
-.done-item { background:rgba(70,129,137,.14); border:.5px solid #468189; border-radius:8px; padding:6px 8px; text-align:center; color:#468189; line-height:1.35; display:flex; flex-direction:column; justify-content:center; min-height:44px; word-break:break-word; }
+.done-area { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
+.done-item { background:rgba(70,129,137,.14); border:.5px solid #468189; border-radius:8px; padding:7px 8px; text-align:center; color:#468189; line-height:1.35; display:flex; flex-direction:column; justify-content:center; min-height:50px; word-break:break-word; }
 .done-item .zh { font-size:14px; font-weight:600; }
 .done-item .en { font-size:12px; }
+.done-item .cls { font-size:12px; margin-top:3px; padding-top:3px; border-top:1px solid rgba(70,129,137,.35); }
+
+.panel { background:white; border:.5px solid #ddd; border-radius:12px; padding:12px; margin-bottom:12px; }
+.panel-label { font-size:12px; color:#999; margin-bottom:8px; }
+.genome-row { display:flex; flex-wrap:wrap; gap:8px; }
+.family-grid { display:grid; grid-template-columns:repeat(var(--cols, 5), 1fr); gap:8px; }
+
+.choice { background:white; border:.5px solid #ccc; border-radius:8px; padding:9px 12px; font-size:14px; cursor:pointer; color:#2B3A55; font-family:inherit; text-align:center; line-height:1.35; word-break:break-word; }
+.family-grid .choice { font-size:13px; min-height:40px; white-space:nowrap; word-break:normal; }
+.choice:hover { border-color:#999; background:#f9f9f9; }
+.choice.correct { background:rgba(70,129,137,.14); border-color:#468189; color:#468189; font-weight:600; }
+.choice.incorrect { background:rgba(232,130,140,.16); border-color:#E8828C; color:#E8828C; }
+.locked .choice { pointer-events:none; }
+
 
 .result-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.3); align-items:center; justify-content:center; z-index:1000; padding:20px; }
 .result-overlay.show { display:flex; }
@@ -43,38 +54,58 @@ h1 { text-align:center; font-size:28px; margin:0 0 16px; }
 .result-button { flex:1; background:#B0C4DE; color:#2B3A55; border:none; border-radius:6px; padding:10px 20px; font-size:14px; font-weight:500; cursor:pointer; font-family:inherit; }
 .result-button:hover { background:#9AB3D0; }
 
-.review-header { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:16px; }
+.review-header { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
 .review-header h2 { margin:0; font-size:20px; }
 .review-header button { background:white; color:#2B3A55; border:1px solid #ccc; border-radius:8px; padding:8px 16px; font-size:14px; cursor:pointer; font-family:inherit; }
-.review-item { background:white; border:.5px solid #ddd; border-radius:8px; padding:11px 14px; margin-bottom:8px; display:flex; justify-content:space-between; gap:12px; font-size:14px; line-height:1.5; }
+.review-genome { font-size:16px; font-weight:700; margin:22px 0 6px; padding-bottom:6px; border-bottom:2px solid #B0C4DE; }
+.review-family { font-size:13px; font-weight:700; color:#666; margin:12px 0 6px; }
+.review-item { background:white; border:.5px solid #ddd; border-radius:8px; padding:9px 14px; margin-bottom:6px; display:flex; justify-content:space-between; gap:12px; font-size:14px; line-height:1.5; }
 .review-item .en { font-weight:700; }
 .review-item .zh { color:#666; text-align:right; }
 
 @media (max-width: 640px) {
-  .en-area, .done-area { grid-template-columns:repeat(2, 1fr); }
+  .virus-grid, .done-area { grid-template-columns:repeat(2, 1fr); }
+  .family-grid { grid-template-columns:repeat(3, 1fr); gap:6px; }
+  .family-grid .choice { font-size:11.5px; padding:9px 2px; }
   .review-item { flex-direction:column; gap:2px; }
   .review-item .zh { text-align:left; }
+}
+@media (max-width: 399px) {
+  .family-grid { grid-template-columns:repeat(2, 1fr); }
+  .family-grid .choice { font-size:13px; padding:9px 4px; }
 }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>病毒中英配對</h1>
+  <h1>病毒分類點選</h1>
 
   <div id="gameArea">
     <div class="stats">
       <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="timer">0:00</div></div>
-      <div class="stat-card"><div class="stat-label">✓ 配對</div><div class="stat-value" id="matched">0/0</div></div>
+      <div class="stat-card"><div class="stat-label">✓ 已完成</div><div class="stat-value" id="done">0/0</div></div>
     </div>
-    <div class="instruction">先點上面的中文，再點下面對應的英文。</div>
-    <div class="zh-area" id="zhArea"></div>
-    <div class="en-area" id="enArea"></div>
+    <div class="instruction">先點上面的病毒，再點它的 genome 和 family。</div>
+
+    <div class="panel" id="virusPanel">
+      <div class="virus-grid" id="virusGrid"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-label">Genome</div>
+      <div class="genome-row" id="genomeRow"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-label">Family</div>
+      <div class="family-grid" id="familyGrid"></div>
+    </div>
+
     <div class="done-area hidden" id="doneArea"></div>
   </div>
 
   <div class="result-overlay" id="resultOverlay">
     <div class="result-modal">
-      <div class="result-title">🎉 全部配對完成！</div>
+      <div class="result-title">🎉 全部完成！</div>
       <div class="result-stat-label">用時</div>
       <div class="result-stat-value" id="finalTime">0:00</div>
       <div class="result-button-group">
@@ -97,93 +128,110 @@ h1 { text-align:center; font-size:28px; margin:0 0 16px; }
 /* ============================================================
    設定
    ============================================================ */
-const ENGLISH_COLUMNS = 5;                          // 下方英文每列幾欄
-const EXCLUDE = [6, 7, 9, 15, 23, 27, 28, 31, 33, 37, 48, 53];  // 不出題的編號（對照表上的序號）
+const VIRUS_COLUMNS = 5;    // 電腦版上方病毒、最下方已完成區，每列幾欄
+const FAMILY_COLUMNS = 5;   // 電腦版 Family 每列幾欄（手機自動調整）
 
 /* ============================================================
-   資料（編號 n 是對照表上的序號）
+   資料：genome / family / 病毒（−ssRNA 的負號沿用你表格的寫法）
    ============================================================ */
-const table = [
-  { n: 1, en: 'Adenovirus', zh: '腺病毒' },
-  { n: 2, en: 'Papovavirus', zh: '乳頭瘤病毒' },
-  { n: 3, en: 'Papillomavirus', zh: '人類乳突病毒' },
-  { n: 4, en: 'Polyomavirus', zh: '多瘤病毒' },
-  { n: 5, en: 'Herpesvirus', zh: '疱疹病毒' },
-  { n: 8, en: 'Varicella-zoster virus', zh: '水痘帶狀疱疹病毒' },
-  { n: 10, en: 'Herpes simplex virus（HSV）', zh: '單純疱疹病毒' },
-  { n: 11, en: 'Poxvirus', zh: '痘病毒' },
-  { n: 12, en: 'Cowpox virus', zh: '牛痘病毒' },
-  { n: 13, en: 'Smallpox virus', zh: '天花病毒' },
-  { n: 14, en: 'Parvovirus', zh: '微小 DNA 病毒' },
-  { n: 16, en: 'Adeno-associated virus', zh: '腺病毒相關病毒' },
-  { n: 17, en: 'Reovirus', zh: '呼腸孤病毒' },
-  { n: 18, en: 'Rotavirus', zh: '輪狀病毒' },
-  { n: 19, en: 'Picornavirus', zh: '小 RNA 病毒' },
-  { n: 20, en: 'Rhinovirus', zh: '鼻病毒' },
-  { n: 21, en: 'Poliovirus', zh: '脊髓灰質炎病毒' },
-  { n: 22, en: 'Enteric / intestinal virus', zh: '腸病毒' },
-  { n: 24, en: 'Calicivirus', zh: '杯狀病毒' },
-  { n: 26, en: 'Coronavirus', zh: '冠狀病毒' },
-  { n: 29, en: 'Flavivirus', zh: '黃病毒' },
-  { n: 30, en: 'Yellow fever virus（YFV）', zh: '黃熱病毒' },
-  { n: 32, en: 'Dengue virus', zh: '登革熱病毒' },
-  { n: 34, en: 'Togavirus', zh: '套膜病毒' },
-  { n: 35, en: 'Rubella virus', zh: '德國麻疹病毒' },
-  { n: 36, en: 'Filovirus', zh: '絲狀病毒' },
-  { n: 37, en: 'Ebola virus', zh: '伊波拉病毒' },
-  { n: 38, en: 'Orthomyxovirus', zh: '正黏液病毒' },
-  { n: 39, en: 'Influenza virus', zh: '流感病毒' },
-  { n: 40, en: 'Paramyxovirus', zh: '副黏液病毒' },
-  { n: 41, en: 'Measles virus', zh: '麻疹病毒' },
-  { n: 42, en: 'Mumps virus', zh: '腮腺炎病毒' },
-  { n: 43, en: 'Orthopneumovirus', zh: '正肺炎病毒' },
-  { n: 44, en: 'Respiratory syncytial virus（RSV）', zh: '呼吸道融合病毒' },
-  { n: 45, en: 'Rhabdovirus', zh: '桿狀病毒' },
-  { n: 46, en: 'Rabies virus', zh: '狂犬病毒' },
-  { n: 49, en: 'Retrovirus', zh: '反轉錄病毒' },
-  { n: 50, en: 'Human immunodeficiency virus（HIV）', zh: '人類免疫缺乏病毒' },
-  { n: 51, en: 'Human T-lymphotropic virus type 1（HTLV-1）', zh: '第一型人類 T 細胞白血病病毒' },
-  { n: 52, en: 'Hepadnavirus', zh: '嗜肝病毒' },
+const viruses = [
+  { genome: 'dsDNA', family: 'Adenovirus', en: 'Adenovirus', zh: '腺病毒' },
+  { genome: 'dsDNA', family: 'Papovavirus', en: 'Papillomavirus（HPV）', zh: '人類乳突病毒' },
+  { genome: 'dsDNA', family: 'Papovavirus', en: 'Polyomavirus', zh: '多瘤病毒' },
+  { genome: 'dsDNA', family: 'Herpesvirus', en: 'Herpes Type 1（HSV-1）', zh: '第一型單純疱疹病毒' },
+  { genome: 'dsDNA', family: 'Herpesvirus', en: 'Herpes Type 2（HSV-2）', zh: '第二型單純疱疹病毒' },
+  { genome: 'dsDNA', family: 'Herpesvirus', en: 'Varicella-zoster virus', zh: '水痘帶狀疱疹病毒' },
+  { genome: 'dsDNA', family: 'Herpesvirus', en: 'Epstein-Barr virus（EBV）', zh: 'EB 病毒' },
+  { genome: 'dsDNA', family: 'Herpesvirus', en: 'Herpes simplex virus（HSV）', zh: '單純疱疹病毒' },
+  { genome: 'dsDNA', family: 'Poxvirus', en: 'Cowpox virus', zh: '牛痘病毒' },
+  { genome: 'dsDNA', family: 'Poxvirus', en: 'Smallpox virus', zh: '天花病毒' },
+  { genome: 'ssDNA', family: 'Parvovirus', en: 'B19 virus', zh: '微小病毒 B19' },
+  { genome: 'ssDNA', family: 'Parvovirus', en: 'Adeno-associated virus（AAV）', zh: '腺病毒相關病毒' },
+  { genome: 'dsRNA', family: 'Reovirus', en: 'Rotavirus', zh: '輪狀病毒' },
+  { genome: '+ssRNA', family: 'Picornavirus', en: 'Rhinovirus', zh: '鼻病毒' },
+  { genome: '+ssRNA', family: 'Picornavirus', en: 'Poliovirus', zh: '脊髓灰質炎病毒' },
+  { genome: '+ssRNA', family: 'Picornavirus', en: 'Enteric / intestinal virus', zh: '腸病毒' },
+  { genome: '+ssRNA', family: 'Picornavirus', en: 'Hepatitis A virus', zh: 'A 型肝炎病毒' },
+  { genome: '+ssRNA', family: 'Calicivirus', en: 'Norwalk virus / Norovirus', zh: '諾羅病毒' },
+  { genome: '+ssRNA', family: 'Coronavirus', en: 'SARS-related coronavirus', zh: '嚴重急性呼吸道症候群相關冠狀病毒' },
+  { genome: '+ssRNA', family: 'Coronavirus', en: 'MERS coronavirus', zh: '中東呼吸症候群冠狀病毒' },
+  { genome: '+ssRNA', family: 'Flavivirus', en: 'Yellow fever virus（YFV）', zh: '黃熱病毒' },
+  { genome: '+ssRNA', family: 'Flavivirus', en: 'Zika virus', zh: '茲卡病毒' },
+  { genome: '+ssRNA', family: 'Flavivirus', en: 'Dengue virus', zh: '登革熱病毒' },
+  { genome: '+ssRNA', family: 'Flavivirus', en: 'Hepatitis C virus', zh: 'C 型肝炎病毒' },
+  { genome: '+ssRNA', family: 'Togavirus', en: 'Rubella virus', zh: '德國麻疹病毒' },
+  { genome: '−ssRNA', family: 'Filovirus', en: 'Ebola virus', zh: '伊波拉病毒' },
+  { genome: '−ssRNA', family: 'Orthomyxovirus', en: 'Influenza virus', zh: '流感病毒' },
+  { genome: '−ssRNA', family: 'Paramyxovirus', en: 'Measles virus', zh: '麻疹病毒' },
+  { genome: '−ssRNA', family: 'Paramyxovirus', en: 'Mumps virus', zh: '腮腺炎病毒' },
+  { genome: '−ssRNA', family: 'Orthopneumovirus', en: 'Respiratory syncytial virus（RSV）', zh: '呼吸道融合病毒' },
+  { genome: '−ssRNA', family: 'Rhabdovirus', en: 'Rabies virus', zh: '狂犬病毒' },
+  { genome: '−ssRNA', family: 'Orthohantavirus', en: 'Hantavirus', zh: '漢他病毒' },
+  { genome: 'ssRNA-RT', family: 'Retrovirus', en: 'Human immunodeficiency virus（HIV）', zh: '人類免疫缺乏病毒' },
+  { genome: 'ssRNA-RT', family: 'Retrovirus', en: 'Human T-lymphotropic virus type 1（HTLV-1）', zh: '第一型人類 T 細胞白血病病毒' },
+  { genome: 'dsDNA-RT', family: 'Hepadnavirus', en: 'Hepatitis B virus', zh: 'B 型肝炎病毒' }
 ];
-const viruses = table.filter(v => !EXCLUDE.includes(v.n));
+
+// Genome 照表格出現的順序；Family 照字母排（不洩漏它屬於哪個 genome）
+const genomes = [...new Set(viruses.map(v => v.genome))];
+const families = [...new Set(viruses.map(v => v.family))].sort((a, b) => a.localeCompare(b, 'en'));
 
 /* ============================================================
    小工具
    ============================================================ */
 function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
+// 英文名稱後面的（縮寫）不要從中間斷行，例如（HSV-1）
+function setEn(el, text) {
+  el.textContent = '';
+  const m = text.match(/^(.*?)(（[^）]*）)$/);
+  if (!m) { el.textContent = text; return; }
+  el.appendChild(document.createTextNode(m[1]));
+  const sp = document.createElement('span');
+  sp.style.whiteSpace = 'nowrap';
+  sp.textContent = m[2];
+  el.appendChild(sp);
+}
 function fmt(sec) { const m = Math.floor(sec / 60), s = sec % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
 
 /* ============================================================
-   遊戲
+   遊戲：先點上面的病毒，再點它的 genome 和 family
    ============================================================ */
-let selectedBtn = null;
-let matchedCount = 0;
-let startTime = Date.now();
-let timerId = null;
+let selectedCell = null;     // 目前選中的病毒格
+let selectedVirus = null;
+let genomeOk = false, familyOk = false;
+let doneCount = 0;
+let startTime = Date.now(), timerId = null;
 
 function initGame() {
-  document.getElementById('matched').textContent = '0/' + viruses.length;
-  document.getElementById('enArea').style.setProperty('--cols', ENGLISH_COLUMNS);
-  document.getElementById('doneArea').style.setProperty('--cols', ENGLISH_COLUMNS);
+  document.getElementById('done').textContent = '0/' + viruses.length;
+  document.getElementById('virusGrid').style.setProperty('--cols', VIRUS_COLUMNS);
+  document.getElementById('doneArea').style.setProperty('--cols', VIRUS_COLUMNS);
+  document.getElementById('familyGrid').style.setProperty('--cols', FAMILY_COLUMNS);
 
-  const zhArea = document.getElementById('zhArea');
-  shuffle(viruses).forEach(v => {
-    const btn = document.createElement('button');
-    btn.className = 'zh-btn';
-    btn.textContent = v.zh;
-    btn.dataset.n = v.n;
-    btn.onclick = () => selectZh(btn);
-    zhArea.appendChild(btn);
-  });
-
-  const enArea = document.getElementById('enArea');
+  const vGrid = document.getElementById('virusGrid');
   shuffle(viruses).forEach(v => {
     const cell = document.createElement('button');
-    cell.className = 'en-cell';
-    cell.textContent = v.en;
-    cell.dataset.n = v.n;
-    cell.onclick = () => pickEn(cell);
-    enArea.appendChild(cell);
+    cell.className = 'virus-cell';
+    const en = document.createElement('span'); en.className = 'en'; setEn(en, v.en);
+    const zh = document.createElement('span'); zh.className = 'zh'; zh.textContent = v.zh;
+    cell.append(en, zh);
+    cell.onclick = () => selectVirus(cell, v);
+    vGrid.appendChild(cell);
+  });
+
+  const gRow = document.getElementById('genomeRow');
+  genomes.forEach(g => {
+    const b = document.createElement('button');
+    b.className = 'choice'; b.textContent = g; b.dataset.value = g;
+    b.onclick = () => pickGenome(b);
+    gRow.appendChild(b);
+  });
+  const fGrid = document.getElementById('familyGrid');
+  families.forEach(f => {
+    const b = document.createElement('button');
+    b.className = 'choice'; b.textContent = f; b.dataset.value = f;
+    b.onclick = () => pickFamily(b);
+    fGrid.appendChild(b);
   });
 
   startTime = Date.now();
@@ -192,62 +240,102 @@ function initGame() {
   }, 200);
 }
 
-function selectZh(btn) {
-  if (selectedBtn) selectedBtn.removeAttribute('data-selected');
-  selectedBtn = btn;
-  btn.dataset.selected = 'true';
+function resetChoices() {
+  genomeOk = false; familyOk = false;
+  document.querySelectorAll('#genomeRow .choice, #familyGrid .choice').forEach(b => b.classList.remove('correct', 'incorrect'));
+  document.getElementById('genomeRow').classList.remove('locked');
+  document.getElementById('familyGrid').classList.remove('locked');
 }
 
-function pickEn(cell) {
-  if (!selectedBtn) return;
-
-  if (selectedBtn.dataset.n === cell.dataset.n) {
-    const v = viruses.find(x => String(x.n) === cell.dataset.n);
-    selectedBtn.remove();
-    cell.remove();
-    selectedBtn = null;
-    addDone(v);
-    matchedCount++;
-    document.getElementById('matched').textContent = matchedCount + '/' + viruses.length;
-    if (matchedCount === viruses.length) finish();
-  } else {
-    cell.classList.add('incorrect');
-    setTimeout(() => cell.classList.remove('incorrect'), 500);
-  }
+function selectVirus(cell, v) {
+  if (selectedCell === cell) return;
+  if (selectedCell) selectedCell.removeAttribute('data-selected');
+  selectedCell = cell; selectedVirus = v;
+  cell.dataset.selected = 'true';
+  resetChoices();                 // 換一隻病毒，之前選的綠色清掉重選
 }
 
-// 配對成功的移到最下面，中英文一起顯示
+function flash(b) {
+  b.classList.add('incorrect');
+  setTimeout(() => b.classList.remove('incorrect'), 500);
+}
+
+function pickGenome(b) {
+  if (!selectedVirus || genomeOk) return;
+  if (b.dataset.value === selectedVirus.genome) {
+    b.classList.add('correct'); genomeOk = true;
+    document.getElementById('genomeRow').classList.add('locked');
+    checkDone();
+  } else flash(b);
+}
+
+function pickFamily(b) {
+  if (!selectedVirus || familyOk) return;
+  if (b.dataset.value === selectedVirus.family) {
+    b.classList.add('correct'); familyOk = true;
+    document.getElementById('familyGrid').classList.add('locked');
+    checkDone();
+  } else flash(b);
+}
+
+// genome 和 family 都對：病毒移到最下面，中英文＋分類一起顯示，分類按鈕重置
+function checkDone() {
+  if (!(genomeOk && familyOk)) return;
+  const v = selectedVirus;
+  selectedCell.remove();
+  selectedCell = null; selectedVirus = null;
+  resetChoices();
+  addDone(v);
+  doneCount++;
+  document.getElementById('done').textContent = doneCount + '/' + viruses.length;
+  if (doneCount === viruses.length) finish();
+}
+
 function addDone(v) {
   const area = document.getElementById('doneArea');
   const item = document.createElement('div');
   item.className = 'done-item';
   const zh = document.createElement('span'); zh.className = 'zh'; zh.textContent = v.zh;
-  const en = document.createElement('span'); en.className = 'en'; en.textContent = v.en;
-  item.append(zh, en);
+  const en = document.createElement('span'); en.className = 'en'; setEn(en, v.en);
+  const cls = document.createElement('span'); cls.className = 'cls'; cls.textContent = v.genome + '｜' + v.family;
+  item.append(zh, en, cls);
   area.appendChild(item);
   area.classList.remove('hidden');
 }
 
 function finish() {
-  document.getElementById('zhArea').classList.add('hidden');
-  document.getElementById('enArea').classList.add('hidden');
+  document.getElementById('virusPanel').classList.add('hidden');
   clearInterval(timerId);
   document.getElementById('finalTime').textContent = fmt(Math.floor((Date.now() - startTime) / 1000));
   document.getElementById('resultOverlay').classList.add('show');
 }
 
+/* ============================================================
+   解析：genome → family → 病毒
+   ============================================================ */
 function showReview() {
   document.getElementById('resultOverlay').classList.remove('show');
   document.getElementById('gameArea').classList.add('hidden');
   const list = document.getElementById('reviewList');
   list.innerHTML = '';
-  viruses.forEach(v => {
-    const row = document.createElement('div');
-    row.className = 'review-item';
-    const en = document.createElement('span'); en.className = 'en'; en.textContent = v.en;
-    const zh = document.createElement('span'); zh.className = 'zh'; zh.textContent = v.zh;
-    row.append(en, zh);
-    list.appendChild(row);
+  genomes.forEach(g => {
+    const gTitle = document.createElement('div');
+    gTitle.className = 'review-genome'; gTitle.textContent = g;
+    list.appendChild(gTitle);
+    const fams = [...new Set(viruses.filter(v => v.genome === g).map(v => v.family))];
+    fams.forEach(f => {
+      const fTitle = document.createElement('div');
+      fTitle.className = 'review-family'; fTitle.textContent = f;
+      list.appendChild(fTitle);
+      viruses.filter(v => v.genome === g && v.family === f).forEach(v => {
+        const row = document.createElement('div');
+        row.className = 'review-item';
+        const en = document.createElement('span'); en.className = 'en'; en.textContent = v.en;
+        const zh = document.createElement('span'); zh.className = 'zh'; zh.textContent = v.zh;
+        row.append(en, zh);
+        list.appendChild(row);
+      });
+    });
   });
   document.getElementById('review').classList.remove('hidden');
   window.scrollTo({ top: 0 });
