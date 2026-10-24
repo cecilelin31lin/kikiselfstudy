@@ -152,6 +152,31 @@ const viruses = table.filter(v => !EXCLUDE.includes(v.n));
    小工具
    ============================================================ */
 function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
+// 中文名稱的字數（空格不算，英文字母一個算一個字）
+function zhLength(v) { return [...v.zh.replace(/\s/g, '')].length; }
+
+// 上面的中文：依字數由少到多排，同字數的每次重新隨機排
+function sortByLength(list) {
+  const groups = new Map();
+  shuffle(list).forEach(v => {
+    const k = zhLength(v);
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(v);
+  });
+  return [...groups.keys()].sort((a, b) => a - b).flatMap(k => groups.get(k));
+}
+
+// 下面的英文：依首字母 A→Z 排，首字母相同的每次重新隨機排
+function sortByLetter(list) {
+  const groups = new Map();
+  shuffle(list).forEach(v => {
+    const k = v.en.charAt(0).toUpperCase();
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(v);
+  });
+  return [...groups.keys()].sort().flatMap(k => groups.get(k));
+}
+
 function fmt(sec) { const m = Math.floor(sec / 60), s = sec % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
 
 /* ============================================================
@@ -168,7 +193,7 @@ function initGame() {
   document.getElementById('doneArea').style.setProperty('--cols', ENGLISH_COLUMNS);
 
   const zhArea = document.getElementById('zhArea');
-  shuffle(viruses).forEach(v => {
+  sortByLength(viruses).forEach(v => {
     const btn = document.createElement('button');
     btn.className = 'zh-btn';
     btn.textContent = v.zh;
@@ -178,7 +203,7 @@ function initGame() {
   });
 
   const enArea = document.getElementById('enArea');
-  shuffle(viruses).forEach(v => {
+  sortByLetter(viruses).forEach(v => {
     const cell = document.createElement('button');
     cell.className = 'en-cell';
     cell.textContent = v.en;
