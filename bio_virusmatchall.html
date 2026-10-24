@@ -63,6 +63,17 @@ h1 { text-align:center; font-size:28px; margin:0 0 16px; }
 .review-item .en { font-weight:700; }
 .review-item .zh { color:#666; text-align:right; }
 
+.review-img-box { background:white; border:.5px solid #ddd; border-radius:12px; padding:10px; margin-bottom:12px; }
+.review-img-box img { display:block; width:100%; height:auto; border-radius:6px; cursor:zoom-in; }
+
+.lightbox { position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:2000; display:none; }
+.lightbox.show { display:block; }
+.lightbox-scroll { position:absolute; inset:0; overflow:auto; display:flex; }
+.lightbox-scroll img { flex:none; display:block; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; cursor:zoom-in; }
+.lightbox.full .lightbox-scroll img { max-width:none; max-height:none; cursor:zoom-out; }
+.lightbox-close { position:fixed; top:12px; right:12px; width:40px; height:40px; border-radius:50%; border:none; background:rgba(255,255,255,.92); color:#2B3A55; font-size:20px; line-height:1; cursor:pointer; z-index:2; font-family:inherit; }
+.lightbox-close:hover { background:#fff; }
+
 @media (max-width: 640px) {
   .virus-grid, .done-area { grid-template-columns:repeat(2, 1fr); }
   .family-grid { grid-template-columns:repeat(3, 1fr); gap:6px; }
@@ -120,7 +131,17 @@ h1 { text-align:center; font-size:28px; margin:0 0 16px; }
       <h2>📋 查看解析</h2>
       <button onclick="location.reload()">重新開始</button>
     </div>
+    <div class="review-img-box" id="reviewImgBox">
+      <img id="reviewImg" src="https://raw.githubusercontent.com/cecilelin31lin/pic/main/virus.png" alt="病毒分類圖" onclick="openLightbox()" onerror="document.getElementById('reviewImgBox').classList.add('hidden')">
+    </div>
     <div id="reviewList"></div>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="關閉">✕</button>
+    <div class="lightbox-scroll" id="lightboxScroll" onclick="if (event.target === this) closeLightbox()">
+      <img id="lightboxImg" alt="病毒分類圖" onclick="toggleLightboxZoom()">
+    </div>
   </div>
 </div>
 
@@ -351,6 +372,30 @@ function showReview() {
   document.getElementById('review').classList.remove('hidden');
   window.scrollTo({ top: 0 });
 }
+
+/* ============================================================
+   解析頁的圖：點開看大圖，再點一下看原始大小（可捲動）
+   ============================================================ */
+function openLightbox() {
+  const box = document.getElementById('lightbox');
+  document.getElementById('lightboxImg').src = document.getElementById('reviewImg').src;
+  box.classList.remove('full');
+  box.classList.add('show');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('lightboxScroll').scrollTo(0, 0);
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show', 'full');
+  document.body.style.overflow = '';
+}
+function toggleLightboxZoom() {
+  const box = document.getElementById('lightbox');
+  box.classList.toggle('full');
+  document.getElementById('lightboxScroll').scrollTo(0, 0);
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.getElementById('lightbox').classList.contains('show')) closeLightbox();
+});
 
 initGame();
 </script>
