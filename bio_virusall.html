@@ -76,7 +76,7 @@
   }
   
   .question-type {
-    background: #B0C4DE;
+    background: #378ADD;
     color: white;
     padding: 4px 8px;
     border-radius: 4px;
@@ -119,9 +119,9 @@
     background: #f9f9f9;
   }
   .option-btn[data-selected="true"] {
-    background: #B0C4DE;
+    background: #378ADD;
     color: white;
-    border-color: #B0C4DE;
+    border-color: #378ADD;
   }
   
   .button-group {
@@ -141,11 +141,11 @@
   }
   
   .btn-submit {
-    background: #B0C4DE;
+    background: #378ADD;
     color: white;
   }
   .btn-submit:hover {
-    background: #9AB3D0;
+    background: #2970c7;
   }
   
   .feedback {
@@ -161,25 +161,18 @@
     display: block;
   }
   .feedback.success {
-    background: rgba(70,129,137,.14);
-    border: 0.5px solid #468189;
-    color: #468189;
+    background: #E8F9EF;
+    border: 0.5px solid #4CAF7D;
+    color: #2B6E4F;
   }
   .feedback.error {
-    background: rgba(232,130,140,.16);
-    border: 0.5px solid #E8828C;
-    color: #E8828C;
+    background: #FDE8E8;
+    border: 0.5px solid #E24B4A;
+    color: #8B2323;
   }
   
   .explanation {
     font-size: 13px;
-    margin-top: 8px;
-    display: block;
-    line-height: 1.6;
-  }
-  .explanation-image {
-    max-width: 100%;
-    border-radius: 8px;
     margin-top: 8px;
     display: block;
   }
@@ -265,15 +258,15 @@
   }
   
   .result-item.correct {
-    color: #468189;
+    color: #4CAF7D;
   }
   
   .result-item.incorrect {
-    color: #E8828C;
+    color: #E24B4A;
   }
   
   .result-button {
-    background: #B0C4DE;
+    background: #378ADD;
     color: white;
     border: none;
     border-radius: 6px;
@@ -285,7 +278,7 @@
   }
   
   .result-button:hover {
-    background: #9AB3D0;
+    background: #2970c7;
   }
 
   .review-container {
@@ -312,8 +305,8 @@
     padding: 16px;
     margin-bottom: 12px;
   }
-  .review-card.first-correct { border-left: 4px solid #468189; }
-  .review-card.had-wrong { border-left: 4px solid #E8828C; }
+  .review-card.first-correct { border-left: 4px solid #4CAF7D; }
+  .review-card.had-wrong { border-left: 4px solid #E24B4A; }
   .review-q {
     font-weight: 600;
     margin-bottom: 10px;
@@ -324,10 +317,10 @@
     line-height: 1.6;
     margin-top: 4px;
   }
-  .review-wrong { color: #E8828C; }
-  .review-correct { color: #468189; }
+  .review-wrong { color: #8B2323; }
+  .review-correct { color: #2B6E4F; }
   .back-btn {
-    background: #B0C4DE;
+    background: #378ADD;
     color: white;
     border: none;
     border-radius: 8px;
@@ -336,14 +329,74 @@
     white-space: nowrap;
   }
 
+
+  .start-screen {
+    background: white;
+    border: 0.5px solid #ddd;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .start-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .start-info {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 18px;
+  }
+  .count-input {
+    width: 120px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    color: #2B3A55;
+    outline: none;
+  }
+  .count-input:focus {
+    border-color: #B0C4DE;
+    box-shadow: 0 0 0 3px rgba(176,196,222,.20);
+  }
+  .start-btn {
+    margin-left: 10px;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #B0C4DE;
+    color: white;
+  }
+  .start-btn:hover { background: #9AB3D0; }
+  .start-error {
+    min-height: 20px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #E8828C;
+  }
+
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>病毒</h1>
-  <p class="subtitle">完成所有題目</p>
+  <p class="subtitle"></p>
 
-  <div class="stats">
+  <div class="start-screen" id="startScreen">
+    <div class="start-title">這次要練習幾題呢？</div>
+    <div class="start-info" id="startInfo"></div>
+    <input class="count-input" id="questionCountInput" type="number" inputmode="numeric" min="1" step="1">
+    <button class="start-btn" onclick="startSelectedQuiz()">開始測驗</button>
+    <div class="start-error" id="startError"></div>
+  </div>
+
+  <div class="stats" style="display:none;">
     <div class="stat-card">
       <div class="stat-label">題目</div>
       <div class="stat-value" id="progress">1/2</div>
@@ -358,7 +411,7 @@
     </div>
   </div>
 
-  <div class="question-container" id="questionContainer">
+  <div class="question-container" id="questionContainer" style="display:none;">
     <div class="question-header">
       <div class="question-progress" id="questionProgress">第 1 題</div>
       <div class="question-type" id="questionType">類型</div>
@@ -368,7 +421,7 @@
     <div class="feedback" id="feedback"></div>
   </div>
 
-  <div class="button-group">
+  <div class="button-group" style="display:none;">
     <button class="btn-submit" id="submitBtn" onclick="submitAnswer()">確認答案</button>
   </div>
 
@@ -396,14 +449,14 @@
         <div id="resultDetails"></div>
       </div>
       
-      <button class="result-button" onclick="location.reload()">重新開始</button>
+      <button class="result-button" onclick="resetToStart()">重新開始</button>
     </div>
   </div>
 
   <div class="review-container" id="reviewContainer">
     <div class="review-header">
       <h2>📋 答題複習</h2>
-      <button class="back-btn" onclick="location.reload()">重新開始</button>
+      <button class="back-btn" onclick="resetToStart()">重新開始</button>
     </div>
     <div id="reviewList"></div>
   </div>
@@ -412,7 +465,7 @@
 
 <script>
 const allQuestions = [
-// ---------------- Virus ----------------
+ // ---------------- Virus ----------------
 {type:3,question:'感染 animal 的 virus 大多有 envelope，下列何者「沒有 envelope」卻仍會感染 animal？',options:['Influenza virus','HIV','Adenovirus','Herpesvirus'],answer:'Adenovirus',explanation:{text:'無 envelope 仍會感染 animal 的有 adenovirus、papovavirus、parvovirus、reovirus、picornavirus、calicivirus（6 類）；influenza、HIV、herpesvirus 都有 envelope。',image:''}},
 {type:3,question:'下列關於 rotavirus、Norwalk virus、enteric virus（常被稱為腸胃型感冒）的敘述，何者正確？',options:['它們是真正的感冒，由 influenza virus 引起','它們有 envelope，可用酒精消毒','它們無 envelope，無法用酒精消毒，需用次氯酸水','它們都有 vaccine 可預防'],answer:'它們無 envelope，無法用酒精消毒，需用次氯酸水',explanation:{text:'三者不是真感冒；因無 envelope，酒精無效，要用次氯酸水；症狀為下瀉、上吐、喉嚨手足口。Norovirus 無 vaccine。',image:''}},
 {type:3,question:'被感染後會出現 Cowdry A body 的 virus 是：',options:['HSV','Poliovirus','Adenovirus','Cytomegalovirus'],answer:'HSV',explanation:{text:'Cowdry A（酸性）：HSV、YFV；Cowdry B：poliovirus（酸性）、adenovirus 與 cytomegalovirus（鹼性）。',image:''}},
@@ -464,33 +517,31 @@ const allQuestions = [
 {type:3,question:'A、B、C 型肝炎病毒分別屬於哪一個科？',options:['A：Flavivirus；B：Hepadnavirus；C：Picornavirus','A：Picornavirus；B：Hepadnavirus；C：Flavivirus','A：Picornavirus；B：Flavivirus；C：Hepadnavirus','A：Hepadnavirus；B：Picornavirus；C：Flavivirus'],answer:'A：Picornavirus；B：Hepadnavirus；C：Flavivirus',explanation:{text:'Hepatitis A：+ssRNA－Picornavirus；Hepatitis B：dsDNA-RT－Hepadnavirus；Hepatitis C：+ssRNA－Flavivirus。',image:''}},
 {type:3,question:'influenza virus 與 rabies virus 的基因組同屬：',options:['−ssRNA','dsRNA','+ssRNA','ssRNA-RT'],answer:'−ssRNA',explanation:{text:'Influenza：−ssRNA－Orthomyxovirus；Rabies：−ssRNA－Rhabdovirus。',image:''}},
 {type:3,question:'Hepatitis B virus 與 HIV 的基因組類型分別是：',options:['ssRNA-RT；dsDNA-RT','dsDNA；ssRNA','ssDNA；dsRNA','dsDNA-RT；ssRNA-RT'],answer:'dsDNA-RT；ssRNA-RT',explanation:{text:'Hepatitis B：dsDNA-RT－Hepadnavirus；HIV：ssRNA-RT－Retrovirus。',image:''}},
-  ];
+ ];
 
 /*
 const allQuestions = [
   // 類型 2：自動選擇（自動生成干擾項）
-  { type: 2, question: '1+1=__', answer: '2', explanation: { text: '基本數學運算', image: '' } },
+  { type: 2, question: '1+1=__', answer: '2', explanation: '基本數學運算' },
   
   // 類型 3：選擇題（需提供 options）
-  { type: 3, question: 'Q？', answer: 'A1', options: ['A1', 'A2', 'A3', 'A4'], explanation: { text: 'explaination', image: '' } },
+  { type: 3, question: 'Q？', answer: 'A1', options: ['A1', 'A2', 'A3', 'A4'], explanation: 'explaination' },
   
   // 類型 4：填空題（文字輸入）
-  { type: 4, question: 'Qaaa___', answer: 'A', explanation: { text: 'explanation', image: '' } },
+  { type: 4, question: 'Qaaa___', answer: 'A', explanation: 'explanation' },
   
   // 類型 9：是非題（answer: true 或 false）
-  { type: 9, question: 'Q', answer: true, explanation: { text: 'explanation', image: '' } },
-  { type: 9, question: 'Q', answer: false, explanation: { text: 'explanation', image: '' } },
+  { type: 9, question: 'Q', answer: true, explanation: 'explanation' },
+  { type: 9, question: 'Q', answer: false, explanation: 'explanation' },
 
   
   // 沒有解析的例子
-  { type: 2, question: '2+2=__', answer: '4', explanation: { text: '', image: '' } },
-  { type: 9, question: 'CO是強場配體', answer: true, explanation: { text: '', image: '' } },
+  { type: 2, question: '2+2=__', answer: '4', explanation: 0 },
+  { type: 9, question: 'CO是強場配體', answer: true, explanation: 0 },
 ];
 */
 
-// 每次遊戲隨機抽幾題，只要改這個數字即可
-const QUESTIONS_PER_GAME = 7;
-
+// 每次遊戲題數由考生開始前自行輸入；可選上限會自動讀取 allQuestions.length
 const typeNames = {
   2: '自動選擇',
   3: '選擇題',
@@ -506,19 +557,53 @@ let selectedAnswer = null;
 let answered = false;
 let shuffledQuestions = [];
 let reviewLog = [];
+let selectedQuestionCount = 0;
 
 function shuffle(arr) {
-  const result = [...arr];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
-  }
-  return result;
+  return [...arr].sort(() => Math.random() - 0.5);
 }
 
 function initGame() {
-  const questionCount = Math.min(Math.max(1, QUESTIONS_PER_GAME), allQuestions.length);
-  shuffledQuestions = shuffle(allQuestions).slice(0, questionCount);
+  const total = allQuestions.length;
+  const input = document.getElementById('questionCountInput');
+
+  document.getElementById('startInfo').textContent =
+    `題庫共有 ${total} 題，請輸入 1～${total}`;
+  input.min = 1;
+  input.max = total;
+  input.value = total;
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      startSelectedQuiz();
+    }
+  });
+
+  input.focus();
+  input.select();
+}
+
+function startSelectedQuiz() {
+  const total = allQuestions.length;
+  const input = document.getElementById('questionCountInput');
+  const error = document.getElementById('startError');
+  const count = Number(input.value);
+
+  if (!Number.isInteger(count) || count < 1 || count > total) {
+    error.textContent = `請輸入 1～${total} 之間的整數`;
+    input.focus();
+    input.select();
+    return;
+  }
+
+  selectedQuestionCount = count;
+  shuffledQuestions = shuffle(allQuestions).slice(0, selectedQuestionCount);
+
+  currentQuestion = 0;
+  correctCount = 0;
+  selectedAnswer = null;
+  answered = false;
   reviewLog = shuffledQuestions.map(q => ({
     question: q.question,
     type: q.type,
@@ -527,25 +612,52 @@ function initGame() {
     gotCorrect: false,
     explanation: q.explanation
   }));
+
+  startTime = Date.now();
+  clearInterval(timerInterval);
+  document.getElementById('timer').textContent = '0:00';
+  document.getElementById('correct').textContent = '0';
+
+  document.getElementById('startScreen').style.display = 'none';
+  document.querySelector('.stats').style.display = 'grid';
+  document.getElementById('questionContainer').style.display = 'block';
+  document.querySelector('.button-group').style.display = 'flex';
+  document.getElementById('reviewContainer').classList.remove('show');
+
   showQuestion();
   startTimer();
 
-  document.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      if (answered) nextQuestion();
-      else submitAnswer();
-    }
-  });
+  document.removeEventListener('keypress', handleQuizEnter);
+  document.addEventListener('keypress', handleQuizEnter);
+}
 
-  document.addEventListener('keydown', (e) => {
-    if (!['1', '2', '3', '4'].includes(e.key)) return;
-    const idx = Number(e.key) - 1;
-    const buttons = document.querySelectorAll('#contentArea .option-btn');
-    if (buttons[idx] && !buttons[idx].disabled) {
-      e.preventDefault();
-      buttons[idx].click();
-    }
-  });
+function handleQuizEnter(e) {
+  if (e.key === 'Enter') {
+    if (answered) nextQuestion();
+    else submitAnswer();
+  }
+}
+
+function resetToStart() {
+  clearInterval(timerInterval);
+  document.removeEventListener('keypress', handleQuizEnter);
+
+  document.getElementById('resultOverlay').classList.remove('show');
+  document.getElementById('reviewContainer').classList.remove('show');
+  document.getElementById('reviewList').innerHTML = '';
+  document.querySelector('.stats').style.display = 'none';
+  document.getElementById('questionContainer').style.display = 'none';
+  document.querySelector('.button-group').style.display = 'none';
+  document.getElementById('startScreen').style.display = 'block';
+  document.getElementById('startError').textContent = '';
+  document.getElementById('timer').textContent = '0:00';
+  document.getElementById('correct').textContent = '0';
+
+  const input = document.getElementById('questionCountInput');
+  input.max = allQuestions.length;
+  input.value = selectedQuestionCount || allQuestions.length;
+  input.focus();
+  input.select();
 }
 
 function displayAnswer(value) {
@@ -675,21 +787,22 @@ function submitAnswer() {
       btn.disabled = true;
       const selected = btn.getAttribute('data-selected') === 'true';
       if (selected) {
-        btn.style.background = 'rgba(70,129,137,.14)';
-        btn.style.borderColor = '#468189';
-        btn.style.color = '#468189';
+        btn.style.background = '#E8F9EF';
+        btn.style.borderColor = '#4CAF7D';
+        btn.style.color = '#2B6E4F';
       }
     });
 
     const input = document.querySelector('.input-field');
     if (input) {
       input.disabled = true;
-      input.style.background = 'rgba(70,129,137,.14)';
-      input.style.borderColor = '#468189';
+      input.style.background = '#E8F9EF';
+      input.style.borderColor = '#4CAF7D';
     }
 
     feedback.className = 'feedback show success';
-    feedback.innerHTML = '✓ 正確' + buildExplanationHtml(q.explanation);
+    feedback.innerHTML = '✓ 正確' +
+      (q.explanation ? '<span class="explanation">' + escapeHtml(String(q.explanation)) + '</span>' : '');
 
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.textContent = currentQuestion === shuffledQuestions.length - 1 ? '查看結果' : '下一題';
@@ -701,9 +814,9 @@ function submitAnswer() {
     if (selectedBtn) {
       selectedBtn.disabled = true;
       selectedBtn.removeAttribute('data-selected');
-      selectedBtn.style.background = 'rgba(232,130,140,.16)';
-      selectedBtn.style.borderColor = '#E8828C';
-      selectedBtn.style.color = '#E8828C';
+      selectedBtn.style.background = '#FDE8E8';
+      selectedBtn.style.borderColor = '#E24B4A';
+      selectedBtn.style.color = '#8B2323';
     }
 
     const input = document.querySelector('.input-field');
@@ -844,9 +957,9 @@ function showReview() {
         log.wrongAttempts.map(escapeHtml).join('、') + '</div>';
     }
 
-    const expHtml = buildExplanationHtml(log.explanation);
-    if (expHtml) {
-      inner += '<div class="review-line">解析：' + expHtml + '</div>';
+    if (log.explanation) {
+      inner += '<div class="review-line">解析：' +
+        escapeHtml(String(log.explanation)) + '</div>';
     }
 
     card.innerHTML = inner;
@@ -854,17 +967,6 @@ function showReview() {
   });
 
   reviewContainer.classList.add('show');
-}
-
-function buildExplanationHtml(explanation) {
-  if (!explanation) return '';
-  const text = explanation.text || '';
-  const image = explanation.image || '';
-  if (!text && !image) return '';
-  let html = '';
-  if (text) html += '<span class="explanation">' + escapeHtml(text) + '</span>';
-  if (image) html += '<img class="explanation-image" src="' + escapeHtml(image) + '" alt="解析圖片">';
-  return html;
 }
 
 function escapeHtml(value) {
