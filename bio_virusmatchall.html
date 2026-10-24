@@ -172,9 +172,20 @@ const viruses = [
   { genome: 'dsDNA-RT', family: 'Hepadnavirus', en: 'Hepatitis B virus', zh: 'B 型肝炎病毒' }
 ];
 
-// Genome 照表格出現的順序；Family 照字母排（不洩漏它屬於哪個 genome）
+// 依首字母 A→Z 排，首字母相同的每次重新隨機排
+function sortByLetter(list, keyFn) {
+  const groups = new Map();
+  shuffle(list).forEach(item => {
+    const k = keyFn(item).charAt(0).toUpperCase();
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(item);
+  });
+  return [...groups.keys()].sort().flatMap(k => groups.get(k));
+}
+
+// Genome 照表格出現的順序；Family 依首字母排（同字母每次隨機，不洩漏它屬於哪個 genome）
 const genomes = [...new Set(viruses.map(v => v.genome))];
-const families = [...new Set(viruses.map(v => v.family))].sort((a, b) => a.localeCompare(b, 'en'));
+const families = sortByLetter([...new Set(viruses.map(v => v.family))], f => f);
 
 /* ============================================================
    小工具
@@ -209,7 +220,7 @@ function initGame() {
   document.getElementById('familyGrid').style.setProperty('--cols', FAMILY_COLUMNS);
 
   const vGrid = document.getElementById('virusGrid');
-  shuffle(viruses).forEach(v => {
+  sortByLetter(viruses, v => v.en || v.family).forEach(v => {
     const cell = document.createElement('button');
     cell.className = 'virus-cell';
     const en = document.createElement('span'); en.className = 'en'; setEn(en, v.en);
