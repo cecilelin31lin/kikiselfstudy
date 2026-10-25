@@ -829,9 +829,8 @@ function persistMarks(articleId) {
 function recordsOf(id, mode) { return state.records.filter(r => r.articleId === id && r.mode === mode).sort((x, y) => new Date(x.time) - new Date(y.time)); }
 function modeStatus(a, mode) {
   const recs = recordsOf(a.id, mode);
-  const done = recs.filter(r => r.status === 'completed');
-  const last = recs[recs.length - 1];
-  return { done: done.length > 0, lastDone: done[done.length - 1], incomplete: (!done.length && last && last.status === 'incomplete') ? last : null };
+  // 閱讀：完成才有紀錄；聽力：只要交過卷（有紀錄）就算完成，有沒有空格、對不對都不管（舊紀錄裡被記成 incomplete 的也算）
+  return { done: recs.length > 0, lastDone: recs[recs.length - 1] };
 }
 function isUnlocked(id) { return state.records.some(r => r.articleId === id); }   // 做過任一種測驗（閱讀完成或聽力交卷）才解鎖翻譯
 function articleState(a) {
@@ -892,9 +891,8 @@ function readingLine(st) {
   return ['閱讀：尚未作答', ''];
 }
 function listeningLine(st) {
-  if (st.l.done) { const r = st.l.lastDone; return ['聽力：✓ 答對 ' + r.correct + '｜答錯 ' + r.wrong + '｜' + fmtDate(r.time), 'ok']; }
+  if (st.l.done) { const r = st.l.lastDone; return ['聽力：✓ 答對 ' + r.correct + '｜答錯 ' + r.wrong + (r.empty ? '｜未答 ' + r.empty : '') + '｜' + fmtDate(r.time), 'ok']; }
   if (!st.blanks) return ['聽力：尚未標記空格', 'warn'];
-  if (st.l.incomplete) { const r = st.l.incomplete; return ['聽力：上次未寫完 ' + (r.total - r.empty) + '/' + r.total, 'warn']; }
   return ['聽力：尚未作答（' + st.blanks + ' 個空格）', ''];
 }
 function renderHome() {
@@ -1380,13 +1378,13 @@ function gradeListening() {
   $('lqPlay').disabled = true; $('lqPause').disabled = true; $('lqSubmit').disabled = true;
   $('lqState').textContent = '已交卷'; $('lqNote').textContent = '已交卷';
   const rec = {
-    time: new Date().toISOString(), articleId: lq.a.id, title: lq.a.title, mode: 'listening', status: empty ? 'incomplete' : 'completed',
+    time: new Date().toISOString(), articleId: lq.a.id, title: lq.a.title, mode: 'listening', status: 'completed',
     correct, wrong, empty, total: inputs.length, seconds, details
   };
   addRecord(rec);
   lq.result = { correct, wrong, empty, total: inputs.length, details };
   const snap = lq;
-  showResult(empty ? '已交卷（有 ' + empty + ' 格未作答）' : '聽力測驗完成',
+  showResult(empty ? '聽力測驗完成（有 ' + empty + ' 格未作答）' : '聽力測驗完成',
     [['答對', correct], ['答錯', wrong], ['未作答', empty], ['用時', fmt(seconds)]], () => showListeningReview(snap));
 }
 
