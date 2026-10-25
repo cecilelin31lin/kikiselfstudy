@@ -1566,6 +1566,14 @@ const words = [
 { word: 'tenuous', meaning: '細的、稀薄的、薄弱的', pos: 'adj.', sentences: [
   {en: 'His tenuous reasoning is not convincing at all.', zh: '他薄弱的推理一點也不令人信服。'}
 ], avoid: [], roots: ['tend, tent, tens'], usages: [] },
+{ word: 'abide', meaning: '遵守、忍受、居住（古／文）', pos: 'v.', sentences: [
+  {en: 'All members must abide by the club’s rules.', zh: '所有成員都必須遵守俱樂部的規定。'},
+  {en: 'I cannot abide rudeness in any form.', zh: '我無法忍受任何形式的無禮。'},
+  {en: 'A good citizen should always abide by the law (= observe the law = comply with the law).', zh: '好國民應始終守法。'}
+], avoid: [], roots: [], usages: [
+    'abide by the law = observe the law = comply with the law 遵守法律）',
+    'cannot abide 無法忍受',
+  ] },
 { word: 'attenuate', meaning: '稀釋、減弱；稀釋的、變弱的', pos: 'v., adj.', sentences: [
   {en: 'Earplugs will attenuate the loud sounds of the machinery.', zh: '耳塞會減弱機器的噪音。'}
 ], avoid: [], roots: ['tend, tent, tens'], usages: [] },
@@ -1623,6 +1631,15 @@ const words = [
 { word: 'primate', meaning: '靈長類動物', pos: 'n.', sentences: [
   {en: 'Monkeys, apes and humans are all primates.', zh: '猴子、猿類和人類都屬於靈長類動物。'}
 ], avoid: [], roots: ['prim, prem'] },
+{ word: 'rehearse', meaning: '排練、預演；背誦；詳述', pos: 'v.', sentences: [
+  {en: 'The actors were rehearsing the final scene of the play.', zh: '演員們正在排練這齣戲的最後一幕。'},
+  {en: 'She rehearsed her speech several times before the presentation.', zh: '她在演講前把講稿練習了好幾遍。'}
+], avoid: [], roots: [], usages: [
+    'rehearse a play / a concert / a speech 排練戲劇／音樂會／演講',
+    'rehearse for something 為某事進行排練',
+    'in rehearsal 在排練中',
+    '同義詞：drill, run through（練習、預演）'
+  ] },
 ];
 const ROOTS={
   'act, ag, ig': '做、行動',
@@ -1860,6 +1877,7 @@ const CLOUD_URL='https://script.google.com/macros/s/AKfycbxmKpFPVgZauhFDiAW-NlCG
 const QUOTES=[
   '每天進步一點點，也是在往前走。',
   'How we spend our days is, of course, how we spend our lives.',
+  'The more it matters, the more you should rehearse.',
   '多認識一個單字，就多一個拿分的機會。',
   '不用一次記住全部，今天記住一些就很好。',
   '你現在背的，可能就是考場上救你的一題。',
