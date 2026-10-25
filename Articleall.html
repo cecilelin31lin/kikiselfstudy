@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>閱讀聽力練習</title>
+<style>
+/* ===== 美編：整層沿用 Vocall 的「VOC 美編升級」（變數、背景、標題、卡片、按鈕、選項、彈窗、手機版） ===== */
+:root{
+  --theme-main:#B0C4DE; --theme-hover:#9AB3D0; --theme-soft:rgba(176,196,222,.22); --theme-selected:rgba(176,196,222,.30); --theme-rgb:176,196,222;
+  --ok:#468189; --bad:#E8828C;
+  --ink:#2B3A55; --muted:#748096; --paper:rgba(255,255,255,.94); --line:rgba(43,58,85,.10);
+  --shadow:0 12px 34px rgba(43,58,85,.08); --shadow-soft:0 5px 18px rgba(43,58,85,.06);
+  --serif:Georgia,'Times New Roman',serif;
+}
+*{box-sizing:border-box}
+html,body{overscroll-behavior:none}
+html{scroll-behavior:smooth}
+body{
+  margin:0; padding:34px 16px 72px; color:var(--ink); min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC','Noto Sans TC','Helvetica Neue',Arial,sans-serif;
+  background:
+    radial-gradient(circle at 12% 0%,var(--theme-soft) 0,transparent 28%),
+    radial-gradient(circle at 92% 12%,rgba(255,255,255,.92) 0,transparent 25%),
+    #f5f6f8;
+  background-attachment:fixed;
+}
+.wrap{max-width:1180px;margin:0 auto}
+.narrow{max-width:760px;margin-left:auto;margin-right:auto}
+.hidden{display:none !important}
+h1{
+  position:relative; max-width:760px; margin:0 auto 10px; text-align:center;
+  font-family:'HanziPen TC','Xingkai TC','Klee','Bradley Hand','Segoe Print',cursive;
+  font-size:31px; font-weight:700; letter-spacing:.06em; text-shadow:0 1px 0 rgba(255,255,255,.8);
+}
+h1::after{content:"";display:block;width:100%;height:3px;margin:11px auto 0;border-radius:999px;background:var(--theme-main);opacity:.8}
+.cloud-status{text-align:center;font-size:12px;color:var(--muted);margin:10px 0 20px;min-height:16px;letter-spacing:.03em}
+.cloud-status.ok{color:var(--ok)}
+.cloud-status.fail{color:var(--bad)}
+
+/* ---------- 按鈕 ---------- */
+button{font-family:inherit}
+.btn{border:none;border-radius:11px;padding:10px 20px;font-size:14px;font-weight:700;letter-spacing:.035em;cursor:pointer;min-width:110px;
+  transition:transform .14s ease,box-shadow .14s ease,background .14s ease,border-color .14s ease,opacity .14s ease}
+.btn.primary{background:var(--theme-main);color:var(--ink);box-shadow:0 5px 14px var(--theme-soft)}
+.btn.primary:hover{background:var(--theme-hover);transform:translateY(-1px);box-shadow:0 7px 18px var(--theme-soft)}
+.btn.primary:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;background:var(--theme-main)}
+.btn.secondary{background:rgba(255,255,255,.88);color:var(--ink);border:1px solid var(--theme-main);min-width:0;padding:8px 14px;font-weight:500;letter-spacing:.02em}
+.btn.secondary:hover{background:var(--theme-soft)}
+.btn.secondary:disabled{opacity:.45;cursor:not-allowed}
+.btn:active{transform:translateY(1px)}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.topbar h2{margin:0;font-size:20px;letter-spacing:.04em}
+
+/* ---------- 卡片（Vocall 的圓角、柔陰影） ---------- */
+.card,.q-card,.article-pane,.listen-panel,.listen-article,.av-card,.reader-bar,.mark-bar,.rv-card,.stat-card{
+  border:1px solid var(--line); box-shadow:var(--shadow-soft); background:var(--paper);
+}
+.card{border-radius:20px;padding:22px;box-shadow:var(--shadow);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.q-card,.article-pane,.listen-article,.av-card{border-radius:18px}
+.listen-panel,.reader-bar,.mark-bar{border-radius:15px;padding:11px 14px}
+
+/* ---------- 主頁 ---------- */
+.home-card{padding:24px 22px}
+.home-section + .home-section{margin-top:22px;padding-top:20px;border-top:1px solid #eee}
+.area-title{display:flex;align-items:center;justify-content:center;gap:9px;font-size:18px;letter-spacing:.06em;margin:0 0 14px}
+.area-title::before{content:"";width:5px;height:19px;border-radius:999px;background:var(--theme-main);box-shadow:0 0 0 4px var(--theme-soft)}
+.area-title span{font-size:13px;color:var(--muted);font-weight:400;letter-spacing:.03em}
+.card-grid{display:flex;flex-direction:column;gap:10px}
+.article-card{
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 18px; align-items:center; width:100%; text-align:left; cursor:pointer; color:var(--ink);
+  background:rgba(255,255,255,.68); border:1px solid rgba(43,58,85,.10); border-radius:14px; padding:13px 16px;
+  transition:transform .16s ease,border-color .16s ease,background .16s ease,box-shadow .16s ease;
+}
+.article-card:hover{transform:translateY(-1px);border-color:var(--theme-main);box-shadow:0 5px 14px rgba(43,58,85,.06);background:linear-gradient(145deg,#fff,var(--theme-soft))}
+.ac-title{font-family:var(--serif);font-size:16px;font-weight:700;line-height:1.45;letter-spacing:.01em}
+.ac-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.ac-status{text-align:right;font-size:12px;line-height:1.75}
+.ac-line{color:#777}
+.ac-line.ok{color:var(--ok)}
+.ac-line.warn{color:#b9707a}
+.empty-hint{font-size:13px;color:#b5bcc8;padding:4px 2px;text-align:center}
+.banner{border-radius:12px;padding:10px 14px;margin:0 auto 14px;font-size:13px;line-height:1.7}
+.banner.err{background:rgba(232,130,140,.16);border:1px solid var(--bad);color:#a24450}
+.banner.warn{background:rgba(255,255,255,.7);border:1px solid var(--line);color:#777}
+
+/* ---------- 彈窗 ---------- */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.overlay.show{display:flex}
+.menu-modal,.modal{background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.7);border-radius:22px;box-shadow:0 24px 70px rgba(43,58,85,.20);width:100%;text-align:center;max-height:88vh;overflow-y:auto}
+.menu-modal{padding:26px 24px 20px;max-width:420px}
+.modal{padding:26px;max-width:420px}
+.menu-title{font-family:var(--serif);font-size:18px;font-weight:700;line-height:1.45;margin-bottom:18px}
+.menu-item{margin-bottom:12px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.menu-item .btn{width:100%;max-width:340px;padding:12px 16px;font-size:15px}
+.menu-note{font-size:12px;color:var(--muted);line-height:1.5}
+.menu-note.ok{color:var(--ok)}
+.menu-note.warn{color:#b9707a}
+.modal-title{font-size:22px;font-weight:700;letter-spacing:.04em;margin-bottom:16px}
+.res-row{display:flex;justify-content:space-between;border:1px solid var(--line);border-radius:13px;background:#fafbfc;padding:11px 14px;margin-bottom:9px;font-size:14px}
+.res-row strong{font-size:15px}
+
+/* ---------- 統計 ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat-card{border-radius:15px;padding:13px;background:rgba(255,255,255,.80);text-align:center}
+.stat-label{font-size:12px;color:var(--muted);letter-spacing:.06em;margin-bottom:2px}
+.stat-value{font-size:20px;font-weight:600}
+
+/* ---------- 閱讀測驗 ---------- */
+.reading-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px;align-items:start}
+.article-pane{position:sticky;top:12px;display:flex;flex-direction:column;max-height:calc(100vh - 24px);background:rgba(255,255,255,.92)}
+.article-pane-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:14px;letter-spacing:.06em}
+.article-scroll{overflow:auto;padding:14px 18px;flex:1;min-height:0}
+.sec{margin-bottom:18px}
+.sec-head{font-family:var(--serif);font-weight:700;font-size:15px;margin-bottom:4px;line-height:1.5}
+.sec-label{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC',sans-serif;color:var(--ok);margin-right:7px;font-size:13px}
+.sec-body{font-family:var(--serif);font-size:16px;line-height:1.8;margin:0}
+.sec-zh{font-size:14px;line-height:1.8;color:#657086;margin:6px 0 0}
+.hl-bar{border-top:1px solid var(--line);padding:9px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hl-tip{font-size:12px;color:var(--muted)}
+mark.hl{background:rgba(255,225,53,.6);color:inherit;border-radius:2px;cursor:pointer}
+mark.ev{background:rgba(255,225,53,.4);color:inherit;border-radius:2px;padding:0 1px}
+.q-card{padding:22px;background:rgba(255,255,255,.92)}
+.q-progress{font-size:13px;color:var(--muted);letter-spacing:.04em;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.q-text{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:.015em;line-height:1.55;margin-bottom:16px}
+.option-btn{display:block;width:100%;padding:13px 15px;margin-bottom:10px;border:1px solid rgba(43,58,85,.10);border-radius:13px;background:#fff;cursor:pointer;text-align:left;
+  font-family:var(--serif);font-size:15px;line-height:1.5;color:var(--ink);box-shadow:0 2px 8px rgba(43,58,85,.035);
+  transition:transform .14s ease,box-shadow .14s ease,background .14s ease,border-color .14s ease}
+.option-btn:hover{border-color:var(--theme-main);transform:translateY(-1px)}
+.option-btn[data-selected="true"]{background:var(--theme-selected);border-color:var(--theme-main);box-shadow:0 0 0 2px var(--theme-soft)}
+.option-btn.correct{background:rgba(70,129,137,.14);border-color:var(--ok)}
+.option-btn.incorrect{background:rgba(232,130,140,.16);border-color:var(--bad)}
+.option-btn:disabled{cursor:default;transform:none}
+.choice-line{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
+.choice-text{flex:1;min-width:0}
+.choice-mark{flex:0 0 3.9em;text-align:right;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC',sans-serif;font-size:12px;font-weight:700;white-space:nowrap}   /* 永遠預留標記的位置，答對／答錯時選項不會多換一行 */
+.choice-mark.ok{color:var(--ok)}
+.choice-mark.bad{color:var(--bad)}
+.q-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;letter-spacing:.02em}
+
+/* ---------- 聽力測驗 ---------- */
+.listen-panel{margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.listen-panel label,.reader-bar label{font-size:13px;color:var(--muted)}
+select,.listen-panel select,.reader-bar select{padding:7px 10px;border:1px solid rgba(43,58,85,.14);border-radius:11px;font-size:14px;background:rgba(255,255,255,.92);color:var(--ink);max-width:230px;box-shadow:inset 0 1px 2px rgba(43,58,85,.03)}
+select:focus{outline:none;border-color:var(--theme-main);box-shadow:0 0 0 3px var(--theme-soft)}
+.listen-status{font-size:13px;color:var(--muted);margin-left:auto}
+.listen-article{padding:20px 24px}
+.listen-article .sec-body,.listen-article .sec-head{line-height:2.25}
+input.blank{width:8em;font:inherit;font-size:15px;text-align:center;padding:2px 6px;border:none;border-bottom:2px solid var(--theme-main);background:rgba(var(--theme-rgb),.22);border-radius:6px 6px 0 0;color:var(--ink);outline:none}
+input.blank:focus{background:rgba(var(--theme-rgb),.45);box-shadow:0 0 0 3px var(--theme-soft)}
+input.blank:read-only{background:rgba(var(--theme-rgb),.12)}
+input.blank.correct{background:rgba(70,129,137,.14);border-color:var(--ok);color:var(--ok)}
+input.blank.wrong{background:rgba(232,130,140,.16);border-color:var(--bad);color:var(--bad)}
+input.blank.empty{background:#f3f3f3;border-color:#bbb}
+.blank-ans{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC',sans-serif;font-size:12px;font-weight:700;color:var(--ok);margin:0 4px;white-space:nowrap}
+.blank-ans.empty{color:#999}
+.chip{display:inline-block;padding:1px 9px;border-radius:8px;font-size:15px;line-height:1.8;margin:0 1px}
+.chip.ok{background:rgba(70,129,137,.14);color:var(--ok);border:1px solid var(--ok)}
+.chip.bad{background:rgba(232,130,140,.16);color:#c25a66;border:1px solid var(--bad)}
+.chip.empty{background:#f3f3f3;color:#777;border:1px dashed #aaa}
+.chip s{opacity:.75;margin-right:2px}
+
+/* ---------- 文章瀏覽 / 朗讀 ---------- */
+.reader-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.reader-status{font-size:12px;color:var(--muted);margin-left:auto}
+.tabs{display:inline-flex;background:rgba(255,255,255,.88);border:1px solid var(--theme-main);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.tabs button{border:none;background:transparent;padding:9px 20px;font-size:14px;cursor:pointer;color:var(--ink);letter-spacing:.03em}
+.tabs button.active{background:var(--theme-selected);font-weight:700}
+.mark-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.mark-bar .count{font-size:13px;color:var(--muted)}
+.av-card{padding:18px 22px}
+.sec-play{border:1px solid var(--theme-main);background:rgba(255,255,255,.88);border-radius:999px;font-size:12px;padding:1px 10px;cursor:pointer;margin-left:8px;color:var(--ink)}
+.sec-play:hover{background:var(--theme-soft)}
+.sec-play:disabled{opacity:.4;cursor:not-allowed}
+.w{border-radius:3px}
+.w.m{background:rgba(var(--theme-rgb),.55);border-bottom:2px solid var(--theme-main)}
+.marking .w{cursor:pointer}
+.marking .w:hover{background:rgba(255,225,53,.45)}
+.locked-box{background:rgba(255,255,255,.7);border:1px dashed #bbb;border-radius:16px;padding:30px 16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.7;white-space:pre-line}
+
+/* ---------- 解析 ---------- */
+.rv-title{font-family:var(--serif);font-size:16px;font-weight:700;margin:22px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--theme-main)}
+.rv-card{border-radius:15px;padding:14px 16px;margin-bottom:10px;font-size:14px;line-height:1.7;background:rgba(255,255,255,.90)}
+.rv-card.first-ok{border-left:4px solid var(--ok)}
+.rv-card.had-wrong{border-left:4px solid var(--bad)}
+.rv-q{font-family:var(--serif);font-size:15px;font-weight:700;margin-bottom:8px}
+.rv-opt{font-family:var(--serif);padding:2px 0}
+.rv-opt.ok{color:var(--ok);font-weight:700}
+.rv-opt.bad{color:#c25a66}
+.rv-line{margin-top:6px}
+.rv-expl{margin-top:9px;padding:10px 12px;background:#f7f8fa;border-radius:11px;white-space:pre-wrap;font-size:13px;color:#5f6b80}
+.rv-ev{margin-top:9px;font-family:var(--serif);font-size:13.5px;color:#657086;border-left:3px solid rgba(255,225,53,.9);padding-left:9px}
+
+section:not(.hidden){animation:vocFade .22s ease}
+@keyframes vocFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+@media (min-width: 901px) {
+  /* 閱讀測驗：隱藏上方大標題，文章區與題目區各自獨立捲動、頁面本身不捲 */
+  body.rq-mode{padding-top:18px;padding-bottom:18px}
+  body.rq-mode h1, body.rq-mode .cloud-status{display:none}
+  #readingQuiz{display:flex;flex-direction:column;height:calc(100vh - 44px);min-height:480px}
+  #readingQuiz .reading-layout{flex:1;min-height:0;align-items:stretch}
+  #readingQuiz .article-pane{position:static;max-height:none;height:100%;min-height:0}
+  #readingQuiz .q-col{height:100%;display:flex;flex-direction:column;overflow:hidden}
+  #readingQuiz .q-col .q-card{flex:1;min-height:0;overflow:auto}
+  #readingQuiz .q-col .btn-row,#readingQuiz .q-col .q-hint{flex:none}
+}
+@media (max-width: 900px) {
+  .reading-layout{grid-template-columns:1fr}
+  .article-pane{position:static;max-height:50vh}
+  .listen-article{padding:15px 15px}
+}
+@media (max-width: 560px) {
+  body{padding:24px 12px 56px}
+  h1{font-size:27px}
+  .card{padding:17px;border-radius:17px}
+  .home-card{padding:18px 14px}
+  .article-card{grid-template-columns:1fr}
+  .ac-status{text-align:left}
+  .q-card{padding:18px 15px}
+  .q-text{font-size:17px}
+  .stat-value{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>閱讀聽力練習</h1>
+  <div class="cloud-status" id="cloudStatus"></div>
+
+  <!-- ================= 主頁 ================= -->
+  <section id="home" class="narrow">
+    <div id="loadMsgs"></div>
+    <div class="card home-card">
+      <div class="home-section"><h2 class="area-title" id="nsTitle">Not Started</h2><div class="card-grid" id="nsGrid"></div></div>
+      <div class="home-section"><h2 class="area-title" id="ipTitle">In Progress</h2><div class="card-grid" id="ipGrid"></div></div>
+      <div class="home-section"><h2 class="area-title" id="cpTitle">Completed</h2><div class="card-grid" id="cpGrid"></div></div>
+    </div>
+  </section>
+
+  <!-- ================= 文章瀏覽 ================= -->
+  <section id="articleView" class="hidden narrow">
+    <div class="topbar"><h2 id="avTitle"></h2><button class="btn secondary" onclick="goHome()">回主頁</button></div>
+    <div class="reader-bar" id="avReader"></div>
+    <div class="tabs" id="avTabs">
+      <button data-tab="en" class="active">英文</button>
+      <button data-tab="zh">中文</button>
+      <button data-tab="both">對照</button>
+    </div>
+    <div class="mark-bar" id="avMarkBar">
+      <button class="btn secondary" id="avMarkToggle">標記聽力空格：關</button>
+      <span class="count" id="avMarkCount"></span>
+      <button class="btn secondary" id="avMarkClear">全部清除</button>
+      <span class="count" id="avMarkTip">開啟後，點文章裡的字就標成空格，再點取消</span>
+    </div>
+    <div class="av-card" id="avBody"></div>
+  </section>
+
+  <!-- ================= 閱讀測驗 ================= -->
+  <section id="readingQuiz" class="hidden">
+    <div class="topbar"><h2 id="rqTitle" style="font-size:16px"></h2><button class="btn secondary" onclick="leaveQuiz()">回主頁</button></div>
+    <div class="stats">
+      <div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="rqProg">1/1</div></div>
+      <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="rqTimer">0:00</div></div>
+      <div class="stat-card"><div class="stat-label">✓ 第一次答對</div><div class="stat-value" id="rqCorrect">0</div></div>
+    </div>
+    <div class="reading-layout">
+      <div class="article-pane" id="rqPane">
+        <div class="article-pane-head"><span>文章</span><button class="btn secondary" id="rqCollapse">收合文章</button></div>
+        <div class="article-scroll" id="rqArticle"></div>
+        <div class="hl-bar" id="hlBar">
+          <button class="btn secondary" id="hlBtn" disabled>🖍 標示選取文字</button>
+          <span class="hl-tip">選取文字後按「標示」；點已標示的字可取消</span>
+        </div>
+      </div>
+      <div class="q-col">
+        <div class="q-card">
+          <div class="q-progress" id="rqProgress"></div>
+          <div class="q-text" id="rqText"></div>
+          <div id="rqOptions"></div>
+        </div>
+        <div class="btn-row"><button class="btn primary" id="rqSubmit">確認答案</button></div>
+        <div class="q-hint">數字鍵 1～4 選選項，Enter 確認／下一題</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 聽力測驗 ================= -->
+  <section id="listeningQuiz" class="hidden narrow">
+    <div class="topbar"><h2 id="lqTitle" style="font-size:16px"></h2><button class="btn secondary" onclick="leaveQuiz()">回主頁</button></div>
+    <div class="stats">
+      <div class="stat-card"><div class="stat-label">已填</div><div class="stat-value" id="lqFilled">0/0</div></div>
+      <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="lqTimer">0:00</div></div>
+      <div class="stat-card"><div class="stat-label">播放</div><div class="stat-value" id="lqState" style="font-size:14px">尚未開始</div></div>
+    </div>
+    <div class="listen-panel" id="lqPanel">
+      <label for="lqVoice">聲音</label>
+      <select id="lqVoice"></select>
+      <label for="lqRate">語速</label>
+      <select id="lqRate"></select>
+      <button class="btn primary" id="lqPlay">▶ 開始播放</button>
+      <button class="btn secondary" id="lqPause" disabled>⏸ 暫停</button>
+      <span class="listen-status" id="lqNote">只播放一次，不能重播</span>
+    </div>
+    <div class="listen-article" id="lqArticle"></div>
+    <div class="btn-row"><button class="btn primary" id="lqSubmit" disabled>交卷</button></div>
+    <div class="q-hint">Enter 跳到下一格（不會交卷），聽不出來就先空著</div>
+  </section>
+
+  <!-- ================= 解析 ================= -->
+  <section id="review" class="hidden narrow">
+    <div class="topbar"><h2>📋 查看解析</h2><button class="btn secondary" onclick="goHome()">回主頁</button></div>
+    <div id="rvReader" class="reader-bar"></div>
+    <div id="rvBody"></div>
+  </section>
+
+  <!-- ================= 文章選單彈窗 ================= -->
+  <div class="overlay" id="menuOverlay">
+    <div class="menu-modal">
+      <div class="menu-title" id="menuTitle"></div>
+      <div class="menu-item"><button class="btn primary" id="menuBrowse">文章瀏覽</button><div class="menu-note" id="menuBrowseNote"></div></div>
+      <div class="menu-item"><button class="btn primary" id="menuReading">閱讀測驗</button><div class="menu-note" id="menuReadingNote"></div></div>
+      <div class="menu-item"><button class="btn primary" id="menuListening">聽力測驗</button><div class="menu-note" id="menuListeningNote"></div></div>
+      <button class="btn secondary" id="menuClose">關閉</button>
+    </div>
+  </div>
+
+  <!-- ================= 結算彈窗 ================= -->
+  <div class="overlay" id="resultOverlay">
+    <div class="modal">
+      <div class="modal-title" id="resTitle"></div>
+      <div id="resBody"></div>
+      <div class="btn-row">
+        <button class="btn primary" id="resReview">查看解析</button>
+        <button class="btn secondary" id="resHome">回主頁</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ① 設定區：你最常改的東西都在這裡
+     ============================================================ -->
+<script>
+const CLOUD_URL = 'https://script.google.com/macros/s/AKfycbwc3At1ALtNcZTtSbq5HLtkCei0R18yS-6Ae6qhVNB00R9NFpEMxA3DsbZyslpFr7areA/exec';                  // Google Apps Script 部署後的網址，貼在引號裡（空白＝紀錄只存在這台瀏覽器）
+const DEFAULT_RATE = 0.85;             // 朗讀預設語速（1 = 正常）
+const RATE_OPTIONS = [0.7, 0.85, 1.0]; // 語速下拉選單裡的選項
+
+// 主題色（每次打開、每次回主頁隨機換一個；main 主色、hover 滑過色、rgb 淡底色用）
+const THEMES = [
+  { main: '#B0C4DE', hover: '#9AB3D0', rgb: '176,196,222' },
+  { main: '#A9C6D9', hover: '#8FB2C9', rgb: '169,198,217' },
+  { main: '#9FBAD0', hover: '#86A7C1', rgb: '159,186,208' },
+  { main: '#AFCBE3', hover: '#94B6D3', rgb: '175,203,227' },
+  { main: '#8FAFC8', hover: '#769BB8', rgb: '143,175,200' },
+  { main: '#C7B8EA', hover: '#B4A2DE', rgb: '199,184,234' },
+  { main: '#D2B7E5', hover: '#C09FD8', rgb: '210,183,229' },
+  { main: '#E3B8D8', hover: '#D39BC6', rgb: '227,184,216' },
+  { main: '#E9B9C8', hover: '#DD9FB3', rgb: '233,185,200' },
+  { main: '#F0C2B8', hover: '#E3A99D', rgb: '240,194,184' },
+  { main: '#E8C7A7', hover: '#D9B48C', rgb: '232,199,167' },
+  { main: '#E6D89C', hover: '#D6C47F', rgb: '230,216,156' },
+  { main: '#D8D6A8', hover: '#C5C381', rgb: '216,214,168' },
+  { main: '#C4D6A4', hover: '#ADC588', rgb: '196,214,164' },
+  { main: '#A8D5BA', hover: '#8FC5A5', rgb: '168,213,186' },
+  { main: '#A9D8CF', hover: '#8FC8BC', rgb: '169,216,207' },
+  { main: '#A7D5DB', hover: '#8AC3CB', rgb: '167,213,219' },
+  { main: '#B8DCE8', hover: '#9BC9DB', rgb: '184,220,232' },
+  { main: '#C6D8F0', hover: '#A9C1E2', rgb: '198,216,240' },
+  { main: '#D0D1ED', hover: '#B8BAE2', rgb: '208,209,237' },
+  { main: '#D8C9E8', hover: '#C5B1DB', rgb: '216,201,232' },
+  { main: '#E7C9D7', hover: '#D8B0C4', rgb: '231,201,215' },
+  { main: '#EBCDC0', hover: '#DDB3A4', rgb: '235,205,192' },
+  { main: '#EAD5B5', hover: '#DCC197', rgb: '234,213,181' },
+  { main: '#D9E0B5', hover: '#C5CF94', rgb: '217,224,181' },
+  { main: '#BFDDB8', hover: '#A5CC9D', rgb: '191,221,184' },
+  { main: '#B6D8C9', hover: '#9BC7B5', rgb: '182,216,201' },
+  { main: '#B9D4D8', hover: '#9FC2C8', rgb: '185,212,216' },
+  { main: '#C8D1E3', hover: '#AFBDD5', rgb: '200,209,227' },
+  { main: '#D7CBE2', hover: '#C3B4D5', rgb: '215,203,226' },
+  { main: '#F2C6C2', hover: '#E5AAA5', rgb: '242,198,194' },
+  { main: '#F0D0A8', hover: '#E2B985', rgb: '240,208,168' },
+  { main: '#E5D5A3', hover: '#D4C080', rgb: '229,213,163' },
+  { main: '#CFE0A6', hover: '#B8CF82', rgb: '207,224,166' },
+  { main: '#A6DCC8', hover: '#88CBB2', rgb: '166,220,200' },
+  { main: '#A5D9E2', hover: '#86C5D1', rgb: '165,217,226' },
+  { main: '#AFC8E8', hover: '#91B1D9', rgb: '175,200,232' },
+  { main: '#BDBCE8', hover: '#A3A1D9', rgb: '189,188,232' },
+  { main: '#D1B9E6', hover: '#BE9ED8', rgb: '209,185,230' },
+  { main: '#E7B9CF', hover: '#D79DBA', rgb: '231,185,207' }
+];
+</script>
+
+<!-- ============================================================
+     ② 文章資料區：新增文章就在這裡貼
+     一篇文章 = 一個 { … }，貼在最後一篇後面（上一篇結尾要有逗號）
+     四個 ★ 區塊直接整塊貼 AI 整理的文字，不用自己切段、轉格式
+     ============================================================ -->
+<script>
+const ARTICLES_RAW = [
+{
+  id: 'speak-well',
+  title: 'How to Speak Well When All Eyes Are on You',
+
+  en: `
+**Introduction**
+Whether you are on a stage before five hundred people or in a discussion with five, a moment will come when all eyes are on you. Learn to shine in those few minutes, so your ideas are heard and your abilities recognized. Speaking well can open up new opportunities.
+
+**01. The More It Matters, the More You Should Rehearse**
+A routine team update and a pitch that could shape your business call for different levels of preparation. You do not need a professional speaker’s rehearsal schedule for every meeting. Give more practice time to presentations with greater consequences.
+
+**02. Rehearse Out Loud**
+Read your script aloud from beginning to end. Use the energy, volume, and pace you intend to bring to the room. Silent reading does not practice your delivery. Pay attention to movement, too: pacing throughout rehearsal can become a habit during the presentation.
+
+**03. Try to Recall Before Checking**
+Keep your script nearby, but try speaking without looking at it. When you lose your place, pause, take a deep breath, and try to remember what comes next. During rehearsal, give yourself at least ten seconds before checking your notes. The effort to recall is part of the practice.
+
+**04. Practice Pausing When You Lose Your Place**
+Rehearsal is also a chance to practice how you respond when something goes wrong. If you repeatedly meet a blank moment with a calm pause, you are practicing an alternative to panic. The aim is to become more comfortable recovering, rather than expecting never to forget.
+
+**05. Focus on What Listeners Can Gain**
+Before speaking, shift your attention from how you might be judged to what listeners could gain. What can you help them understand or do? Focusing on their needs gives you something useful to work toward, instead of staying caught in thoughts about your own performance.
+
+**06. Give Nervous Feelings Another Meaning**
+Nervousness and excitement can share sensations such as a racing heart and sweaty palms. Try describing what you feel as excitement about the opportunity. This does not require the sensations to disappear; it offers another way to interpret them before you begin.
+
+**07. Begin with Connection**
+Before moving into dense information, help listeners get to know you. A brief personal story relevant to the topic can make the opening feel more human. Its purpose is to build a connection that makes the ideas easier to share, rather than simply adding more content.
+
+**08. Help People Understand Your Motivation**
+In an interview, a short account of what led you to apply can say more than a list of positive traits. Connect a relevant experience with your reason for wanting the role. That gives the interviewer a clearer sense of who you are and why you are there.
+
+**09. Make It Useful, Engaging, and Encouraging**
+A good presentation gives people something practical to learn, inspires them to act, and keeps them engaged. As you prepare, check that you have included all three: useful ideas, encouragement, and moments that make listening enjoyable.
+
+**10. Bring Your Own Strengths**
+Alongside these three elements, bring in the ways of speaking you do best. These might include storytelling, interaction, humor, or how you use your voice. Weave these strengths into your presentation so listeners get a sense of your personal style.
+
+**11. Review What Actually Happened**
+Feeling brilliant or terrible afterward does not tell you exactly how a presentation went. Where recording is appropriate and permitted, record yourself and watch the whole talk. If audience reactions are visible, notice when attention shifts and what you were doing at those moments.
+
+**12. Start Before an Opportunity Arrives**
+You do not need a formal speaking invitation to begin recording and reviewing. Use your phone to rehearse a talk and watch it back. Creating opportunities to practice gives you material to learn from now, instead of postponing improvement until someone offers you a stage.
+`,
+  zh: `
+**引言**
+無論你是站在五百人的舞台上，還是在五個人的討論中，總有一刻，你會成為全場焦點。學會在那幾分鐘裡發光，讓你的想法被聽見，讓你的能力被看見。一次好的表達，也可能為你打開新的機會。
+
+**01. 越重要的發言，越要提前練習**
+例行工作彙報和可能影響業務走向的提案，需要的準備程度不同。不是每次會議都要按職業演講的強度排練，但越重要的發言，越值得提前投入時間。先判斷這次發言的重要性，再安排練習。
+
+**02. 出聲練，才能練到表達**
+把講稿從頭到尾讀出聲，用正式發言時的精神狀態、音量和語速來練習。默讀熟悉的是文字，出聲才能練到表達。同時留意身體動作：排練時一直來回踱步，也可能把這個習慣帶到現場。
+
+**03. 先試著回憶，再看講稿**
+把講稿放在身邊，試著不看稿講下去。卡住時，先停下來，深呼吸，努力回想下一步要說什麼。排練時，至少給自己十秒，再決定是否查看提示。主動回憶的過程，本身就是練習的一部分。
+
+**04. 練習停頓，也是在練習應對**
+排練也要練習出錯之後怎麼辦。每次忘詞都先平靜地停一下，就是在練習一種不同於慌亂的反應。這樣做，是為了讓自己更從容地接著講下去，而不是要求自己永遠不忘詞。
+
+**05. 想想他們能帶走什麼**
+開口前，把注意力從「別人會怎麼看我」轉向「聽眾能從中得到什麼」。你能幫助他們理解什麼，或者學會做什麼？ 把心思放在聽眾的需要上，能讓你有更明確的表達目標，少一些對自身表現的反覆擔憂。
+
+**06. 心跳加快，不必只理解成害怕**
+緊張和興奮都可能伴隨心跳加快、手心出汗。試著把這些感受理解為「我對這次機會感到興奮」。你不必等身體完全平靜下來才開口，也可以先換一種方式理解當下的感受。
+
+**07. 開場先建立連接**
+在進入密集的信息之前，先讓聽眾對你有所了解。一段與主題有關的簡短個人經歷，可以讓開場更有親近感。它的作用是建立連接，讓接下來的觀點更容易傳達，而不只是給發言增加一段內容。
+
+**08. 自我介紹，要讓人理解你的選擇**
+面試中的自我介紹，可以用一段與求職動機有關的簡短經歷，替代一串自我評價。把相關經歷與你申請這份工作的原因連起來，讓對方更具體地理解你是怎樣的人，以及你為什麼來到這裡。
+
+**09. 內容要有用，也要讓人投入**
+好的表達，既要讓人學到實用的方法，也要讓人獲得行動的動力，還要讓人願意聽下去。準備發言時，可以檢查自己是否兼顧了這三點：內容有用，能給人鼓勵，聽起來也有趣。
+
+**10. 留下屬於你的表達方式**
+除了兼顧這三點，也可以融入自己擅長的表達方式。它可以是講故事、互動、幽默，也可以是聲音的運用。把這些特點融入內容，讓聽眾感受到你的個人風格。
+
+**11. 用錄像，把感受變成觀察**
+講完後覺得自己很出色，或者糟糕透了，都不足以準確判斷表現。在適合且允許錄製的情況下，錄下發言並完整回看。如果能看到聽眾反應，就留意他們何時投入、何時分心，以及你當時正在怎樣表達。
+
+**12. 不必等到有舞台才開始**
+開始錄製和複盤，不必等到正式的演講邀請。用手機錄下一次練習，再回看自己的表現，就已經有了可以改進的材料。主動創造練習機會，讓進步從現在開始，而不是等別人給你一個舞台。
+`,
+  questions: `
+**1. According to Section 04, what is the primary objective of managing memory lapses during a presentation?**
+(A) To eradicate any possibility of memory loss during high-stakes presentations.
+(B) To cultivate psychological resilience and adaptive behavioral responses under pressure.
+(C) To train speaker's memorization techniques by suppressing natural anxiety responses.
+(D) To ensure that notes are consulted within a strict ten-second timeframe when a slip occurs.
+
+**2. Based on Section 06, which of the following best describes the author’s perspective on physiological arousal prior to speaking?**
+(A) Physiological symptoms like tachycardia and palmar hyperhidrosis should be eliminated before taking the stage.
+(B) Autonomic nervous system responses are strictly indicative of speech anxiety and public performance phobia.
+(C) Physiological manifestations of stress can be cognitive-reappraised as positive affective states without suppressing the symptoms.
+(D) Reinterpreting physiological signs as excitement requires total emotional suppression to reduce autonomic reactivity.
+
+**3. What can be inferred from Section 07 and Section 08 regarding effective communication strategies?**
+(A) Presenting dense, data-heavy content early establishes authority better than narrative devices.
+(B) Self-evaluative trait descriptors in interviews are more persuasively informative than anecdotal narratives.
+(C) Relatable personal narratives serve an instrumental function in facilitating audience receptivity and contextualizing intent.
+(D) Anecdotes should be included primarily to pad presentation duration rather than to convey core concepts.
+
+**4. According to Section 11, why does the author suggest recording and reviewing one's presentation?**
+(A) Internal emotional states after a talk fail to serve as a reliable indicator of actual performance.
+(B) Audiences generally refrain from giving honest verbal feedback during live interactions.
+(C) Reviewing recorded footage helps speakers memorize their scripts for future speaking engagements.
+(D) External visual recordings are the only legally permissible method to evaluate public speeches.
+
+**5. Which underlying principle synthesizes the recommendations presented in Section 01, Section 03, and Section 12?**
+(A) Professional presentation skills require public validation before deliberate practice can begin.
+(B) Proactive, effortful practice strategies should be dynamically tailored and initiated independent of external demands.
+(C) Equal amounts of preparation time must be allocated to all public speaking engagements regardless of importance.
+(D) Passive review of written scripts is superior to active retrieval practice during presentation preparation.
+`,
+  answers: `
+**1. 答案：(B)**
+
+* **解析**：第四段提到「The aim is to become more comfortable recovering, rather than expecting never to forget（目標是變得更擅長修復/恢復，而非期望永不忘詞）」。選項 (B) 培養壓力下的心理韌性與適應性行為反應，最符合文意。(A) 宣稱要消除忘詞的可能性，與文意相反；(C) 與 (D) 皆不符合原文主旨。
+
+
+
+**2. 答案：(C)**
+
+* **解析**：第六段指出「Nervousness and excitement can share sensations... This does not require the sensations to disappear; it offers another way to interpret them（緊張與興奮有相同的生理感受……這不需要感受消失，而是提供另一種詮釋方式）」。此概念在心理學上稱為「認知重評（Cognitive Reappraisal）」，即選項 (C)。(A) 與 (D) 提到要消除或壓抑生理症狀，皆不符合原文。
+
+
+
+**3. 答案：(C)**
+
+* **解析**：第七與第八段指出，講述相關的個人故事「make the opening feel more human... makes the ideas easier to share（使開場更具人情味、使觀點更容易傳達）」，且在面試中「gives the interviewer a clearer sense of who you are（能讓面試官更清晰地理解你）」。因此選項 (C)「故事性敘事能促進聽眾接受度並給予行為動機情境化」為正確推論。
+
+
+
+**4. 答案：(A)**
+
+* **解析**：
+
+原文依據："Feeling brilliant or terrible afterward does not tell you exactly how a presentation went."   
+PNG
+嚴謹對應：演講後的內部情緒狀態（Internal emotional states）無法（fail to）作為實際表現的可靠指標（reliable indicator）。這完全是原文文意的同義改寫（Paraphrase），不添加任何文章沒寫到的外部原因。   
+PNG
+干擾項分析（為什麼其他選項錯誤）：
+(B)：文中只提到若看得到聽眾反應可以觀察，未提及聽眾不願給予真實反饋。   
+PNG
+(C)：文中未提及錄影是為了「背誦講稿」。
+(D)：文中提到 "Where recording is appropriate and permitted"，但並未宣稱這是「唯一合法的評估方式」，屬於無中生有。   
+PNG
+
+
+**5. 答案：(B)**
+
+* **解析**：第一段指出要依據演講重要性調配練習時間（dynamically tailored）；第三段強調不看稿的主動回憶（effortful practice）；第十二段強調不必等 formal invitation，應主動隨時開始（initiated independent of external demands）。綜合這三段，選項 (B)「主動且具挑戰性的練習策略應動態調整，且不依賴外部需求」最符合整體核心思想。
+`,
+
+  // 第 5 題是綜合題，解析沒有引用原文句子，自動抓不到，所以手動補
+  evidence: {
+    5: [
+      'Give more practice time to presentations with greater consequences.',
+      'The effort to recall is part of the practice.',
+      'You do not need a formal speaking invitation to begin recording and reviewing.'
+    ]
+  }
+},
+];
+
+/* ===== 新增文章模板：複製下面「從 { 到 }, 」整塊（不含這行說明），貼在上一篇後面，只填 ★ 的地方 =====
+{
+  id: 'article-02',                 // ★ 每篇不能重複（英文、數字、減號、底線）
+  title: 'How to …',                // ★ 英文標題（顯示在主頁）
+
+  en: `
+★ 貼英文原文：從 **Introduction** 開始，到最後一段
+`,
+  zh: `
+★ 貼中文翻譯：從 **引言** 開始，段落順序要跟英文一樣
+`,
+  questions: `
+★ 貼題目：**1. …** 加 (A)～(D)
+`,
+  answers: `
+★ 貼答案與解析：**1. 答案：(B)** 加解析
+`,
+
+  // 選填：自動抓不到原文依據句的題目才需要；不需要就整段刪掉。數字是題號，句子要跟英文完全一樣
+  evidence: { 5: ['原文依據句…'] }
+},
+===== 模板結束 ===== */
+</script>
+
+<!-- ============================================================
+     ③ 程式（一般不用動）
+     ============================================================ -->
+<script>
+/* ============================================================
+   小工具
+   ============================================================ */
+const STORE = { records: 'rl_records', marks: 'rl_marks', pending: 'rl_pending', voice: 'rl_voice' };
+const $ = id => document.getElementById(id);
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
+function fmt(sec) { const m = Math.floor(sec / 60), s = sec % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
+function fmtDate(iso) { const d = new Date(iso); return isNaN(d) ? '' : (d.getMonth() + 1) + '/' + d.getDate(); }
+function lsGet(k, def) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+function normalizeWord(s) { return String(s).trim().toLowerCase().replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' '); }
+function rateLabel(r) { const s = String(Math.round(r * 100) / 100); return (s.includes('.') ? s : s + '.0') + '×'; }
+
+/* 隨機主題色 */
+let lastTheme = -1;
+function applyRandomTheme() {
+  let i = Math.floor(Math.random() * THEMES.length);
+  if (THEMES.length > 1 && i === lastTheme) i = (i + 1 + Math.floor(Math.random() * (THEMES.length - 1))) % THEMES.length;
+  lastTheme = i;
+  const t = THEMES[i], r = document.documentElement.style;
+  r.setProperty('--theme-main', t.main); r.setProperty('--theme-hover', t.hover); r.setProperty('--theme-rgb', t.rgb);
+  r.setProperty('--theme-soft', 'rgba(' + t.rgb + ',.22)'); r.setProperty('--theme-selected', 'rgba(' + t.rgb + ',.30)');
+}
+applyRandomTheme();
+
+/* 斷詞：英文單字（含 don't、well-known 這類）算一個字 */
+const WORD_RE = /[A-Za-z0-9]+(?:[’'\-][A-Za-z0-9]+)*/g;
+function tokenize(text) {
+  const out = []; let last = 0, m, n = 0;
+  WORD_RE.lastIndex = 0;
+  while ((m = WORD_RE.exec(text))) {
+    if (m.index > last) out.push({ w: false, v: text.slice(last, m.index) });
+    out.push({ w: true, v: m[0], i: n++ });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) out.push({ w: false, v: text.slice(last) });
+  return out;
+}
+function sentencesOf(text) { return (text.match(/[^.!?]+[.!?]+["”’']*|[^.!?]+$/g) || [text]).map(s => s.trim()).filter(Boolean); }
+
+/* ============================================================
+   文章解析：把四個貼上的文字區塊，轉成頁面用的文章物件
+   ============================================================ */
+function cleanLines(text) {
+  return String(text || '').replace(/\r\n?/g, '\n').split('\n')
+    .map(l => l.replace(/[ \t\u00a0]+$/, ''))
+    .filter(l => { const t = l.trim(); return !/^#{1,6}\s/.test(t) && !/^[-–—_*]{3,}$/.test(t) && t !== 'PNG'; });
+}
+function splitByHeadings(text) {
+  const secs = []; let cur = null;
+  cleanLines(text).forEach(l => {
+    const m = l.trim().match(/^\*\*(.+?)\*\*$/);
+    if (m) { cur = { head: m[1].trim(), body: [] }; secs.push(cur); }
+    else if (cur && l.trim()) cur.body.push(l.trim());
+  });
+  return secs.map(s => ({ head: s.head, body: s.body.join(' ') }));
+}
+function parseQuestions(text) {
+  const qs = []; let cur = null;
+  cleanLines(text).forEach(l => {
+    const t = l.trim(); let m;
+    if ((m = t.match(/^\*\*(\d+)\s*[.．]\s*(.+?)\*\*$/))) { cur = { n: Number(m[1]), question: m[2].trim(), options: [] }; qs.push(cur); }
+    else if (cur && (m = t.match(/^\(([A-Za-z])\)\s*(.+)$/))) cur.options.push({ letter: m[1].toUpperCase(), text: m[2].trim() });
+    else if (cur && t && !cur.options.length) cur.question += ' ' + t;
+  });
+  return qs;
+}
+function parseAnswers(text) {
+  const out = {}; let cur = null;
+  cleanLines(text).forEach(l => {
+    const t = l.trim(); let m;
+    if ((m = t.match(/^\*\*(\d+)\s*[.．]\s*答案\s*[：:]\s*\(?([A-Za-z])\)?\s*\*\*$/))) { cur = { letter: m[2].toUpperCase(), lines: [] }; out[Number(m[1])] = cur; }
+    else if (cur) cur.lines.push(l.trim());
+  });
+  Object.values(out).forEach(a => {
+    let s = a.lines.filter(Boolean).join('\n');
+    s = s.replace(/^[*•\-]?\s*\*{0,2}解析\*{0,2}\s*[：:]\s*/, '').replace(/\n{2,}/g, '\n').trim();
+    a.explanation = s;
+  });
+  return out;
+}
+function detectEvidence(expl, sections) {
+  const frags = []; const re = /[「"“]([^」"”]{15,}?)[」"”（(]/g; let m; const s = expl + '（';
+  while ((m = re.exec(s))) frags.push(m[1]);
+  const out = [], seen = new Set();
+  frags.forEach(fr => fr.split(/\.\.\.|…|；|;\s(?=[A-Z])/).forEach(piece => {
+    piece = piece.trim().replace(/^[ .,]+|[ .,]+$/g, '');
+    if ((piece.match(/[A-Za-z]+/g) || []).length < 4) return;
+    sections.forEach((sec, si) => sentencesOf(sec.en).forEach(sent => {
+      if (sent.toLowerCase().includes(piece.toLowerCase())) { const k = si + '|' + sent; if (!seen.has(k)) { seen.add(k); out.push({ s: si, text: sent }); } }
+    }));
+  }));
+  return out;
+}
+function parseArticle(raw) {
+  const errors = [], warnings = [];
+  const id = String(raw.id || '').trim(), title = String(raw.title || '').trim() || '(沒有標題)';
+  if (!/^[A-Za-z0-9_-]+$/.test(id)) errors.push('id 只能用英文、數字、減號、底線，不能空白（目前是「' + id + '」）');
+
+  const en = splitByHeadings(raw.en);
+  if (!en.length) errors.push('英文區塊找不到段落（每一段要有獨立一行的 **標題**，例如 **Introduction**、**01. 標題**）');
+  const sections = [];
+  en.forEach((s, i) => {
+    let m;
+    if (/^introduction$/i.test(s.head)) sections.push({ label: 'Introduction', title: '', en: s.body });
+    else if ((m = s.head.match(/^(\d+)\s*[.．]\s*(.+)$/))) sections.push({ label: m[1], title: m[2].trim(), en: s.body });
+    else { errors.push('英文第 ' + (i + 1) + ' 段的標題格式看不懂：「' + s.head + '」（要是 Introduction 或 01. 標題）'); sections.push({ label: '?', title: '', en: s.body }); }
+    if (!s.body) errors.push('英文第 ' + (i + 1) + ' 段（' + s.head + '）沒有內文');
+  });
+
+  const zh = splitByHeadings(raw.zh);
+  if (en.length && zh.length !== en.length) errors.push('中文翻譯有 ' + zh.length + ' 段，英文有 ' + en.length + ' 段，要一樣多');
+  else sections.forEach((sec, i) => {
+    const z = zh[i]; if (!z) return; let m;
+    if (sec.label === '?') { sec.zhTitle = z.head; sec.zh = z.body; return; }   // 英文標題已經報錯，不連帶再報中文對不上
+    if (sec.label === 'Introduction') sec.zhTitle = z.head;
+    else if ((m = z.head.match(/^(\d+)\s*[.．]\s*(.+)$/)) && Number(m[1]) === Number(sec.label)) sec.zhTitle = m[2].trim();
+    else { errors.push('中文第 ' + (i + 1) + ' 段的編號跟英文「' + sec.label + '」對不上（中文標題：「' + z.head + '」）'); sec.zhTitle = z.head; }
+    sec.zh = z.body;
+    if (!z.body) errors.push('中文第 ' + (i + 1) + ' 段（' + z.head + '）沒有內文');
+  });
+
+  const qs = parseQuestions(raw.questions), ans = parseAnswers(raw.answers);
+  if (!qs.length) errors.push('題目區塊找不到題目（每題要有獨立一行的 **1. 題目**，選項寫 (A) (B) (C) (D)）');
+  const questions = qs.map(q => {
+    const a = ans[q.n]; const where = '第 ' + q.n + ' 題';
+    if (q.options.length < 2) errors.push(where + '的選項少於 2 個（選項要寫成 (A) …、(B) …）');
+    if (!a) { errors.push(where + '在「答案與解析」裡找不到（要有 **' + q.n + '. 答案：(B)** 這一行）'); return null; }
+    const opt = q.options.find(o => o.letter === a.letter);
+    if (!opt) { errors.push(where + '的答案是 (' + a.letter + ')，但題目裡沒有這個選項'); return null; }
+    if (!a.explanation) warnings.push(where + '沒有解析文字');
+    return { type: 3, n: q.n, question: q.question, options: q.options.map(o => o.text), answer: opt.text, explanation: { text: a.explanation, image: '' }, evidence: [] };
+  }).filter(Boolean);
+
+  if (!errors.length) {
+    questions.forEach(q => {
+      const manual = raw.evidence && raw.evidence[q.n];
+      if (Array.isArray(manual)) {
+        manual.forEach(txt => {
+          const si = sections.findIndex(s => s.en.includes(txt));
+          if (si < 0) warnings.push('第 ' + q.n + ' 題 evidence 裡的句子在英文原文找不到：「' + String(txt).slice(0, 40) + '…」');
+          else q.evidence.push({ s: si, text: txt });
+        });
+      } else q.evidence = detectEvidence(q.explanation.text, sections);
+      if (!q.evidence.length) warnings.push('第 ' + q.n + ' 題沒有自動抓到原文依據句（可以在 evidence 手動補）');
+    });
+  }
+  return { errors, warnings, article: errors.length ? null : { id, title, sections, questions } };
+}
+const articles = [];
+const loadErrors = [], loadWarnings = [];
+(function loadAllArticles() {
+  const ids = new Set();
+  ARTICLES_RAW.forEach((raw, idx) => {
+    const name = (raw && raw.title) ? '「' + raw.title + '」' : '第 ' + (idx + 1) + ' 篇';
+    let r;
+    try { r = parseArticle(raw || {}); } catch (e) { r = { errors: ['解析時出錯：' + e.message], warnings: [], article: null }; }
+    if (r.article && ids.has(r.article.id)) { r.errors.push('id「' + r.article.id + '」跟前面的文章重複了'); r.article = null; }
+    if (r.article) { ids.add(r.article.id); articles.push(r.article); }
+    r.errors.forEach(m => loadErrors.push(name + '：' + m));
+    if (r.article) r.warnings.forEach(m => loadWarnings.push(name + '：' + m));   // 沒載入的文章不報提醒
+  });
+})();
+function articleById(id) { return articles.find(a => a.id === id); }
+function segText(a, s, p) { return p === 't' ? a.sections[s].title : a.sections[s].en; }
+
+/* ============================================================
+   狀態與紀錄（本機 + Google）
+   ============================================================ */
+const state = { records: [], marks: {}, cloud: 'none' };
+
+function setCloud(s) {
+  state.cloud = s;
+  const box = $('cloudStatus');
+  box.className = 'cloud-status' + (s === 'ok' ? ' ok' : s === 'fail' ? ' fail' : '');
+  box.textContent = { none: '☁️ 尚未連接 Google，紀錄只存在這台瀏覽器', sync: '☁️ 同步中…', ok: '✓ 已同步 Google', fail: '⚠️ 雲端同步失敗，紀錄暫存在這台瀏覽器' }[s];
+}
+function saveLocal() { lsSet(STORE.records, state.records); lsSet(STORE.marks, state.marks); }
+
+async function cloudGetAll() {
+  const r = await fetch(CLOUD_URL + '?action=getAll&_=' + Date.now());
+  const d = await r.json();
+  if (!d.ok) throw new Error(d.error || 'fail');
+  return d;
+}
+async function cloudPost(payload) {
+  try {
+    const r = await fetch(CLOUD_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+    const d = await r.json();
+    return !!d.ok;
+  } catch (e) { return false; }
+}
+async function cloudSend(payload) {
+  if (!CLOUD_URL) return;
+  const ok = await cloudPost(payload);
+  if (ok) { if (!lsGet(STORE.pending, []).length) setCloud('ok'); return; }
+  let p = lsGet(STORE.pending, []);
+  if (payload.action === 'saveMarks') p = p.filter(x => !(x.action === 'saveMarks' && x.articleId === payload.articleId));
+  p.push(payload); lsSet(STORE.pending, p);
+  setCloud('fail');
+}
+async function flushPending() {
+  const p = lsGet(STORE.pending, []);
+  if (!p.length) return;
+  const rest = [];
+  for (const x of p) { if (!(await cloudPost(x))) rest.push(x); }
+  lsSet(STORE.pending, rest);
+}
+function recKey(r) { return r.time + '|' + r.articleId + '|' + r.mode; }
+function safeParse(s) { try { return JSON.parse(s); } catch (e) { return []; } }
+function mergeFromCloud(d) {
+  const cloudRecs = (d.results || []).map(r => ({ ...r, details: typeof r.details === 'string' ? safeParse(r.details) : r.details }));
+  const have = new Set(cloudRecs.map(recKey));
+  const localOnly = state.records.filter(r => !have.has(recKey(r)));
+  state.records = [...cloudRecs, ...localOnly];
+  localOnly.forEach(r => cloudSend({ action: 'saveResult', ...r }));       // 還沒連 Google 時存的紀錄，補送上去
+  const cm = d.marks || {};
+  Object.keys(state.marks).forEach(id => { if (!(id in cm) && (state.marks[id] || []).length) cloudSend({ action: 'saveMarks', articleId: id, marks: state.marks[id] }); });
+  state.marks = { ...state.marks, ...cm };                                  // 兩邊都有的，以雲端為準
+  saveLocal();
+}
+function addRecord(rec) { state.records.push(rec); saveLocal(); cloudSend({ action: 'saveResult', ...rec }); }
+
+const marksTimers = {};
+function persistMarks(articleId) {
+  saveLocal();
+  clearTimeout(marksTimers[articleId]);
+  marksTimers[articleId] = setTimeout(() => cloudSend({ action: 'saveMarks', articleId, marks: state.marks[articleId] || [] }), 600);
+}
+
+/* 每篇文章的狀態 */
+function recordsOf(id, mode) { return state.records.filter(r => r.articleId === id && r.mode === mode).sort((x, y) => new Date(x.time) - new Date(y.time)); }
+function modeStatus(a, mode) {
+  const recs = recordsOf(a.id, mode);
+  const done = recs.filter(r => r.status === 'completed');
+  const last = recs[recs.length - 1];
+  return { done: done.length > 0, lastDone: done[done.length - 1], incomplete: (!done.length && last && last.status === 'incomplete') ? last : null };
+}
+function isUnlocked(id) { return state.records.some(r => r.articleId === id); }   // 做過任一種測驗（閱讀完成或聽力交卷）才解鎖翻譯
+function articleState(a) {
+  const r = modeStatus(a, 'reading'), l = modeStatus(a, 'listening');
+  const any = state.records.some(x => x.articleId === a.id);
+  return { r, l, blanks: validMarks(a).length, key: (r.done && l.done) ? 'completed' : any ? 'progress' : 'notstarted' };
+}
+
+/* 聽力空格：驗證存的標記跟目前文章內容對得上 */
+function validMarks(a) {
+  const saved = state.marks[a.id] || [];
+  const tokCache = {};
+  return saved.filter(m => {
+    if (!a.sections[m.s]) return false;
+    const txt = segText(a, m.s, m.p); if (!txt) return false;
+    const k = m.s + m.p;
+    const words = (tokCache[k] = tokCache[k] || tokenize(txt).filter(t => t.w));
+    const t = words[m.i];
+    return !!t && normalizeWord(t.v) === normalizeWord(m.w);
+  });
+}
+function markKey(m) { return m.s + '.' + m.p + '.' + m.i; }
+
+/* ============================================================
+   畫面切換
+   ============================================================ */
+const SCREENS = ['home', 'articleView', 'readingQuiz', 'listeningQuiz', 'review'];
+function show(id) {
+  SCREENS.forEach(s => $(s).classList.toggle('hidden', s !== id));
+  document.body.classList.toggle('rq-mode', id === 'readingQuiz');
+  window.scrollTo(0, 0);
+}
+let timerId = null, timerStart = 0;
+function startTimer(displayId) {
+  clearInterval(timerId);
+  timerStart = Date.now();
+  $(displayId).textContent = '0:00';
+  timerId = setInterval(() => { $(displayId).textContent = fmt(Math.floor((Date.now() - timerStart) / 1000)); }, 250);
+}
+function stopTimer() { clearInterval(timerId); timerId = null; return Math.floor((Date.now() - timerStart) / 1000); }
+
+function goHome() {
+  stopTimer(); unbindKeys(); Reader.stop();
+  $('resultOverlay').classList.remove('show'); $('menuOverlay').classList.remove('show');
+  applyRandomTheme();
+  renderHome(); show('home');
+}
+function leaveQuiz() {
+  if (!confirm('離開會放棄這次作答，確定要回主頁嗎？')) return;
+  goHome();
+}
+
+/* ============================================================
+   主頁：Not Started / In Progress / Completed
+   ============================================================ */
+function readingLine(st) {
+  if (st.r.done) { const r = st.r.lastDone; return ['閱讀：✓ 第一次答對 ' + r.correct + '/' + r.total + '｜' + fmtDate(r.time), 'ok']; }
+  return ['閱讀：尚未作答', ''];
+}
+function listeningLine(st) {
+  if (st.l.done) { const r = st.l.lastDone; return ['聽力：✓ 答對 ' + r.correct + '｜答錯 ' + r.wrong + '｜' + fmtDate(r.time), 'ok']; }
+  if (!st.blanks) return ['聽力：尚未標記空格', 'warn'];
+  if (st.l.incomplete) { const r = st.l.incomplete; return ['聽力：上次未寫完 ' + (r.total - r.empty) + '/' + r.total, 'warn']; }
+  return ['聽力：尚未作答（' + st.blanks + ' 個空格）', ''];
+}
+function renderHome() {
+  const msgs = $('loadMsgs'); msgs.innerHTML = '';
+  if (loadErrors.length) { const b = el('div', 'banner err'); b.appendChild(el('div', null, '⚠️ 有文章沒有載入，請檢查「文章資料區」：')); loadErrors.forEach(m => b.appendChild(el('div', null, '・' + m))); msgs.appendChild(b); }
+  if (loadWarnings.length) { const b = el('div', 'banner warn'); b.appendChild(el('div', null, '提醒：')); loadWarnings.forEach(m => b.appendChild(el('div', null, '・' + m))); msgs.appendChild(b); }
+
+  const groups = { notstarted: [], progress: [], completed: [] };
+  articles.forEach(a => { const st = articleState(a); groups[st.key].push({ a, st }); });
+  [['nsTitle', 'nsGrid', 'notstarted', 'Not Started'], ['ipTitle', 'ipGrid', 'progress', 'In Progress'], ['cpTitle', 'cpGrid', 'completed', 'Completed']].forEach(([t, g, k, name]) => {
+    const list = groups[k];
+    $(t).innerHTML = ''; $(t).appendChild(document.createTextNode(name)); if (list.length) $(t).appendChild(el('span', null, '（' + list.length + '）'));
+    const grid = $(g); grid.innerHTML = '';
+    if (!list.length) { grid.appendChild(el('div', 'empty-hint', '—')); return; }
+    list.forEach(({ a, st }) => {
+      const card = el('button', 'article-card'); card.dataset.id = a.id;
+      const main = el('div', 'ac-main');
+      main.appendChild(el('div', 'ac-title', a.title));
+      main.appendChild(el('div', 'ac-meta', a.sections.length + ' 段 · ' + a.questions.length + ' 題'));
+      card.appendChild(main);
+      if (k !== 'notstarted') {
+        const [rt, rc] = readingLine(st), [lt, lc] = listeningLine(st);
+        const status = el('div', 'ac-status');
+        status.appendChild(el('div', 'ac-line ' + rc, rt)); status.appendChild(el('div', 'ac-line ' + lc, lt));
+        card.appendChild(status);
+      }
+      card.onclick = () => openMenu(a.id);
+      grid.appendChild(card);
+    });
+  });
+}
+
+/* ---------- 文章選單彈窗 ---------- */
+let menuId = null;
+function openMenu(id) {
+  const a = articleById(id), st = articleState(a); menuId = id;
+  $('menuTitle').textContent = a.title;
+  const un = isUnlocked(id);
+  $('menuBrowseNote').textContent = un ? '英文、中文、對照、朗讀、標記聽力空格' : '英文、朗讀、標記聽力空格（翻譯 🔒 做完任一種測驗後解鎖）';
+  $('menuBrowseNote').className = 'menu-note';
+  const [rt, rc] = readingLine(st); $('menuReadingNote').textContent = rt; $('menuReadingNote').className = 'menu-note ' + rc;
+  const [lt, lc] = listeningLine(st); $('menuListeningNote').textContent = st.blanks ? lt : (st.l.done ? lt + '｜要再考請先到「文章瀏覽」重新標記空格' : '先到「文章瀏覽」標記空格，才能考聽力');
+  $('menuListeningNote').className = 'menu-note ' + (st.blanks ? lc : (st.l.done ? 'ok' : 'warn'));
+  $('menuListening').disabled = !st.blanks;
+  $('menuOverlay').classList.add('show');
+}
+function closeMenu() { $('menuOverlay').classList.remove('show'); }
+$('menuClose').onclick = closeMenu;
+$('menuOverlay').addEventListener('click', e => { if (e.target === $('menuOverlay')) closeMenu(); });
+$('menuBrowse').onclick = () => { closeMenu(); openArticle(menuId); };
+$('menuReading').onclick = () => { closeMenu(); startReading(menuId); };
+$('menuListening').onclick = () => { if ($('menuListening').disabled) return; closeMenu(); startListening(menuId); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('menuOverlay').classList.contains('show')) closeMenu(); });
+
+/* ============================================================
+   朗讀（瀏覽器內建語音，免費）
+   切成一句一句念，避免長文章中途停掉；暫停＝停掉，繼續＝從這一句重念
+   ============================================================ */
+function sectionItems(s) { const items = []; if (s.title) items.push(s.title); items.push(...sentencesOf(s.en)); return items; }
+function articleItems(a) { const items = [a.title]; a.sections.forEach(s => items.push(...sectionItems(s))); return items; }
+
+/* 聲音：只列英文聲音，預設挑品質較好的，你選了就記住 */
+function englishVoices() { return (typeof speechSynthesis !== 'undefined' && speechSynthesis.getVoices ? speechSynthesis.getVoices() : []).filter(v => /^en/i.test(v.lang)); }
+function voiceScore(v) {
+  let s = 0; const n = v.name || '';
+  if (/natural|neural|premium|enhanced|online/i.test(n)) s += 4;
+  if (/google/i.test(n)) s += 3;
+  if (/samantha|ava|allison|zoe|serena|jenny|aria|guy|daniel|karen|moira|tessa|nicky/i.test(n)) s += 2;
+  if (v.lang === 'en-US') s += 1;
+  if (v.default) s += 0.5;
+  return s;
+}
+function sortedVoices() { return englishVoices().sort((a, b) => voiceScore(b) - voiceScore(a)); }
+function chosenVoice() { const vs = sortedVoices(); const saved = lsGet(STORE.voice, null); return vs.find(v => v.name === saved) || vs[0] || null; }
+const voiceSelects = [];
+function fillVoiceSelect(sel) {
+  const vs = sortedVoices(), cur = chosenVoice();
+  sel.innerHTML = '';
+  if (!vs.length) { const o = el('option', null, '（沒有英文語音，用系統預設）'); sel.appendChild(o); sel.disabled = true; return; }
+  sel.disabled = false;
+  vs.forEach(v => { const o = el('option', null, v.name + '（' + v.lang + '）'); o.value = v.name; if (cur && v.name === cur.name) o.selected = true; sel.appendChild(o); });
+}
+function bindVoiceSelect(sel) {
+  fillVoiceSelect(sel);
+  sel.onchange = () => lsSet(STORE.voice, sel.value);
+  voiceSelects.push(sel);
+}
+function refreshVoiceSelects() { voiceSelects.forEach(s => { if (document.body.contains(s)) { const dis = s.dataset.locked === '1'; fillVoiceSelect(s); if (dis) s.disabled = true; } }); }
+
+const Reader = {
+  supported: ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window),
+  items: [], idx: 0, state: 'idle', rate: DEFAULT_RATE, token: 0, listeners: [],
+  onChange(fn) { this.listeners = [fn]; },
+  _emit() { this.listeners.forEach(f => f(this.state)); },
+  voice() { return this.supported ? chosenVoice() : null; },
+  load(items) { this.token++; if (this.supported) speechSynthesis.cancel(); this.items = items; this.idx = 0; this.state = 'idle'; },
+  play() {
+    if (!this.supported || !this.items.length || this.state === 'playing') return;
+    this.state = 'playing'; this._emit();
+    setTimeout(() => this._speak(), 60);
+  },
+  _speak() {
+    if (this.state !== 'playing') return;
+    if (this.idx >= this.items.length) { this.state = 'done'; this._emit(); return; }
+    const my = ++this.token;
+    const u = new SpeechSynthesisUtterance(this.items[this.idx]);
+    u.lang = 'en-US'; u.rate = this.rate;
+    const v = this.voice(); if (v) { u.voice = v; u.lang = v.lang || 'en-US'; }
+    u.onend = () => { if (my !== this.token || this.state !== 'playing') return; this.idx++; this._speak(); };
+    u.onerror = (e) => { if (my !== this.token) return; if (e && (e.error === 'canceled' || e.error === 'interrupted')) return; this.idx++; this._speak(); };
+    speechSynthesis.speak(u);
+  },
+  pause() { if (this.state !== 'playing') return; this.state = 'paused'; this.token++; speechSynthesis.cancel(); this._emit(); },
+  resume() { if (this.state !== 'paused') return; this.state = 'playing'; this._emit(); setTimeout(() => this._speak(), 60); },
+  stop() { this.token++; if (this.supported) speechSynthesis.cancel(); this.idx = 0; this.state = 'idle'; this.listeners = []; },
+};
+if (Reader.supported && speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', refreshVoiceSelects);
+
+function buildRateSelect(sel) {
+  sel.innerHTML = '';
+  RATE_OPTIONS.forEach(r => { const o = el('option', null, rateLabel(r)); o.value = String(r); if (r === DEFAULT_RATE) o.selected = true; sel.appendChild(o); });
+}
+
+/* 朗讀控制列（文章瀏覽、解析頁共用） */
+function buildReaderBar(bar, getArticleItems) {
+  bar.innerHTML = '';
+  if (!Reader.supported) { bar.appendChild(el('span', 'reader-status', '這個瀏覽器不支援朗讀')); return; }
+  const play = el('button', 'btn secondary', '▶ 整篇朗讀');
+  const pause = el('button', 'btn secondary', '⏸ 暫停'); pause.disabled = true;
+  const stop = el('button', 'btn secondary', '■ 停止'); stop.disabled = true;
+  const vsel = el('select'); vsel.setAttribute('aria-label', '聲音');
+  const rsel = el('select'); rsel.setAttribute('aria-label', '語速'); buildRateSelect(rsel);
+  const status = el('span', 'reader-status', '只念英文');
+  bar.append(play, pause, stop, el('label', null, '聲音'), vsel, el('label', null, '語速'), rsel, status);
+  bindVoiceSelect(vsel);
+  const sync = (st) => {
+    pause.disabled = !(st === 'playing' || st === 'paused');
+    pause.textContent = st === 'paused' ? '▶ 繼續' : '⏸ 暫停';
+    stop.disabled = st === 'idle';
+    status.textContent = st === 'playing' ? '朗讀中…' : st === 'paused' ? '已暫停' : st === 'done' ? '朗讀完畢' : '只念英文';
+  };
+  const begin = (items) => { Reader.load(items); Reader.rate = Number(rsel.value); Reader.onChange(sync); Reader.play(); };
+  play.onclick = () => begin(getArticleItems());
+  pause.onclick = () => { if (Reader.state === 'paused') Reader.resume(); else Reader.pause(); };
+  stop.onclick = () => { Reader.stop(); Reader.onChange(sync); sync('idle'); };
+  rsel.onchange = () => { Reader.rate = Number(rsel.value); };
+  bar._begin = begin;
+}
+function addSectionPlayButton(head, bar, section) {
+  if (!Reader.supported || !bar._begin) return;
+  const b = el('button', 'sec-play', '▶ 朗讀'); b.type = 'button';
+  b.onclick = () => bar._begin(sectionItems(section));
+  head.appendChild(b);
+}
+
+/* ============================================================
+   文章瀏覽
+   ============================================================ */
+const av = { a: null, tab: 'en', marking: false };
+function openArticle(id) {
+  stopTimer(); unbindKeys(); Reader.stop();
+  av.a = articleById(id); av.tab = 'en'; av.marking = false;
+  $('avTitle').textContent = av.a.title;
+  buildReaderBar($('avReader'), () => articleItems(av.a));
+  renderArticleView();
+  show('articleView');
+}
+$('avTabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  av.tab = b.dataset.tab; if (av.tab !== 'en') av.marking = false;
+  renderArticleView();
+});
+$('avMarkToggle').onclick = () => { av.marking = !av.marking; renderArticleView(); };
+$('avMarkClear').onclick = () => {
+  if (!(state.marks[av.a.id] || []).length) return;
+  if (!confirm('確定清除這篇文章所有的聽力空格標記？')) return;
+  state.marks[av.a.id] = []; persistMarks(av.a.id); renderArticleView();
+};
+
+function renderArticleView() {
+  const a = av.a, body = $('avBody');
+  document.querySelectorAll('#avTabs button').forEach(b => {
+    const locked = b.dataset.tab !== 'en' && !isUnlocked(a.id);
+    b.classList.toggle('active', b.dataset.tab === av.tab);
+    b.textContent = { en: '英文', zh: '中文', both: '對照' }[b.dataset.tab] + (locked ? ' 🔒' : '');
+  });
+  $('avMarkBar').classList.toggle('hidden', av.tab !== 'en');
+  $('avMarkToggle').textContent = '標記聽力空格：' + (av.marking ? '開' : '關');
+  $('avMarkCount').textContent = '已標 ' + validMarks(a).length + ' 格';
+  body.innerHTML = '';
+  body.classList.toggle('marking', av.marking && av.tab === 'en');
+  if (av.tab !== 'en' && !isUnlocked(a.id)) {
+    body.appendChild(el('div', 'locked-box', '🔒 翻譯還沒解鎖\n做完這篇的閱讀測驗或聽力測驗後就會開放'));
+    return;
+  }
+  const marks = new Map(validMarks(a).map(m => [markKey(m), m]));
+  a.sections.forEach((s, si) => {
+    const sec = el('div', 'sec');
+    const head = el('div', 'sec-head');
+    head.appendChild(el('span', 'sec-label', s.label));
+    if (av.tab === 'en' || av.tab === 'both') {
+      if (s.title) head.appendChild(buildWords(a, si, 't', s.title, marks));
+      addSectionPlayButton(head, $('avReader'), s);
+    } else head.appendChild(document.createTextNode(s.zhTitle));
+    sec.appendChild(head);
+    if (av.tab === 'en' || av.tab === 'both') sec.appendChild(buildWords(a, si, 'b', s.en, marks, 'sec-body'));
+    if (av.tab === 'zh') sec.appendChild(el('p', 'sec-body', s.zh));
+    if (av.tab === 'both') sec.appendChild(el('p', 'sec-zh', (s.zhTitle ? s.zhTitle + '：' : '') + s.zh));
+    body.appendChild(sec);
+  });
+}
+function buildWords(a, si, p, text, marks, cls) {
+  const box = el(cls ? 'p' : 'span', cls || null);
+  tokenize(text).forEach(t => {
+    if (!t.w) { box.appendChild(document.createTextNode(t.v)); return; }
+    const sp = el('span', 'w', t.v);
+    const key = si + '.' + p + '.' + t.i;
+    if (marks.has(key)) sp.classList.add('m');
+    sp.onclick = () => { if (av.marking) toggleMark(a, si, p, t.i, t.v, sp); };
+    box.appendChild(sp);
+  });
+  return box;
+}
+function toggleMark(a, s, p, i, w, sp) {
+  const list = state.marks[a.id] = (state.marks[a.id] || []);
+  const idx = list.findIndex(m => m.s === s && m.p === p && m.i === i);
+  if (idx >= 0) { list.splice(idx, 1); sp.classList.remove('m'); }
+  else { list.push({ s, p, i, w }); sp.classList.add('m'); list.sort((x, y) => x.s - y.s || (x.p === y.p ? 0 : x.p === 't' ? -1 : 1) || x.i - y.i); }
+  $('avMarkCount').textContent = '已標 ' + validMarks(a).length + ' 格';
+  persistMarks(a.id);
+}
+
+/* ============================================================
+   閱讀測驗
+   ============================================================ */
+let rq = null;
+function startReading(id) {
+  const a = articleById(id);
+  stopTimer(); Reader.stop();
+  rq = { a, items: a.questions.map(q => ({ q, options: shuffle(q.options), wrong: [], firstTry: null })), idx: 0, selected: null, answered: false, firstTryCount: 0, finished: false };
+  $('rqTitle').textContent = a.title;
+  buildReadingArticle(a);
+  $('rqCollapse').textContent = '收合文章';
+  $('rqArticle').classList.remove('hidden'); $('hlBar').classList.remove('hidden');
+  $('rqCorrect').textContent = '0';
+  show('readingQuiz');
+  showRQ();
+  startTimer('rqTimer');
+  bindKeys(readingKeys);
+}
+function buildReadingArticle(a) {
+  const box = $('rqArticle'); box.innerHTML = '';
+  a.sections.forEach(s => {
+    const sec = el('div', 'sec');
+    const head = el('div', 'sec-head'); head.appendChild(el('span', 'sec-label', s.label)); if (s.title) head.appendChild(document.createTextNode(s.title));
+    sec.appendChild(head); sec.appendChild(el('p', 'sec-body', s.en));
+    box.appendChild(sec);
+  });
+  box.scrollTop = 0;
+}
+$('rqCollapse').onclick = () => {
+  const collapsed = $('rqArticle').classList.toggle('hidden');
+  $('hlBar').classList.toggle('hidden', collapsed);
+  $('rqCollapse').textContent = collapsed ? '展開文章' : '收合文章';
+};
+function showRQ() {
+  const it = rq.items[rq.idx];
+  rq.selected = null; rq.answered = false;
+  $('rqProg').textContent = (rq.idx + 1) + '/' + rq.items.length;
+  $('rqProgress').textContent = '第 ' + (rq.idx + 1) + ' 題 / 共 ' + rq.items.length + ' 題';
+  $('rqText').textContent = it.q.question;
+  const box = $('rqOptions'); box.innerHTML = '';
+  it.options.forEach(opt => {
+    const b = el('button', 'option-btn');
+    b.innerHTML = '<span class="choice-line"><span class="choice-text"></span><span class="choice-mark"></span></span>';
+    b.querySelector('.choice-text').textContent = opt;
+    b.dataset.value = opt;
+    b.onclick = () => {
+      if (rq.answered || b.disabled) return;
+      box.querySelectorAll('.option-btn').forEach(x => x.removeAttribute('data-selected'));
+      b.dataset.selected = 'true'; rq.selected = opt;
+    };
+    box.appendChild(b);
+  });
+  $('rqSubmit').textContent = '確認答案';
+}
+function submitRQ() {
+  if (rq.finished) return;
+  if (rq.answered) { nextRQ(); return; }
+  if (rq.selected === null) { alert('請先選擇答案'); return; }
+  const it = rq.items[rq.idx];
+  const btn = $('rqOptions').querySelector('.option-btn[data-selected="true"]');
+  const mark = btn.querySelector('.choice-mark');
+  if (rq.selected === it.q.answer) {
+    rq.answered = true;
+    if (it.firstTry === null) { it.firstTry = it.wrong.length === 0; if (it.firstTry) { rq.firstTryCount++; $('rqCorrect').textContent = rq.firstTryCount; } }
+    btn.classList.add('correct'); btn.removeAttribute('data-selected');
+    mark.textContent = '✓ 正確'; mark.classList.add('ok');
+    $('rqOptions').querySelectorAll('.option-btn').forEach(x => x.disabled = true);
+    $('rqSubmit').textContent = rq.idx === rq.items.length - 1 ? '查看結果' : '下一題';
+  } else {
+    it.wrong.push(rq.selected); it.firstTry = false;
+    btn.classList.add('incorrect'); btn.disabled = true; btn.removeAttribute('data-selected');
+    mark.textContent = '✗ 錯誤'; mark.classList.add('bad');
+    rq.selected = null;
+  }
+}
+function nextRQ() {
+  rq.idx++;
+  if (rq.idx >= rq.items.length) finishReading(); else showRQ();
+}
+$('rqSubmit').onclick = submitRQ;
+
+function finishReading() {
+  if (!rq || rq.finished) return;                      // 只能完成一次（避免被蓋住的按鈕還有焦點，Enter 又觸發一次）
+  rq.finished = true;
+  if (document.activeElement) document.activeElement.blur();
+  const seconds = stopTimer(); unbindKeys();
+  const rec = {
+    time: new Date().toISOString(), articleId: rq.a.id, title: rq.a.title, mode: 'reading', status: 'completed',
+    correct: rq.firstTryCount, wrong: rq.items.filter(it => it.wrong.length).length, empty: 0, total: rq.items.length, seconds,
+    details: rq.items.map((it, i) => ({ q: i + 1, firstTry: !!it.firstTry, wrong: it.wrong }))
+  };
+  addRecord(rec);
+  const snap = rq;
+  showResult('閱讀測驗完成', [['第一次答對', rec.correct + '/' + rec.total], ['答錯過的題數', rec.wrong], ['用時', fmt(seconds)]], () => showReadingReview(snap));
+}
+
+/* ---------- 閱讀測驗：選取文字 → 螢光標示 ---------- */
+let lastRange = null;
+function selectionInArticle() {
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount || sel.isCollapsed) return null;
+  const r = sel.getRangeAt(0);
+  return $('rqArticle').contains(r.commonAncestorContainer) ? r : null;
+}
+document.addEventListener('selectionchange', () => {
+  if ($('readingQuiz').classList.contains('hidden')) return;
+  const r = selectionInArticle();
+  if (r) lastRange = r.cloneRange();
+  $('hlBtn').disabled = !r && !lastRangeValid();
+});
+function lastRangeValid() { return !!lastRange && !lastRange.collapsed && $('rqArticle').contains(lastRange.commonAncestorContainer); }
+['mousedown', 'touchstart'].forEach(ev => $('hlBtn').addEventListener(ev, e => e.preventDefault(), { passive: false }));
+$('hlBtn').onclick = () => {
+  const r = selectionInArticle() || (lastRangeValid() ? lastRange : null);
+  if (!r) return;
+  highlightRange(r);
+  window.getSelection().removeAllRanges(); lastRange = null; $('hlBtn').disabled = true;
+};
+function highlightRange(range) {
+  const sc = range.startContainer, so = range.startOffset, ec = range.endContainer, eo = range.endOffset;
+  const root = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentNode : range.commonAncestorContainer;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) { const n = walker.currentNode; if (range.intersectsNode(n)) nodes.push(n); }
+  nodes.forEach(n => {
+    if (n.parentNode.closest && n.parentNode.closest('mark.hl')) return;
+    const start = n === sc ? so : 0, end = n === ec ? eo : n.nodeValue.length;
+    if (end <= start) return;
+    if (!n.nodeValue.slice(start, end).trim()) return;
+    const mid = n.splitText(start); mid.splitText(end - start);
+    const m = document.createElement('mark'); m.className = 'hl';
+    mid.parentNode.replaceChild(m, mid); m.appendChild(mid);
+  });
+}
+$('rqArticle').addEventListener('click', e => {
+  const m = e.target.closest && e.target.closest('mark.hl');
+  if (!m) return;
+  const sel = window.getSelection(); if (sel && !sel.isCollapsed) return;
+  const parent = m.parentNode;
+  while (m.firstChild) parent.insertBefore(m.firstChild, m);
+  parent.removeChild(m); parent.normalize();
+});
+
+/* ============================================================
+   聽力測驗
+   ============================================================ */
+let lq = null;
+function startListening(id) {
+  const a = articleById(id);
+  const marks = validMarks(a);
+  if (!marks.length) return;
+  stopTimer(); Reader.stop();
+  const set = new Map(marks.map(m => [markKey(m), m]));
+  lq = { a, marks, set, started: false, graded: false, startAt: 0 };
+  $('lqTitle').textContent = a.title;
+  const box = $('lqArticle'); box.innerHTML = '';
+  box.appendChild(el('div', 'sec-head', a.title)).style.fontSize = '17px';
+  a.sections.forEach((s, si) => {
+    const sec = el('div', 'sec');
+    const head = el('div', 'sec-head');
+    if (s.title) head.appendChild(blankLine(si, 't', s.title, set));
+    else head.appendChild(document.createTextNode(s.label));
+    sec.appendChild(head);
+    const p = el('p', 'sec-body'); p.appendChild(blankLine(si, 'b', s.en, set)); sec.appendChild(p);
+    box.appendChild(sec);
+  });
+  const inputs = box.querySelectorAll('input.blank');
+  inputs.forEach((inp, k) => {
+    inp.addEventListener('input', updateFilled);
+    inp.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault(); e.stopPropagation();
+      if (inputs[k + 1]) inputs[k + 1].focus(); else $('lqSubmit').focus();
+    });
+  });
+  buildRateSelect($('lqRate')); $('lqRate').disabled = false;
+  if (!Reader.supported) { $('lqVoice').innerHTML = ''; $('lqVoice').appendChild(el('option', null, '（不支援朗讀）')); $('lqVoice').disabled = true; }
+  else { $('lqVoice').dataset.locked = ''; if (!voiceSelects.includes($('lqVoice'))) bindVoiceSelect($('lqVoice')); else fillVoiceSelect($('lqVoice')); }
+  $('lqPlay').disabled = false; $('lqPlay').textContent = '▶ 開始播放';
+  $('lqPause').disabled = true; $('lqPause').textContent = '⏸ 暫停';
+  $('lqSubmit').disabled = true;
+  $('lqNote').textContent = '只播放一次，不能重播';
+  $('lqState').textContent = '尚未開始';
+  $('lqTimer').textContent = '0:00';
+  updateFilled();
+  show('listeningQuiz');
+}
+function blankLine(si, p, text, set) {
+  const frag = document.createDocumentFragment();
+  tokenize(text).forEach(t => {
+    if (!t.w) { frag.appendChild(document.createTextNode(t.v)); return; }
+    if (set.has(si + '.' + p + '.' + t.i)) {
+      const inp = el('input', 'blank'); inp.type = 'text'; inp.readOnly = true;
+      inp.autocomplete = 'off'; inp.setAttribute('autocapitalize', 'off'); inp.spellcheck = false;
+      inp.dataset.word = t.v; inp.dataset.key = si + '.' + p + '.' + t.i;
+      frag.appendChild(inp);
+    } else frag.appendChild(document.createTextNode(t.v));
+  });
+  return frag;
+}
+function updateFilled() {
+  const inputs = [...$('lqArticle').querySelectorAll('input.blank')];
+  $('lqFilled').textContent = inputs.filter(i => i.value.trim()).length + '/' + inputs.length;
+}
+function lqSync(st) {
+  if (!lq || lq.graded) return;
+  $('lqState').textContent = { idle: '尚未開始', playing: '播放中', paused: '已暫停', done: '播放完畢' }[st] || '';
+  $('lqPause').disabled = !(st === 'playing' || st === 'paused');
+  $('lqPause').textContent = st === 'paused' ? '▶ 繼續' : '⏸ 暫停';
+  if (st === 'done') $('lqNote').textContent = '播放完畢（一次聽，不能重播）';
+  if (st === 'paused') $('lqNote').textContent = '已暫停，按「繼續」會從這一句重念';
+  if (st === 'playing') $('lqNote').textContent = '只播放一次，不能重播';
+}
+$('lqPlay').onclick = () => {
+  if (!lq || lq.started) return;
+  if (!Reader.supported) { alert('這個瀏覽器不支援朗讀，無法進行聽力測驗'); return; }
+  lq.started = true;
+  $('lqPlay').disabled = true; $('lqRate').disabled = true; $('lqVoice').disabled = true; $('lqVoice').dataset.locked = '1'; $('lqSubmit').disabled = false;
+  const inputs = $('lqArticle').querySelectorAll('input.blank');
+  inputs.forEach(i => i.readOnly = false);
+  Reader.load(articleItems(lq.a)); Reader.rate = Number($('lqRate').value); Reader.onChange(lqSync); Reader.play();
+  startTimer('lqTimer');
+  if (inputs[0]) inputs[0].focus();
+};
+$('lqPause').onclick = () => { if (Reader.state === 'paused') Reader.resume(); else Reader.pause(); };
+$('lqSubmit').onclick = gradeListening;
+
+function gradeListening() {
+  if (!lq || lq.graded) return;
+  const inputs = [...$('lqArticle').querySelectorAll('input.blank')];
+  const empties = inputs.filter(i => !i.value.trim()).length;
+  if (empties && !confirm('還有 ' + empties + ' 格沒填，確定交卷？')) return;
+  lq.graded = true;
+  if (document.activeElement) document.activeElement.blur();
+  const seconds = stopTimer(); Reader.stop();
+  let correct = 0, wrong = 0, empty = 0; const details = [];
+  inputs.forEach(inp => {
+    const word = inp.dataset.word, val = inp.value.trim();
+    let result;
+    if (!val) result = 'empty';
+    else if (normalizeWord(val) === normalizeWord(word)) result = 'correct';
+    else result = 'wrong';
+    if (result === 'correct') correct++; else if (result === 'wrong') wrong++; else empty++;
+    inp.readOnly = true; inp.classList.add(result);
+    if (result !== 'correct') {
+      const ans = el('span', 'blank-ans' + (result === 'empty' ? ' empty' : ''), (result === 'empty' ? '未作答 → ' : '→ ') + word);
+      inp.after(ans);
+    }
+    details.push({ key: inp.dataset.key, word, input: val, result });
+  });
+  $('lqPlay').disabled = true; $('lqPause').disabled = true; $('lqSubmit').disabled = true;
+  $('lqState').textContent = '已交卷'; $('lqNote').textContent = '已交卷';
+  const rec = {
+    time: new Date().toISOString(), articleId: lq.a.id, title: lq.a.title, mode: 'listening', status: empty ? 'incomplete' : 'completed',
+    correct, wrong, empty, total: inputs.length, seconds, details
+  };
+  addRecord(rec);
+  lq.result = { correct, wrong, empty, total: inputs.length, details };
+  const snap = lq;
+  showResult(empty ? '已交卷（有 ' + empty + ' 格未作答）' : '聽力測驗完成',
+    [['答對', correct], ['答錯', wrong], ['未作答', empty], ['用時', fmt(seconds)]], () => showListeningReview(snap));
+}
+
+/* ============================================================
+   結算彈窗
+   ============================================================ */
+function showResult(title, rows, onReview) {
+  $('resTitle').textContent = title;
+  const body = $('resBody'); body.innerHTML = '';
+  rows.forEach(([k, v]) => { const r = el('div', 'res-row'); r.appendChild(el('span', null, k)); r.appendChild(el('strong', null, String(v))); body.appendChild(r); });
+  $('resReview').onclick = () => { $('resultOverlay').classList.remove('show'); onReview(); };
+  $('resHome').onclick = goHome;
+  $('resultOverlay').classList.add('show');
+}
+
+/* ============================================================
+   解析
+   ============================================================ */
+function ctxMarkEvidence(box, text, evs) {
+  const ranges = evs.map(e => { const i = text.indexOf(e); return i >= 0 ? [i, i + e.length] : null; }).filter(Boolean).sort((a, b) => a[0] - b[0]);
+  let pos = 0;
+  ranges.forEach(([s, e]) => {
+    if (s < pos) return;
+    if (s > pos) box.appendChild(document.createTextNode(text.slice(pos, s)));
+    box.appendChild(el('mark', 'ev', text.slice(s, e))); pos = e;
+  });
+  if (pos < text.length) box.appendChild(document.createTextNode(text.slice(pos)));
+}
+function evidenceBySection(a) {
+  const map = {};
+  a.questions.forEach(q => (q.evidence || []).forEach(ev => { (map[ev.s] = map[ev.s] || []).push(ev.text); }));
+  return map;
+}
+function renderBilingual(a, body) {
+  const evMap = evidenceBySection(a);
+  const readerBar = $('rvReader');
+  a.sections.forEach((s, si) => {
+    const sec = el('div', 'sec');
+    const head = el('div', 'sec-head'); head.appendChild(el('span', 'sec-label', s.label));
+    head.appendChild(document.createTextNode(s.title ? s.title + '｜' + s.zhTitle : s.zhTitle));
+    addSectionPlayButton(head, readerBar, s);
+    sec.appendChild(head);
+    const en = el('p', 'sec-body'); ctxMarkEvidence(en, s.en, evMap[si] || []); sec.appendChild(en);
+    sec.appendChild(el('p', 'sec-zh', s.zh));
+    body.appendChild(sec);
+  });
+}
+function showReadingReview(r) {
+  const a = r.a, body = $('rvBody'); body.innerHTML = '';
+  Reader.stop();
+  buildReaderBar($('rvReader'), () => articleItems(a));
+  body.appendChild(el('div', 'rv-title', a.title));
+  r.items.forEach((it, i) => {
+    const q = it.q;
+    const card = el('div', 'rv-card ' + (it.wrong.length ? 'had-wrong' : 'first-ok'));
+    card.appendChild(el('div', 'rv-q', (i + 1) + '. ' + q.question));
+    q.options.forEach((opt, k) => {
+      const isAns = opt === q.answer, wasWrong = it.wrong.includes(opt);
+      card.appendChild(el('div', 'rv-opt' + (isAns ? ' ok' : wasWrong ? ' bad' : ''), (isAns ? '✓ ' : wasWrong ? '✗ ' : '') + '(' + 'ABCDEFGH'[k] + ') ' + opt));
+    });
+    card.appendChild(el('div', 'rv-line', it.wrong.length ? '答錯過：' + it.wrong.map(w => '(' + 'ABCDEFGH'[q.options.indexOf(w)] + ')').join('、') : '✓ 第一次答對'));
+    if (q.explanation) {
+      const text = typeof q.explanation === 'string' ? q.explanation : q.explanation.text;
+      if (text) card.appendChild(el('div', 'rv-expl', text));
+      if (q.explanation.image) { const im = el('img'); im.src = q.explanation.image; im.alt = '解析圖片'; im.style.cssText = 'max-width:100%;border-radius:8px;margin-top:8px;display:block'; card.appendChild(im); }
+    }
+    (q.evidence || []).forEach(ev => card.appendChild(el('div', 'rv-ev', '原文依據（' + a.sections[ev.s].label + '）：' + ev.text)));
+    body.appendChild(card);
+  });
+  body.appendChild(el('div', 'rv-title', '文章對照（原文依據句以淡黃標示）'));
+  renderBilingual(a, body);
+  show('review');
+}
+function renderEnWithChips(box, a, si, text, chips) {
+  tokenize(text).forEach(t => {
+    if (!t.w) { box.appendChild(document.createTextNode(t.v)); return; }
+    const d = chips.get(si + '.b.' + t.i);
+    if (!d) { box.appendChild(document.createTextNode(t.v)); return; }
+    box.appendChild(chipFor(d));
+  });
+}
+function chipFor(d) {
+  if (d.result === 'correct') return el('span', 'chip ok', d.word);
+  const c = el('span', 'chip ' + (d.result === 'wrong' ? 'bad' : 'empty'));
+  if (d.result === 'wrong') { c.appendChild(el('s', null, d.input)); c.appendChild(document.createTextNode('→ ' + d.word)); }
+  else c.textContent = '未作答 → ' + d.word;
+  return c;
+}
+function showListeningReview(r) {
+  const a = r.a, body = $('rvBody'); body.innerHTML = '';
+  Reader.stop();
+  buildReaderBar($('rvReader'), () => articleItems(a));
+  const res = r.result;
+  body.appendChild(el('div', 'rv-title', a.title + '｜答對 ' + res.correct + '、答錯 ' + res.wrong + '、未作答 ' + res.empty));
+  const chips = new Map(res.details.map(d => [d.key, d]));
+  a.sections.forEach((s, si) => {
+    const sec = el('div', 'sec');
+    const head = el('div', 'sec-head'); head.appendChild(el('span', 'sec-label', s.label));
+    if (s.title) {
+      tokenize(s.title).forEach(t => {
+        if (!t.w) { head.appendChild(document.createTextNode(t.v)); return; }
+        const d = chips.get(si + '.t.' + t.i); head.appendChild(d ? chipFor(d) : document.createTextNode(t.v));
+      });
+      head.appendChild(document.createTextNode('｜' + s.zhTitle));
+    } else head.appendChild(document.createTextNode(s.zhTitle));
+    addSectionPlayButton(head, $('rvReader'), s);
+    sec.appendChild(head);
+    const en = el('p', 'sec-body'); renderEnWithChips(en, a, si, s.en, chips); sec.appendChild(en);
+    sec.appendChild(el('p', 'sec-zh', s.zh));
+    body.appendChild(sec);
+  });
+  show('review');
+}
+
+/* ============================================================
+   鍵盤（閱讀測驗）：數字鍵選選項、Enter 確認／下一題
+   ============================================================ */
+let keyHandler = null;
+function bindKeys(fn) { unbindKeys(); keyHandler = fn; document.addEventListener('keydown', keyHandler); }
+function unbindKeys() { if (keyHandler) document.removeEventListener('keydown', keyHandler); keyHandler = null; }
+function readingKeys(e) {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if ($('resultOverlay').classList.contains('show')) return;
+  if (e.key === 'Enter') { e.preventDefault(); submitRQ(); return; }          // preventDefault：避免按鈕有焦點時 Enter 又觸發一次原生點擊
+  if (rq.answered) return;
+  if (/^[1-9]$/.test(e.key)) {
+    const b = $('rqOptions').querySelectorAll('.option-btn')[Number(e.key) - 1];
+    if (b && !b.disabled) { e.preventDefault(); b.click(); }
+  }
+}
+
+/* ============================================================
+   啟動
+   ============================================================ */
+async function init() {
+  state.records = lsGet(STORE.records, []);
+  state.marks = lsGet(STORE.marks, {});
+  renderHome(); show('home');
+  if (!CLOUD_URL) { setCloud('none'); return; }
+  setCloud('sync');
+  await flushPending();
+  try {
+    const d = await cloudGetAll();
+    mergeFromCloud(d);
+    setCloud(lsGet(STORE.pending, []).length ? 'fail' : 'ok');
+  } catch (e) { setCloud('fail'); }
+  renderHome();
+}
+init();
+</script>
+</body>
+</html>
