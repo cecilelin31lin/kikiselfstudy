@@ -946,7 +946,7 @@ const words = [
   ], avoid: [], roots: [], usages: [] },
   { word: 'rehabilitation', meaning: '復健、恢復', pos: 'n.', sentences: [
     {en: 'The drug addict was sent to the rehabilitation center.', zh: '這位吸毒者被送入了康復中心。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: ['remission'], roots: [], usages: [] },
   { word: 'survive', meaning: '生存、存活', pos: 'v.', sentences: [
     {en: 'We teach students how to survive in the society.', zh: '我們教導學生如何在社會中生存。'}
   ], avoid: [], roots: [], usages: [] },
@@ -1087,7 +1087,7 @@ const words = [
   ], avoid: [], roots: [], usages: [] },
   { word: 'remission', meaning: '寬恕、緩解', pos: 'n.', sentences: [
     {en: 'The cancer is currently in remission.', zh: '癌症目前處於緩解期。'}
-  ], avoid: [], roots: ['miss, mit'], usages: [] },
+  ], avoid: ['rehabilitation'], roots: ['miss, mit'], usages: [] },
   { word: 'transmit', meaning: '傳送、傳播', pos: 'v.', sentences: [
     {en: 'The message is transmitted over short-wave radio.', zh: '該信息通過短波無線電傳輸。'}
   ], avoid: [], roots: [], usages: [] },
@@ -1894,8 +1894,9 @@ function hideStages(){[1,2,3,4,5,6].forEach(n=>document.getElementById('stage'+n
 function startTimer(id){clearInterval(timer);stageStart=Date.now();timer=setInterval(()=>{const e=document.getElementById(id);if(e)e.textContent=formatTime(Math.floor((Date.now()-stageStart)/1000))},100)}
 function stopTimer(){clearInterval(timer);return Math.floor((Date.now()-stageStart)/1000)}
 function startSelectedStage(){hideStages();currentStage=selectedStages[stagePos];renderIndicator();document.getElementById('stage'+currentStage).classList.remove('hidden');({1:initS1,2:initS2,3:initS3,4:initS4,5:initS5,6:initS6}[currentStage])()}
-function finishStage(n,wrongDetails=[]){const elapsed=stopTimer();stats[n]={time:elapsed,wrongDetails,skipped:false};document.getElementById('stageOverlayTitle').textContent='🎉 第 '+n+' 關過關！';document.getElementById('stageOverlayTime').textContent=formatTime(elapsed);document.getElementById('stageOverlay').classList.add('show');const b=document.getElementById('stageNextBtn');if(stagePos===selectedStages.length-1){b.textContent='查看結果';b.onclick=()=>{document.getElementById('stageOverlay').classList.remove('show');showFinal()}}else{b.textContent='下一關';b.onclick=()=>{document.getElementById('stageOverlay').classList.remove('show');stagePos++;startSelectedStage()}}}
-function skipCurrentStage(){if(!currentStage)return;if(!confirm('確定要直接跳過「'+stageNames[currentStage]+'」嗎？'))return;clearTimeout(s4hideTimer);const elapsed=stopTimer();stats[currentStage]={time:elapsed,wrongDetails:[],skipped:true};gameWords.forEach(w=>{const x=getSW(w.word);x.stages[currentStage]={wrong:0,correct:false,skipped:true}});document.getElementById('stageOverlayTitle').textContent='⏭ 已跳過｜'+stageNames[currentStage];document.getElementById('stageOverlayTime').textContent=formatTime(elapsed);document.getElementById('stageOverlay').classList.add('show');const b=document.getElementById('stageNextBtn');if(stagePos===selectedStages.length-1){b.textContent='查看結果';b.onclick=()=>{document.getElementById('stageOverlay').classList.remove('show');showFinal()}}else{b.textContent='下一關';b.onclick=()=>{document.getElementById('stageOverlay').classList.remove('show');stagePos++;startSelectedStage()}}}
+function finalOrReviewOpen(){return document.getElementById('finalOverlay').classList.contains('show')||document.getElementById('reviewContainer').classList.contains('show')}
+function finishStage(n,wrongDetails=[]){if(finalOrReviewOpen())return;const elapsed=stopTimer();stats[n]={time:elapsed,wrongDetails,skipped:false};if(stagePos===selectedStages.length-1){showFinal();return}document.getElementById('stageOverlayTitle').textContent='🎉 第 '+n+' 關過關！';document.getElementById('stageOverlayTime').textContent=formatTime(elapsed);document.getElementById('stageOverlay').classList.add('show');const b=document.getElementById('stageNextBtn');b.textContent='下一關';b.onclick=()=>{document.getElementById('stageOverlay').classList.remove('show');stagePos++;startSelectedStage()}}
+function skipCurrentStage(){if(!currentStage||finalOrReviewOpen())return;if(!confirm('確定要直接跳過「'+stageNames[currentStage]+'」嗎？'))return;clearTimeout(s4hideTimer);const elapsed=stopTimer();stats[currentStage]={time:elapsed,wrongDetails:[],skipped:true};gameWords.forEach(w=>{const x=getSW(w.word);x.stages[currentStage]={wrong:0,correct:false,skipped:true}});if(stagePos===selectedStages.length-1){showFinal();return}document.getElementById('stageOverlayTitle').textContent='⏭ 已跳過｜'+stageNames[currentStage];document.getElementById('stageOverlayTime').textContent=formatTime(elapsed);document.getElementById('stageOverlay').classList.add('show');const b=document.getElementById('stageNextBtn');b.textContent='下一關';b.onclick=()=>{document.getElementById('stageOverlay').classList.remove('show');stagePos++;startSelectedStage()}}
 function showFinal(){hideStages();renderIndicator();completionTime=new Date();const names={1:'第一關｜認識單字',2:'第五關｜尋找單字',3:'第二關｜複習單字',4:'第六關｜記憶單字',5:'第三關｜單字例句',6:'第四關｜例句填空'};let h='';selectedStages.forEach(s=>{const st=stats[s]||{time:0,wrongDetails:[]};h+=`<div class="stage-summary-row"><div class="summary-name">${names[s]}</div><div class="summary-detail">${st.skipped?'已跳過':'用時 '+formatTime(st.time)+' 答錯 '+st.wrongDetails.length+' 次'}</div></div>`});const hintCount=hintRecords.length+s4HintWords.size;h+=hintCount?`<div class="stage-summary-row"><div class="summary-name">💡 使用提示</div><div class="summary-detail">共 ${hintCount} 題</div></div>`:`<div class="stage-summary-row"><div class="summary-name">💡 使用提示</div><div class="summary-detail">0 題</div></div>`;document.getElementById('finalStats').innerHTML=h;document.getElementById('totalTime').textContent=formatTime(Math.floor((Date.now()-totalStart)/1000));document.getElementById('finalOverlay').classList.add('show')}
 
 /* 1 */
@@ -2302,6 +2303,7 @@ document.querySelectorAll('input[name="wordMode"]').forEach(r=>r.addEventListene
 buildRandomCountOptions();renderPlayers();updateModeVisibility();
 
 document.addEventListener('keydown',e=>{
+  if(finalOrReviewOpen())return;
   if(['1','2','3','4'].includes(e.key)){
     const idx=Number(e.key)-1;let buttons=[];
     if(currentStage===1)buttons=[...document.querySelectorAll('#s1options .option-btn')];
