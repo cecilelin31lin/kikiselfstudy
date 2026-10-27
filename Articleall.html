@@ -395,8 +395,6 @@ const THEMES = [
 
 <!-- ============================================================
      ② 文章資料區：新增文章就在這裡貼
-     一篇文章 = 一個 { … }，貼在最後一篇後面（上一篇結尾要有逗號）
-     四個 ★ 區塊直接整塊貼 AI 整理的文字，不用自己切段、轉格式
      ============================================================ -->
 <script>
 const ARTICLES_RAW = [
@@ -520,35 +518,23 @@ You do not need a formal speaking invitation to begin recording and reviewing. U
 
 * **解析**：第四段提到「The aim is to become more comfortable recovering, rather than expecting never to forget（目標是變得更擅長修復/恢復，而非期望永不忘詞）」。選項 (B) 培養壓力下的心理韌性與適應性行為反應，最符合文意。(A) 宣稱要消除忘詞的可能性，與文意相反；(C) 與 (D) 皆不符合原文主旨。
 
-
-
 **2. 答案：(C)**
 
 * **解析**：第六段指出「Nervousness and excitement can share sensations... This does not require the sensations to disappear; it offers another way to interpret them（緊張與興奮有相同的生理感受……這不需要感受消失，而是提供另一種詮釋方式）」。此概念在心理學上稱為「認知重評（Cognitive Reappraisal）」，即選項 (C)。(A) 與 (D) 提到要消除或壓抑生理症狀，皆不符合原文。
-
-
 
 **3. 答案：(C)**
 
 * **解析**：第七與第八段指出，講述相關的個人故事「make the opening feel more human... makes the ideas easier to share（使開場更具人情味、使觀點更容易傳達）」，且在面試中「gives the interviewer a clearer sense of who you are（能讓面試官更清晰地理解你）」。因此選項 (C)「故事性敘事能促進聽眾接受度並給予行為動機情境化」為正確推論。
 
-
-
 **4. 答案：(A)**
 
 * **解析**：
-
 原文依據："Feeling brilliant or terrible afterward does not tell you exactly how a presentation went."   
-PNG
 嚴謹對應：演講後的內部情緒狀態（Internal emotional states）無法（fail to）作為實際表現的可靠指標（reliable indicator）。這完全是原文文意的同義改寫（Paraphrase），不添加任何文章沒寫到的外部原因。   
-PNG
 干擾項分析（為什麼其他選項錯誤）：
 (B)：文中只提到若看得到聽眾反應可以觀察，未提及聽眾不願給予真實反饋。   
-PNG
 (C)：文中未提及錄影是為了「背誦講稿」。
 (D)：文中提到 "Where recording is appropriate and permitted"，但並未宣稱這是「唯一合法的評估方式」，屬於無中生有。   
-PNG
-
 
 **5. 答案：(B)**
 
@@ -641,25 +627,17 @@ Stop looking around. Just focus on yourself. This is not only a life strategy, b
 
 * **解析**：根據第一段與第五段，作者指出「把評價自己的尺子交給了外界」以及「如果你把自己的價值感建立在外界的評價和對比上，你就會像一葉浮萍……這種由外物支撐的自我，是非常脆弱的」。選項 (C) 指出「將自我價值感建立在波動的外在指標上，會導致本質上的不穩定」，完全符合原文。其餘選項皆非作者批判的核心重點。
 
-
-
 **2. 答案：(B)**
 
 * **解析**：第五段指出「當你真正做到精神上的獨立，你就擁有了不被打擾的底氣。你不再需要通過拯救別人來證明自己的價值，也不再因為別人的誤解而自我懷疑」。選項 (B)「不論外在評價或誤解如何，皆能維持自我認同與心理韌性」是極為嚴謹的同義重述（Paraphrase）。選項 (A) 斷絕所有社交關係與 (D) 拒絕社會規範皆屬過度延伸。
-
-
 
 **3. 答案：(A)**
 
 * **解析**：第二段與第四段明確提到「注意力是你極其有限且寶貴的資產」以及「把大量的精力用來窺探、比較……是在把自己的能量輸送給別人，讓自己的領地荒草叢生」。選項 (A) 描述「注意力是有限的認知資源，將其向外轉移會消耗自我發展所需的能量」，精準忠實於原文。
 
-
-
 **4. 答案：(C)**
 
 * **解析**：第五段使用「孤島」比喻：「不管周圍的海浪怎麼拍打，島上的生態系統依然能夠自給自足。你形成了一個能量內循環的閉環，外界再怎麼變化，也動搖不了你的根基」。這是在比喻建立起自給自足、不受外界動盪影響的內部秩序，故選 (C)。
-
-
 
 **5. 答案：(B)**
 
@@ -673,31 +651,223 @@ Stop looking around. Just focus on yourself. This is not only a life strategy, b
     4: ['You are like an isolated island. No matter how the waves crash around you, the ecosystem on the island remains self-sufficient.'],
     5: ['When you gather all your scattered and floating energy and pour it entirely into yourself, you will find that you actually lack nothing.']
   }
-}
-];
-
-/* ===== 新增文章模板：複製下面「從 { 到 }, 」整塊（不含這行說明），貼在上一篇後面，只填 ★ 的地方 =====
+},
 {
-  id: 'article-02',                 // ★ 每篇不能重複（英文、數字、減號、底線）
-  title: 'How to …',                // ★ 英文標題（顯示在主頁）
+  id: 'trapped-by-food-and-fear',
+  title: 'Trapped by Food and Fear: The physical and emotional impact of eating disorders',
 
   en: `
-★ 貼英文原文：從 **Introduction** 開始，到最後一段
+**01. Overview**
+Eating disorders are conditions that occur in people who experience a difficult relationship with food. Two of the most commonly diagnosed eating disorders are anorexia nervosa and bulimia nervosa.
+
+**02. Anorexia nervosa**
+Anorexia is an eating disorder that results in unhealthy weight loss. People with anorexia may have a distorted body image; they restrict their calories to reach unrealistic weight goals. Calorie restriction often involves increasingly narrow food choices, smaller portion sizes and skipped meals. Malnutrition can develop, which can harm typical growth and development. Although anorexia is more common in females, anyone can develop anorexia. Eating disorders of all types may cause a person to become secretive about their eating and restriction. They can hide the impacts with baggy clothes or avoiding time with loved ones. They may also appear anxious/depressed, get tired more easily or show signs of increased emotion such as outbursts. Some physical signs include hair loss, brittle nails, dry skin, stomach pains, stunted growth and anemia.
+
+**03. Bulimia nervosa**
+Bulimia presents itself as an eating disorder in which a person eats large amounts of food (binges) and then tries to undo the effects of the binge in some way. After bingeing, people with bulimia typically feel guilty and are afraid of gaining weight. To ease their guilt and fear, they purge the food from their body by vomiting or other means. They may also turn to extreme exercise or strict dieting. Although most people with bulimia are teenage girls and young adult women, much like many eating disorders, anyone can develop bulimia. People with bulimia aren't happy with their bodies. Then, in response to anxiety and other emotions, they give in to their impulses and cravings for food by bingeing. People with bulimia don't all fit a single mold. They may be underweight (slightly), overweight or average weight. Bulimia causes a host of physical symptoms such as tooth decay from stomach acid in the vomit, weight fluctuations, dehydration, damage to internal organs and a puffy or bloated appearance to the face/throat/stomach.
+
+**04. What is the treatment?**
+Treatment should begin as soon as possible for those living with eating disorders. The earlier an eating disorder is recognized, the higher the chance of recovery. Treatment depends on multiple factors, including the patient's willingness to make changes, family support and the stage of the eating disorder. Successful treatment of eating disorders involves a team of health care professionals who each treat a certain aspect of the disorder. Treatment should begin with a visit to a doctor who will assess how the eating disorder has affected the body. If the effects are severe, the person may need to be hospitalized. Treatment of the eating disorder will not be successful if good nutrition and physical health are not restored first.
+
+**05. Specific Treatments**
+In treating anorexia, the team helps a person get back to a healthy body weight, a crucial step for successful recovery. If a person refuses to eat, they may need to be admitted to a hospital for nutrition. In treating bulimia, the team may admit a person to a hospital to treat medical complications, such as dehydration or electrolyte imbalance, or to stop the cycle of bingeing and purging.
+
+**06. Counseling and Support**
+Mental health counseling is an important part of treatment and helps a person with an eating disorder manage their unhealthy thoughts, understand how they use food as a way to deal with problems and feelings, and improve their self-image and develop the confidence to take control of their life. Family therapy can be implemented to help family members understand the condition and guide families to use effective approaches for recovery. A registered dietitian can supplement care given at inpatient settings and allow the person continuation of care. Living with an eating disorder is difficult on both the patient and their loved ones. Both emotional and physical health are affected; and, without help, a person with an eating disorder can have serious health problems or die. However, with treatment, a person can get well and go on to lead a healthy life.
 `,
   zh: `
-★ 貼中文翻譯：從 **引言** 開始，段落順序要跟英文一樣
+**01. 概述**
+飲食障礙症是一種發生於對食物關係出現困境者的疾病。兩種最常被診斷出的飲食障礙症為神經性厭食症（厭食症）與神經性暴食症（暴食症）。
+
+**02. 神經性厭食症**
+厭食症是一種導致不健康體重減輕的飲食障礙症。厭食症患者可能對體型有扭曲的認知；他們限制熱量攝取以達到不切實際的體重目標。熱量限制通常包含飲食選擇日益狹隘、食物份量縮小以及忽略正餐。這可能引發營養不良，進而損害正常的生長與發育。雖然厭食症在女性中較為常見，但任何人都有可能患上厭食症。各種類型的飲食障礙症都可能導致患者對其飲食和限制行為隱瞞不報。他們可能會穿著寬鬆衣物或避免與親友相處來隱藏影響。他們也可能表現出焦慮/憂鬱、更容易感到疲倦，或展現情緒激增的徵兆（例如情緒爆發）。部分生理徵兆包括脫髮、指甲變脆、皮膚乾燥、胃痛、生長遲緩以及貧血。
+
+**03. 神經性暴食症**
+暴食症表現為患者大量進食（大吃大喝），接著試圖以某種方式抵銷暴食帶來的影響。暴食之後，暴食症患者通常會感到罪惡並害怕體重增加。為了減輕罪惡感與恐懼，他們會透過嘔吐或其他方式將食物從體內催吐/清除。他們也可能轉向極端運動或嚴格節食。雖然大多數暴食症患者為青少女與年輕女性，但就像許多飲食障礙症一樣，任何人都可能患上暴食症。暴食症患者對自己的身體並不滿意。隨後，作為對焦慮與其他情緒的反應，他們會屈服於衝動與對食物的渴望而進行暴食。暴食症患者並不完全符合單一模式。他們的體重可能是偏輕（輕微）、過重或平均體重。暴食症會引發許多生理症狀，例如嘔吐物中的胃酸導致牙齒腐爛、體重波動、脫水、內臟受損，以及臉部/喉嚨/胃部呈現腫脹或脹氣的外觀。
+
+**04. 治療方式為何？**
+對於飲食障礙症患者而言，治療應儘早開始。越早識別出飲食障礙症，康復的機會就越高。治療取決於多項因素，包括患者改變的意願、家庭支持以及飲食障礙症的階段。飲食障礙症的成功治療需要由醫療專業人員組成的團隊共同參與，每位專業人員負責治療該障礙的特定層面。治療應從就診醫師開始，醫師將評估飲食障礙症如何影響身體。若影響嚴重，患者可能需要住院。若未能先恢復良好的營養與身體健康，飲食障礙症的治療將無法成功。
+
+**05. 特定治療方法**
+在治療厭食症時，團隊會幫助患者恢復到健康的體重，這是成功康復的關鍵一步。若患者拒絕進食，可能需要入住醫院接受營養補充。在治療暴食症時，團隊可能會安排患者住院以治療併發症，例如脫水或電解質不平衡，或打破暴食與催吐的循環。
+
+**06. 諮詢與支持**
+心理健康諮詢是治療的重要部分，能幫助飲食障礙症患者管理不健康的想法，理解他們如何利用食物作為應對問題與情緒的方式，並改善自我形象、培養掌控生活的信心。可實施家庭治療以幫助家庭成員理解病情，並引導家庭採用有效的康復方法。註冊營養師可以補充住院環境中提供的照護，並讓患者獲得持續性的照護。與飲食障礙症共存對患者及其親友而言皆十分艱難。情緒與身體健康都會受到影響；且若未獲得協助，飲食障礙症患者可能會出現嚴重的健康問題甚至死亡。然而，透過治療，患者可以恢復健康並繼續過上健康的生活。
 `,
   questions: `
-★ 貼題目：**1. …** 加 (A)～(D)
+**1. Based on the passage, which of the following best characterizes a fundamental difference in clinical presentation between anorexia nervosa and bulimia nervosa?**
+(A) Anorexia nervosa is exclusively limited to females, whereas bulimia nervosa affects individuals across all genders.
+(B) Bulimia nervosa requires immediate hospitalization in all cases, while anorexia nervosa can always be managed in outpatient settings.
+(C) Individuals with anorexia typically experience severe weight loss, whereas those with bulimia do not necessarily exhibit a uniform body weight profile.
+(D) Anorexia is characterized by sudden emotional outbursts, whereas bulimia causes no psychiatric or emotional disturbances.
+
+**2. According to the section on treatment, what is considered a mandatory physiological prerequisite before psychological interventions can achieve lasting efficacy?**
+(A) The complete elimination of family involvement in patient therapy sessions.
+(B) The immediate administration of pharmaceutical appetite stimulants in inpatient care.
+(C) The restoration of physical health and nutritional stabilization.
+(D) The total cessation of outpatient consultations with registered dietitians.
+
+**3. What can be inferred from the passage regarding the pathophysiology and physiological consequences of bulimia nervosa?**
+(A) Recurrent exposure of the oral cavity to gastric acid contributes to dental erosion.
+(B) Bingeing behavior directly causes permanent, irreversible failure of all internal organs within days.
+(C) Purging through vomiting is the sole clinical criteria used to diagnose electrolyte imbalance.
+(D) Strict dietary restriction in bulimic patients entirely prevents fluctuations in body weight.
+
+**4. According to the text, what essential role does family therapy serve in the comprehensive management of eating disorders?**
+(A) It replaces the necessity of consulting a medical doctor for initial physical assessments.
+(B) It enforces strict caloric surveillance by family members during inpatient hospitalization.
+(C) It equips relatives with an understanding of the condition to adopt supportive recovery strategies.
+(D) It legally mandates family members to take control of the patient's daily financial decisions.
+
+**5. Which statement best summarizes the author's overall outlook on the prognosis of individuals suffering from eating disorders?**
+(A) Eating disorders inevitably result in fatal outcomes due to irreversible organ damage, regardless of medical intervention.
+(B) Recovery is contingent upon early detection and multidisciplinary intervention, offering a viable path to leading a healthy life.
+(C) Complete remission is achievable solely through self-directed willpower without medical or psychological support.
+(D) Long-term management focuses exclusively on weight restoration while disregarding emotional and cognitive factors.
 `,
   answers: `
-★ 貼答案與解析：**1. 答案：(B)** 加解析
+**1. 答案：(C)**
+
+* **解析**：第二段提及厭食症會導致「unhealthy weight loss」（不健康的體重減輕）；第三段明確指出暴食症患者「don't all fit a single mold. They may be underweight (slightly), overweight or average weight」（並不符合單一模式，可能偏輕、過重或標準體重）。故選項 (C)「厭食症患者通常經歷嚴重體重減輕，而暴食症患者則不一定呈現單一體重型態」為精準對應。(A) 兩者皆可發生於任何性別；(B) 兩者皆依嚴重度決定是否住院；(D) 文章未宣稱暴食症無視情緒干擾。
+
+**2. 答案：(C)**
+
+* **解析**：第四段明確指出「Treatment of the eating disorder will not be successful if good nutrition and physical health are not restored first」（若未先恢復良好的營養與身體健康，治療將無法成功）。選項 (C)「身體健康與營養穩定度的恢復」為嚴謹的同義改寫（Paraphrase）。
+
+**3. 答案：(A)**
+
+* **解析**：第三段指出暴食症會導致「tooth decay from stomach acid in the vomit」（嘔吐物中的胃酸導致牙齒腐爛）。口腔反覆接觸胃酸（gastric acid）會導致牙齒受損（dental erosion），故 (A) 正確。(B) 文章未提及數日內造成不可逆器官衰竭；(C) 催吐非唯一的診斷依據；(D) 原文提到體重會呈現 fluctuation（波動）而非防止波動。
+
+**4. 答案：(C)**
+
+* **解析**：第六段指出「Family therapy can be implemented to help family members understand the condition and guide families to use effective approaches for recovery」（家庭治療可幫助家屬理解病情並引導採用有效的康復方法）。選項 (C) 完全契合文本文意。
+
+**5. 答案：(B)**
+
+* **解析**：全文最後一段總結指出「without help, a person ... can have serious health problems or die. However, with treatment, a person can get well and go on to lead a healthy life」（若無協助可能致死，但透過治療可恢復健康過上好生活），並結合多專科團隊的介入。故選項 (B) 為全文最佳主旨歸納。
 `,
 
-  // 選填：自動抓不到原文依據句的題目才需要；不需要就整段刪掉。數字是題號，句子要跟英文完全一樣
-  evidence: { 5: ['原文依據句…'] }
+  evidence: {
+    1: [
+      'Anorexia is an eating disorder that results in unhealthy weight loss.',
+      "People with bulimia don't all fit a single mold. They may be underweight (slightly), overweight or average weight."
+    ],
+    2: ['Treatment of the eating disorder will not be successful if good nutrition and physical health are not restored first.'],
+    3: ['Bulimia causes a host of physical symptoms such as tooth decay from stomach acid in the vomit'],
+    4: ['Family therapy can be implemented to help family members understand the condition and guide families to use effective approaches for recovery.'],
+    5: ['However, with treatment, a person can get well and go on to lead a healthy life.']
+  }
 },
-===== 模板結束 ===== */
+{
+  id: 'how-mistakes-springboard-growth',
+  title: "How Mistakes Springboard Conscientious People's Growth",
+
+  en: `
+**01. Why You've Stopped Saying "Let Me Try"**
+Think about the last time you avoided something new. It wasn't that you weren't interested — you were worried you'd look clumsy, slow, or out of place next to people who seemed to "get it" right away. As adults, we quietly stop signing up for things we might not be good at on the first try. We put the pottery class back in the cart, hum along in the car, but never open that guitar tutorial. We tell ourselves we're "just not the creative type." Psychologist Lindsey Godwin studies how people keep possibility alive. She argues this avoidance costs us more than one hobby. What we lose isn't the activity itself — it's the small, warm freedom of being a beginner again, allowed to be messy and unimpressive.
+
+**02. We're Only Allowed to Do Things We Look Good At**
+This starts with habit, not weakness. From school onward, we're graded and praised for being competent. Slowly, "doing it well" stops being one possible goal and becomes the price of joining in at all. By adulthood, we tie our self-worth to looking steady and composed. So touching something we are clearly not good at no longer feels like play; it feels like a threat to "who I am." Godwin's point is gentle: the problem isn't that you lost your playful side. It's that you learned an expensive rule — that you're only allowed to do things you already look good at. That rule is what to question, not your talent.
+
+**03. Looking Foolish on Purpose Vaccinates You Against Fear**
+The first benefit is concrete. When you deliberately do something low-stakes you're bad at — a terrible drawing, a wobbly dance, a shaky first cake — you practice looking silly on purpose. That practice changes your relationship with failure across the rest of your life. Godwin sums up the research: doing things you're bad at builds resilience, mainly by shrinking your fear of failure. In one small, safe corner of life, you survive looking foolish. Once that happens a few times, the fear that freezes you at work starts to look smaller. It works like a vaccine: a tiny, controlled dose of embarrassment trains your nervous system. You're not toughening up by being reckless — you're showing yourself, in safe doses, that awkwardness is survivable, and rarely as bad as your imagination predicted.
+
+**04. Play With No Scoreboard Keeps Your Brain Flexible**
+The second benefit is cognitive. Activities that are playful and have no scoreboard foster creativity and mental flexibility. When no one judges your technique, your brain can wander, associate, and try half-formed ideas without punishing itself. Adults think creativity is a gift reserved for artists. Research points to something more useful: it's closer to a muscle that stays loose only when used without pressure. A low-stakes doodle, a silly playlist, a bad first draft no one will ever read — these aren't wastes. They're the gym where flexible thinking stays in shape. The point isn't to produce something impressive. It's to let yourself associate without a deadline. That unhurried, playful state is exactly what you later need when you sit down to solve a real problem.
+
+**05. Enjoy the Process**
+Underneath it all is a mindset. Godwin notes that people with a growth mindset enjoy learning and experimenting for their own sake, instead of fixing their eyes only on the result. When you draw without aiming to be good, the drawing stops being a report card. When you take a class without aiming to be the best, the class becomes a place to be a beginner. The pressure drains away, because the activity no longer carries your self-worth. This isn't about lowering your standards where it matters. It's about reserving seriousness for the few things that truly deserve it, and giving yourself permission to be unexceptional at the things that are only supposed to bring you joy.
+
+**06. Permission to Be Bad Isn't Permission to Coast**
+This idea can be misread. It doesn't mean quitting everything or chasing ten hobbies half-heartedly. Low-stakes play works because it's small, voluntary, and genuinely yours. If every new activity becomes "must master in six months," you've just brought the pressure back. Pick one thing with no audience, no grade, and no deadline. The freedom comes from the absence of evaluation, not from adding another achievement to your list. And if it doesn't stick, that's fine too. The research isn't about loyalty to a hobby. It's about keeping the habit of starting alive. You may drop the pottery after three weeks — but you already got the resilience, the flexibility, and the laugh at yourself.
+
+**07. Pick One Clumsy Little Thing This Week**
+Two small moves to try. First, name one thing you've been quietly avoiding because you might be bad at it. Keep it tiny: a recipe, a one-kilometre jog, a doodle on a notebook. Second, do it once on purpose, with no audience. Before you start, say out loud: "I'm allowed to be bad at this. I'm only here for the beginner version of me." Notice what it feels like to survive looking a little foolish. So here's the question: what's one small, foolish thing you've told yourself you're "not the type" for? This week, what if you let yourself be bad at it — and actually enjoyed it?
+`,
+  zh: `
+**01. 為什麼你越來越不敢說「我來試試」**
+想想上一次你躲開一件新鮮事。不是沒興趣，而是怕在那些一看就會的人旁邊，顯得笨手笨腳、學得慢、格格不入。成年以後，我們悄悄不再報名那些第一次可能做不好的事。把陶藝班放回購物車，在車裡跟著哼歌，卻一直沒打開那節吉他教程。我們對自己說：「我就不是那塊料。」心理學家 Lindsey Godwin 研究人如何讓「可能性」活下去。她認為，這種迴避讓我們失去的遠不止一個愛好。弄丟的不只是那件事本身，而是重新當新手的拿份自由——允許自己笨拙、不厲害。
+
+**02. 大人只被允許把事情做漂亮**
+這是習慣，不是脆弱。從上學起，我們就因為「做得好」被打分、被表揚。慢慢地，「做好」從一個可選目標，變成了參與的入場券。到了中年，我們把自我價值和「看起來穩、一切盡在掌握」綁在一起。於是碰一件自己明顯不擅長的事，不再像玩，而像在威脅「我是誰」。Godwin 的話很溫柔：問題不是你丟了愛玩的那面，而是你學會了一條代價很高的規則——你只被允許做那些一開始就好看的事。該被質疑的是這條規則，不是你的天賦。
+
+**03. 主動出醜，是給恐懼打疫苗**
+第一個好處很具體。當你故意去做一件成本很低、自己又很爛的事——一幅糟糕的畫、一段晃悠的舞、一個烤歪的蛋糕——你是在主動練習出醜。這種練習會改變你和「失敗」的關係，影響到生活其他地方。Godwin 這樣概括研究：做不擅長的事能建立韌性，主要靠縮小你對失敗的恐懼。在生活某個安全角落，你活過了一次「出醜」。這種經歷多發生幾次，那個在工作里讓你僵住的恐懼，就開始變小。它像疫苗：一小劑可控的尷尬，訓練你的神經系統。你不是靠魯莽變堅強，而是用安全劑量反複向自己證明——尷尬是可以活下來的，而且遠沒有想像中難受。
+
+**04. 不帶評分的玩，最養腦子**
+第二個好處在認知。那些帶著玩心、沒有計分板的活動，反而能培養創造力和思維靈活。沒人評判你時，大腦才能自由遊走、產生聯想，試那些還沒成型的念頭，而不必因此懲罰自己。大人以為創造力是藝術家的天賦。研究給出更有用的說法：它更像一塊肌肉，只有在沒壓力時才保持鬆弛。一張隨手塗鴉、一份沒正經的歌單、一稿沒人會看的糟糕開頭——這些都不是浪費，而是靈活性思維保持狀態的健身房。重點不是做出什麼厲害東西，而是讓自己在沒截止日期時自由聯想。這種不慌不忙、帶著玩心的狀態，恰恰是你之後坐下來解決真問題時最需要的。
+
+**05. 享受過程，比拿到結果更輕鬆**
+這一切底下，是一種心態。Godwin 指出，擁有成長型思維的人，會為了學習和嘗試本身而享受過程，而不是把眼睛只盯在結果上。當你畫畫不再追求「畫得好」，畫就不再是成績單。當你上課不再想當第一，課堂就變回一個可以當新手的地方。壓力散了，因為這件事不再扛著你的自我價值。這不是讓你在真正重要的事上放水，而是把嚴肅留給少數配得上它的事，然後允許自己在那些只為快樂的事上，做個普通人。
+
+**06. 允許自己做得不好，不是擺爛**
+這觀點容易被讀歪。不是讓你辭掉一切、半心半意追十個愛好。低成本的玩之所以有效，是因為它小、自願、真正屬於你。如果每件新事都變成「半年必須精通」，你只是把壓力又請了回來。挑一件沒觀眾、沒分數、沒截止日期的事。自由來自「沒人評價」，而不是又往成就清單上加一筆。它沒堅持下來也沒關係。研究講的不是對愛好忠誠，而是讓「開始」這個習慣活下去。你可能三周後放下陶藝再沒碰——但韌性、靈活、和對自己的一笑，你已經拿到了。
+
+**07. 這周，挑一件你怕出醜的小事**
+這周試兩個小動作。第一，寫下一件你一直在悄悄迴避、怕做不好的事。越小越好：一個菜譜、一次一公里慢跑、筆記本上的一幅塗鴉。第二，故意做一次，沒有觀眾。開始前大聲說：「這件事我允許自己做不好，我只是來陪那個新手的自己。」 留意一下——活過一次「有點出醜」，是什麼感覺。留給你一個問題：有哪件小小的、傻傻的事，你一直對自己說「我不是那塊料」？這一周，如果允許自己把它做得很爛——然後竟然有點開心，會怎樣？
+`,
+  questions: `
+**1. Based on Part 1 and Part 2, what is the primary factor that deters adults from engaging in novel activities?**
+(A) A lack of inherent intellectual capacity and creative talent needed for skill acquisition.
+(B) The conditioning that conditions participation on proficiency, equating failure with a threat to identity.
+(C) Severe economic constraints that restrict access to recreational facilities and instructional materials.
+(D) Biological degeneration of brain plasticity that impairs cognitive functioning in adulthood.
+
+**2. Which of the following best characterizes the physiological mechanism of "deliberate embarrassment" as described in Part 3?**
+(A) It permanently desensitizes the central nervous system to all forms of emotional pain.
+(B) It functions analogously to inoculation, exposing the individual to manageable doses of discomfort to diminish fear response.
+(C) It forces individuals to engage in reckless behavior to build psychological tolerance to public humiliation.
+(D) It eliminates the necessity of professional incompetence by suppressing autonomic stress responses.
+
+**3. According to Part 4 and Part 5, how does low-stakes, evaluation-free play enhance problem-solving capacities in high-stakes domains?**
+(A) It lowers performance standards in professional obligations to prevent burnout.
+(B) It frees cognitive processing from evaluative anxiety, preserving mental flexibility and associative capacity.
+(C) It guarantees rapid technical mastery of artistic disciplines through unconstrained repetition.
+(D) It replaces structured professional training with unstructured recreational endeavors.
+
+**4. In Part 6, the author emphasizes that "permission to be bad" should NOT be conflated with which of the following?**
+(A) Developing a habitual willingness to initiate new experiences.
+(B) Engaging in voluntary, self-directed activities without external deadlines.
+(C) A superficial or careless abandonment of all meaningful commitments across life domains.
+(D) Detaching personal self-worth from the outcomes of recreational pursuits.
+
+**5. What is the overarching thesis synthesized across the entire text?**
+(A) Perfectionism in all life domains is essential for maintaining career advancement and societal respect.
+(B) Engaging in unmonitored, low-stakes vulnerability cultivates cognitive resilience and restores agency without undermining professional rigor.
+(C) Adults should abandon high-stakes professional pursuits to focus exclusively on mastering artistic hobbies.
+(D) Psychological resilience can only be attained through formal clinical interventions rather than self-directed behavioral adjustments.
+`,
+  answers: `
+**1. 答案：(B)**
+
+* **解析**：第一段與第二段指出大人之所以避開嘗試新事物，是因為「you were worried you'd look clumsy...」 以及「"doing it well" stops being one possible goal and becomes the price of joining in at all」，進而將不擅長的事視為「threat to who I am」。選項 (B)「將參與前提建立於熟練度之上，並將失敗同義於對身份認同的威脅」精準改寫此核心制約機制。(A) 與 (D) 提到生理與智力缺陷完全未提及；(C) 經濟限制亦非主因。
+
+**2. 答案：(B)**
+
+* **解析**：第三段明確將故意出醜比喻為疫苗：「It works like a vaccine: a tiny, controlled dose of embarrassment trains your nervous system... showing yourself, in safe doses, that awkwardness is survivable」。選項 (B)「其功能類似接種疫苗，將個體暴露於可控劑量的尷尬中以減弱恐懼反應」完美對應原文。(A) 宣稱「永久去敏感化所有情感疼痛」屬於過度延伸；(C) 宣稱「強迫魯莽行為」與原文「You're not toughening up by being reckless」矛盾；(D) 宣稱可免除技術不熟練亦不符合文意。
+
+**3. 答案：(B)**
+
+* **解析**：第四段指出「When no one judges your technique, your brain can wander, associate, and try half-formed ideas without punishing itself」，且此不慌不忙的狀態正是解決實質問題所需。選項 (B)「使認知運作脫離評估焦慮，從而保留思考靈活性與聯想能力」嚴謹改寫了原文。(A) 降低工作標準與 (C) 保證快速精通藝術皆不符文意；(D) 完全取代專業訓練屬於無中生有。
+
+**4. 答案：(C)**
+
+* **解析**：第六段開宗明義強調「This idea can be misread. It doesn't mean quitting everything or chasing ten hobbies half-heartedly」。選項 (C)「對所有生活領域中具意義的承諾進行膚淺或草率的放棄（擺爛/ coast）」即為作者強調不可混淆的誤讀概念。其餘選項 (A)、(B)、(D) 均為作者所提倡的正面特質而非應避免的誤讀。
+
+**5. 答案：(B)**
+
+* **解析**：通篇整合第三至六段，作者的主旨在於：在低風險活動中主動接納脆弱與出醜，能建構心理韌性與認知靈活性，且這並非放任擺爛，而是將嚴肅留給真正重要的事物。選項 (B)「在無監督、低風險的環境中進行脆弱性嘗試，能培養認知韌性並找回主導權，且不致削弱專業嚴謹度」最具全面性與統合力。(A) 主張完美主義與作者相反；(C) 主張放棄專業追求屬於過度推論；(D) 宣稱只能靠臨床治療亦不符合文意。
+`,
+
+  evidence: {
+    1: ['Slowly, "doing it well" stops being one possible goal and becomes the price of joining in at all.'],
+    2: ['It works like a vaccine: a tiny, controlled dose of embarrassment trains your nervous system.'],
+    3: ['When no one judges your technique, your brain can wander, associate, and try half-formed ideas without punishing itself.'],
+    4: ["It doesn't mean quitting everything or chasing ten hobbies half-heartedly."],
+    5: ["The research isn't about loyalty to a hobby. It's about keeping the habit of starting alive."]
+  }
+}
+];
 </script>
 
 <!-- ============================================================
@@ -939,7 +1109,6 @@ function persistMarks(articleId) {
 function recordsOf(id, mode) { return state.records.filter(r => r.articleId === id && r.mode === mode).sort((x, y) => new Date(x.time) - new Date(y.time)); }
 function modeStatus(a, mode) {
   const recs = recordsOf(a.id, mode);
-  // 閱讀：完成才有紀錄；聽力：只要交過卷（有紀錄）就算完成，有沒有空格、對不對都不管（舊紀錄裡被記成 incomplete 的也算）
   return { done: recs.length > 0, lastDone: recs[recs.length - 1] };
 }
 function isUnlocked(id) { return state.records.some(r => r.articleId === id); }   // 做過任一種測驗（閱讀完成或聽力交卷）才解鎖翻譯
@@ -1059,12 +1228,10 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('menuOve
 
 /* ============================================================
    朗讀（瀏覽器內建語音，免費）
-   切成一句一句念，避免長文章中途停掉；暫停＝停掉，繼續＝從這一句重念
    ============================================================ */
 function sectionItems(s) { const items = []; if (s.title) items.push(s.title); items.push(...sentencesOf(s.en)); return items; }
 function articleItems(a) { const items = [a.title]; a.sections.forEach(s => items.push(...sectionItems(s))); return items; }
 
-/* 聲音：只列英文聲音，預設挑品質較好的，你選了就記住 */
 function englishVoices() { return (typeof speechSynthesis !== 'undefined' && speechSynthesis.getVoices ? speechSynthesis.getVoices() : []).filter(v => /^en/i.test(v.lang)); }
 function voiceScore(v) {
   let s = 0; const n = v.name || '';
@@ -1317,7 +1484,7 @@ function nextRQ() {
 $('rqSubmit').onclick = submitRQ;
 
 function finishReading() {
-  if (!rq || rq.finished) return;                      // 只能完成一次（避免被蓋住的按鈕還有焦點，Enter 又觸發一次）
+  if (!rq || rq.finished) return;
   rq.finished = true;
   if (document.activeElement) document.activeElement.blur();
   const seconds = stopTimer(); unbindKeys();
@@ -1618,7 +1785,7 @@ function unbindKeys() { if (keyHandler) document.removeEventListener('keydown', 
 function readingKeys(e) {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   if ($('resultOverlay').classList.contains('show')) return;
-  if (e.key === 'Enter') { e.preventDefault(); submitRQ(); return; }          // preventDefault：避免按鈕有焦點時 Enter 又觸發一次原生點擊
+  if (e.key === 'Enter') { e.preventDefault(); submitRQ(); return; }
   if (rq.answered) return;
   if (/^[1-9]$/.test(e.key)) {
     const b = $('rqOptions').querySelectorAll('.option-btn')[Number(e.key) - 1];
