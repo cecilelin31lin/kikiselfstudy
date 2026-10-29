@@ -102,16 +102,16 @@ button{font-family:inherit}
 .res-row strong{font-size:15px}
 
 /* ---------- 統計 ---------- */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
 .stat-card{border-radius:15px;padding:13px;background:rgba(255,255,255,.80);text-align:center}
 .stat-label{font-size:12px;color:var(--muted);letter-spacing:.06em;margin-bottom:2px}
 .stat-value{font-size:20px;font-weight:600}
 
 /* ---------- 閱讀測驗 ---------- */
 .reading-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px;align-items:start}
-.article-pane{position:sticky;top:12px;display:flex;flex-direction:column;max-height:calc(100vh - 24px);background:rgba(255,255,255,.92)}
+.article-pane{position:sticky;top:12px;display:flex;flex-direction:column;max-height:calc(100vh - 24px);background:rgba(255,255,255,.92);-webkit-user-select:text;user-select:text}
 .article-pane-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:14px;letter-spacing:.06em}
-.article-scroll{overflow:auto;padding:14px 18px;flex:1;min-height:0}
+.article-scroll{overflow:auto;padding:14px 18px;flex:1;min-height:0;-webkit-user-select:text;user-select:text}
 .sec{margin-bottom:18px}
 .sec-head{font-family:var(--serif);font-weight:700;font-size:15px;margin-bottom:4px;line-height:1.5}
 .sec-label{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC',sans-serif;color:var(--ok);margin-right:7px;font-size:13px}
@@ -264,7 +264,6 @@ section:not(.hidden){animation:vocFade .22s ease}
     <div class="stats">
       <div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="rqProg">1/1</div></div>
       <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="rqTimer">0:00</div></div>
-      <div class="stat-card"><div class="stat-label">✓ 第一次答對</div><div class="stat-value" id="rqCorrect">0</div></div>
     </div>
     <div class="reading-layout">
       <div class="article-pane" id="rqPane">
@@ -281,8 +280,11 @@ section:not(.hidden){animation:vocFade .22s ease}
           <div class="q-text" id="rqText"></div>
           <div id="rqOptions"></div>
         </div>
-        <div class="btn-row"><button class="btn primary" id="rqSubmit">確認答案</button></div>
-        <div class="q-hint">數字鍵 1～4 選選項，Enter 確認／下一題</div>
+        <div class="btn-row">
+          <button class="btn secondary" id="rqPrev" disabled>上一題</button>
+          <button class="btn primary" id="rqNext">下一題</button>
+        </div>
+        <div class="q-hint">數字鍵 1～4 選選項，Enter 下一題</div>
       </div>
     </div>
   </section>
@@ -1409,12 +1411,11 @@ let rq = null;
 function startReading(id) {
   const a = articleById(id);
   stopTimer(); Reader.stop();
-  rq = { a, items: a.questions.map(q => ({ q, options: shuffle(q.options), wrong: [], firstTry: null })), idx: 0, selected: null, answered: false, firstTryCount: 0, finished: false };
+  rq = { a, items: a.questions.map(q => ({ q, options: shuffle(q.options), selected: null })), idx: 0, finished: false };
   $('rqTitle').textContent = a.title;
   buildReadingArticle(a);
   $('rqCollapse').textContent = '收合文章';
   $('rqArticle').classList.remove('hidden'); $('hlBar').classList.remove('hidden');
-  $('rqCorrect').textContent = '0';
   show('readingQuiz');
   showRQ();
   startTimer('rqTimer');
@@ -1437,7 +1438,6 @@ $('rqCollapse').onclick = () => {
 };
 function showRQ() {
   const it = rq.items[rq.idx];
-  rq.selected = null; rq.answered = false;
   $('rqProg').textContent = (rq.idx + 1) + '/' + rq.items.length;
   $('rqProgress').textContent = '第 ' + (rq.idx + 1) + ' 題 / 共 ' + rq.items.length + ' 題';
   $('rqText').textContent = it.q.question;
@@ -1447,58 +1447,62 @@ function showRQ() {
     b.innerHTML = '<span class="choice-line"><span class="choice-text"></span><span class="choice-mark"></span></span>';
     b.querySelector('.choice-text').textContent = opt;
     b.dataset.value = opt;
+    if (it.selected === opt) b.dataset.selected = 'true';
     b.onclick = () => {
-      if (rq.answered || b.disabled) return;
       box.querySelectorAll('.option-btn').forEach(x => x.removeAttribute('data-selected'));
-      b.dataset.selected = 'true'; rq.selected = opt;
+      b.dataset.selected = 'true'; it.selected = opt;
     };
     box.appendChild(b);
   });
-  $('rqSubmit').textContent = '確認答案';
+  $('rqPrev').disabled = rq.idx === 0;
+  $('rqNext').textContent = rq.idx === rq.items.length - 1 ? '交卷' : '下一題';
 }
-function submitRQ() {
-  if (rq.finished) return;
-  if (rq.answered) { nextRQ(); return; }
-  if (rq.selected === null) { alert('請先選擇答案'); return; }
-  const it = rq.items[rq.idx];
-  const btn = $('rqOptions').querySelector('.option-btn[data-selected="true"]');
-  const mark = btn.querySelector('.choice-mark');
-  if (rq.selected === it.q.answer) {
-    rq.answered = true;
-    if (it.firstTry === null) { it.firstTry = it.wrong.length === 0; if (it.firstTry) { rq.firstTryCount++; $('rqCorrect').textContent = rq.firstTryCount; } }
-    btn.classList.add('correct'); btn.removeAttribute('data-selected');
-    mark.textContent = '✓ 正確'; mark.classList.add('ok');
-    $('rqOptions').querySelectorAll('.option-btn').forEach(x => x.disabled = true);
-    $('rqSubmit').textContent = rq.idx === rq.items.length - 1 ? '查看結果' : '下一題';
-  } else {
-    it.wrong.push(rq.selected); it.firstTry = false;
-    btn.classList.add('incorrect'); btn.disabled = true; btn.removeAttribute('data-selected');
-    mark.textContent = '✗ 錯誤'; mark.classList.add('bad');
-    rq.selected = null;
-  }
+function prevRQ() {
+  if (rq.idx > 0) { rq.idx--; showRQ(); }
 }
 function nextRQ() {
-  rq.idx++;
-  if (rq.idx >= rq.items.length) finishReading(); else showRQ();
+  if (rq.idx < rq.items.length - 1) {
+    rq.idx++; showRQ();
+  } else {
+    finishReading();
+  }
 }
-$('rqSubmit').onclick = submitRQ;
+$('rqPrev').onclick = prevRQ;
+$('rqNext').onclick = nextRQ;
 
 function finishReading() {
   if (!rq || rq.finished) return;
+  const unans = rq.items.filter(it => !it.selected).length;
+  if (unans > 0 && !confirm('還有 ' + unans + ' 題尚未作答，確定要交卷嗎？')) return;
+
   rq.finished = true;
   if (document.activeElement) document.activeElement.blur();
   const seconds = stopTimer(); unbindKeys();
+
+  let correctCount = 0;
+  const details = rq.items.map((it, i) => {
+    const isCorrect = it.selected === it.q.answer;
+    if (isCorrect) correctCount++;
+    return { q: i + 1, firstTry: isCorrect, wrong: isCorrect ? [] : (it.selected ? [it.selected] : ['未作答']) };
+  });
+
   const rec = {
     time: new Date().toISOString(), articleId: rq.a.id, title: rq.a.title, mode: 'reading', status: 'completed',
-    correct: rq.firstTryCount, wrong: rq.items.filter(it => it.wrong.length).length, empty: 0, total: rq.items.length, seconds,
-    details: rq.items.map((it, i) => ({ q: i + 1, firstTry: !!it.firstTry, wrong: it.wrong }))
+    correct: correctCount, wrong: rq.items.length - correctCount, empty: 0, total: rq.items.length, seconds,
+    details
   };
   addRecord(rec);
+  
+  // 為了相容解析頁面顯示
+  rq.items.forEach(it => {
+    it.wrong = it.selected === it.q.answer ? [] : (it.selected ? [it.selected] : ['未作答']);
+  });
+  
   const snap = rq;
-  showResult('閱讀測驗完成', [['第一次答對', rec.correct + '/' + rec.total], ['答錯過的題數', rec.wrong], ['用時', fmt(seconds)]], () => showReadingReview(snap));
+  showResult('閱讀測驗完成', [['得分', correctCount + '/' + rec.total], ['答錯題數', rec.wrong], ['用時', fmt(seconds)]], () => showReadingReview(snap));
 }
 
-/* ---------- 閱讀測驗：選取文字 → 螢光標示 ---------- */
+/* ---------- 閱讀測驗：選取文字 → 螢光標示 (相容 iOS / iPad / Desktop) ---------- */
 let lastRange = null;
 function selectionInArticle() {
   const sel = window.getSelection();
@@ -1506,14 +1510,19 @@ function selectionInArticle() {
   const r = sel.getRangeAt(0);
   return $('rqArticle').contains(r.commonAncestorContainer) ? r : null;
 }
-document.addEventListener('selectionchange', () => {
+function checkSelection() {
   if ($('readingQuiz').classList.contains('hidden')) return;
   const r = selectionInArticle();
   if (r) lastRange = r.cloneRange();
   $('hlBtn').disabled = !r && !lastRangeValid();
-});
+}
+document.addEventListener('selectionchange', checkSelection);
+document.addEventListener('touchend', () => setTimeout(checkSelection, 100));
+document.addEventListener('mouseup', () => setTimeout(checkSelection, 100));
+
 function lastRangeValid() { return !!lastRange && !lastRange.collapsed && $('rqArticle').contains(lastRange.commonAncestorContainer); }
-['mousedown', 'touchstart'].forEach(ev => $('hlBtn').addEventListener(ev, e => e.preventDefault(), { passive: false }));
+
+$('hlBtn').addEventListener('pointerdown', e => e.stopPropagation());
 $('hlBtn').onclick = () => {
   const r = selectionInArticle() || (lastRangeValid() ? lastRange : null);
   if (!r) return;
@@ -1722,7 +1731,7 @@ function showReadingReview(r) {
       const isAns = opt === q.answer, wasWrong = it.wrong.includes(opt);
       card.appendChild(el('div', 'rv-opt' + (isAns ? ' ok' : wasWrong ? ' bad' : ''), (isAns ? '✓ ' : wasWrong ? '✗ ' : '') + '(' + 'ABCDEFGH'[k] + ') ' + opt));
     });
-    card.appendChild(el('div', 'rv-line', it.wrong.length ? '答錯過：' + it.wrong.map(w => '(' + 'ABCDEFGH'[q.options.indexOf(w)] + ')').join('、') : '✓ 第一次答對'));
+    card.appendChild(el('div', 'rv-line', it.wrong.length ? '作答結果：' + it.wrong.map(w => w === '未作答' ? '未作答' : '(' + 'ABCDEFGH'[q.options.indexOf(w)] + ')').join('、') : '✓ 答對'));
     if (q.explanation) {
       const text = typeof q.explanation === 'string' ? q.explanation : q.explanation.text;
       if (text) card.appendChild(el('div', 'rv-expl', text));
@@ -1777,7 +1786,7 @@ function showListeningReview(r) {
 }
 
 /* ============================================================
-   鍵盤（閱讀測驗）：數字鍵選選項、Enter 確認／下一題
+   鍵盤（閱讀測驗）：數字鍵選選項、Enter 下一題
    ============================================================ */
 let keyHandler = null;
 function bindKeys(fn) { unbindKeys(); keyHandler = fn; document.addEventListener('keydown', keyHandler); }
@@ -1785,8 +1794,7 @@ function unbindKeys() { if (keyHandler) document.removeEventListener('keydown', 
 function readingKeys(e) {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   if ($('resultOverlay').classList.contains('show')) return;
-  if (e.key === 'Enter') { e.preventDefault(); submitRQ(); return; }
-  if (rq.answered) return;
+  if (e.key === 'Enter') { e.preventDefault(); nextRQ(); return; }
   if (/^[1-9]$/.test(e.key)) {
     const b = $('rqOptions').querySelectorAll('.option-btn')[Number(e.key) - 1];
     if (b && !b.disabled) { e.preventDefault(); b.click(); }
