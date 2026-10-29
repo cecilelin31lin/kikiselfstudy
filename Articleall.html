@@ -111,7 +111,7 @@ button{font-family:inherit}
 .reading-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px;align-items:start}
 .article-pane{position:sticky;top:12px;display:flex;flex-direction:column;max-height:calc(100vh - 24px);background:rgba(255,255,255,.92);-webkit-user-select:text;user-select:text}
 .article-pane-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);font-weight:700;font-size:14px;letter-spacing:.06em}
-.article-scroll{overflow:auto;padding:14px 18px;flex:1;min-height:0;-webkit-user-select:text;user-select:text}
+.article-scroll{overflow:auto;padding:14px 18px;flex:1;min-height:0;-webkit-user-select:text;user-select:text;-webkit-overflow-scrolling:touch}
 .sec{margin-bottom:18px}
 .sec-head{font-family:var(--serif);font-weight:700;font-size:15px;margin-bottom:4px;line-height:1.5}
 .sec-label{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC',sans-serif;color:var(--ok);margin-right:7px;font-size:13px}
@@ -126,15 +126,19 @@ mark.ev{background:rgba(255,225,53,.4);color:inherit;border-radius:2px;padding:0
 .q-text{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:.015em;line-height:1.55;margin-bottom:16px}
 .option-btn{display:block;width:100%;padding:13px 15px;margin-bottom:10px;border:1px solid rgba(43,58,85,.10);border-radius:13px;background:#fff;cursor:pointer;text-align:left;
   font-family:var(--serif);font-size:15px;line-height:1.5;color:var(--ink);box-shadow:0 2px 8px rgba(43,58,85,.035);
-  transition:transform .14s ease,box-shadow .14s ease,background .14s ease,border-color .14s ease}
+  transition:transform .14s ease,box-shadow .14s ease,background .14s ease,border-color .14s ease;
+  -webkit-tap-highlight-color:transparent}
 .option-btn:hover{border-color:var(--theme-main);transform:translateY(-1px)}
 .option-btn[data-selected="true"]{background:var(--theme-selected);border-color:var(--theme-main);box-shadow:0 0 0 2px var(--theme-soft)}
 .option-btn.correct{background:rgba(70,129,137,.14);border-color:var(--ok)}
 .option-btn.incorrect{background:rgba(232,130,140,.16);border-color:var(--bad)}
 .option-btn:disabled{cursor:default;transform:none}
 .choice-line{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
+.choice-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.choice-cb{width:18px;height:18px;border-radius:4px;border:1.5px solid #91a0b5;cursor:pointer;flex-shrink:0;transition:all .14s ease;accent-color:var(--theme-main);margin:0}
+.choice-cb:hover{border-color:var(--theme-main)}
 .choice-text{flex:1;min-width:0}
-.choice-mark{flex:0 0 3.9em;text-align:right;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC',sans-serif;font-size:12px;font-weight:700;white-space:nowrap}   /* 永遠預留標記的位置，答對／答錯時選項不會多換一行 */
+.choice-mark{flex:0 0 3.9em;text-align:right;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang TC',sans-serif;font-size:12px;font-weight:700;white-space:nowrap}
 .choice-mark.ok{color:var(--ok)}
 .choice-mark.bad{color:var(--bad)}
 .q-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;letter-spacing:.02em}
@@ -203,7 +207,7 @@ section:not(.hidden){animation:vocFade .22s ease}
   #readingQuiz .reading-layout{flex:1;min-height:0;align-items:stretch}
   #readingQuiz .article-pane{position:static;max-height:none;height:100%;min-height:0}
   #readingQuiz .q-col{height:100%;display:flex;flex-direction:column;overflow:hidden}
-  #readingQuiz .q-col .q-card{flex:1;min-height:0;overflow:auto}
+  #readingQuiz .q-col .q-card{flex:1;min-height:0;overflow:auto;-webkit-overflow-scrolling:touch}
   #readingQuiz .q-col .btn-row,#readingQuiz .q-col .q-hint{flex:none}
 }
 @media (max-width: 900px) {
@@ -343,14 +347,13 @@ section:not(.hidden){animation:vocFade .22s ease}
 </div>
 
 <!-- ============================================================
-     ① 設定區：你最常改的東西都在這裡
+     ① 設定區
      ============================================================ -->
 <script>
-const CLOUD_URL = 'https://script.google.com/macros/s/AKfycbwc3At1ALtNcZTtSbq5HLtkCei0R18yS-6Ae6qhVNB00R9NFpEMxA3DsbZyslpFr7areA/exec';                  // Google Apps Script 部署後的網址，貼在引號裡（空白＝紀錄只存在這台瀏覽器）
+const CLOUD_URL = 'https://script.google.com/macros/s/AKfycbwc3At1ALtNcZTtSbq5HLtkCei0R18yS-6Ae6qhVNB00R9NFpEMxA3DsbZyslpFr7areA/exec';                  // Google Apps Script 部署後的網址
 const DEFAULT_RATE = 0.85;             // 朗讀預設語速（1 = 正常）
 const RATE_OPTIONS = [0.7, 0.85, 1.0]; // 語速下拉選單裡的選項
 
-// 主題色（每次打開、每次回主頁隨機換一個；main 主色、hover 滑過色、rgb 淡底色用）
 const THEMES = [
   { main: '#B0C4DE', hover: '#9AB3D0', rgb: '176,196,222' },
   { main: '#A9C6D9', hover: '#8FB2C9', rgb: '169,198,217' },
@@ -396,7 +399,7 @@ const THEMES = [
 </script>
 
 <!-- ============================================================
-     ② 文章資料區：新增文章就在這裡貼
+     ② 文章資料區
      ============================================================ -->
 <script>
 const ARTICLES_RAW = [
@@ -873,7 +876,7 @@ Two small moves to try. First, name one thing you've been quietly avoiding becau
 </script>
 
 <!-- ============================================================
-     ③ 程式（一般不用動）
+     ③ 程式區
      ============================================================ -->
 <script>
 /* ============================================================
@@ -902,7 +905,7 @@ function applyRandomTheme() {
 }
 applyRandomTheme();
 
-/* 斷詞：英文單字（含 don't、well-known 這類）算一個字 */
+/* 斷詞 */
 const WORD_RE = /[A-Za-z0-9]+(?:[’'\-][A-Za-z0-9]+)*/g;
 function tokenize(text) {
   const out = []; let last = 0, m, n = 0;
@@ -918,7 +921,7 @@ function tokenize(text) {
 function sentencesOf(text) { return (text.match(/[^.!?]+[.!?]+["”’']*|[^.!?]+$/g) || [text]).map(s => s.trim()).filter(Boolean); }
 
 /* ============================================================
-   文章解析：把四個貼上的文字區塊，轉成頁面用的文章物件
+   文章解析
    ============================================================ */
 function cleanLines(text) {
   return String(text || '').replace(/\r\n?/g, '\n').split('\n')
@@ -974,70 +977,53 @@ function detectEvidence(expl, sections) {
 function parseArticle(raw) {
   const errors = [], warnings = [];
   const id = String(raw.id || '').trim(), title = String(raw.title || '').trim() || '(沒有標題)';
-  if (!/^[A-Za-z0-9_-]+$/.test(id)) errors.push('id 只能用英文、數字、減號、底線，不能空白（目前是「' + id + '」）');
+  if (!/^[A-Za-z0-9_-]+$/.test(id)) errors.push('id 格式錯誤');
 
   const en = splitByHeadings(raw.en);
-  if (!en.length) errors.push('英文區塊找不到段落（每一段要有獨立一行的 **標題**，例如 **Introduction**、**01. 標題**）');
   const sections = [];
   en.forEach((s, i) => {
     let m;
     if (/^introduction$/i.test(s.head)) sections.push({ label: 'Introduction', title: '', en: s.body });
     else if ((m = s.head.match(/^(\d+)\s*[.．]\s*(.+)$/))) sections.push({ label: m[1], title: m[2].trim(), en: s.body });
-    else { errors.push('英文第 ' + (i + 1) + ' 段的標題格式看不懂：「' + s.head + '」（要是 Introduction 或 01. 標題）'); sections.push({ label: '?', title: '', en: s.body }); }
-    if (!s.body) errors.push('英文第 ' + (i + 1) + ' 段（' + s.head + '）沒有內文');
+    else { sections.push({ label: '?', title: '', en: s.body }); }
   });
 
   const zh = splitByHeadings(raw.zh);
-  if (en.length && zh.length !== en.length) errors.push('中文翻譯有 ' + zh.length + ' 段，英文有 ' + en.length + ' 段，要一樣多');
-  else sections.forEach((sec, i) => {
+  sections.forEach((sec, i) => {
     const z = zh[i]; if (!z) return; let m;
-    if (sec.label === '?') { sec.zhTitle = z.head; sec.zh = z.body; return; }   // 英文標題已經報錯，不連帶再報中文對不上
     if (sec.label === 'Introduction') sec.zhTitle = z.head;
     else if ((m = z.head.match(/^(\d+)\s*[.．]\s*(.+)$/)) && Number(m[1]) === Number(sec.label)) sec.zhTitle = m[2].trim();
-    else { errors.push('中文第 ' + (i + 1) + ' 段的編號跟英文「' + sec.label + '」對不上（中文標題：「' + z.head + '」）'); sec.zhTitle = z.head; }
+    else sec.zhTitle = z.head;
     sec.zh = z.body;
-    if (!z.body) errors.push('中文第 ' + (i + 1) + ' 段（' + z.head + '）沒有內文');
   });
 
   const qs = parseQuestions(raw.questions), ans = parseAnswers(raw.answers);
-  if (!qs.length) errors.push('題目區塊找不到題目（每題要有獨立一行的 **1. 題目**，選項寫 (A) (B) (C) (D)）');
   const questions = qs.map(q => {
-    const a = ans[q.n]; const where = '第 ' + q.n + ' 題';
-    if (q.options.length < 2) errors.push(where + '的選項少於 2 個（選項要寫成 (A) …、(B) …）');
-    if (!a) { errors.push(where + '在「答案與解析」裡找不到（要有 **' + q.n + '. 答案：(B)** 這一行）'); return null; }
+    const a = ans[q.n];
+    if (!a) return null;
     const opt = q.options.find(o => o.letter === a.letter);
-    if (!opt) { errors.push(where + '的答案是 (' + a.letter + ')，但題目裡沒有這個選項'); return null; }
-    if (!a.explanation) warnings.push(where + '沒有解析文字');
+    if (!opt) return null;
     return { type: 3, n: q.n, question: q.question, options: q.options.map(o => o.text), answer: opt.text, explanation: { text: a.explanation, image: '' }, evidence: [] };
   }).filter(Boolean);
 
-  if (!errors.length) {
-    questions.forEach(q => {
-      const manual = raw.evidence && raw.evidence[q.n];
-      if (Array.isArray(manual)) {
-        manual.forEach(txt => {
-          const si = sections.findIndex(s => s.en.includes(txt));
-          if (si < 0) warnings.push('第 ' + q.n + ' 題 evidence 裡的句子在英文原文找不到：「' + String(txt).slice(0, 40) + '…」');
-          else q.evidence.push({ s: si, text: txt });
-        });
-      } else q.evidence = detectEvidence(q.explanation.text, sections);
-      if (!q.evidence.length) warnings.push('第 ' + q.n + ' 題沒有自動抓到原文依據句（可以在 evidence 手動補）');
-    });
-  }
-  return { errors, warnings, article: errors.length ? null : { id, title, sections, questions } };
+  questions.forEach(q => {
+    const manual = raw.evidence && raw.evidence[q.n];
+    if (Array.isArray(manual)) {
+      manual.forEach(txt => {
+        const si = sections.findIndex(s => s.en.includes(txt));
+        if (si >= 0) q.evidence.push({ s: si, text: txt });
+      });
+    } else q.evidence = detectEvidence(q.explanation.text, sections);
+  });
+
+  return { errors: [], warnings: [], article: { id, title, sections, questions } };
 }
+
 const articles = [];
-const loadErrors = [], loadWarnings = [];
 (function loadAllArticles() {
-  const ids = new Set();
-  ARTICLES_RAW.forEach((raw, idx) => {
-    const name = (raw && raw.title) ? '「' + raw.title + '」' : '第 ' + (idx + 1) + ' 篇';
-    let r;
-    try { r = parseArticle(raw || {}); } catch (e) { r = { errors: ['解析時出錯：' + e.message], warnings: [], article: null }; }
-    if (r.article && ids.has(r.article.id)) { r.errors.push('id「' + r.article.id + '」跟前面的文章重複了'); r.article = null; }
-    if (r.article) { ids.add(r.article.id); articles.push(r.article); }
-    r.errors.forEach(m => loadErrors.push(name + '：' + m));
-    if (r.article) r.warnings.forEach(m => loadWarnings.push(name + '：' + m));   // 沒載入的文章不報提醒
+  ARTICLES_RAW.forEach(raw => {
+    const r = parseArticle(raw || {});
+    if (r.article) articles.push(r.article);
   });
 })();
 function articleById(id) { return articles.find(a => a.id === id); }
@@ -1092,10 +1078,10 @@ function mergeFromCloud(d) {
   const have = new Set(cloudRecs.map(recKey));
   const localOnly = state.records.filter(r => !have.has(recKey(r)));
   state.records = [...cloudRecs, ...localOnly];
-  localOnly.forEach(r => cloudSend({ action: 'saveResult', ...r }));       // 還沒連 Google 時存的紀錄，補送上去
+  localOnly.forEach(r => cloudSend({ action: 'saveResult', ...r }));
   const cm = d.marks || {};
   Object.keys(state.marks).forEach(id => { if (!(id in cm) && (state.marks[id] || []).length) cloudSend({ action: 'saveMarks', articleId: id, marks: state.marks[id] }); });
-  state.marks = { ...state.marks, ...cm };                                  // 兩邊都有的，以雲端為準
+  state.marks = { ...state.marks, ...cm };
   saveLocal();
 }
 function addRecord(rec) { state.records.push(rec); saveLocal(); cloudSend({ action: 'saveResult', ...rec }); }
@@ -1107,20 +1093,18 @@ function persistMarks(articleId) {
   marksTimers[articleId] = setTimeout(() => cloudSend({ action: 'saveMarks', articleId, marks: state.marks[articleId] || [] }), 600);
 }
 
-/* 每篇文章的狀態 */
 function recordsOf(id, mode) { return state.records.filter(r => r.articleId === id && r.mode === mode).sort((x, y) => new Date(x.time) - new Date(y.time)); }
 function modeStatus(a, mode) {
   const recs = recordsOf(a.id, mode);
   return { done: recs.length > 0, lastDone: recs[recs.length - 1] };
 }
-function isUnlocked(id) { return state.records.some(r => r.articleId === id); }   // 做過任一種測驗（閱讀完成或聽力交卷）才解鎖翻譯
+function isUnlocked(id) { return state.records.some(r => r.articleId === id); }
 function articleState(a) {
   const r = modeStatus(a, 'reading'), l = modeStatus(a, 'listening');
   const any = state.records.some(x => x.articleId === a.id);
   return { r, l, blanks: validMarks(a).length, key: (r.done && l.done) ? 'completed' : any ? 'progress' : 'notstarted' };
 }
 
-/* 聽力空格：驗證存的標記跟目前文章內容對得上 */
 function validMarks(a) {
   const saved = state.marks[a.id] || [];
   const tokCache = {};
@@ -1165,7 +1149,7 @@ function leaveQuiz() {
 }
 
 /* ============================================================
-   主頁：Not Started / In Progress / Completed
+   主頁
    ============================================================ */
 function readingLine(st) {
   if (st.r.done) { const r = st.r.lastDone; return ['閱讀：✓ 第一次答對 ' + r.correct + '/' + r.total + '｜' + fmtDate(r.time), 'ok']; }
@@ -1177,10 +1161,6 @@ function listeningLine(st) {
   return ['聽力：尚未作答（' + st.blanks + ' 個空格）', ''];
 }
 function renderHome() {
-  const msgs = $('loadMsgs'); msgs.innerHTML = '';
-  if (loadErrors.length) { const b = el('div', 'banner err'); b.appendChild(el('div', null, '⚠️ 有文章沒有載入，請檢查「文章資料區」：')); loadErrors.forEach(m => b.appendChild(el('div', null, '・' + m))); msgs.appendChild(b); }
-  if (loadWarnings.length) { const b = el('div', 'banner warn'); b.appendChild(el('div', null, '提醒：')); loadWarnings.forEach(m => b.appendChild(el('div', null, '・' + m))); msgs.appendChild(b); }
-
   const groups = { notstarted: [], progress: [], completed: [] };
   articles.forEach(a => { const st = articleState(a); groups[st.key].push({ a, st }); });
   [['nsTitle', 'nsGrid', 'notstarted', 'Not Started'], ['ipTitle', 'ipGrid', 'progress', 'In Progress'], ['cpTitle', 'cpGrid', 'completed', 'Completed']].forEach(([t, g, k, name]) => {
@@ -1229,7 +1209,7 @@ $('menuListening').onclick = () => { if ($('menuListening').disabled) return; cl
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('menuOverlay').classList.contains('show')) closeMenu(); });
 
 /* ============================================================
-   朗讀（瀏覽器內建語音，免費）
+   朗讀
    ============================================================ */
 function sectionItems(s) { const items = []; if (s.title) items.push(s.title); items.push(...sentencesOf(s.en)); return items; }
 function articleItems(a) { const items = [a.title]; a.sections.forEach(s => items.push(...sectionItems(s))); return items; }
@@ -1295,7 +1275,6 @@ function buildRateSelect(sel) {
   RATE_OPTIONS.forEach(r => { const o = el('option', null, rateLabel(r)); o.value = String(r); if (r === DEFAULT_RATE) o.selected = true; sel.appendChild(o); });
 }
 
-/* 朗讀控制列（文章瀏覽、解析頁共用） */
 function buildReaderBar(bar, getArticleItems) {
   bar.innerHTML = '';
   if (!Reader.supported) { bar.appendChild(el('span', 'reader-status', '這個瀏覽器不支援朗讀')); return; }
@@ -1411,7 +1390,7 @@ let rq = null;
 function startReading(id) {
   const a = articleById(id);
   stopTimer(); Reader.stop();
-  rq = { a, items: a.questions.map(q => ({ q, options: shuffle(q.options), selected: null })), idx: 0, finished: false };
+  rq = { a, items: a.questions.map(q => ({ q, options: shuffle(q.options), selected: null, flagged: {} })), idx: 0, finished: false };
   $('rqTitle').textContent = a.title;
   buildReadingArticle(a);
   $('rqCollapse').textContent = '收合文章';
@@ -1438,19 +1417,34 @@ $('rqCollapse').onclick = () => {
 };
 function showRQ() {
   const it = rq.items[rq.idx];
+  if (!it.flagged) it.flagged = {};
   $('rqProg').textContent = (rq.idx + 1) + '/' + rq.items.length;
   $('rqProgress').textContent = '第 ' + (rq.idx + 1) + ' 題 / 共 ' + rq.items.length + ' 題';
   $('rqText').textContent = it.q.question;
   const box = $('rqOptions'); box.innerHTML = '';
   it.options.forEach(opt => {
     const b = el('button', 'option-btn');
-    b.innerHTML = '<span class="choice-line"><span class="choice-text"></span><span class="choice-mark"></span></span>';
-    b.querySelector('.choice-text').textContent = opt;
+    b.innerHTML = '<span class="choice-line"><span class="choice-left"><input type="checkbox" class="choice-cb" aria-label="標記此選項"><span class="choice-text"></span></span><span class="choice-mark"></span></span>';
+    
+    const cb = b.querySelector('.choice-cb');
+    const txtSpan = b.querySelector('.choice-text');
+    txtSpan.textContent = opt;
     b.dataset.value = opt;
+    
+    cb.checked = !!it.flagged[opt];
     if (it.selected === opt) b.dataset.selected = 'true';
+
+    cb.onclick = (e) => {
+      e.stopPropagation();
+      it.flagged[opt] = cb.checked;
+    };
+
     b.onclick = () => {
       box.querySelectorAll('.option-btn').forEach(x => x.removeAttribute('data-selected'));
-      b.dataset.selected = 'true'; it.selected = opt;
+      b.dataset.selected = 'true'; 
+      it.selected = opt;
+      it.flagged[opt] = true;
+      cb.checked = true;
     };
     box.appendChild(b);
   });
@@ -1493,7 +1487,6 @@ function finishReading() {
   };
   addRecord(rec);
   
-  // 為了相容解析頁面顯示
   rq.items.forEach(it => {
     it.wrong = it.selected === it.q.answer ? [] : (it.selected ? [it.selected] : ['未作答']);
   });
@@ -1502,7 +1495,7 @@ function finishReading() {
   showResult('閱讀測驗完成', [['得分', correctCount + '/' + rec.total], ['答錯題數', rec.wrong], ['用時', fmt(seconds)]], () => showReadingReview(snap));
 }
 
-/* ---------- 閱讀測驗：選取文字 → 螢光標示 (相容 iOS / iPad / Desktop) ---------- */
+/* ---------- 閱讀測驗：選取文字螢光標示 ---------- */
 let lastRange = null;
 function selectionInArticle() {
   const sel = window.getSelection();
@@ -1786,7 +1779,7 @@ function showListeningReview(r) {
 }
 
 /* ============================================================
-   鍵盤（閱讀測驗）：數字鍵選選項、Enter 下一題
+   鍵盤：數字鍵選選項、Enter 下一題
    ============================================================ */
 let keyHandler = null;
 function bindKeys(fn) { unbindKeys(); keyHandler = fn; document.addEventListener('keydown', keyHandler); }
