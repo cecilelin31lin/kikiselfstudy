@@ -1506,7 +1506,7 @@ const words = [
   ], avoid: [], roots: [], usages: [] },
   { word: 'secluded', meaning: '僻靜的、與世隔離的', pos: 'adj.', sentences: [
     {en: 'The hermit lives alone by a secluded lake.', zh: '隱士獨自住在一個僻靜的湖邊。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: ['clud, clus, claus'], usages: [] },
   { word: 'seduce', meaning: '引誘、誘惑', pos: 'v.', sentences: [
     {en: 'I joined the tour because I was seduced by the price.', zh: '我因為價格的吸引而報名參加了這次旅行。'}
   ], avoid: [], roots: [], usages: [] },
@@ -1761,6 +1761,10 @@ const words = [
 { word: 'incognito', meaning: '隱藏身分', pos: 'adj., adv.', sentences: [
     {en: 'The best-selling author remains incognito.', zh: '這位暢銷書作家仍然隱藏身分。'}
   ], avoid: [], roots: ['cogni, gnos, gno'], usages: [] },
+{ word: 'exclusively', meaning: '專門地、唯一地、排他地', pos: 'adv.', sentences: [
+    {en: 'The room is exclusively for staff members.', zh: '這個房間僅供員工使用。'},
+    {en: 'He writes exclusively for the local newspaper.', zh: '他專門為當地報紙撰稿。'}
+  ], avoid: [], roots: ['clud, clus, claus'], usages: ['exclusively for 專門為',  ] },
   
 ];
 const ROOTS={
@@ -1782,6 +1786,7 @@ const ROOTS={
   'ced, cess': 'go',
   'charis': '魅力',
   'cliv': '斜坡、傾斜',
+  'clud, clus, claus': 'close',  
   'cogni, gnos, gno': 'know',
   'com, con, col, co': '共同或強調語氣',
   'contra, counter': '對抗、相反',
