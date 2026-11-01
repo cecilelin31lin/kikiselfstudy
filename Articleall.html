@@ -96,6 +96,9 @@ button{font-family:inherit}
 .menu-item .btn{width:100%;max-width:340px;padding:12px 16px;font-size:15px}
 .menu-note{font-size:12px;color:var(--muted);line-height:1.5}
 .menu-note.ok{color:var(--ok)}
+#homeFab{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;z-index:50;box-shadow:0 4px 14px rgba(43,58,85,.12);background:rgba(255,255,255,.96)}
+.menu-check{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--ink);cursor:pointer;margin-top:2px;user-select:none}
+.menu-check input{width:16px;height:16px;accent-color:var(--theme-main);cursor:pointer}
 .menu-note.warn{color:#b9707a}
 .modal-title{font-size:22px;font-weight:700;letter-spacing:.04em;margin-bottom:16px}
 .res-row{display:flex;justify-content:space-between;border:1px solid var(--line);border-radius:13px;background:#fafbfc;padding:11px 14px;margin-bottom:9px;font-size:14px}
@@ -216,6 +219,7 @@ section:not(.hidden){animation:vocFade .22s ease}
   .listen-article{padding:15px 15px}
 }
 @media (max-width: 560px) {
+  #homeFab{top:max(10px,env(safe-area-inset-top));right:10px;padding:6px 11px;font-size:13px}
   body{padding:24px 12px 56px}
   h1{font-size:27px}
   .card{padding:17px;border-radius:17px}
@@ -234,6 +238,8 @@ section:not(.hidden){animation:vocFade .22s ease}
   <h1>閱讀聽力練習</h1>
   <div class="cloud-status" id="cloudStatus"></div>
 
+  <button class="btn secondary hidden" id="homeFab" type="button">回主頁</button>
+
   <!-- ================= 主頁 ================= -->
   <section id="home" class="narrow">
     <div id="loadMsgs"></div>
@@ -246,7 +252,7 @@ section:not(.hidden){animation:vocFade .22s ease}
 
   <!-- ================= 文章瀏覽 ================= -->
   <section id="articleView" class="hidden narrow">
-    <div class="topbar"><h2 id="avTitle"></h2><button class="btn secondary" onclick="goHome()">回主頁</button></div>
+    <div class="topbar"><h2 id="avTitle"></h2></div>
     <div class="reader-bar" id="avReader"></div>
     <div class="tabs" id="avTabs">
       <button data-tab="en" class="active">英文</button>
@@ -264,7 +270,7 @@ section:not(.hidden){animation:vocFade .22s ease}
 
   <!-- ================= 閱讀測驗 ================= -->
   <section id="readingQuiz" class="hidden">
-    <div class="topbar"><h2 id="rqTitle" style="font-size:16px"></h2><button class="btn secondary" onclick="leaveQuiz()">回主頁</button></div>
+    <div class="topbar"><h2 id="rqTitle" style="font-size:16px"></h2></div>
     <div class="stats">
       <div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="rqProg">1/1</div></div>
       <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="rqTimer">0:00</div></div>
@@ -295,7 +301,7 @@ section:not(.hidden){animation:vocFade .22s ease}
 
   <!-- ================= 聽力測驗 ================= -->
   <section id="listeningQuiz" class="hidden narrow">
-    <div class="topbar"><h2 id="lqTitle" style="font-size:16px"></h2><button class="btn secondary" onclick="leaveQuiz()">回主頁</button></div>
+    <div class="topbar"><h2 id="lqTitle" style="font-size:16px"></h2></div>
     <div class="stats">
       <div class="stat-card"><div class="stat-label">已填</div><div class="stat-value" id="lqFilled">0/0</div></div>
       <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="lqTimer">0:00</div></div>
@@ -317,7 +323,7 @@ section:not(.hidden){animation:vocFade .22s ease}
 
   <!-- ================= 解析 ================= -->
   <section id="review" class="hidden narrow">
-    <div class="topbar"><h2>📋 查看解析</h2><button class="btn secondary" onclick="goHome()">回主頁</button></div>
+    <div class="topbar"><h2>📋 查看解析</h2></div>
     <div id="rvReader" class="reader-bar"></div>
     <div id="rvBody"></div>
   </section>
@@ -328,7 +334,7 @@ section:not(.hidden){animation:vocFade .22s ease}
       <div class="menu-title" id="menuTitle"></div>
       <div class="menu-item"><button class="btn primary" id="menuBrowse">文章瀏覽</button><div class="menu-note" id="menuBrowseNote"></div></div>
       <div class="menu-item"><button class="btn primary" id="menuReading">閱讀測驗</button><div class="menu-note" id="menuReadingNote"></div></div>
-      <div class="menu-item"><button class="btn primary" id="menuListening">聽力測驗</button><div class="menu-note" id="menuListeningNote"></div></div>
+      <div class="menu-item"><button class="btn primary" id="menuListening">聽力測驗</button><div class="menu-note" id="menuListeningNote"></div><label class="menu-check"><input type="checkbox" id="menuNoListen"> 本篇不考聽力</label></div>
       <button class="btn secondary" id="menuClose">關閉</button>
     </div>
   </div>
@@ -1037,6 +1043,1279 @@ Don't blame your own incompetence for a dull brain. Many times, you are just too
       'When you rebuild these tiny physiological foundations, that agile, clear, and insightful version of yourself will naturally return.'
     ]
   }
+},
+{
+  id: 'cdc-vaccine-panel-hep-b',
+  title: 'CDC Vaccine Panel Scraps Guidance for Universal Hepatitis B Shots at Birth',
+
+  en: `
+**01. Part 1**
+New guidance from the CDC’s vaccine advisory panel would do away with a decades-old universal birth dose recommendation for hepatitis B that helped cut infections by 99 percent in the U.S.
+On Friday an influential vaccine advisory panel voted to change the recommendations for the hepatitis B vaccine for newborns. Under the new guidance from the panel, which the Centers for Disease Control and Prevention almost always adopts, parents would need to consult with a health care provider about when to give a baby their first dose of the vaccine—so long as the person who gave birth to the baby tested negative for the disease. That would scrap current CDC policy that all babies receive the hepatitis B vaccine hours after birth. The vote passed with eight in favor and three against.
+The new Advisory Committee on Immunization Practices (ACIP) guidance recommends that the three-dose vaccine regimen begin at no earlier than two months of age for those infants. ACIP members also passed a second vote to recommend that parents discuss subsequent doses with a health care provider based on blood tests of the newborn’s immunity levels (protective antibody titers).
+“I will just say: we have heard that do no harm is a moral imperative. We are doing harm by changing this wording. And I vote no,” said ACIP member Cody Meissner, a pediatric infectious disease epidemiologist, during the first of three votes presented at today’s meeting.
+
+**02. Part 2**
+The CDC didn’t immediately respond to requests for comment from Scientific American.
+Public health experts have expressed concern about the lack of data to support the proposed timing of vaccination and have cautioned that delaying the initial dose would increase vulnerability to hepatitis B infection.
+That two-month period “is time that a child is at risk for a vaccine-preventable disease,” says Helen Chu, a physician and immunologist at the University of Washington and a former ACIP member.
+The decision comes after several meetings filled with heated debate and admitted confusion among members on what they were voting on. The panel had tabled the vote twice, first at a September meeting and again on Thursday. Deliberations ignited a “public outcry,” Chu says. Many public health experts and medical societies are “pretty clear that they do not want to eliminate the birth dose," she says.
+At the meetings, several ACIP members argued that newborns whose birthing parent tested negative for the virus are “low risk” for the disease—and that deciding to vaccinate should be an individual right. Currently, states require people receive certain vaccines in order to attend public school or participate in certain jobs. Some members also raised concerns over adverse effects and limited data on vaccine safety, despite dozens of studies and CDC reviews that have demonstrated that the hepatitis B vaccine is safe and highly effective at preventing infections in infants.
+Today’s vote moves away from a vaccine policy established in 1991 that has dramatically reduced hepatitis B rates in children, according to a review of 400 studies published earlier this week.
+
+**03. Part 3**
+“The vaccine has essentially virtually eliminated childhood hepatitis B from the United States, and so it is really devastating to think about losing that,” says Yvonne Maldonado, a pediatrician at the Stanford University School of Medicine and a former ACIP member.
+ACIP’s decisions directly affect vaccine access. Vaccines for kids are covered either through private health insurance or Vaccines for Children (VFC)—a federal program that approximately half of the children in the U.S. are eligible for. Private and public insurers, including VFC, fully cover vaccines ACIP recommends under shared clinical decision-making. But public health experts have expressed concern that ACIP’s discussion and new shared decision-making recommendation will still ultimately weaken people’s ability to receive the vaccine.
+“When you remove the strength of that recommendation, pregnant women may or may not be offered that vaccine,” said Rochelle Walensky, former director of the CDC and now a senior fellow at Harvard University, in a press call on Thursday. “They may or may not have a discussion about how important it is for their newborn to be vaccinated. And that may fall off the radar in terms of the access.”
+Hepatitis B is a very contagious viral disease that damages the liver. Chronic cases can lead to liver disease or liver cancer. The virus spreads through bodily fluids, including blood and semen. The disease has been stigmatized because people associate it with unprotected sex and injection drug use, but the virus can also be transmitted during pregnancy and through childbirth and close contact of bodily fluids after birth.
+“In my career, I have seen children with hepatitis B. I’ve seen children die of liver failure, which is a horrible death. I would never wish this on anybody,” Maldonado says.
+
+**04. Part 4**
+About 18,000 infants and children were infected with hepatitis B annually before the vaccine was recommended to all newborns in the U.S., according to the Children’s Hospital of Philadelphia. The guidance called for three vaccine doses: the first has been given to infants at birth, the second has been given at one to two months old and the third has been given between six and 18 months. The birth dose helps prevent infection in the first weeks to months of life, Maldonado says. And the regimen has been effective: cases from 1990 to 2019 dropped by 99 percent.
+Delaying the first dose to the second month of age for infants born to pregnant parents who test negative for the virus or whose infection status is unknown could cause 1,437 more childhood infections over the course of one year, which could lead to 304 liver cancer cases and 482 hepatitis B-related deaths, a recent preprint paper suggests.
+Public health experts note that the updated recommendation’s success is contingent on effective screening for hepatitis B in pregnant people. The CDC recommends that all pregnant people be tested for hepatitis B, preferably in the first trimester. But that testing can fail because hepatitis B can be “a silent infection,” Maldonado says.
+Only 84 to 88 percent of pregnant people get screened for the virus in the U.S.; more than 80 percent of people are unaware that they’re infected. False negatives can occur if the test is performed incorrectly or if a person was very recently infected. And other caregivers, such as family members and daycare workers, who might not be screened could also carry the virus, Maldonado says.
+“The simplest, safest, most effective way to protect all of the babies in this country is to give them that birth dose, along with the subsequent two doses, which is going to keep them protected for virtually their entire young adult life,” she adds.
+`,
+  zh: `
+**01. 第一部分**
+美國疾病管制與預防中心（CDC）疫苗顧問小組的新指導，將廢除一項已實施數十年、要求新生兒出生時一律接種 B 型肝炎疫苗的建議；這項建議曾讓美國的感染率降低 99%。
+週五，一個具影響力的疫苗顧問小組投票決定修改新生兒 B 型肝炎疫苗的建議。根據該小組的新指導（美國疾病管制與預防中心幾乎總是採納其意見），只要生下嬰兒的人 B 型肝炎檢驗為陰性，父母就必須與醫療提供者諮詢何時讓寶寶接種第一劑疫苗。這將廢除 CDC 現行「所有嬰兒在出生後數小時內接種 B 型肝炎疫苗」的政策。投票結果為八票贊成、三票反對。
+免疫接種諮詢委員會（ACIP）的新指導建議，三劑疫苗療程應在這些嬰兒滿兩個月大之後才開始。ACIP 成員也通過了第二項投票，建議父母依據新生兒免疫力指標（保護性抗體滴度）的血液檢驗結果，與醫療提供者討論後續劑次。
+「我只想說：我們聽過『不傷害』是一種道德義務。修改這段文字就是在造成傷害。所以我投反對票。」ACIP 成員、兒科傳染病流行病學家柯迪．梅斯納（Cody Meissner）在今天會議所提出的三項表決中的第一項時這麼說。
+
+**02. 第二部分**
+美國疾病管制與預防中心沒有立即回應《科學人》雜誌（Scientific American）的置評請求。
+公共衛生專家對於缺乏資料支持所提出的接種時程表示擔憂，並警告延後第一劑會增加感染 B 型肝炎的脆弱性。
+華盛頓大學的醫師兼免疫學家、也是前 ACIP 成員海倫．朱（Helen Chu）說，這兩個月的期間「正是孩子面臨可由疫苗預防疾病風險的時間」。
+這項決定是在多場充滿激烈辯論、成員也承認對自己在投票表決什麼感到混亂的會議之後做出的。該小組曾兩度擱置表決，第一次是在九月的會議，第二次是在週四。朱說，審議過程引發了「公眾強烈抗議」。她說，許多公共衛生專家與醫學學會「相當明確地表示，他們不希望取消出生時接種的那一劑」。
+在會議中，幾位 ACIP 成員辯稱，生下孩子的人病毒檢驗為陰性的新生兒，對這種疾病屬於「低風險」，而且是否接種應屬個人權利。目前，各州要求民眾必須接種某些疫苗，才能就讀公立學校或從事某些工作。儘管有數十項研究與 CDC 的審查已證明 B 型肝炎疫苗對預防嬰兒感染既安全又高度有效，仍有一些成員對不良反應與疫苗安全資料有限提出疑慮。
+根據本週稍早發表、涵蓋 400 項研究的一份回顧，今天的投票將背離一項於 1991 年確立、曾大幅降低兒童 B 型肝炎發生率的疫苗政策。
+
+**03. 第三部分**
+「這種疫苗基本上幾乎已讓美國的兒童 B 型肝炎絕跡，所以想到要失去這項成果，真的令人痛心，」史丹佛大學醫學院的兒科醫師、前 ACIP 成員伊馮．馬爾多納多（Yvonne Maldonado）說。
+ACIP 的決定會直接影響疫苗的取得管道。兒童疫苗是透過私人健康保險或「兒童疫苗計畫」（Vaccines for Children，簡稱 VFC）給付——這是美國約半數兒童符合資格的一項聯邦計畫。包括 VFC 在內的私人與公共保險機構，會全額給付 ACIP 在「共同臨床決策」下所建議的疫苗。但公共衛生專家擔心，ACIP 的討論與新的共同決策建議，終究仍會削弱人們接種疫苗的能力。
+「當你拿掉那項建議的強度，孕婦可能會、也可能不會被提供那種疫苗，」前 CDC 署長、現任哈佛大學資深研究員的蘿謝爾．瓦倫斯基（Rochelle Walensky）週四在一場記者電話會議中說。「她們可能會、也可能不會討論讓新生兒接種有多重要。而這可能會在取得管道上變成被雷達漏掉的盲點。」
+B 型肝炎是一種傳染力很強、會損害肝臟的病毒性疾病。慢性病例可能導致肝病或肝癌。這種病毒透過體液傳播，包括血液與精液。這種疾病曾被污名化，因為人們把它與無保護性行為和注射毒品聯想在一起，但病毒也可能在懷孕期間、生產過程中，以及出生後透過體液的密切接觸而傳播。
+「在我的職業生涯中，我看過罹患 B 型肝炎的孩子。我看過孩子死於肝衰竭，那是一種可怕的死法。我絕不希望這種事發生在任何人身上，」馬爾多納多說。
+
+**04. 第四部分**
+根據費城兒童醫院的資料，在美國建議所有新生兒接種疫苗之前，每年約有 18,000 名嬰兒與兒童感染 B 型肝炎。指導方針要求接種三劑疫苗：第一劑在嬰兒出生時施打，第二劑在一至兩個月大時施打，第三劑則在六至十八個月大之間施打。馬爾多納多說，出生時的那一劑有助於預防生命最初幾週到幾個月內的感染。而這套療程確實有效：1990 年至 2019 年間，病例下降了 99%。
+一份近期的預印本論文指出，對於生母檢驗為陰性或感染狀態不明的嬰兒，若將第一劑延後到第二個月，一年內可能多造成 1,437 例兒童感染，進而導致 304 例肝癌病例與 482 例與 B 型肝炎相關的死亡。
+公共衛生專家指出，這項更新建議能否成功，取決於對孕婦進行有效的 B 型肝炎篩檢。CDC 建議所有孕婦都接受 B 型肝炎檢驗，最好是在懷孕的前三個月。但這種檢驗可能失敗，因為 B 型肝炎可能是「一種沒有症狀的感染」，馬爾多納多說。
+在美國，只有 84% 到 88% 的孕婦接受病毒篩檢；超過 80% 的感染者並不知道自己已被感染。如果檢驗執行不當，或當事人是在極近期才被感染，就可能出現偽陰性。此外，其他可能未接受篩檢的照顧者，例如家庭成員與日間托育工作人員，也可能帶有病毒，馬爾多納多說。
+「保護這個國家所有嬰兒最簡單、最安全、也最有效的方法，就是讓他們接種出生時的那一劑，加上後續的兩劑，這樣幾乎能讓他們在整個青年期都受到保護，」她補充說。
+`,
+  questions: `
+**1. According to Part 1, how would the panel’s new guidance change the way hepatitis B vaccination is handled for newborns whose birthing parent tested negative?**
+(A) The hepatitis B vaccine would be dropped from the childhood schedule, and parents could decide whether to give any dose at all.
+(B) Parents would consult a health care provider about when to give the first dose, instead of every baby receiving it hours after birth.
+(C) Every newborn would receive the first dose at exactly two months of age, once the birthing parent’s blood test had confirmed immunity to the virus.
+(D) Each newborn would first need an antibody blood test, and the first dose would be given only if protective antibody titers were found to be low.
+
+**2. Why did ACIP member Cody Meissner vote against the first proposal presented at the meeting?**
+(A) He considered the hepatitis B vaccine unsafe for newborns and wanted its use limited to infants at high risk of infection.
+(B) He believed the CDC would reject any change the panel recommended, so the vote would be meaningless.
+(C) He felt the panel had not been given enough time to review the 400 studies published earlier that week.
+(D) He argued that changing the wording would itself do harm, contradicting the principle of “do no harm.”
+
+**3. What concern did public health experts raise about the proposed timing of the first dose?**
+(A) There was little data to support the proposed timing, and delaying the initial dose could leave infants more vulnerable to infection.
+(B) Delaying the vaccine would raise costs for families, because private and public insurers, including Vaccines for Children, would no longer cover the two later doses.
+(C) The two-month delay had been tested in several trials, which showed higher rates of adverse effects than dosing at birth.
+(D) The panel had voted without consulting any pediatric infectious disease specialist or any medical society.
+
+**4. Based on Part 3, what is the main concern raised by Rochelle Walensky about removing the strength of the birth-dose recommendation?**
+(A) Private and public insurers, including Vaccines for Children, would immediately stop covering every hepatitis B vaccine dose for newborns.
+(B) Pregnant women would be legally required to be tested twice, which would delay prenatal care and overwhelm clinics.
+(C) Pregnant women might not be offered the vaccine or counseled on why newborn vaccination matters, so access could erode.
+(D) States would stop requiring certain vaccines for public school attendance, which would weaken demand for the birth dose nationwide.
+
+**5. According to Part 4, why might the updated recommendation fail to protect some infants?**
+(A) Most pregnant people decline hepatitis B testing, which means almost no infected parent is identified before delivery.
+(B) The second and third doses cannot be given once a child is older than two months, which would leave infants only partly vaccinated.
+(C) The virus can be detected only after birth, so screening during pregnancy cannot show which newborns would benefit from an early dose.
+(D) Screening of pregnant people is incomplete and can yield false negatives, and unscreened caregivers may also carry the virus.
+`,
+  answers: `
+**1. 答案：(B)**
+
+* **解析**：第一部分指出，在新指導下，只要生下嬰兒的人檢驗為陰性，父母就必須與醫療提供者「諮詢何時施打第一劑」，這將廢除「所有嬰兒出生後數小時內接種」的現行政策。選項 (B) 為精準的同義改寫（Paraphrase）。(A) 疫苗並未被移出時程，改變的只是時機與決策方式；(C) 把「建議療程最早從兩個月大開始」誤解為「一律兩個月大施打」，並把新生兒免疫力的血液檢驗誤當成生母的檢驗；(D) 抗體血液檢驗是用來討論「後續劑次」，並非決定第一劑是否施打的條件。
+
+**2. 答案：(D)**
+
+* **解析**：梅斯納表示：「我們聽過『不傷害』是一種道德義務。修改這段文字就是在造成傷害。所以我投反對票。」選項 (D) 為同義改寫。(A) 與其立場相反——他反對的正是改動，並未質疑疫苗安全；(B) 與原文「CDC 幾乎總是採納該小組意見」不符；(C) 原文未提及這項理由。
+
+**3. 答案：(A)**
+
+* **解析**：第二部分指出，公共衛生專家「對缺乏資料支持所提出的接種時程表示擔憂，並警告延後第一劑會增加感染 B 型肝炎的脆弱性」，前 ACIP 成員朱也強調這兩個月正是孩子面臨可由疫苗預防疾病風險的時間。選項 (A) 正確。(B) 與原文相反——保險機構會全額給付共同臨床決策下的建議疫苗，專家擔憂的也不是費用；(C) 原文未提這類試驗，且數十項研究顯示疫苗安全；(D) 與原文不符——梅斯納本身就是兒科傳染病流行病學家，許多醫學學會也反對取消出生劑。
+
+**4. 答案：(C)**
+
+* **解析**：第三部分中，瓦倫斯基指出拿掉建議的強度後，「孕婦可能會、也可能不會被提供那種疫苗」，也可能不討論新生兒接種的重要性，疫苗的取得管道可能因此被忽略。選項 (C) 正確。(A) 與原文相反——保險機構會全額給付共同臨床決策下的建議疫苗；(B) 原文未提；(D) 把第二部分「各州要求某些疫苗才能就讀公立學校」的內容誤當成她的論點。
+
+**5. 答案：(D)**
+
+* **解析**：第四部分指出，新建議能否成功取決於對孕婦的有效篩檢，但只有 84%–88% 的孕婦接受篩檢，且可能出現偽陰性；家庭成員、日間托育工作人員等未篩檢的照顧者也可能帶有病毒。選項 (D) 精準概括。(A) 誇大——多數孕婦有接受篩檢；(B) 與原文不符，原文並未限制後續劑次的施打時間；(C) 與原文相反——CDC 建議在懷孕期間（最好是前三個月）篩檢，只是檢驗可能失敗。
+`,
+
+  evidence: {
+    1: [
+      'Under the new guidance from the panel, which the Centers for Disease Control and Prevention almost always adopts, parents would need to consult with a health care provider about when to give a baby their first dose of the vaccine—so long as the person who gave birth to the baby tested negative for the disease.',
+      'That would scrap current CDC policy that all babies receive the hepatitis B vaccine hours after birth.'
+    ],
+    2: [
+      'We are doing harm by changing this wording.'
+    ],
+    3: [
+      'Public health experts have expressed concern about the lack of data to support the proposed timing of vaccination and have cautioned that delaying the initial dose would increase vulnerability to hepatitis B infection.',
+      'That two-month period “is time that a child is at risk for a vaccine-preventable disease,” says Helen Chu, a physician and immunologist at the University of Washington and a former ACIP member.'
+    ],
+    4: [
+      '“When you remove the strength of that recommendation, pregnant women may or may not be offered that vaccine,” said Rochelle Walensky, former director of the CDC and now a senior fellow at Harvard University, in a press call on Thursday.',
+      'Private and public insurers, including VFC, fully cover vaccines ACIP recommends under shared clinical decision-making.'
+    ],
+    5: [
+      'Only 84 to 88 percent of pregnant people get screened for the virus in the U.S.; more than 80 percent of people are unaware that they’re infected.',
+      'False negatives can occur if the test is performed incorrectly or if a person was very recently infected.',
+      'And other caregivers, such as family members and daycare workers, who might not be screened could also carry the virus, Maldonado says.'
+    ]
+  }
+},
+{
+  id: 'ai-superintelligence-first-steps',
+  title: 'Are We Seeing the First Steps Toward AI Superintelligence?',
+
+  en: `
+**01. Part 1**
+Today’s leading AI models can already write and refine their own software. The question is whether that self-improvement can ever snowball into true superintelligence.
+The Matrix, The Terminator—so much of our science fiction is built around the dangers of superintelligent artificial intelligence: a system that exceeds the best humans across nearly all cognitive domains. OpenAI CEO Sam Altman and Meta CEO Mark Zuckerberg have predicted we’ll achieve such AI in the coming years. Yet machines like those depicted as battling humanity in those movies would have to be far more advanced than ChatGPT, not to mention more capable of making Excel spreadsheets than Microsoft Copilot. So how can anyone think we’re remotely close to artificial superintelligence?
+One answer goes back to 1965, when statistician Irving John Good introduced the idea of an “ultraintelligent machine.” He wrote that once it became sufficiently sophisticated, a computer would rapidly improve itself. If this seems far-fetched, consider how AlphaGo Zero—an AI system developed at DeepMind in 2017 to play the ancient Chinese board game Go—was built. Using no data from human games, AlphaGo Zero played itself millions of times, achieving in days an improvement that would have taken a human a lifetime and that allowed it to defeat the previous versions of AlphaGo that had already beaten the world’s best human players. Good’s idea was that any system that was sufficiently intelligent to rewrite itself would create iterations of itself, each one smarter than the previous and even more capable of improvement, triggering an “intelligence explosion.”
+
+**02. Part 2**
+The question, then, is how close we are to that first system capable of autonomous self-improvement. Though the runaway systems Good described aren’t here yet, self-improving computers are—at least in narrow domains. AI is already running code on itself. OpenAI’s Codex and Anthropic’s Claude Code can work independently for an hour or more writing new code or updating existing code. Using Codex recently, I thumbed a prompt into my phone while on a walk, and it made a working website before I reached home. In the hands of skilled coders, such systems can do dramatically more, from reorganizing large code bases to sketching entirely new ways to build the software in the first place.
+So why hasn’t a model powering ChatGPT quietly coded itself into ultraintelligence? The hitch is in the phrase above: “in the hands of skilled coders.” Despite AI’s impressive improvements, our current systems still rely on humans to set goals, design experiments and decide which changes count as genuine progress. They’re not yet capable of evolving independently in a robust way, which makes some talk about imminent superintelligence seem blown out of proportion—unless, of course, current AI systems are closer than they appear to being able to self-improve in increasingly broad slices of their abilities.
+One area in which they already look superhuman is how much information they can absorb and manipulate. The most advanced models are trained on far more text than any human could read in a lifetime—from poetry to history to the sciences. They can also keep track of far longer stretches of text while they work. Already, with commercially available systems such as ChatGPT and Gemini, I can upload a stack of books and have the AI synthesize and critique them in a way that would take a human weeks. That doesn’t mean the result is always correct or insightful—but it does mean that, in principle, a system like this could read its own documentation, logs, and code and propose changes at a speed and scale no engineering team could match.
+
+**03. Part 3**
+Reasoning, however, is where these systems lag—though that’s no longer true in certain focused areas. DeepMind’s AlphaDev and related systems have already found new, more efficient algorithms for tasks such as sorting, results that are now used in real-world code and that go beyond simple statistical mimicry. Other models excel at formal mathematics and graduate-level science questions that resist simple pattern-matching. We can debate the value of any particular benchmark—and researchers are doing exactly that—but there’s no question that some AI systems have become capable of discovering solutions humans had not previously found.
+If the systems already have these abilities, what, then, is the missing piece? One answer is artificial general intelligence (AGI), the sort of dynamic, flexible reasoning that allows humans to learn from one field and apply it to others. As I’ve previously written, we keep shifting our definitions of AGI as machines master new skills. But for the superintelligence question, what matters is not the label we attach; it’s whether a system can use its skills to reliably redesign and upgrade itself.
+And this brings us back to Good’s “intelligence explosion.” If we do build systems with that kind of flexible, humanlike reasoning across many domains, what will separate it from superintelligence? Advanced models are already trained on more science and literature than any human, have far greater working memories and show extraordinary reasoning skills in limited domains. Once that missing piece of flexible reasoning is in place, and once we allow such systems to deploy those skills on their own code, data and training processes, could the leap to fully superhuman performance be shorter than we imagine?
+
+**04. Part 4**
+Not everyone agrees. Some researchers believe we have yet to fundamentally understand intelligence and that this missing piece will take longer than expected to engineer. Others speak of AGI being achieved in a few years, leading to further advances far beyond human capacities. In 2024 Altman publicly suggested that superintelligence could arrive “in a few thousand days.”
+If this sounds too much like science fiction, consider that AI companies regularly run safety tests on their systems to make sure they can’t go into a runaway self-improvement loop. METR, an independent AI safety group, evaluates models according to how long they can reliably sustain a complex task before reaching failure. This past November, its tests of GPT-5.1-Codex-Max came in around two hours and 42 minutes. This is a huge leap from GPT-4’s few minutes of such performance on the same metric, but it isn’t the situation Good described.
+Anthropic runs similar tests on its AI systems. “To be clear, we are not yet at ‘self-improving AI,’” wrote the company’s co-founder and head of policy Jack Clark in October, “but we are at the stage of ‘AI that improves bits of the next AI, with increasing autonomy.’”
+If AGI is achieved, and we add human-level judgment to an immense information base, vast working memory and extraordinary speed, Good’s idea of rapid self-improvement starts to look less like science fiction. The real question is whether we’ll stop at “mere human”—or risk overshooting.
+`,
+  zh: `
+**01. 第一部分**
+目前領先的人工智慧模型已經能夠撰寫並改進自己的軟體。問題是，這種自我改進能否真的越滾越大，成為真正的超級智慧。
+《駭客任務》（The Matrix）、《魔鬼終結者》（The Terminator）——我們許多科幻作品都圍繞著超級智慧人工智慧的危險而建構：這種系統在幾乎所有認知領域都超越最優秀的人類。OpenAI 執行長山姆．奧特曼（Sam Altman）與 Meta 執行長馬克．祖克柏（Mark Zuckerberg）都預測，我們將在未來幾年內達成這樣的人工智慧。然而，那些電影裡所描繪、與人類作戰的機器，必須比 ChatGPT 先進得多，更別提要比微軟的 Copilot 更擅長製作 Excel 試算表。那麼，怎麼會有人認為我們已經離人工超級智慧不遠了呢？
+其中一個答案可追溯到 1965 年，當時統計學家歐文．約翰．古德（Irving John Good）提出了「超智慧機器」的概念。他寫道，電腦一旦變得足夠複雜精密，就會迅速改進自己。如果這聽起來牽強，不妨想想 AlphaGo Zero 是怎麼打造出來的——這是 DeepMind 於 2017 年開發、用來下古老中國棋盤遊戲圍棋的人工智慧系統。它沒有使用任何人類棋局的資料，而是自己跟自己下了數百萬次，在幾天內達成了人類要花一輩子才能達成的進步，也因此打敗了先前那些已擊敗世界最強人類棋手的 AlphaGo 版本。古德的想法是：任何聰明到足以改寫自己的系統，都會創造出自己的疊代版本，每一個都比前一個更聰明、更有能力繼續改進，進而引發一場「智慧爆炸」。
+
+**02. 第二部分**
+因此，問題在於我們距離第一個能夠自主自我改進的系統還有多近。雖然古德所描述的失控系統還沒有出現，但自我改進的電腦已經出現了——至少在狹窄的領域中是如此。人工智慧已經在對自己執行程式碼。OpenAI 的 Codex 與 Anthropic 的 Claude Code，能夠獨立工作一小時或更久，撰寫新程式碼或更新現有程式碼。最近我使用 Codex，在散步時用手指在手機上敲了一個提示，等我走到家時，它已經做出了一個可以運作的網站。在熟練的程式設計師手中，這類系統能做到的事會多得多，從重新整理龐大的程式碼庫，到勾勒出建構軟體的全新方式。
+那麼，為什麼驅動 ChatGPT 的模型沒有悄悄把自己寫成超級智慧呢？障礙就在上面那句話裡：「在熟練的程式設計師手中」。儘管人工智慧有令人印象深刻的進步，我們目前的系統仍然依賴人類來設定目標、設計實驗，並判斷哪些改變算得上真正的進步。它們還沒有能力以穩健的方式獨立演化，這使得一些關於超級智慧即將到來的說法顯得太過誇大——除非，當然，目前的人工智慧系統其實比看起來更接近能在越來越廣泛的能力範圍內自我改進。
+它們已經看似超越人類的一個領域，是能吸收與操作的資訊量。最先進的模型接受訓練所用的文字，遠比任何人一輩子能讀的還多——從詩歌到歷史到科學都有。它們在運作時也能追蹤長得多的文字片段。如今，透過 ChatGPT 和 Gemini 這類商業上可取得的系統，我可以上傳一疊書，讓人工智慧以人類要花上數週的方式加以綜合與批判。這並不表示結果總是正確或有見地——但這確實意味著，原則上，這樣的系統可以閱讀自己的文件、日誌與程式碼，並以任何工程團隊都無法匹敵的速度與規模提出修改。
+
+**03. 第三部分**
+然而，推理是這些系統落後的地方——不過在某些特定領域，這已不再成立。DeepMind 的 AlphaDev 與相關系統，已經為排序等任務找到了新的、更有效率的演算法，這些成果現在已用於真實世界的程式碼中，而且超越了單純的統計模仿。其他模型則在形式數學與抗拒簡單模式比對的研究所程度科學問題上表現出色。我們可以爭論任何特定基準測試的價值——研究人員也確實正在這麼做——但毫無疑問，有些人工智慧系統已經能夠發現人類先前沒找到的解決方案。
+如果這些系統已經具備這些能力，那麼缺少的那一塊究竟是什麼？一個答案是通用人工智慧（AGI），也就是那種動態、有彈性、讓人類能從一個領域學習並應用到其他領域的推理能力。正如我先前寫過的，隨著機器掌握新技能，我們不斷在改變對 AGI 的定義。但就超級智慧的問題而言，重要的不是我們貼上什麼標籤，而是一個系統能否運用它的技能，可靠地重新設計並升級自己。
+這又把我們帶回古德的「智慧爆炸」。如果我們真的打造出具備那種橫跨許多領域、有彈性、類似人類推理能力的系統，是什麼會讓它與超級智慧區分開來？先進模型所受的科學與文學訓練已經比任何人類都多，擁有遠大得多的工作記憶，並在有限領域中展現非凡的推理技能。一旦缺少的那塊有彈性的推理能力到位，而且一旦我們允許這類系統把這些技能部署在它們自己的程式碼、資料與訓練流程上，那麼通往完全超越人類表現的那一躍，會不會比我們想像的更短？
+
+**04. 第四部分**
+並非每個人都同意。有些研究人員認為，我們還沒有從根本上理解智慧，而這塊缺少的拼圖要花比預期更長的時間才能被製造出來。另一些人則說 AGI 幾年內就會達成，進而帶來遠遠超越人類能力的進一步躍進。2024 年，奧特曼公開表示，超級智慧可能「在幾千天內」到來。
+如果這聽起來太像科幻小說，請想想：人工智慧公司會定期對自家系統進行安全測試，以確保它們不會陷入失控的自我改進迴路。獨立的人工智慧安全組織 METR，會依據模型在失敗之前能可靠地持續執行複雜任務多久來評估它們。上個十一月，它對 GPT-5.1-Codex-Max 的測試結果約為兩小時又 42 分鐘。相較於 GPT-4 在同一量表上僅僅幾分鐘的表現，這是一個巨大的躍進，但這並非古德所描述的那種情況。
+Anthropic 也對自家人工智慧系統進行類似的測試。該公司共同創辦人兼政策主管傑克．克拉克（Jack Clark）在十月寫道：「說得明白一點，我們還沒有進入『自我改進的人工智慧』，但我們正處於『能改進下一代人工智慧某些環節、且自主性日益增強的人工智慧』這個階段。」
+如果 AGI 達成，而我們再把人類水準的判斷力，加到龐大的資訊基礎、廣大的工作記憶與非凡的速度之上，古德所說的快速自我改進就開始顯得不那麼像科幻小說了。真正的問題是：我們會停在「僅僅是人類」的水準——還是冒著超越目標的風險。
+`,
+  questions: `
+**1. According to Part 1, what did statistician Irving John Good propose about a sufficiently intelligent machine?**
+(A) Such a system would need to be trained on ever-larger collections of human games and texts before it could begin to improve itself.
+(B) Such a system would create iterations of itself, each smarter and better at improving, setting off an “intelligence explosion.”
+(C) Such a system could never exceed the cognitive abilities of the best human experts, because its designers would limit its self-modification.
+(D) Such a system’s progress would stall once it reached human-level ability, since only human researchers can judge which changes count as progress.
+
+**2. Which statement best explains why today’s AI systems have not yet coded themselves into superintelligence, according to Part 2?**
+(A) They still rely on humans to set goals, design experiments, and decide which changes count as genuine progress.
+(B) Their underlying models cannot yet write or update code, so engineers must rebuild them from scratch every time.
+(C) They have been trained on far less text than a typical person reads in a lifetime, which limits what they can learn about themselves.
+(D) Governments have prohibited AI companies from letting models run code on themselves, so no self-modification is possible.
+
+**3. What can be inferred from Part 3 about the reasoning abilities of today’s AI systems?**
+(A) Reasoning is the one area in which AI has shown no measurable progress, so its self-improvement claims remain unsupported.
+(B) Researchers unanimously agree that current benchmarks reliably measure AI reasoning, so the debate about them has ended.
+(C) AlphaDev’s new sorting algorithms are only statistical imitations of existing human code and have not been adopted in any real-world software.
+(D) Reasoning remains a relative weakness overall, yet some systems already find solutions humans had not found in focused areas.
+
+**4. According to the author, what matters most for the superintelligence question?**
+(A) Whether researchers can agree on a single definition of AGI, since without an agreed label no progress can be measured.
+(B) Whether a model can pass graduate-level science and mathematics questions that resist simple pattern-matching.
+(C) Whether a system can use its skills to reliably redesign and upgrade itself, whatever label is attached.
+(D) Whether AI company leaders publicly predict that superintelligence will arrive within a few thousand days.
+
+**5. Which conclusion about the current state of AI self-improvement is best supported by Part 4?**
+(A) METR’s results show that runaway self-improvement has already begun, because a model sustained a complex task for over two hours before failing.
+(B) Progress is substantial but is not yet the runaway situation Good described, although Anthropic sees AI improving bits of the next AI with increasing autonomy.
+(C) Anthropic’s co-founder declared that fully self-improving AI has already been achieved, but that safety tests prevent its release.
+(D) Safety testing has become unnecessary because models still fail complex tasks after only a few minutes.
+`,
+  answers: `
+**1. 答案：(B)**
+
+* **解析**：第一部分指出，古德認為任何聰明到足以改寫自己的系統，都會創造出自己的疊代版本，每一個都更聰明、更有能力繼續改進，進而引發「智慧爆炸」。選項 (B) 正確。(A) 與 AlphaGo Zero 完全沒有使用人類棋局資料的例子相反；(C) 與古德「超智慧機器」的論點相反；(D) 把第二部分「目前的系統仍依賴人類判斷進步」誤當成古德的理論。
+
+**2. 答案：(A)**
+
+* **解析**：第二部分指出：儘管進步令人印象深刻，「我們目前的系統仍然依賴人類來設定目標、設計實驗，並判斷哪些改變算得上真正的進步」。選項 (A) 正確。(B) 與原文相反——Codex 與 Claude Code 已能獨立工作一小時以上撰寫與更新程式碼；(C) 與原文相反——模型所受訓練的文字量遠超任何人一輩子能讀的；(D) 原文未提。
+
+**3. 答案：(D)**
+
+* **解析**：第三部分指出：「推理是這些系統落後的地方——不過在某些特定領域，這已不再成立」，而且 AlphaDev 找到了更有效率的演算法，成果「超越單純的統計模仿」，也有些系統發現了人類先前沒找到的解決方案。選項 (D) 正確。(A) 與 (C) 與原文相反（成果已用於真實世界的程式碼）；(B) 原文說我們可以爭論基準測試的價值，研究人員也正在這麼做。
+
+**4. 答案：(C)**
+
+* **解析**：第三部分中作者明確表示：「重要的不是我們貼上什麼標籤，而是一個系統能否運用它的技能，可靠地重新設計並升級自己。」選項 (C) 正確。(A) 作者的意思正是標籤並不重要；(B) 與 (D) 屬於文中其他脈絡（模型的能力與業界預測），並非作者認定的關鍵。
+
+**5. 答案：(B)**
+
+* **解析**：第四部分指出，GPT-5.1-Codex-Max 在 METR 的測試中約能維持兩小時又 42 分鐘，相較 GPT-4 的幾分鐘是巨大躍進，「但這並非古德所描述的情況」；克拉克也說「我們還沒有進入自我改進的 AI，但已處於能改進下一代 AI 某些環節、自主性日益增強的階段」。選項 (B) 正確。(A) 與 (C) 與原文相反；(D) 與原文不符——進步已從幾分鐘進展到兩個多小時，且公司仍定期進行安全測試。
+`,
+
+  evidence: {
+    1: [
+      'Good’s idea was that any system that was sufficiently intelligent to rewrite itself would create iterations of itself, each one smarter than the previous and even more capable of improvement, triggering an “intelligence explosion.”'
+    ],
+    2: [
+      'Despite AI’s impressive improvements, our current systems still rely on humans to set goals, design experiments and decide which changes count as genuine progress.'
+    ],
+    3: [
+      'Reasoning, however, is where these systems lag—though that’s no longer true in certain focused areas.',
+      'DeepMind’s AlphaDev and related systems have already found new, more efficient algorithms for tasks such as sorting, results that are now used in real-world code and that go beyond simple statistical mimicry.',
+      'We can debate the value of any particular benchmark—and researchers are doing exactly that—but there’s no question that some AI systems have become capable of discovering solutions humans had not previously found.'
+    ],
+    4: [
+      'But for the superintelligence question, what matters is not the label we attach; it’s whether a system can use its skills to reliably redesign and upgrade itself.'
+    ],
+    5: [
+      'This is a huge leap from GPT-4’s few minutes of such performance on the same metric, but it isn’t the situation Good described.',
+      '“To be clear, we are not yet at ‘self-improving AI,’” wrote the company’s co-founder and head of policy Jack Clark in October, “but we are at the stage of ‘AI that improves bits of the next AI, with increasing autonomy.’”'
+    ]
+  }
+},
+{
+  id: 'why-adhd-rates-on-the-rise',
+  title: 'Why Are ADHD Rates On the Rise?',
+
+  en: `
+**01. Part 1**
+More than 1 in 10 children in the U.S. have ADHD, fueling debate over the condition and how to treat it.
+In some parts of the world, record numbers of people are being diagnosed with attention deficit hyperactivity disorder (ADHD). In the United States, for example, government researchers last year reported that more than 11% of children had received an ADHD diagnosis at some point in their lives — a sharp increase from 2003, when around 8% of children had.
+But now, top US health officials argue that diagnoses have spiraled out of control. In May, the Make America Healthy Again Commission — led by US health secretary Robert F. Kennedy Jr — said ADHD was part of a “crisis of overdiagnosis and overtreatment” and suggested that ADHD medications did not help children in the long term.
+So what, exactly, is going on?
+
+**02. Part 2**
+One thing that’s clear is that several factors — including improved detection and greater awareness of ADHD — are causing people with symptoms to receive a diagnosis and treatment, whereas they wouldn’t have years earlier. Clinicians say this is especially true for women and girls, whose pattern of symptoms was often missed in the past. Although some specialists are concerned about the risks of overdiagnosis, many are more worried that too many people go undiagnosed and untreated.
+At the same time, the rise in awareness and diagnoses of ADHD has fueled a public debate about how it should be viewed and how best to provide support, including when medication is required. The emergence of the neurodiversity movement is challenging the view of ADHD as a disorder that should be ‘treated’, and instead proposes that it’s a difference that should be better understood and supported — with more focus on adapting schools and workplaces, for instance.
+“I do have a big problem with ‘disorder’,” says Jeff Karp, a biomedical engineer at Brigham and Women’s Hospital in Boston, Massachusetts, who has ADHD. “It’s the school system that’s disordered. It’s not the kids.”
+But many clinicians and people with ADHD argue that it is associated with difficulties — ranging from academic struggles to an increased chance of injuries and substance misuse — that justify its label as a medical condition, and say that medication is an important and effective part of therapy for many people.
+“I hear a lot of people talking about ADHD being a gift and a superpower, and I do applaud that,” says Jeremy Didier, a clinician specializing in ADHD who is president of Children and Adults with Attention Deficit–Hyperactivity Disorder (CHADD), a non-profit US group based in Lanham, Maryland, and who has ADHD herself. “But I do not want to downplay the impact that ADHD can have on someone’s life when it’s either undiagnosed or poorly managed.”
+She and others say both models — neurodiversity and medical — have merit. “Bringing those two together in a meaningful and productive way, I think that’s maybe the biggest challenge” for the field, says Sven Bölte, a specialist in child and adolescent psychiatric science at the Karolinska Institute in Stockholm.
+
+**03. A real rise**
+A slew of studies suggests that diagnoses of ADHD have gone up in many high-income countries in the past two to three decades — similar to a rise in autism diagnoses. The rate of new ADHD diagnoses in the United Kingdom, for example, doubled in boys and quadrupled in girls between 2000 and 2018, according to one study. In adults, the rate shot up even more. “We have numbers suggesting that we’re seeing a rise,” says Max Wiznitzer, a pediatric neurologist at Rainbow Babies and Children’s Hospital in Cleveland, Ohio.
+So what explains the surge? It doesn’t seem to be a big rise in the prevalence of the symptoms and traits that characterize ADHD — namely hyperactivity, impulsivity and inattention, researchers say. When scientists use standard procedures to rigorously assess symptoms in representative samples of a population, they find that the ‘true’ prevalence of ADHD is fairly consistent in different parts of the world — estimated at around 5.4% in children and 2.6% in adults, according to two comprehensive global studies.
+Experts say there are several reasons these figures are much lower than the 11% diagnosis level in US children that the country’s health authorities reported last year. That number comes from the US National Survey of Children’s Health conducted in 2022, in which parents were asked whether a doctor or other health-care provider had ever said their child has ADHD. But this method of assessing prevalence would lead to inflated counts, says Luis Rohde, a psychiatrist and ADHD specialist at the Federal University of Rio Grande do Sul in Porto Alegre, Brazil. Some children were probably misdiagnosed — perhaps by a physician without specialist training — and would not be classified as having ADHD in a thorough clinical evaluation. Some parents might have misremembered, perhaps if they were told that their child had symptoms without a formal diagnosis, he says. And some children who once had a diagnosis would no longer have received one at the time of the survey if their symptoms had waned and they were reassessed.
+Researchers and specialists highlight other factors that are likely to be driving up the number of diagnoses. One is a change in diagnostic criteria in The Diagnostic and Statistical Manual of Mental Disorders (DSM). In the fourth edition of this widely used manual, introduced in 1994, a child or adult ADHD diagnosis required the presence of at least six of a list of nine inattention symptoms and/or six or more of nine hyperactivity symptoms, and stipulated that these had to be present before the age of seven. (This reflects the idea that ADHD is a neurodevelopmental condition that arises during childhood brain development.)
+When the fifth edition, DSM-V, arrived in 2013, the criteria were slightly relaxed. Symptoms had to be present before age 12, and adult diagnosis required a minimum of five symptoms. (Children still had to have at least six.) “So when we expand the criteria, obviously you increase a little bit the prevalence,” says Rohde, who was involved in those revisions. It has also become more common for clinicians to diagnose ADHD along with other conditions, when in the past they tended to focus on one, says Bölte: “That fuels the figures.” ADHD commonly occurs with autism, as well as with anxiety, depression and other disorders.
+
+**04. The impairment requirement**
+Today, a thorough ADHD assessment involves collecting a detailed history and completing behavior questionnaires, including input from family members and, for children, from schools. In the United States, the condition can be diagnosed by a range of health professionals, including psychiatrists, other mental-health specialists and primary-care physicians such as pediatricians, who might not have dedicated training in ADHD. But countries differ: in Brazil and many other low- and middle-income nations, people with ADHD symptoms tend to be sent to neurologists and psychiatrists for ADHD assessment and diagnoses, and there is a shortage of such specialists, Rohde says.
+The DSM-V defines three “presentations” of ADHD. People with “predominantly inattentive” ADHD show symptoms such as making careless mistakes, struggling to sustain attention, losing things and being easily distracted. Those with predominantly hyperactive-impulsive ADHD have traits such as fidgeting, restlessness, talking excessively and interrupting others. In a third, combined presentation, people show both sets of symptoms. A diagnosis requires that symptoms are present for at least six months and in two or more settings (such as school, home, work); are not explained by another condition such as anxiety; and cause an impairment, such as struggling with schoolwork, losing a job or having relationship problems.
+The impairment requirement is key, clinicians say. These traits vary across the population: some individuals are very hyperactive or inattentive, and some not at all. But people tend to be diagnosed with ADHD when their symptoms significantly interfere with their lives. “The medical part of ADHD comes in when your life is becoming derailed,” says Margaret Sibley, a specialist in psychiatry and behavioral sciences at the University of Washington School of Medicine in Seattle.
+Bölte says that clinicians are interpreting the diagnostic criteria “far more liberally and openly” than in the past. This is another factor — aside from changes in the diagnostic criteria — that is driving the apparent surge in ADHD.
+But working out when someone crosses the impairment line involves a subjective and sometimes tricky judgement, say specialists. And there is an ongoing debate about whether a person’s level of impairment should be defined relative to their own potential or to a population average.
+What’s clear is that more parents as well as children are deemed as crossing that threshold. Wiznitzer says that when he diagnoses a child, “almost invariably [one of] the parents has it”, too. (That’s because genes are a major contributor to ADHD: the disorder has a heritability of roughly 70–80%.) Even though the parents were probably symptomatic as children, many were not identified as having the condition, he says. But now, they are.
+
+**05. ADHD on TikTok**
+Another reason why diagnoses have surged is an increase in public awareness of ADHD — fueled by an explosion of discussion on TikTok and other social media.
+Information online “connects with some people who have had these symptoms and impairments for a long time, but never understood what they were,” says Sibley. That leads them to seek information and professional help, pushing diagnoses up. And people might be eager to receive a diagnosis if it allows them to access help and services for themselves or a child, such as adaptations to support learning at school.
+The surge in ADHD has led to concerns, particularly in the United States, about questionable diagnoses being given without a thorough clinical evaluation — through online services, for example, or by medical professionals without ADHD training. “They’ve got a visit for 15 or 20 minutes, and the diagnosis is made,” says Stephen Hinshaw, a specialist in child and adolescent mental health and ADHD at the University of California, Berkeley. But Didier says that a bigger problem is the number of people with ADHD who are undiagnosed or untreated. She emphasizes how important it is for people to have access to a thorough, accurate assessment from a trained professional who specializes in ADHD.
+The lack of recognition of ADHD is a particular problem in low- and middle-income countries, says Rohde. “The problem here is clearly underdiagnosis, stigma and undertreatment,” he says, which particularly affects “vulnerable people and communities.”
+Many specialists say they’re observing a rapid rise of diagnoses in girls and women. In part, that’s thought to be because women and girls are more likely to have symptoms of inattention — rather than more-noticeable hyperactivity — and to find organizational and other strategies that “mask” those symptoms. Didier says that, despite being an ADHD specialist and diagnosing the condition in three of her sons, she and other ADHD practitioners missed the signs and symptoms in her daughter until she was a teenager. “It’s egregious that we don’t have more research on ADHD trajectories in women,” Sibley says.
+Changes in the world itself are yet another possible contributor to increased diagnoses. Some researchers speculate that schools, work, technology and other aspects of modern lives have become so complex and taxing that they are pushing more people beyond the threshold of impairment. In Sweden, says Bölte, schools are sometimes chaotic, with complex schedules and grading systems. “Many students are very confused and fed up with school and do not understand it anymore,” he says.
+A study published last year revealed that parents think their children are struggling more. The research team examined how parents viewed the ADHD symptoms of more than 27,000 nine-year-old children born in Sweden. Parents consulted in 2016–18 tended to say that their children were more impaired than did parents consulted in 2004–06, even though their kids had the same number of symptoms. “Environment around the child is crucial,” says Samuele Cortese, who studies ADHD at the University of Southampton, UK, and was involved in the work.
+
+**06. Context is key**
+Karp describes ADHD as “context-dependent.” In a school where children are expected to sit still and be quiet, “it makes these traits seem like a problem”, he says. But when someone with ADHD is in an environment that nurtures and empowers them, they “can then channel their neurotype to do incredible things.” Karp is not against medication — and sometimes takes it himself — but would like more emphasis on institutions and society evolving so that people with ADHD can thrive.
+Researchers, meanwhile, are finding evidence that the severity of symptoms can vary over time. In a 2021 study, Sibley and her colleagues analyzed detailed records of more than 550 children who were diagnosed with ADHD and followed for up to 16 years. The researchers found that 64% of young people had fluctuations in ADHD — times when their symptoms faded but then recurred.
+Sibley and her team hypothesized that people’s symptoms might flare up when they were facing increased demands in their lives, such as when starting a new school or having a child. But in fact, the opposite seemed to be true, according to a later analysis by Sibley and her colleagues. This could be because people are able to take on more responsibility when their symptoms abate. But the alternative explanation — one that has “really resonated,” Sibley says — is that people with ADHD need a degree of activity and accountability in their lives to perform and stay engaged. Sibley thinks there might be a U-shaped curve: too many or too few demands and obligations mean that people with ADHD don’t function at their best — but at a “sweet spot,” they do.
+
+**07. Part 3**
+Such studies fan a lively debate about how best to treat ADHD. Clinical guidelines from the UK National Institute for Health and Care Excellence (NICE) recommend offering medications — often stimulants such as methylphenidate (commonly sold as Ritalin and Concerta) — as a treatment for children aged five and over. But this applies only after parents are given ADHD education and support, and only if the child’s impairment persists after “environmental modifications” have been implemented, such as reducing distractions at school. NICE recommends that the first-line treatment for children under five should involve parent-training programs, which typically teach behavior-management techniques such as setting clear ground rules.
+The American Academy of Pediatrics recommends the use of medications and behavior therapy, such as parent training and adjustments made in schools, for children aged 6–12.
+A meta-analysis based on studies published up to 2020 aimed to address controversy over whether ADHD medications are over- or underused, by pooling data mostly from high-income countries. It found that medication was being taken by 19% of school-age children diagnosed with ADHD — much less than the roughly 70% that the study estimated might benefit from trying such treatment. It also found that almost 1% of children without a formal ADHD diagnosis were receiving medication.
+But medication is “a very hot topic”, says Cortese. There has been a tension, he explains, between those who favor treating ADHD with medication and those who advocate alternatives.
+A systematic review published in January aimed to address this tension. For the first time, it compared the effectiveness of all types of intervention for ADHD in adults by synthesizing evidence from rigorous randomized trials. This showed that stimulant medications and a drug called atomoxetine were effective at reducing the “core” symptoms of inattention, hyperactivity and impulsivity after 12 weeks. “Only the medications have a level of evidence which support their use to treat these symptoms,” says Cortese, a co-author of that review. “The evidence is quite clear.” The review found weaker evidence that cognitive behavioral therapy, which aims to change unhelpful thoughts and behaviors, improves core symptoms in adults. But plenty of other research suggests that behavioral approaches can be effective at improving other outcomes for adults and children with ADHD.
+
+**08. Part 4**
+Researchers acknowledge that ADHD medications can have side effects and come with many unknowns. Some research suggests that taking stimulants is linked to a reduction in the expected height and weight of children. But one large epidemiological study in Sweden found that ADHD was linked to shorter height even before stimulant medications were introduced to treat it there — suggesting that some other genetic or environmental influence might actually account for all or part of the reduced height. It’s important to discuss the “trade-off between benefits and harms” with patients, says Edoardo Ostinelli, who studies precision medicine in psychiatry at the University of Oxford, UK.
+The long-term effects of ADHD medications are harder to study rigorously, so evidence is more scarce. In one study published in August, Cortese and his colleagues examined the records of nearly 150,000 people diagnosed with ADHD in Sweden between 2007 and 2020, of whom more than half had started on drug treatment such as methylphenidate. After controlling for confounding factors, the researchers found that taking medication was linked to lower rates of suicidal behavior, substance misuse, criminal convictions and transport accidents, compared with a group that did not take medication.
+Stimulants have been used for decades, and “there’s really a vast literature” that supports their use, Bölte says. “It’s probably the most effective medication we have in the whole of the mental-health sector.”
+But clinical specialists who spoke to Nature emphasized that support should involve offering a range of approaches, and that individuals should work with specialists to decide what is right for them.
+
+**09. Part 5**
+Wiznitzer says that data do not support claims in the “Make America Healthy Again” (MAHA) report that ADHD treatments are overprescribed or ineffective in the long term. “There’s an increased rate of prescription because we’re identifying the kids better,” he says. The comments in the report about stimulants “do not look at the totality of the evidence that we have about their efficacy,” he adds.
+How to select the right approach for an individual is one area that would benefit from a more scientific approach. People with ADHD have widely differing traits and responses to medications, but researchers lack a detailed understanding of why.
+Cortese, Ostinelli and their team are developing a digital tool — based on data from randomized trials and the health records of people with ADHD — that will suggest treatments that best match a person’s ADHD symptoms. This, they hope, will improve on the current trial-and-error approach.
+Two other big challenges for people with ADHD are access to diagnosis and treatment, and misinformation, says Didier. In one 2022 study, clinicians rated more than half of TikTok videos about ADHD as misleading. “They’re being bombarded with myths about what ADHD is and isn’t,” she says. And statements from Kennedy — such as using questionable data to link Tylenol (paracetamol) use in pregnancy to autism and ADHD — could add to the problem, some researchers say.
+Nature asked the US Department of Health and Human Services (HHS) to respond to criticisms of statements from Kennedy and the MAHA Commission. An agency spokesperson said: “HHS is committed to expanding efforts to improve the safe and appropriate use of medications in children.”
+For their part, scientists want to learn more about how brain circuits develop and operate in people with ADHD and, ideally, find biological markers that could be used to improve diagnosis of the condition. And researchers have not been able to test all the ideas generated by people who have experience of living with ADHD, says Sibley.
+But a lot of puzzles about ADHD remain unsolved, says Sibley, because the broader medical field tends to view it as less serious than other chronic health conditions, such as depression, that pose a more obvious threat. “That’s the uphill battle,” she says.
+`,
+  zh: `
+**01. 第一部分**
+美國超過十分之一的兒童患有注意力不足過動症（ADHD），這使得關於這種病症及其療法的辯論不斷升溫。
+在世界某些地區，被診斷出注意力不足過動症（ADHD）的人數創下新高。以美國為例，政府研究人員去年報告指出，超過 11% 的兒童在人生某個時間點曾被診斷出 ADHD——相較於 2003 年約 8% 的兒童，這是急遽的增加。
+但如今，美國高階衛生官員主張，診斷已經擴張到失控。今年五月，由美國衛生部長小羅伯特．F．甘迺迪（Robert F. Kennedy Jr）領導的「讓美國再次健康」委員會表示，ADHD 是「過度診斷與過度治療危機」的一部分，並指出 ADHD 藥物長遠來看對兒童並沒有幫助。
+那麼，到底發生了什麼事？
+
+**02. 第二部分**
+有一點很明確：包括偵測能力提升與對 ADHD 認識增加在內的幾項因素，使得有症狀的人得以被診斷並接受治療，而這些人在多年前並不會得到診斷或治療。臨床醫師表示，這一點對女性與女孩尤其如此，她們的症狀模式過去經常被忽略。雖然一些專家擔心過度診斷的風險，但更多人擔憂的是，太多人沒有被診斷、也沒有接受治療。
+與此同時，對 ADHD 認識與診斷的增加，也助長了一場公眾辯論，議題包括應該如何看待它，以及如何最好地提供支持，包括何時需要用藥。神經多樣性運動的興起，正在挑戰把 ADHD 視為應該被「治療」的疾患這種看法，並主張它是一種應該被更好地理解與支持的差異——例如，更著重調整學校與職場。
+「我對『疾患』這個詞確實有很大的意見，」麻薩諸塞州波士頓布萊根婦女醫院（Brigham and Women’s Hospital）的生物醫學工程師傑夫．卡普（Jeff Karp）說，他本人也有 ADHD。「失序的是學校體制，不是孩子。」
+但許多臨床醫師與 ADHD 患者主張，這種狀況與各種困難有關——從學業上的掙扎，到受傷與物質濫用機率增加——這些困難足以讓它被稱為一種醫療狀況，並說藥物對許多人來說是治療中重要而有效的一環。
+「我聽到很多人說 ADHD 是一種天賦、一種超能力，我也確實為此喝采，」專精 ADHD 的臨床醫師、美國非營利組織「兒童與成人注意力不足過動症協會」（CHADD，總部設於馬里蘭州蘭哈姆）會長傑瑞米．迪迪耶（Jeremy Didier）說，她自己也有 ADHD。「但我不想淡化 ADHD 在未被診斷或管理不善時，對一個人生活可能造成的衝擊。」
+她和其他人說，神經多樣性與醫療這兩種模式都有其價值。「如何以有意義而且有成效的方式把這兩者結合起來，我認為這可能是最大的挑戰，」瑞典斯德哥爾摩卡羅林斯卡學院（Karolinska Institute）的兒童與青少年精神醫學專家斯文．伯爾特（Sven Bölte）說。
+
+**03. 真正的增加**
+大量研究顯示，ADHD 的診斷在過去二、三十年間於許多高收入國家都增加了——與自閉症診斷的增加類似。例如，根據一項研究，英國新診斷 ADHD 的比率在 2000 年到 2018 年之間，男孩增加了一倍，女孩增加到四倍。成年人的比率則上升得更多。「我們有數字顯示我們看到了上升，」俄亥俄州克里夫蘭彩虹嬰兒與兒童醫院的兒科神經學家麥克斯．維茲尼策（Max Wiznitzer）說。
+那麼，是什麼解釋了這波激增？研究人員說，ADHD 的症狀與特質——也就是過動、衝動與注意力不集中——的盛行率，似乎並沒有大幅上升。當科學家使用標準程序，嚴格評估具代表性的人口樣本中的症狀時，他們發現 ADHD 的「真實」盛行率在世界各地相當一致——根據兩項全面的全球研究，估計兒童約為 5.4%、成人約為 2.6%。
+專家說，這些數字之所以遠低於美國衛生主管機關去年所報告的美國兒童 11% 的診斷率，有好幾個原因。那個數字來自 2022 年進行的「全美兒童健康調查」，調查中詢問家長是否有醫師或其他醫療提供者曾說過他們的孩子有 ADHD。但巴西阿雷格里港南大河聯邦大學的精神科醫師暨 ADHD 專家路易斯．羅德（Luis Rohde）說，這種評估盛行率的方法會導致數字膨脹。有些孩子可能被誤診了——也許是被沒受過專科訓練的醫師診斷——在徹底的臨床評估中並不會被歸類為 ADHD。他說，有些家長可能記錯了，例如他們被告知孩子有某些症狀，卻沒有正式診斷。還有些孩子曾經有過診斷，但如果他們的症狀已經減退並重新接受評估，在調查當時就不會再被診斷為 ADHD。
+研究人員與專家強調，還有其他因素可能正在推高診斷人數。其一是《精神疾病診斷與統計手冊》（DSM）診斷標準的改變。在 1994 年推出、被廣泛使用的這本手冊第四版中，兒童或成人的 ADHD 診斷，要求在九項注意力不集中症狀中至少符合六項，和／或在九項過動症狀中符合六項以上，並規定這些症狀必須在七歲以前就已出現。（這反映出 ADHD 是一種在兒童腦部發育期間出現的神經發展狀況這個概念。）
+當第五版 DSM-V 於 2013 年問世時，標準稍微放寬了。症狀必須在 12 歲以前出現，成人診斷則至少要有五項症狀。（兒童仍必須至少有六項。）「所以當我們擴大標準時，顯然會稍微增加盛行率，」曾參與這些修訂的羅德說。如今臨床醫師也越來越常把 ADHD 與其他狀況一併診斷，而過去他們傾向只聚焦於其中一種，伯爾特說：「這助長了這些數字。」ADHD 常與自閉症同時出現，也常與焦慮、憂鬱及其他疾患並存。
+
+**04. 需要有損傷才能認定**
+如今，一份徹底的 ADHD 評估，包括蒐集詳細的病史，並完成行為問卷，其中包含家人的意見，若是兒童則還包括學校的意見。在美國，這種狀況可由一系列健康專業人員來診斷，包括精神科醫師、其他心理健康專家，以及兒科醫師等初級照護醫師——後者可能並未受過專門的 ADHD 訓練。但各國情況不同：在巴西和許多其他中低收入國家，有 ADHD 症狀的人往往被轉介給神經科醫師與精神科醫師做 ADHD 評估與診斷，而這類專科醫師很短缺，羅德說。
+DSM-V 界定了 ADHD 的三種「呈現類型」。「以注意力不集中為主」的 ADHD 患者，會出現諸如犯下粗心的錯誤、難以維持注意力、遺失東西、容易分心等症狀。「以過動—衝動為主」的 ADHD 患者，則具有坐立不安、無法安靜、說話過多及打斷別人等特質。第三種「混合」型則同時表現出兩組症狀。診斷要求症狀至少持續六個月，並出現在兩個或更多場域（例如學校、家裡、工作）；不能用焦慮等其他狀況來解釋；而且造成損害，例如在學業上掙扎、失去工作，或出現人際關係問題。
+臨床醫師說，「損害」這項要件是關鍵。這些特質在人群中的程度各不相同：有些人非常過動或注意力不集中，有些人則完全沒有。但人們往往是在症狀嚴重干擾生活時才被診斷為 ADHD。「當你的生活開始出軌時，就是 ADHD 的醫療部分登場的時候，」西雅圖華盛頓大學醫學院的精神醫學與行為科學專家瑪格麗特．西布利（Margaret Sibley）說。
+伯爾特說，臨床醫師對診斷標準的詮釋「比過去自由和開放得多」。除了診斷標準的改變之外，這是推高 ADHD 表面激增的另一個因素。
+但專家說，要判斷一個人何時越過損害的門檻，涉及一種主觀、有時還很棘手的判斷。而且關於一個人的損害程度，應該相對於他自己的潛力，還是相對於人群平均值來界定，目前仍有持續的爭論。
+可以確定的是，越來越多的家長以及兒童被認為越過了那道門檻。維茲尼策說，當他診斷一個孩子時，「幾乎毫無例外，[孩子的]父母之一也有」。（這是因為基因是 ADHD 的主要促成因素：這種疾患的遺傳率約為 70%–80%。）儘管這些父母小時候可能就有症狀，但許多人當時並沒有被辨認為有這種狀況，他說。但現在，他們被辨認出來了。
+
+**05. 注意力不足過動症在抖音上**
+診斷激增的另一個原因，是大眾對 ADHD 的認識增加——這是由 TikTok 和其他社群媒體上爆炸性的討論所助長的。
+網路上的資訊「連結到一些長期有這些症狀與損害、卻從來不明白那是什麼的人，」西布利說。這使他們去尋求資訊與專業協助，進而推高診斷數字。而如果得到診斷能讓人為自己或孩子取得協助與服務，例如學校裡支持學習的調整措施，人們可能就會渴望獲得診斷。
+ADHD 的激增引發了一些擔憂，特別是在美國，擔憂的是有些可疑的診斷是在沒有徹底臨床評估的情況下做出的——例如透過線上服務，或由沒受過 ADHD 訓練的醫療專業人員。「他們有 15 或 20 分鐘的看診時間，診斷就做出來了，」加州大學柏克萊分校的兒童與青少年心理健康及 ADHD 專家史蒂芬．欣肖（Stephen Hinshaw）說。但迪迪耶說，更大的問題是有許多 ADHD 患者沒有被診斷或沒有接受治療。她強調，人們能夠從專精 ADHD 的受過訓練的專業人員那裡，獲得徹底而正確的評估，是多麼重要。
+對 ADHD 缺乏認識，在中低收入國家尤其是個問題，羅德說。「這裡的問題顯然是診斷不足、污名與治療不足，」他說，這特別影響「弱勢的人與社群」。
+許多專家說，他們觀察到女孩與女性的診斷快速上升。部分原因據認為是，女性與女孩比較可能出現注意力不集中的症狀——而不是比較明顯的過動——並且比較會找到組織性及其他策略來「掩飾」這些症狀。迪迪耶說，儘管她自己是 ADHD 專家，也診斷出她的三個兒子有這種狀況，但她和其他 ADHD 從業人員直到她的女兒進入青少年時期，才發現她身上的跡象與症狀。「我們對女性 ADHD 發展軌跡的研究不夠多，這真的太過分了，」西布利說。
+世界本身的改變，是造成診斷增加的另一個可能因素。一些研究人員推測，學校、工作、科技與現代生活的其他面向已變得如此複雜而繁重，把更多人推過了損害的門檻。伯爾特說，在瑞典，學校有時很混亂，時間表與計分制度都很複雜。「許多學生非常困惑，也對學校受夠了，而且再也看不懂了，」他說。
+去年發表的一項研究顯示，家長認為孩子的掙扎變多了。研究團隊檢視了父母如何看待超過 27,000 名瑞典出生的九歲兒童的 ADHD 症狀。結果發現，2016–18 年接受諮詢的家長，往往比 2004–06 年接受諮詢的家長更常說他們的孩子受到較多損害，即使這些孩子的症狀數量相同。「孩子周遭的環境是關鍵，」英國南安普敦大學研究 ADHD、也參與這項研究的薩穆埃萊．科爾泰塞（Samuele Cortese）說。
+
+**06. 關鍵在於背景**
+卡普把 ADHD 形容為「取決於情境」。在一個期待孩子們坐著不動、保持安靜的學校裡，「這會讓這些特質看起來像是問題」，他說。但當 ADHD 患者身處一個能滋養並賦能他們的環境時，他們就「能把自己的神經類型導引去做出令人難以置信的事」。卡普並不反對藥物——他自己有時也會服用——但他希望更多強調讓機構與社會演進，好讓 ADHD 患者能夠茁壯成長。
+與此同時，研究人員發現證據顯示，症狀的嚴重程度會隨時間變動。在 2021 年的一項研究中，西布利與同事分析了超過 550 名被診斷為 ADHD 的兒童的詳細紀錄，並追蹤長達 16 年。研究人員發現，64% 的年輕人的 ADHD 出現波動——症狀有時消退，之後又再度復發。
+西布利與她的團隊曾假設，當人們面臨生活中日益增加的要求時，例如開始上新學校或生了孩子，症狀可能會爆發。但實際上，根據西布利與同事之後的一項分析，情況似乎正好相反。這可能是因為當症狀減弱時，人們能夠承擔更多責任。但另一種解釋——西布利說這個解釋「真的引起了共鳴」——則是 ADHD 患者的生活中需要一定程度的活動與責任感，才能有好表現並保持投入。西布利認為可能存在一條 U 形曲線：要求與義務太多或太少，都會使 ADHD 患者無法發揮最佳狀態——但在一個「最佳位置」上，他們就能。
+
+**07. 第三部分**
+這類研究助長了一場關於如何最好地治療 ADHD 的熱烈辯論。英國國家健康與照護卓越研究院（NICE）的臨床指引建議，對五歲以上的兒童提供藥物治療——通常是刺激劑，例如派醋甲酯（methylphenidate，市面上常以 Ritalin 與 Concerta 販售）。但這只適用於家長已接受 ADHD 教育與支持之後，而且只有在實施了「環境調整」（例如減少學校裡的干擾）之後孩子的損害仍然持續時才適用。NICE 建議，對五歲以下兒童的第一線治療，應該包含家長訓練計畫，這類計畫通常教導行為管理技巧，例如訂立明確的基本規則。
+美國小兒科學會建議，對 6–12 歲的兒童，使用藥物與行為治療，例如家長訓練以及在學校中所做的調整。
+一項以截至 2020 年發表的研究為基礎的統合分析，旨在處理 ADHD 藥物是被過度使用還是使用不足這項爭議，方法是彙集主要來自高收入國家的資料。結果發現，被診斷為 ADHD 的學齡兒童中有 19% 正在服藥——遠低於該研究估計可能從這種治療中受益的約 70%。研究也發現，沒有正式 ADHD 診斷的兒童中，有將近 1% 正在接受藥物治療。
+但科爾泰塞說，藥物是「一個非常熱門的話題」。他解釋說，主張用藥物治療 ADHD 的人與提倡替代方案的人之間，一直存在著緊張關係。
+一月發表的一項系統性回顧，旨在處理這種緊張關係。這是首次透過綜合嚴格隨機試驗的證據，比較成人 ADHD 所有類型介入措施的有效性。結果顯示，刺激劑藥物與一種稱為 atomoxetine 的藥物，在 12 週後能有效減輕注意力不集中、過動與衝動這些「核心」症狀。「只有藥物擁有足以支持其用於治療這些症狀的證據等級，」該回顧的共同作者科爾泰塞說。「證據相當明確。」該回顧發現，認知行為治療（旨在改變無益的想法與行為）改善成人核心症狀的證據較弱。但許多其他研究顯示，行為取向的作法在改善 ADHD 成人與兒童的其他結果上可能有效。
+
+**08. 第四部分**
+研究人員承認，ADHD 藥物可能有副作用，而且存在許多未知。一些研究顯示，服用刺激劑與兒童預期身高與體重的降低有關。但瑞典一項大型流行病學研究發現，在刺激劑藥物被引進該國用來治療 ADHD 之前，ADHD 就已與較矮的身高有關——這顯示可能是其他某種遺傳或環境影響，實際上造成了身高降低的全部或一部分。牛津大學研究精神醫學精準醫療的愛德華多．奧斯蒂內利（Edoardo Ostinelli）說，與病人討論「利與弊之間的取捨」很重要。
+ADHD 藥物的長期效果更難以嚴格研究，因此證據更為稀少。在八月發表的一項研究中，科爾泰塞與同事檢視了瑞典 2007 年至 2020 年間近 150,000 名被診斷為 ADHD 者的紀錄，其中超過半數已開始接受派醋甲酯等藥物治療。在控制了混淆因素之後，研究人員發現，與未服藥的族群相比，服藥者的自殺行為、物質濫用、刑事定罪及交通事故的發生率較低。
+刺激劑已使用了數十年，而且「確實有大量文獻」支持它們的使用，伯爾特說。「它很可能是我們在整個心理健康產業中最有效的藥物。」
+但接受《自然》（Nature）雜誌訪問的臨床專家強調，支持應該包含提供各式各樣的作法，而且個人應該與專家合作，決定什麼對自己才是合適的。
+
+**09. 第五部分**
+維茲尼策說，資料並不支持「讓美國再次健康」（MAHA）報告中的說法，也就是 ADHD 治療被過度開立處方，或長遠來看是無效的。「處方率增加，是因為我們更能辨認出這些孩子，」他說。他補充說，報告中有關刺激劑的評論「並沒有考量我們所掌握的、關於其效力的證據整體」。
+如何為個人選擇正確的作法，是一個能從更科學的方法中獲益的領域。ADHD 患者的特質與對藥物的反應差異極大，但研究人員對原因缺乏詳細的了解。
+科爾泰塞、奧斯蒂內利及其團隊正在開發一種數位工具——以隨機試驗的資料和 ADHD 患者的健康紀錄為基礎——它會建議最符合個人 ADHD 症狀的治療方式。他們希望，這能改善目前的嘗試錯誤式作法。
+迪迪耶說，ADHD 患者面臨的另外兩大挑戰，是取得診斷與治療的管道，以及錯誤資訊。在 2022 年的一項研究中，臨床醫師將超過半數關於 ADHD 的 TikTok 影片評為具有誤導性。「他們正被關於 ADHD 是什麼、不是什麼的迷思轟炸，」她說。一些研究人員說，甘迺迪的言論——例如使用有問題的資料，將懷孕期間使用泰諾（Tylenol，即乙醯胺酚）與自閉症及 ADHD 連結起來——可能會讓問題更加嚴重。
+《自然》雜誌請美國衛生與公共服務部（HHS）回應對甘迺迪與 MAHA 委員會言論的批評。該機構一名發言人表示：「HHS 致力於擴大各項努力，以改善兒童安全而適當的藥物使用。」
+就科學家而言，他們想更了解 ADHD 患者的大腦迴路如何發展與運作，並理想上找到可用來改善這種狀況診斷的生物標記。而且，研究人員還未能測試所有由有 ADHD 生活經驗的人所提出的想法，西布利說。
+但西布利說，關於 ADHD 仍有許多謎團尚未解開，因為更廣泛的醫學領域往往認為它比憂鬱症等其他構成更明顯威脅的慢性健康狀況不那麼嚴重。「這就是上坡作戰，」她說。
+`,
+  questions: `
+**1. According to Part 2, how do several specialists view the neurodiversity model and the medical model of ADHD?**
+(A) The neurodiversity model has been rejected by clinicians because it denies that ADHD can cause academic struggles or injuries.
+(B) The two models agree that medication should be avoided and that schools, rather than individuals, should be treated.
+(C) Both models have merit, and combining them in a productive way is a major challenge for the field.
+(D) Only the medical model is supported by evidence, so the neurodiversity movement has largely been abandoned by specialists who have ADHD.
+
+**2. In “A real rise,” why do the “true” prevalence estimates (about 5.4% of children) differ from the 11% diagnosis rate reported for US children?**
+(A) The 11% came from a parent survey of past diagnoses, which can inflate counts, whereas the lower figures came from rigorous assessments of representative samples.
+(B) ADHD is genuinely far less common in the United States than elsewhere, and the global studies simply left American children out of their samples.
+(C) The global studies counted only adults, whose symptoms are rarely reported, whereas the US survey counted only children with severe impairment.
+(D) The standard procedures used in the global studies overlooked children with severe symptoms and relied on teachers’ reports, so the true prevalence is probably higher than 11%.
+
+**3. What does “The impairment requirement” indicate about how ADHD is diagnosed?**
+(A) A diagnosis depends only on counting symptoms against the DSM list; whether those symptoms disrupt a person’s life is irrelevant.
+(B) All clinicians agree on a single universal threshold for deciding when impairment begins, which is why diagnostic practice is now consistent worldwide.
+(C) Impairment is judged solely by a person’s school grades or job performance, measured against the population average.
+(D) People are typically diagnosed when symptoms significantly interfere with life, though where that line lies is a subjective, debated judgement.
+
+**4. What does Sibley’s proposed U-shaped curve suggest about people with ADHD?**
+(A) The more demands people with ADHD face, the better they function, because added responsibility forces their symptoms to fade.
+(B) They function at their best at a “sweet spot,” while too many or too few demands and obligations impair functioning.
+(C) They perform best when they have no obligations at all, because any added demand triggers a flare-up of symptoms.
+(D) Their symptoms always get worse when they take on new responsibilities, such as starting a new school or having a child.
+
+**5. According to Part 3, what did the January systematic review find about interventions for adults with ADHD?**
+(A) Cognitive behavioral therapy was more effective than medication at reducing core symptoms of inattention, hyperactivity and impulsivity after 12 weeks.
+(B) None of the tested interventions reduced core symptoms after 12 weeks, although several improved patients’ quality of life.
+(C) Stimulant medications and atomoxetine reduced core symptoms after 12 weeks, whereas evidence for cognitive behavioral therapy was weaker.
+(D) Only behavioral approaches had been tested in rigorous randomized trials, so no conclusions about medication were possible.
+`,
+  answers: `
+**1. 答案：(C)**
+
+* **解析**：第二部分提到，迪迪耶等人表示神經多樣性與醫療「兩種模式都有其價值」，伯爾特也說如何「以有意義而且有成效的方式把兩者結合起來」可能是這個領域最大的挑戰。選項 (C) 為精準概括。(A) 原文並未說神經多樣性被臨床醫師否決（迪迪耶還為「ADHD 是天賦」喝采）；(B) 把神經多樣性的立場套到兩種模式上——醫療模式主張藥物是重要而有效的一環；(D) 與原文相反，原文說兩種模式都有價值。
+
+**2. 答案：(A)**
+
+* **解析**：「A real rise」一節指出，約 5.4%（兒童）的估計來自對代表性樣本的嚴格評估，而 11% 來自「詢問家長是否曾有醫師說過孩子有 ADHD」的調查，羅德說這種方法會導致數字膨脹（可能有誤診、家長記錯、症狀已消退卻仍被計入）。選項 (A) 正確。(B)、(C)、(D) 皆與原文不符——全球研究涵蓋兒童與成人，美國調查並非只算嚴重損害的兒童，原文也沒有說嚴格評估會漏掉重症或真實盛行率高於 11%。
+
+**3. 答案：(D)**
+
+* **解析**：「The impairment requirement」一節指出，這些特質在人群中程度不一，但人們往往是在症狀嚴重干擾生活時才被診斷；而判斷何時越過損害門檻「涉及主觀而且有時很棘手的判斷」，也仍在爭論該相對於個人潛力還是人群平均來界定。選項 (D) 正確。(A) 與原文相反——損害是診斷的要件；(B) 與原文所說的「持續爭論」矛盾；(C) 把損害過度簡化為成績或工作表現（原文只是舉例），且「相對於人群平均」只是爭論中的一種定義。
+
+**4. 答案：(B)**
+
+* **解析**：「Context is key」一節中，西布利認為可能存在一條 U 形曲線：要求與義務太多或太少，都會使 ADHD 患者無法發揮最佳狀態，但在「最佳位置」上他們就能。選項 (B) 正確。(A) 與 (C) 都與 U 形曲線相反（兩端皆不佳）；(D) 與研究結果相反——症狀在人們面臨更多要求時並未爆發，情況似乎正好相反。
+
+**5. 答案：(C)**
+
+* **解析**：第三部分描述一月發表的系統性回顧：刺激劑藥物與 atomoxetine 在 12 週後能有效減輕核心症狀，而認知行為治療改善核心症狀的證據較弱。選項 (C) 正確。(A) 與 (B) 與原文相反；(D) 原文說該回顧綜合的是嚴格隨機試驗的證據，涵蓋所有類型的介入措施，文末還提到許多研究指出行為取向的作法在改善其他結果上可能有效。
+`,
+
+  evidence: {
+    1: [
+      'She and others say both models — neurodiversity and medical — have merit.',
+      '“Bringing those two together in a meaningful and productive way, I think that’s maybe the biggest challenge” for the field, says Sven Bölte, a specialist in child and adolescent psychiatric science at the Karolinska Institute in Stockholm.'
+    ],
+    2: [
+      'When scientists use standard procedures to rigorously assess symptoms in representative samples of a population, they find that the ‘true’ prevalence of ADHD is fairly consistent in different parts of the world — estimated at around 5.4% in children and 2.6% in adults, according to two comprehensive global studies.',
+      'But this method of assessing prevalence would lead to inflated counts, says Luis Rohde, a psychiatrist and ADHD specialist at the Federal University of Rio Grande do Sul in Porto Alegre, Brazil.'
+    ],
+    3: [
+      'But people tend to be diagnosed with ADHD when their symptoms significantly interfere with their lives.',
+      'But working out when someone crosses the impairment line involves a subjective and sometimes tricky judgement, say specialists.',
+      'And there is an ongoing debate about whether a person’s level of impairment should be defined relative to their own potential or to a population average.'
+    ],
+    4: [
+      'Sibley thinks there might be a U-shaped curve: too many or too few demands and obligations mean that people with ADHD don’t function at their best — but at a “sweet spot,” they do.',
+      'But the alternative explanation — one that has “really resonated,” Sibley says — is that people with ADHD need a degree of activity and accountability in their lives to perform and stay engaged.'
+    ],
+    5: [
+      'This showed that stimulant medications and a drug called atomoxetine were effective at reducing the “core” symptoms of inattention, hyperactivity and impulsivity after 12 weeks.',
+      'The review found weaker evidence that cognitive behavioral therapy, which aims to change unhelpful thoughts and behaviors, improves core symptoms in adults.'
+    ]
+  }
+},
+{
+  id: 'five-second-rule',
+  title: 'Is the five-second rule true? Don’t push your luck.',
+
+  en: `
+**01. Part 1**
+The scientific research on floor food has a clear answer.
+“You aren’t going to eat that are you?” your friend wonders as you reach down to grab the cookie you just dropped on the floor. “Five-second rule!” you argue, before popping the cookie into your mouth.
+According to this popular belief, if you drop a piece of food on the floor and pick it up in less than five seconds, then it’s safe to eat. The presumption is that bacteria on the floor don’t have enough time to hitch a ride on the food. But is it true?
+In 2003, Jillian Clarke, a senior at the Chicago High School for Agricultural Sciences in Illinois, put the five-second rule to the test. She inoculated two types of tiles—smooth and rough—with Escherichia coli and dropped gummy bears and cookies on the tiles for five seconds. Clarke and her coworkers saw that bacteria transferred to food very quickly, even in just five seconds, thus challenging the popular belief.
+
+**02. Part 2**
+A few years later, food scientist Paul Dawson and his students at Clemson University in South Carolina also tested the five-second rule and published their results in the Journal of Applied Microbiology. When they dropped bologna sausage onto a piece of tile contaminated with Salmonella typhimurium, over 99% of the bacteria transferred from the tile to the bologna after just five seconds. The five-second rule was just baloney, Dawson concluded.
+But in 2014, microbiology professor Anthony Hilton and his students at Aston University in the United Kingdom reignited the debate. They studied the transfer of E. coli and Staphylococcus aureus from a variety of indoor floor types (carpet, laminate, and tile) to toast, pasta, biscuit, and a sticky sweet, with contact times ranging between three to 30 seconds. According to their results (which were shared in a press release but not published in a peer-reviewed journal), the longer a piece of food was in contact with the floor, the more likely it was to contain bacteria. This could be interpreted as evidence in favor of the five-second rule, Hilton noted, but was not conclusive.
+This prompted food science professor Donald Schaffner and his master’s thesis student, Robyn C. Miranda, at Rutgers University in New Jersey to conduct a rigorous study on the validity of the five-second rule, which they published in the journal Applied and Environmental Microbiology. They looked at bacterial transfer to four different foods (watermelon, bread, bread with butter, and gummies) when dropped on four different surfaces (stainless steel, ceramic tile, wood, and carpet) contaminated with Enterobacter aerogenes. By analyzing bacterial transfer at <1, 5, 30, and 300 seconds, they found that longer contact times resulted in more transfer but some transfer took place “instantaneously,” after less than 1 second, thus debunking the five-second rule once and for all.
+
+**03. Part 3**
+Your chance of falling ill after eating food that has touched the floor depends on factors like how contaminated the floor is and the type of bacteria present. “Based on our studies, the kitchen floor is one of the germiest spots in the house,” Charles P. Gerba, a microbiologist and professor of virology at the University of Arizona, tells Popular Science. Believe it or not, “the kitchen is actually germier than the restroom in the home,” he added. This is because, compared to other rooms in a house, the kitchen gets a lot of foot traffic and food debris often falls on the floor, creating an ideal breeding ground for bacteria. While most of the bacteria lurking on kitchen floors are harmless, some—like Clostridium, Campylobacter, Salmonella, and Escherichia—can cause food poisoning.
+If you just hate throwing away food, there are safer options than relying on the five-second rule. Rinsing dropped food can reduce contamination—although this method isn’t foolproof. “Rinsing is a good idea if it is a fruit or vegetable, but it’s harder to rinse off microbes from meat due to their rougher surface,” Gerba said. “You should also rinse food off if it falls in the kitchen sink as it is also very germy because of the moisture in the sink,” he suggested.
+The next time you’re tempted to eat that cookie you just dropped, remember: bacteria move fast. As hungry as you may be, do you really want to eat a Salmonella-laced cookie?
+`,
+  zh: `
+**01. 第一部分**
+科學研究對於掉在地上的食物，已經有了明確的答案。
+「你不會要吃那個吧？」當你彎身要抓起剛掉在地上的餅乾時，朋友納悶地問。「五秒規則！」你辯稱，然後就把餅乾丟進嘴裡。
+根據這個流行的說法，如果你把一塊食物掉在地板上，並在不到五秒內撿起來，那麼它就是安全可以吃的。其假設是，地板上的細菌沒有足夠的時間「搭便車」附著在食物上。但這是真的嗎？
+2003 年，伊利諾州芝加哥農業科學高中的高年級學生吉莉安．克拉克（Jillian Clarke）對五秒規則進行了測試。她在兩種磁磚（平滑與粗糙）上接種大腸桿菌（Escherichia coli），然後把小熊軟糖與餅乾丟在磁磚上五秒。克拉克和她的同事發現，細菌轉移到食物上的速度非常快，即使只有短短五秒，也因此挑戰了這個流行的說法。
+
+**02. 第二部分**
+幾年後，南卡羅來納州克萊姆森大學的食品科學家保羅．道森（Paul Dawson）和他的學生也測試了五秒規則，並把結果發表在《應用微生物學期刊》（Journal of Applied Microbiology）上。當他們把波隆那香腸掉在被鼠傷寒沙門氏菌（Salmonella typhimurium）污染的磁磚上時，僅僅五秒後，就有超過 99% 的細菌從磁磚轉移到香腸上。道森的結論是，五秒規則根本是胡扯。
+但在 2014 年，英國阿斯頓大學的微生物學教授安東尼．希爾頓（Anthony Hilton）和他的學生重新點燃了這場辯論。他們研究大腸桿菌與金黃色葡萄球菌（Staphylococcus aureus）從各種室內地板類型（地毯、層壓板和磁磚）轉移到吐司、義大利麵、餅乾和一種黏黏的糖果上的情形，接觸時間從三秒到 30 秒不等。根據他們的結果（這些結果是透過新聞稿公布，而非發表在同儕審查期刊上），食物與地板接觸的時間越長，就越可能帶有細菌。希爾頓指出，這可以被解讀為支持五秒規則的證據，但並非決定性的。
+這促使紐澤西州羅格斯大學的食品科學教授唐納德．沙夫納（Donald Schaffner）和他的碩士論文學生羅賓．C．米蘭達（Robyn C. Miranda）進行一項針對五秒規則有效性的嚴謹研究，並發表在《應用與環境微生物學》（Applied and Environmental Microbiology）期刊上。他們觀察了四種不同食物（西瓜、麵包、塗奶油的麵包和軟糖）掉落在四種被產氣腸桿菌（Enterobacter aerogenes）污染的不同表面（不鏽鋼、陶瓷磁磚、木頭和地毯）時的細菌轉移情形。透過分析 1 秒以內、5 秒、30 秒與 300 秒時的細菌轉移，他們發現接觸時間越長，轉移越多，但有些轉移是「瞬間」發生的，在不到 1 秒之後就出現，因此一勞永逸地戳破了五秒規則。
+
+**03. 第三部分**
+你吃了碰過地板的食物後生病的機率，取決於地板被污染的程度與存在的細菌種類等因素。「根據我們的研究，廚房地板是家裡最多細菌的地方之一，」亞利桑那大學的微生物學家暨病毒學教授查爾斯．P．格巴（Charles P. Gerba）告訴《大眾科學》（Popular Science）。信不信由你，「廚房其實比家裡的廁所更髒，」他補充說。這是因為，與房子裡的其他房間相比，廚房的人來人往很頻繁，食物殘渣也常常掉到地板上，形成細菌理想的繁殖場所。雖然潛伏在廚房地板上的大部分細菌是無害的，但有些——例如梭菌屬（Clostridium）、曲狀桿菌屬（Campylobacter）、沙門氏菌屬（Salmonella）和埃希氏菌屬（Escherichia）——可能導致食物中毒。
+如果你只是討厭把食物丟掉，比起靠五秒規則，有更安全的選擇。沖洗掉在地上的食物可以減少污染——儘管這個方法並非萬無一失。「如果是水果或蔬菜，沖洗是個好主意，但肉類因為表面比較粗糙，要沖掉微生物比較困難，」格巴說。「如果食物掉在廚房水槽裡，你也應該把食物沖洗一下，因為水槽裡有濕氣，也非常容易有細菌，」他建議。
+下次當你忍不住想吃剛掉在地上的那塊餅乾時，請記住：細菌動作很快。即使你再怎麼餓，你真的想吃一塊摻了沙門氏菌的餅乾嗎？
+`,
+  questions: `
+**1. What did Jillian Clarke’s 2003 experiment suggest about the five-second rule?**
+(A) Food dropped for five seconds on rough tiles stays free of bacteria, although smooth tiles transfer bacteria very quickly.
+(B) Bacteria transferred to food very quickly, even within five seconds, challenging the popular belief.
+(C) Bacteria transferred only to cookies and never to gummy bears, so the rule held for some foods but not for others.
+(D) The number of bacteria transferred depended entirely on how long the food sat on the floor, with nothing transferring before five seconds.
+
+**2. Which result did Paul Dawson’s team report in the Journal of Applied Microbiology?**
+(A) After just five seconds, over 99% of the bacteria on a contaminated tile transferred to a piece of bologna.
+(B) No bacteria transferred from the tile to the bologna until at least 30 seconds had passed, which disproved the rule only for longer contact times.
+(C) Fewer than 1% of the bacteria transferred from the tile to the bologna after five seconds, which broadly supported the rule.
+(D) Bacteria transferred to bologna but not to any other food, showing that the rule fails only for processed meats.
+
+**3. How did Anthony Hilton characterize the findings of his 2014 study?**
+(A) They were conclusive proof that the five-second rule is valid, since food picked up within three seconds carried no bacteria at all from any floor type.
+(B) They were published in a peer-reviewed journal and were widely confirmed by later experiments at other universities.
+(C) They showed that the amount of bacteria on food was unrelated to how long the food had been in contact with the floor.
+(D) The longer food touched the floor, the more likely it was to contain bacteria, which could support the rule but was not conclusive.
+
+**4. What did the Rutgers study by Donald Schaffner and Robyn C. Miranda conclude about contact time?**
+(A) No bacterial transfer occurred during the first 30 seconds of contact, but transfer rose sharply at 300 seconds.
+(B) Contact time had no effect on how many bacteria were transferred, which showed that only the type of surface mattered.
+(C) Longer contact times caused more transfer, but some transfer happened instantaneously, in under one second.
+(D) Wood and carpet transferred no bacteria to any of the foods, whereas stainless steel transferred bacteria within five seconds.
+
+**5. According to Part 3, why is the kitchen floor germier than the restroom?**
+(A) Compared with other rooms, the kitchen gets a lot of foot traffic and food debris, creating an ideal breeding ground for bacteria.
+(B) Kitchen floors are made of materials that kill harmless bacteria and leave only harmful species such as Salmonella behind.
+(C) People rinse kitchen floors far less often than restroom floors, so bacteria accumulate over several weeks.
+(D) Most of the bacteria on kitchen floors are of the harmful types that cause food poisoning, whereas restroom bacteria are harmless.
+`,
+  answers: `
+**1. 答案：(B)**
+
+* **解析**：第一部分指出，克拉克與同事發現細菌轉移到食物上的速度非常快，「即使只有短短五秒」，因而挑戰了流行的說法。選項 (B) 正確。(A) 與原文相反；(C) 與 (D) 把實驗條件（小熊軟糖與餅乾、平滑與粗糙磁磚、掉落五秒）誤當成實驗結果的差異，原文並未如此區分，也沒有說五秒前不會轉移。
+
+**2. 答案：(A)**
+
+* **解析**：第二部分指出，道森團隊把波隆那香腸掉在被沙門氏菌污染的磁磚上，僅僅五秒後就有超過 99% 的細菌轉移到香腸上，因此結論是五秒規則是「胡扯」。選項 (A) 正確。(B) 與 (C) 與原文數據相反；(D) 原文未提及其他食物的比較。
+
+**3. 答案：(D)**
+
+* **解析**：第二部分指出，希爾頓團隊的結果顯示，食物與地板接觸越久，越可能帶有細菌；希爾頓說這「可以被解讀為支持五秒規則的證據，但並非決定性的」，而且結果是透過新聞稿公布，並未發表在同儕審查期刊上。選項 (D) 正確。(A) 把「非決定性」說成「決定性證明」；(B) 與原文相反；(C) 與原文相反——接觸時間越長越可能帶有細菌。
+
+**4. 答案：(C)**
+
+* **解析**：第二部分指出，羅格斯大學的研究發現接觸時間越長轉移越多，但有些轉移是「瞬間」發生的（不到 1 秒），因此一勞永逸地戳破了五秒規則。選項 (C) 正確。(A) 與 (B) 與原文相反；(D) 原文只列出四種表面與四種食物，並未說木頭與地毯完全不轉移細菌。
+
+**5. 答案：(A)**
+
+* **解析**：第三部分中格巴指出，與房子裡其他房間相比，廚房的人來人往頻繁，食物殘渣又常掉在地板上，形成細菌理想的繁殖場所，因此廚房甚至比廁所更多細菌。選項 (A) 正確。(B) 與 (C) 原文未提；(D) 與原文相反——潛伏在廚房地板上的大部分細菌是無害的，只有部分可能導致食物中毒。
+`,
+
+  evidence: {
+    1: [
+      'Clarke and her coworkers saw that bacteria transferred to food very quickly, even in just five seconds, thus challenging the popular belief.'
+    ],
+    2: [
+      'When they dropped bologna sausage onto a piece of tile contaminated with Salmonella typhimurium, over 99% of the bacteria transferred from the tile to the bologna after just five seconds.'
+    ],
+    3: [
+      'According to their results (which were shared in a press release but not published in a peer-reviewed journal), the longer a piece of food was in contact with the floor, the more likely it was to contain bacteria.',
+      'This could be interpreted as evidence in favor of the five-second rule, Hilton noted, but was not conclusive.'
+    ],
+    4: [
+      'By analyzing bacterial transfer at <1, 5, 30, and 300 seconds, they found that longer contact times resulted in more transfer but some transfer took place “instantaneously,” after less than 1 second, thus debunking the five-second rule once and for all.'
+    ],
+    5: [
+      'This is because, compared to other rooms in a house, the kitchen gets a lot of foot traffic and food debris often falls on the floor, creating an ideal breeding ground for bacteria.'
+    ]
+  }
+},
+{
+  id: 'why-do-we-have-fevers',
+  title: 'Why do we have fevers? It’s more complicated than ‘heat kills bugs.’',
+
+  en: `
+**01. Part 1**
+'A little bit of fever is good, but a lot of fever is bad.'
+In the midst of a flu-induced fever, it’s easy to ask why your own body would subject you to the chills, sweats, and aches that go along with a temperature. New research offers some insight into what’s going on beneath the surface. Fever-like temperatures shift how certain immune cells behave, ramping up activity in some key infection-fighters and dialing down suppression in regulatory cells by modifying their metabolism, according to a study published September 20 in the journal Science Immunology.
+The findings offer insight into what’s long been a mysterious biological process, helping to partially explain how fevers fight infection. But the new research may also shed light on the darker side of our immune response. The specific biological pathways that the researchers identified could play a role in the increased cancer risk known to be associated with long-term inflammation. In short: “A little bit of fever is good, but a lot of fever is bad,” says senior study author Jeff Rathmell, a professor of immunobiology at Vanderbilt University Medical Center (VUMC).
+A fever is a systemic, full-body rise in temperature–usually associated with infection. Inflammation, which involves a more localized rise in body temperature, resulting from injury or illness is also common. Though it’s long been known that temperature is an important variable in lots of biological processes, the function of heat and exactly what’s happening to our immune system when the proverbial thermostat is turned up is poorly understood, says Rathmell. “Science doesn’t have a good answer,” he says. Generally, it’s been assumed that heat makes the body less welcoming to invading microbes—the pathogens that make us sick, “but it’s really not known,” he adds.
+
+**02. Part 2**
+Reality, it seems, is much more complicated than the basic explanation, according to the new research. There’s a whole other side of the equation to consider: how our own cells respond to extra warmth. Previous research has indicated heat helps the immune system by stimulating activity. This week’s study illustrates how, down to the intracellular level.
+Rathmell and his co-authors looked at how a handful of different types of T cells—a subset of white blood cells—react to heat. In multiple experiments of lab-cultured cells, they found that a “moderate fever” of around 102 degrees Fahrenheit increases the metabolism, proliferation, and activity of one group of generalist T cells, which go on to differentiate into multiple immune functions. At the same time, the regulatory T cells that generally suppress immune response were impaired, a double-negative that means loosened reins on the body’s defense system.
+Finally and counterintuitively, one type of helper T cells, important for warding off viruses, were stressed by the higher temps. Many of these Th1 cells died in response to the stress. However, the survivors were supercells—faster-acting and more prolific. “The cells that live have adaptations that allow them to overcome stress. They’re better in the long run but they have to get through this gauntlet in the middle,” says Rathmell.
+“That balance makes logical sense in the context of a normal infection,” says lead study author Darren Heintzman, a postdoctoral fellow at VUMC. “You want your suppressors to be worse and your effectors to be better.” But there’s a catch.
+
+**03. Part 3**
+In subsequent experiments, the scientists homed in on the mechanism behind many of those observed changes. Cell metabolism and the mitochondria were critically important—particularly one big metabolic protein called Electron Transport Chain 1. This protein complex, which helps to fuel cells, became far less efficient under higher temperature conditions. The same cellular stress occurring in the helper T cells is also likely occurring all over the body—in many different cells’ mitochondria, causing DNA damage that can lead to things like cancerous growth. “When that heat and that inflammation becomes chronic, that is when it becomes a problem—conditions like autoimmune diseases is where this isn’t such a good thing,” explains Heintzman.
+Certain cancers, such as colon cancer, are known to be tied to inflammation from bowel diseases like Crohn’s disease. Now, there’s at least one clear hypothesis about why. “The heat that’s associated with local inflammation might be because of this mitochondrial mechanism … and might ultimately be contributing towards [cancer promoting] mutations,” Rathmell tells Popular Science.
+Right now though, that’s speculative, he adds. They have the petri dish experiments, and also some data from past mice and human studies to indicate their theories pass muster—but more studies of actual, living systems are needed to confirm the hunch. Studying temperature changes in animals is a challenge because the many variables at play make isolating the effects of any one change near impossible, “but it’s really important, and we’re very interested in doing it,” says Rathmell.
+“Everyone gets fevers. Everyone experiences temperature change—they feel the swelling and thumping in an [injured] finger,” says Heintzman. Now, he adds, we have a better understanding of what those thermal processes do to both help and hurt us. That doesn’t mean you should necessarily skip the fever reducer when you’re sick—nor be overly concerned about a swollen sprained ankle, he says. But it does mean even innate biological responses might be best in moderation.
+`,
+  zh: `
+**01. 第一部分**
+「低燒有好處，高燒有壞處。」
+在流感引起的發燒之中，我們很容易問：為什麼自己的身體要讓你承受伴隨體溫升高而來的發冷、盜汗與痠痛？新的研究對表面之下發生的事提供了一些洞見。根據 9 月 20 日發表在《科學免疫學》（Science Immunology）期刊上的一項研究，類似發燒的溫度會改變某些免疫細胞的行為，透過改變其代謝，增強一些關鍵抗感染細胞的活性，並減弱調節性細胞的抑制作用。
+這些發現讓人對長久以來神祕的生物過程有了洞見，有助於部分解釋發燒如何對抗感染。但這項新研究也可能讓我們看見免疫反應較黑暗的一面。研究人員所辨認出的特定生物途徑，可能在長期發炎已知會增加的癌症風險中扮演某種角色。簡而言之：「低燒有好處，高燒有壞處，」資深研究作者、范德比爾特大學醫學中心（VUMC）的免疫生物學教授傑夫．拉斯梅爾（Jeff Rathmell）說。
+發燒是全身性的、全身體溫上升——通常與感染有關。發炎則涉及較局部的體溫上升，起因於受傷或疾病，也很常見。雖然長久以來我們就知道溫度是許多生物過程中的重要變數，但當俗話說的「溫度調節器被調高」時，熱的作用以及我們的免疫系統確切發生了什麼事，目前仍所知甚少，拉斯梅爾說。「科學上並沒有好的答案，」他說。一般的假設是，熱會讓身體對入侵的微生物——也就是讓我們生病的病原體——比較不友善，「但真的不知道，」他補充說。
+
+**02. 第二部分**
+根據這項新研究，現實似乎比基本的解釋複雜得多。方程式還有另一個完整的面向需要考慮：我們自己的細胞如何對額外的溫暖做出反應。先前的研究顯示，熱能透過刺激活動來幫助免疫系統。本週的這項研究則一路說明到細胞內的層次是如何運作的。
+拉斯梅爾與共同作者研究了少數幾種不同類型的 T 細胞——白血球的一個子集——如何對熱產生反應。在多項實驗室培養細胞的實驗中，他們發現約華氏 102 度的「中度發燒」，會增加一組通用型 T 細胞的代謝、增殖與活性，這些細胞接著會分化成多種免疫功能。同時，通常會抑制免疫反應的調節性 T 細胞則受到損害，這是一種雙重否定，意味著放鬆了身體防禦系統的韁繩。
+最後，而且違反直覺的是，有一種對於抵擋病毒很重要的輔助性 T 細胞，在較高的溫度下承受了壓力。這些 Th1 細胞有許多在壓力下死亡。然而，存活下來的卻是「超級細胞」——反應更快、更多產。「存活下來的細胞具有能讓它們克服壓力的適應能力。從長遠來看，它們比較好，但中間必須先熬過這一道考驗，」拉斯梅爾說。
+「這種平衡在正常感染的情境中是合乎邏輯的，」主要研究作者、VUMC 的博士後研究員達倫．海因茲曼（Darren Heintzman）說。「你希望你的抑制因子變差，而你的效應因子變好。」但這裡面有個陷阱。
+
+**03. 第三部分**
+在後續的實驗中，科學家們聚焦在許多這些觀察到的變化背後的機制。細胞代謝與粒線體至關重要——特別是一種稱為電子傳遞鏈 1（Electron Transport Chain 1）的大型代謝蛋白質。這個有助於為細胞提供能量的蛋白質複合體，在較高溫條件下效率變得差很多。在輔助性 T 細胞中發生的同樣細胞壓力，很可能也發生在全身——在許多不同細胞的粒線體中，造成可能導致癌性生長的 DNA 損傷。「當熱與發炎變成慢性，那才會變成問題——像自體免疫疾病這類狀況，就是這並不是件好事的地方，」海因茲曼解釋說。
+已知某些癌症，例如結腸癌，與克隆氏症等腸道疾病所引起的發炎有關。現在，至少有一個關於原因的明確假說。「與局部發炎相關的熱，可能是因為這個粒線體機制……而且最終可能促成了〔促進癌症的〕突變，」拉斯梅爾告訴《大眾科學》。
+不過目前，這還只是推測，他補充說。他們有培養皿實驗，也有一些來自過往小鼠與人類研究的資料，顯示他們的理論通得過檢驗——但還需要更多針對真實活體系統的研究，才能確認這個預感。在動物身上研究溫度變化是一項挑戰，因為牽涉的許多變數使得幾乎不可能孤立出任何單一變化的影響，「但這非常重要，我們也很有興趣去做，」拉斯梅爾說。
+「每個人都會發燒。每個人都會經歷溫度變化——他們會感受到〔受傷的〕手指腫脹與抽痛，」海因茲曼說。他補充說，現在我們對這些熱過程如何既幫助我們也傷害我們，有了更好的理解。這並不表示你生病時就一定要放棄退燒藥——也不必對腫起來的扭傷腳踝過度擔心，他說。但這確實意味著，即使是先天的生物反應，也許適度最好。
+`,
+  questions: `
+**1. According to Part 1, what did the new study find about fever-like temperatures and the immune system?**
+(A) They directly destroy invading pathogens without involving any immune cells, which is why fever is considered the body’s primary defense against infection.
+(B) They permanently shut down the activity of all T cells, which is why prolonged fevers weaken the immune system.
+(C) They change how certain immune cells behave, boosting key infection-fighters and weakening regulatory cells’ suppression by altering their metabolism.
+(D) They leave cell metabolism unchanged but speed up blood flow, which delivers more immune cells to the site of infection.
+
+**2. Which statement best reflects Jeff Rathmell’s overall view of fever, as reported in Part 1?**
+(A) Fever should always be suppressed with medication as soon as it appears, because the study showed that it damages the mitochondria of every cell type and causes cancer.
+(B) A moderate fever helps immune defense, but a lot of fever can be harmful, and the pathways involved may contribute to cancer risk tied to long-term inflammation.
+(C) Fever has no meaningful effect on how the immune system works, since heat only changes how patients feel.
+(D) The function of heat in immunity is now completely understood, so doctors can predict exactly when fever helps and when it hurts.
+
+**3. Why was the impairment of regulatory T cells significant in the study?**
+(A) Because regulatory T cells generally suppress immune response, impairing them loosened the reins on the body’s defense system.
+(B) Because impairing regulatory T cells caused generalist T cells to stop dividing, which reduced the body’s ability to fight viruses.
+(C) Because it lowered the metabolism of every immune cell type, leaving the body unable to mount any response to infection.
+(D) Because it prevented generalist T cells from differentiating into multiple immune functions, which is why fevers above 102 degrees are dangerous.
+
+**4. What counterintuitive result did the researchers observe in helper T cells (Th1)?**
+(A) Higher temperatures made all Th1 cells divide faster, turning them into supercells that eliminated viruses more quickly.
+(B) Th1 cells were unaffected by higher temperatures, whereas regulatory T cells were severely damaged.
+(C) All Th1 cells died within hours at fever-like temperatures, so the immune system lost its ability to ward off viruses.
+(D) Many Th1 cells died under the stress, but the survivors were faster-acting and more prolific “supercells.”
+
+**5. According to Part 3, how might higher temperatures be linked to cancer risk, and how certain is that link?**
+(A) Heat makes a mitochondrial protein complex more efficient, which repairs DNA damage in cells throughout the body; the link to cancer is already firmly established in human trials.
+(B) Heat makes a key mitochondrial protein complex less efficient, causing cellular stress and DNA damage that could drive cancerous growth, though this is still speculative.
+(C) Fever reducers cause mutations in the colon, as confirmed in human trials of patients with Crohn’s disease.
+(D) Local inflammation lowers body temperature, which then promotes mutations in neighboring cells; the link is well established.
+`,
+  answers: `
+**1. 答案：(C)**
+
+* **解析**：第一部分指出，類似發燒的溫度會改變某些免疫細胞的行為，透過改變其代謝，增強一些關鍵抗感染細胞的活性，並減弱調節性細胞的抑制作用。選項 (C) 正確。(A) 與原文相反——原文說熱的作用至今所知甚少，且研究談的正是免疫細胞；(B) 與 (D) 與原文不符，研究的重點正是代謝的改變，而不是永久關閉 T 細胞或血流加速。
+
+**2. 答案：(B)**
+
+* **解析**：第一部分中，拉斯梅爾說「低燒有好處，高燒有壞處」，而且研究所辨認出的生物途徑，可能在長期發炎已知會增加的癌症風險中扮演某種角色。選項 (B) 正確。(A) 過度推論——原文說「可能扮演某種角色」，且後文也說不必然要放棄退燒藥；(C) 與原文相反；(D) 與第三段所說「熱的作用至今仍所知甚少」相反。
+
+**3. 答案：(A)**
+
+* **解析**：第二部分指出，通常會抑制免疫反應的調節性 T 細胞受到損害，這是一種雙重否定，意味著放鬆了身體防禦系統的「韁繩」。選項 (A) 正確。(B) 與 (D) 與原文相反——通用型 T 細胞的代謝、增殖與活性增加，並會分化成多種免疫功能；(C) 與原文不符。
+
+**4. 答案：(D)**
+
+* **解析**：第二部分指出，一種對抵擋病毒很重要的輔助性 T 細胞（Th1）在較高溫度下承受壓力，許多細胞死亡，但存活下來的是反應更快、更多產的「超級細胞」。選項 (D) 正確。(A) 把「存活者變強」說成「所有細胞都增殖」；(B) 與原文相反——Th1 細胞受到壓力；(C) 誇大——並非全部死亡，而且有細胞存活。
+
+**5. 答案：(B)**
+
+* **解析**：第三部分指出，電子傳遞鏈 1 這個蛋白質複合體在較高溫條件下效率變差，造成細胞壓力與 DNA 損傷，可能導致癌性生長；但研究人員也說「目前這還只是推測」，需要更多活體研究來確認。選項 (B) 正確。(A) 與原文相反（效率變差而非變好，且連結尚未確立）；(C) 原文未提退燒藥導致突變；(D) 與原文相反——是發炎伴隨局部升溫，且該連結仍屬推測。
+`,
+
+  evidence: {
+    1: [
+      'Fever-like temperatures shift how certain immune cells behave, ramping up activity in some key infection-fighters and dialing down suppression in regulatory cells by modifying their metabolism, according to a study published September 20 in the journal Science Immunology.'
+    ],
+    2: [
+      'The specific biological pathways that the researchers identified could play a role in the increased cancer risk known to be associated with long-term inflammation.',
+      'In short: “A little bit of fever is good, but a lot of fever is bad,” says senior study author Jeff Rathmell, a professor of immunobiology at Vanderbilt University Medical Center (VUMC).'
+    ],
+    3: [
+      'At the same time, the regulatory T cells that generally suppress immune response were impaired, a double-negative that means loosened reins on the body’s defense system.'
+    ],
+    4: [
+      'Many of these Th1 cells died in response to the stress.',
+      'However, the survivors were supercells—faster-acting and more prolific.'
+    ],
+    5: [
+      'This protein complex, which helps to fuel cells, became far less efficient under higher temperature conditions.',
+      'The same cellular stress occurring in the helper T cells is also likely occurring all over the body—in many different cells’ mitochondria, causing DNA damage that can lead to things like cancerous growth.',
+      'Right now though, that’s speculative, he adds.'
+    ]
+  }
+},
+{
+  id: 'saharan-dust-atlantic-life',
+  title: 'Saharan dust sustains life all over the Atlantic Ocean',
+
+  en: `
+**01. Part 1**
+Its lengthy journey makes it even more useful.
+Massive, migrating dust clouds originating in the Sahara Desert are crucial to fostering life in the Atlantic Ocean as far away as the Amazonian basin, according to new evidence from an international team of researchers. This source of biodiversity, however, becomes particularly useful after traveling thousands of miles in the atmosphere.
+Animal and plant life needs iron to thrive, and in much of the Atlantic Ocean, that micronutrient often originates in one of the world’s driest places, the Sahara Desert. But there are many variants of iron with different levels of bioreactivity—the higher the level, the more accessible it is for organisms like phytoplankton to use for photosynthesis and respiration. According to a study published on September 19 in Frontiers in Marine Science, dust plumes traveling from the Sahara Desert towards the US East Coast supply large amounts of iron across the Atlantic, but it’s the journey itself that makes the micronutrient suitable for the most distant organisms and plants.
+
+**02. Part 2**
+“Rather than focusing on the total iron content as previous studies had done, we measured iron that can dissolve easily in the ocean, and which can be accessed by marine organisms for their metabolic pathways,” Jeremy Owens, study co-author and a Florida State University associate professor, said in a statement. “Only a fraction of total iron in sediment is bioavailable, but that fraction could change during transport of the iron away from its original source. We aimed to explore those relationships.”
+To investigate, researchers took drill core samples from the Atlantic seafloor obtained by the International Ocean Discovery Program (IODP) and measured their total iron levels. They then compared these to each sample’s distance from the Sahara-Sahel Dust Corridor. This region, located between Mauritania and Chad, is known for wind patterns that transport airborne particulates across thousands of miles in such large amounts that they are detectable by satellite imagery.
+The team collected cores from 125 and 310 miles northwest of Mauritania, as well as about 310 miles from Florida’s east coast. Specifically, they focused on iron and mineral contents located 200-640 feet into each sample which correspond to the last 120,000 years. Much of the iron analyzed was found in different mineral compounds such as goethite, magnetite, pyrite, hematite, and iron carbonate—all of which are believed to develop from the seafloor’s bioreactive iron.
+
+**03. Part 3**
+Researchers learned the levels of bioreactive iron are lower in samples closer to the Americas than those near Africa. This indicates the Saharan dust is heavier in bioreactive dust that gets used up by aquatic organisms before reaching the bottom of the ocean. At the same time, however, the remaining dust that continues along the atmospheric migration route undergoes prolonged exposure to various photochemical processes that increases their solubility through acid production.
+“Our results suggest that during long-distance atmospheric transport, the mineral properties of originally non-bioreactive dust-bound iron change, making it more bioreactive,” Timothy Lyons, study co-author and a professor at the University of California Riverside, said in a statement. “This iron then gets taken up by phytoplankton, before it can reach the bottom.”
+“The greater the distance, the more bioreactive the iron,” added Jeremy Owens, another study co-author and a Florida State University associate professor.
+According to their findings, the team concludes that dust in areas including the Amazonian basin and the Bahamas may owe some of their life-sustaining iron contents to immense distances and atmospheric influences after arriving from North Africa.
+`,
+  zh: `
+**01. 第一部分**
+它漫長的旅程使它更有用處。
+根據一個國際研究團隊的新證據，起源於撒哈拉沙漠、規模龐大且會遷移的沙塵雲，對於培養遠至亞馬遜盆地的大西洋生命至關重要。不過，這個生物多樣性的來源，是在大氣中飄行數千英里之後，才變得特別有用。
+動物與植物生命需要鐵才能繁盛，而在大西洋大部分地區，這種微量營養素往往來自世界上最乾燥的地方之一——撒哈拉沙漠。但鐵有許多變種，生物活性的程度各不相同——活性越高，浮游植物等生物就越容易取用它來進行光合作用與呼吸作用。根據 9 月 19 日發表在《海洋科學前沿》（Frontiers in Marine Science）的一項研究，從撒哈拉沙漠吹向美國東岸的沙塵羽流，在大西洋上供應了大量的鐵，但真正讓這種微量營養素適合最遙遠的生物與植物利用的，是旅程本身。
+
+**02. 第二部分**
+「我們沒有像先前的研究那樣聚焦在鐵的總含量，而是測量了容易溶解在海洋中、並且能被海洋生物取用於其代謝途徑的鐵，」研究共同作者、佛羅里達州立大學副教授傑里米．歐文斯（Jeremy Owens）在一份聲明中說。「沉積物中只有一小部分的鐵是生物可利用的，但這一小部分在鐵從原始來源被運送出去的過程中可能會改變。我們的目標是探索這些關係。」
+為了調查，研究人員採集了由國際大洋發現計畫（IODP）取得的大西洋海床鑽探岩心樣本，並測量其總鐵含量。接著，他們將這些與每個樣本到撒哈拉—薩赫爾沙塵走廊的距離做比較。這個位於茅利塔尼亞與查德之間的地區，以其風型著稱，能把空中微粒傳送數千英里，而且量大到從衛星影像就能偵測到。
+研究團隊從茅利塔尼亞西北方 125 英里與 310 英里處，以及距離佛羅里達東岸約 310 英里處採集岩心。具體來說，他們聚焦在每個樣本中深入 200 至 640 英尺、對應過去 12 萬年的鐵與礦物含量。所分析的鐵，大部分存在於不同的礦物化合物中，例如針鐵礦、磁鐵礦、黃鐵礦、赤鐵礦與碳酸鐵——據信這些都是由海床的生物活性鐵發展而來。
+
+**03. 第三部分**
+研究人員得知，靠近美洲的樣本中，生物活性鐵的含量比靠近非洲的低。這顯示撒哈拉沙塵含有較多的生物活性沙塵，在抵達海底之前就被水生生物用掉了。然而，與此同時，繼續沿著大氣遷移路線前進的其餘沙塵，會經歷長時間暴露於各種光化學過程，並透過酸的生成提高其溶解度。
+「我們的結果顯示，在長距離的大氣運送過程中，原本不具生物活性、與沙塵結合的鐵，其礦物性質會改變，使它更具生物活性，」研究共同作者、加州大學河濱分校教授提摩西．里昂斯（Timothy Lyons）在一份聲明中說。「這些鐵接著會在抵達海底之前，被浮游植物攝取。」
+「距離越遠，鐵的生物活性越高，」另一位研究共同作者、佛羅里達州立大學副教授歐文斯補充說。
+根據他們的發現，研究團隊得出結論：包括亞馬遜盆地與巴哈馬在內的地區，其沙塵中維繫生命的鐵含量，可能有一部分要歸功於從北非抵達後所經歷的巨大距離與大氣影響。
+`,
+  questions: `
+**1. According to Part 1, what makes Saharan dust especially useful for life in the distant Atlantic?**
+(A) The dust contains large amounts of nitrogen that directly fertilize the open ocean, so a longer journey simply delivers more of it.
+(B) The dust becomes bioreactive only when it falls straight into nearby coastal waters shortly after leaving the desert.
+(C) The dust is carried so fast that its iron arrives before it can react with anything, which keeps it fully bioavailable.
+(D) Its long journey through the atmosphere makes its iron more suitable for the most distant organisms and plants.
+
+**2. In Part 1, what does a higher level of “bioreactivity” mean for iron?**
+(A) The iron is more accessible for organisms such as phytoplankton to use for photosynthesis and respiration.
+(B) The iron is less likely to dissolve in seawater, so it sinks quickly and is stored in the seafloor sediment.
+(C) The iron is more likely to remain buried in desert soils, where it supports the plants that anchor the dust source.
+(D) The iron can be used only by animals and not by plants, because it must be absorbed through the digestive system.
+
+**3. How did the researchers’ measurements differ from those of previous studies?**
+(A) They counted only the iron found in the tissues of marine animals, in order to estimate how much dust was eaten by organisms in the Atlantic.
+(B) They measured only the amount of dust that reached the Americas, ignoring how much iron it contained.
+(C) They measured iron that dissolves easily in the ocean and can be accessed by marine organisms, rather than total iron content.
+(D) They measured iron in the atmosphere by satellite instead of analyzing samples taken from the seafloor.
+
+**4. What pattern did the researchers find in bioreactive iron, and what did they infer from it?**
+(A) Levels were higher in samples closer to the Americas, showing that dust grows richer in bioreactive iron as it travels west across the Atlantic.
+(B) Levels were lower closer to the Americas, suggesting that aquatic organisms use up bioreactive iron before it reaches the seafloor.
+(C) Levels were identical at every site, which showed that distance from the Sahara has no effect on the iron.
+(D) Levels were lower near Africa, showing that Saharan dust contains no bioreactive iron until it is carried over the ocean.
+
+**5. According to Part 3, how does long-distance atmospheric transport make dust-bound iron more bioreactive?**
+(A) Prolonged exposure to photochemical processes raises its solubility through acid production, altering the mineral properties of non-bioreactive iron.
+(B) Cold temperatures in the upper atmosphere convert the iron into pure metal, which marine organisms can then absorb more easily.
+(C) Phytoplankton living high in the atmosphere absorb the iron and release it into the ocean when they die and fall into the sea.
+(D) Strong winds strip away the non-iron minerals, leaving the iron more concentrated and therefore more reactive by sheer density.
+`,
+  answers: `
+**1. 答案：(D)**
+
+* **解析**：第一部分指出，這個生物多樣性的來源「是在大氣中飄行數千英里之後才變得特別有用」，而且真正讓微量營養素適合最遙遠生物利用的是「旅程本身」。選項 (D) 正確。(A) 原文談的是鐵而不是氮；(B) 與 (C) 與原文相反——旅程越長、鐵越有生物活性。
+
+**2. 答案：(A)**
+
+* **解析**：第一部分指出，鐵有許多變種，生物活性程度各不相同——「活性越高，浮游植物等生物就越容易取用它來進行光合作用與呼吸作用」。選項 (A) 正確。(B)、(C)、(D) 皆與原文不符；原文說動物與植物生命都需要鐵。
+
+**3. 答案：(C)**
+
+* **解析**：第二部分中歐文斯說，他們沒有像先前的研究那樣聚焦在鐵的總含量，而是測量「容易溶解在海洋中、並且能被海洋生物取用」的鐵；並指出沉積物中只有一小部分的鐵是生物可利用的。選項 (C) 正確。(A)、(B)、(D) 皆與原文不符——他們分析的是海床鑽探岩心樣本，衛星影像只是用來說明沙塵走廊規模大到可被偵測。
+
+**4. 答案：(B)**
+
+* **解析**：第三部分指出，靠近美洲的樣本中生物活性鐵含量比靠近非洲的低，這顯示撒哈拉沙塵含有較多生物活性成分，在抵達海底之前就被水生生物用掉了。選項 (B) 正確。(A) 與 (D) 與原文相反；(C) 與原文不符——文中說距離越遠，鐵的生物活性越高。
+
+**5. 答案：(A)**
+
+* **解析**：第三部分指出，沿大氣遷移路線前進的沙塵會長時間暴露於各種光化學過程，並透過酸的生成提高其溶解度；里昂斯也說原本不具生物活性、與沙塵結合的鐵，其礦物性質會改變，使它更具生物活性。選項 (A) 正確。(B)、(C)、(D) 皆為原文未提的說法。
+`,
+
+  evidence: {
+    1: [
+      'This source of biodiversity, however, becomes particularly useful after traveling thousands of miles in the atmosphere.',
+      'According to a study published on September 19 in Frontiers in Marine Science, dust plumes traveling from the Sahara Desert towards the US East Coast supply large amounts of iron across the Atlantic, but it’s the journey itself that makes the micronutrient suitable for the most distant organisms and plants.'
+    ],
+    2: [
+      'But there are many variants of iron with different levels of bioreactivity—the higher the level, the more accessible it is for organisms like phytoplankton to use for photosynthesis and respiration.'
+    ],
+    3: [
+      '“Rather than focusing on the total iron content as previous studies had done, we measured iron that can dissolve easily in the ocean, and which can be accessed by marine organisms for their metabolic pathways,” Jeremy Owens, study co-author and a Florida State University associate professor, said in a statement.',
+      '“Only a fraction of total iron in sediment is bioavailable, but that fraction could change during transport of the iron away from its original source.'
+    ],
+    4: [
+      'Researchers learned the levels of bioreactive iron are lower in samples closer to the Americas than those near Africa.',
+      'This indicates the Saharan dust is heavier in bioreactive dust that gets used up by aquatic organisms before reaching the bottom of the ocean.'
+    ],
+    5: [
+      'At the same time, however, the remaining dust that continues along the atmospheric migration route undergoes prolonged exposure to various photochemical processes that increases their solubility through acid production.',
+      '“Our results suggest that during long-distance atmospheric transport, the mineral properties of originally non-bioreactive dust-bound iron change, making it more bioreactive,” Timothy Lyons, study co-author and a professor at the University of California Riverside, said in a statement.'
+    ]
+  }
+},
+{
+  id: 'memory-crystal-human-genome',
+  title: 'In case of extinction, scientists store human genome on a ‘memory crystal’ that lasts billions of years',
+
+  en: `
+**01. Part 1**
+The disc is as tough as quartz and withstands cosmic radiation.
+Researchers have encoded the entire human genome onto a “5D memory crystal” in the off chance our species finds itself needing to walk back from the brink of extinction. But even if the plan ultimately fails, the device itself is theoretically capable of providing our genetic code to some other future, sentient third-party, even if it takes them billions of years to find it.
+For over a decade, the gold standard for the most durable data storage medium has been crystal. More specifically, a nanostructured glass disc developed in 2014 by a team of researchers led by optoelectronics professor Peter Kazansky at the University of Southampton. The 360 terabyte data crystal will remain stable at room temperature for 300 quintillion years—a lifespan that only drops down to 13.8 billion years (i.e., the universe’s current age) if heated to 374 degrees Fahrenheit. Throw in the ability to survive both higher and lower temperatures, direct impact forces up to 10 tons per square centimeter, as well as lengthy exposure to cosmic radiation, and it’s easy to see how it is still the Guinness World Record holder for the most durable digital storage medium. Given the increasing concern about today’s often unreliable digital landscape, this also makes it one of the premiere choices when safely archiving electronic information.
+
+**02. Part 2**
+Knowing this, Kazansky’s group recently set to work encoding the three-billion character human genome into one of their coin-sized memory crystals. According to a university profile, Kazansky and colleagues utilized ultra-fast lasers to etch the DNA code into voids within the disc’s silica as small as 20 nanometers-wide. While most traditional information-recording tools (such as paper and magnetic tape) are two-dimensional, the researchers encoded in the crystal “uses two optical dimensions and three spatial coordinates to write throughout the material in what they describe as (technically) “5D.”
+Taking inspiration from the Voyager mission’s iconic Golden Records, the disc also includes a visual key explaining how to use it. There are also illustrations of male and female humans; the universal elements of hydrogen, oxygen, carbon, and nitrogen; DNA’s molecular structure, and other potentially necessary information required for synthetically creating a person.
+Speaking of which—Kazansky’s team is well aware that current technology is nowhere near advanced enough to do what their disc is intended to help achieve. That said, milestones in synthetic biology such as the 2010 creation of synthetic bacterium indicate that a future with artificially created humans—as well as plants and animals—may be possible.
+
+**03. Part 3**
+“We know from the work of others that genetic material of simple organisms can be synthesized and used in an existing cell to create a viable living specimen in a lab,” Kazansky said in a statement. “The 5D memory crystal opens up possibilities for other researchers to build an everlasting repository of genomic information from which complex organisms like plants and animals might be restored should science in the future allow.”
+For now, the human genome-encoded “5D memory crystal” is stored in the Memory of Mankind archive, a time capsule project located within the world’s oldest salt mine in Hallstatt, Austria. If all goes as planned, it will remain until potentially needed—hopefully never.
+`,
+  zh: `
+**01. 第一部分**
+這張碟片像石英一樣堅韌，並能承受宇宙輻射。
+研究人員已將完整的人類基因組編碼到一塊「5D 記憶晶體」上，以防萬一我們這個物種需要從滅絕的邊緣回頭。但即使這個計畫最終失敗，這個裝置本身在理論上也能把我們的基因密碼提供給未來某個有知覺的第三方，即使他們要花上數十億年才找到它。
+十多年來，最耐久的資料儲存媒介的黃金標準一直是晶體。更具體地說，是一種奈米結構玻璃碟片，由南安普敦大學光電工程教授彼得．卡贊斯基（Peter Kazansky）領導的研究團隊於 2014 年開發。這種容量 360 TB 的資料晶體，在室溫下可保持穩定長達 300 quintillion（300 × 10 的 18 次方）年——如果加熱到華氏 374 度，壽命才會降到 138 億年（也就是宇宙目前的年齡）。再加上它能承受更高與更低的溫度、每平方公分高達 10 噸的直接撞擊力，以及長時間暴露於宇宙輻射，就不難看出為什麼它至今仍是最耐久數位儲存媒介的金氏世界紀錄保持者。鑑於人們對當今往往不可靠的數位環境越來越擔憂，這也使它成為安全封存電子資訊時最首選的方案之一。
+
+**02. 第二部分**
+有鑑於此，卡贊斯基的團隊最近著手把包含 30 億個字元的人類基因組，編碼到他們其中一塊硬幣大小的記憶晶體中。根據大學發布的簡介，卡贊斯基與同事利用超高速雷射，把 DNA 密碼蝕刻到碟片矽土內寬度小至 20 奈米的空隙中。傳統的資訊記錄工具（如紙張與磁帶）大多是二維的，而研究人員編碼在晶體中的方式「使用兩個光學維度與三個空間座標，在整個材料中寫入」，也就是他們所稱（技術上）的「5D」。
+從航海家（Voyager）任務標誌性的金唱片獲得靈感，這張碟片還附有一張說明使用方法的視覺化圖解。碟片上也有男性與女性人類的插圖；氫、氧、碳與氮等普遍元素；DNA 的分子結構，以及其他以合成方式創造一個人可能需要的資訊。
+說到這點——卡贊斯基的團隊很清楚，目前的科技遠不夠先進，無法做到這張碟片所意圖協助達成的事。話雖如此，合成生物學中的里程碑，例如 2010 年創造出合成細菌，顯示一個有人工創造的人類——以及植物與動物——的未來可能是有可能的。
+
+**03. 第三部分**
+「我們從其他人的研究得知，簡單生物的遺傳物質可以被合成，並用在現有的細胞中，在實驗室裡創造出可存活的活體樣本，」卡贊斯基在一份聲明中說。「5D 記憶晶體為其他研究人員開啟了可能性，讓他們能建立一個永久的基因組資訊儲藏所，如果未來的科學允許，植物與動物等複雜生物也許可以由此復原。」
+目前，這塊編碼了人類基因組的「5D 記憶晶體」存放在「人類記憶」（Memory of Mankind）檔案庫，這是一個位於奧地利哈爾施塔特、世界上最古老鹽礦內的時間膠囊計畫。如果一切按計畫進行，它將一直留在那裡，直到可能需要它的時候——但願永遠不需要。
+`,
+  questions: `
+**1. Why did researchers encode the entire human genome onto a “5D memory crystal”?**
+(A) To replace all existing digital archives with a single crystal, because paper, magnetic tape and hard drives are too fragile to survive even a few centuries.
+(B) In case humanity must recover from the brink of extinction, and so the device might even hand our genetic code to a future sentient third party.
+(C) To prove that DNA can be stored at room temperature for only a few decades before it begins to degrade.
+(D) To let today’s researchers rewrite the human genome quickly by etching new sequences into the same crystal.
+
+**2. Which statement about the durability of the data crystal is supported by Part 1?**
+(A) It remains stable at room temperature for only 13.8 billion years, the current age of the universe.
+(B) It shatters under impact forces above one ton per square centimeter, which is why it must be stored in a cushioned vault deep inside a mine.
+(C) At room temperature it stays stable for 300 quintillion years, dropping to 13.8 billion years only if heated to 374 degrees Fahrenheit.
+(D) Cosmic radiation degrades it within a few thousand years unless it is kept underground.
+
+**3. According to Part 2, how is the DNA code written into the crystal?**
+(A) Ultra-fast lasers etch it into nanometer-scale voids in the disc’s silica, using two optical dimensions and three spatial coordinates, hence “5D.”
+(B) It is printed with ink on a two-dimensional layer inside the disc, in the same way that text is printed on paper.
+(C) It is recorded on a thin magnetic tape wound around the crystal and then sealed under a protective layer of glass.
+(D) It is stored by chemically bonding DNA molecules directly to the disc’s surface, one nucleotide at a time.
+
+**4. What is the purpose of the visual key and illustrations included with the disc?**
+(A) They are decorative and have no informational role, serving only to make the crystal resemble the Voyager Golden Records.
+(B) They are a copy of the Voyager Golden Records, which must be played back with a stylus in order to read the DNA code.
+(C) They are meant to replace the DNA code if it becomes unreadable, since they describe how every cell in the body is built.
+(D) They explain how to use the disc and give information, such as DNA’s molecular structure, that might be needed to synthetically create a person.
+
+**5. How does the passage portray the prospect of restoring organisms from the crystal?**
+(A) The technology to restore organisms from genomic data already exists and is used routinely in laboratories around the world.
+(B) Kazansky’s team believes restoration is impossible in principle, so the crystal is meant only as a symbolic record of humanity.
+(C) Current technology falls far short, but the crystal could be a lasting repository from which organisms might be restored if future science allows.
+(D) The crystal is meant to be opened within the next decade in order to recreate extinct species from preserved genomes.
+`,
+  answers: `
+**1. 答案：(B)**
+
+* **解析**：第一部分指出，研究人員編碼人類基因組，是「以防萬一我們這個物種需要從滅絕的邊緣回頭」；即使計畫失敗，這個裝置在理論上也能把我們的基因密碼提供給未來某個有知覺的第三方。選項 (B) 正確。(A)、(C)、(D) 皆為原文未提的目的，且 (C) 與晶體的超長壽命相反。
+
+**2. 答案：(C)**
+
+* **解析**：第一部分指出，這種資料晶體在室溫下可保持穩定 300 quintillion 年，只有加熱到華氏 374 度時壽命才會降到 138 億年（宇宙目前的年齡）；它還能承受每平方公分高達 10 噸的撞擊力與長時間宇宙輻射。選項 (C) 正確。(A) 把兩個數字對調；(B) 與 (D) 與原文相反。
+
+**3. 答案：(A)**
+
+* **解析**：第二部分指出，卡贊斯基與同事利用超高速雷射，把 DNA 密碼蝕刻到碟片矽土內寬度小至 20 奈米的空隙中，並使用「兩個光學維度與三個空間座標」寫入整個材料，也就是所謂「5D」。選項 (A) 正確。(B) 與 (C) 是文中所說傳統二維資訊記錄工具（紙張、磁帶）的做法；(D) 原文未提。
+
+**4. 答案：(D)**
+
+* **解析**：第二部分指出，這張碟片從航海家任務的金唱片獲得靈感，附有說明使用方法的視覺化圖解，並含有男性與女性人類插圖、普遍元素、DNA 分子結構，以及其他以合成方式創造一個人可能需要的資訊。選項 (D) 正確。(A)、(B)、(C) 皆與原文不符。
+
+**5. 答案：(C)**
+
+* **解析**：第二、三部分指出，卡贊斯基的團隊很清楚「目前的科技遠不夠先進」，但這塊晶體為研究人員建立永久的基因組資訊儲藏所開啟了可能性，「如果未來的科學允許」，複雜生物也許可由此復原。選項 (C) 正確。(A) 與 (B) 與原文相反；(D) 原文未提。
+`,
+
+  evidence: {
+    1: [
+      'Researchers have encoded the entire human genome onto a “5D memory crystal” in the off chance our species finds itself needing to walk back from the brink of extinction.',
+      'But even if the plan ultimately fails, the device itself is theoretically capable of providing our genetic code to some other future, sentient third-party, even if it takes them billions of years to find it.'
+    ],
+    2: [
+      'The 360 terabyte data crystal will remain stable at room temperature for 300 quintillion years—a lifespan that only drops down to 13.8 billion years (i.e., the universe’s current age) if heated to 374 degrees Fahrenheit.'
+    ],
+    3: [
+      'According to a university profile, Kazansky and colleagues utilized ultra-fast lasers to etch the DNA code into voids within the disc’s silica as small as 20 nanometers-wide.',
+      'While most traditional information-recording tools (such as paper and magnetic tape) are two-dimensional, the researchers encoded in the crystal “uses two optical dimensions and three spatial coordinates to write throughout the material in what they describe as (technically) “5D.”'
+    ],
+    4: [
+      'Taking inspiration from the Voyager mission’s iconic Golden Records, the disc also includes a visual key explaining how to use it.',
+      'There are also illustrations of male and female humans; the universal elements of hydrogen, oxygen, carbon, and nitrogen; DNA’s molecular structure, and other potentially necessary information required for synthetically creating a person.'
+    ],
+    5: [
+      'Speaking of which—Kazansky’s team is well aware that current technology is nowhere near advanced enough to do what their disc is intended to help achieve.',
+      '“The 5D memory crystal opens up possibilities for other researchers to build an everlasting repository of genomic information from which complex organisms like plants and animals might be restored should science in the future allow.”'
+    ]
+  }
+},
+{
+  id: 'biobots-from-dead-cells',
+  title: 'How biobots arise from the cells of dead organisms',
+
+  en: `
+**01. Part 1**
+They push the boundaries of life, death, and medicine.
+Life and death are traditionally viewed as opposites. But the emergence of new multicellular life-forms from the cells of a dead organism introduces a “third state” that lies beyond the traditional boundaries of life and death.
+Usually, scientists consider death to be the irreversible halt of functioning of an organism as a whole. However, practices such as organ donation highlight how organs, tissues and cells can continue to function even after an organism’s demise. This resilience raises the question: What mechanisms allow certain cells to keep working after an organism has died?
+We are researchers who investigate what happens within organisms after they die. In our recently published review, we describe how certain cells—when provided with nutrients, oxygen, bioelectricity or biochemical cues—have the capacity to transform into multicellular organisms with new functions after death.
+
+**02. Life, death, and emergence of something new**
+The third state challenges how scientists typically understand cell behavior. While caterpillars metamorphosing into butterflies, or tadpoles evolving into frogs, may be familiar developmental transformations, there are few instances where organisms change in ways that are not predetermined. Tumors, organoids and cell lines that can indefinitely divide in a petri dish, like HeLa cells, are not considered part of the third state because they do not develop new functions.
+However, researchers found that skin cells extracted from deceased frog embryos were able to adapt to the new conditions of a petri dish in a lab, spontaneously reorganizing into multicellular organisms called xenobots. These organisms exhibited behaviors that extend far beyond their original biological roles. Specifically, these xenobots use their cilia—small, hair-like structures—to navigate and move through their surroundings, whereas in a living frog embryo, cilia are typically used to move mucus.
+Xenobots are also able to perform kinematic self-replication, meaning they can physically replicate their structure and function without growing. This differs from more common replication processes that involve growth within or on the organism’s body.
+Researchers have also found that solitary human lung cells can self-assemble into miniature multicellular organisms that can move around. These anthrobots behave and are structured in new ways. They are not only able to navigate their surroundings but also repair both themselves and injured neuron cells placed nearby.
+Taken together, these findings demonstrate the inherent plasticity of cellular systems and challenge the idea that cells and organisms can evolve only in predetermined ways. The third state suggests that organismal death may play a significant role in how life tran sforms over time.
+
+**03. Postmortem conditions**
+Several factors influence whether certain cells and tissues can survive and function after an organism dies. These include environmental conditions, metabolic activity and preservation techniques.
+Different cell types have varying survival times. For example, in humans, white blood cells die between 60 and 86 hours after organismal death. In mice, skeletal muscle cells can be regrown after 14 days postmortem, while fibroblast cells from sheep and goats can be cultured up to a month or so postmortem.
+Metabolic activity plays an important role in whether cells can continue to survive and function. Active cells that require a continuous and substantial supply of energy to maintain their function are more difficult to culture than cells with lower energy requirements. Preservation techniques such as cryopreservation can allow tissue samples such as bone marrow to function similarly to that of living donor sources.
+Inherent survival mechanisms also play a key role in whether cells and tissues live on. For example, researchers have observed a significant increase in the activity of stress-related genes and immune-related genes after organismal death, likely to compensate for the loss of homeostasis. Moreover, factors such as trauma, infection and the time elapsed since death significantly affect tissue and cell viability.
+Factors such as age, health, sex and type of species further shape the postmortem landscape. This is seen in the challenge of culturing and transplanting metabolically active islet cells, which produce insulin in the pancreas, from donors to recipients. Researchers believe that autoimmune processes, high energy costs and the degradation of protective mechanisms could be the reason behind many islet transplant failures.
+How the interplay of these variables allows certain cells to continue functioning after an organism dies remains unclear. One hypothesis is that specialized channels and pumps embedded in the outer membranes of cells serve as intricate electrical circuits. These channels and pumps generate electrical signals that allow cells to communicate with each other and execute specific functions such as growth and movement, shaping the structure of the organism they form.
+The extent to which different types of cells can undergo transformation after death is also uncertain. Previous research has found that specific genes involved in stress, immunity and epigenetic regulation are activated after death in mice, zebrafish and people, suggesting widespread potential for transformation among diverse cell types.
+
+**04. Implications for biology and medicine**
+The third state not only offers new insights into the adaptability of cells. It also offers prospects for new treatments.
+For example, anthrobots could be sourced from an individual’s living tissue to deliver drugs without triggering an unwanted immune response. Engineered anthrobots injected into the body could potentially dissolve arterial plaque in atherosclerosis patients and remove excess mucus in cystic fibrosis patients.
+Importantly, these multicellular organisms have a finite life span, naturally degrading after four to six weeks. This “kill switch” prevents the growth of potentially invasive cells.
+A better understanding of how some cells continue to function and metamorphose into multicellular entities some time after an organism’s demise holds promise for advancing personalized and preventive medicine.
+`,
+  zh: `
+**01. 第一部分**
+它們推動了生命、死亡與醫學的界線。
+生與死傳統上被視為對立。但從已死亡生物的細胞中出現新的多細胞生命形式，引入了一種超越傳統生死界線的「第三種狀態」。
+科學家通常認為，死亡是整個生物體功能不可逆轉的停止。然而，像器官捐贈這樣的作法凸顯出，即使在生物體死亡之後，器官、組織與細胞仍能繼續運作。這種韌性引出了一個問題：是什麼機制讓某些細胞在生物體死亡後仍能持續運作？
+我們是研究生物體死亡後體內發生什麼事的研究人員。在我們最近發表的一篇回顧中，我們描述了某些細胞——在被提供營養、氧氣、生物電或生化訊號時——如何有能力在死後轉變成具有新功能的多細胞生物體。
+
+**02. 生、死，以及新分類的出現**
+這第三種狀態挑戰了科學家通常理解細胞行為的方式。雖然毛毛蟲變態成蝴蝶，或蝌蚪演變成青蛙，可能是大家熟悉的發育轉變，但生物體以並非事先決定的方式改變的例子很少。腫瘤、類器官，以及像 HeLa 細胞這類能在培養皿中無限分裂的細胞系，並不被視為第三種狀態的一部分，因為它們並不會發展出新的功能。
+然而，研究人員發現，從已死亡蛙類胚胎中取出的皮膚細胞，能夠適應實驗室培養皿的新條件，自發地重新組織成稱為「異種機器人」（xenobots）的多細胞生物體。這些生物體表現出遠遠超出其原本生物角色的行為。具體來說，這些異種機器人利用它們的纖毛——小小、類似毛髮的結構——在周圍環境中導航移動，而在活的蛙類胚胎中，纖毛通常是用來移動黏液的。
+異種機器人也能進行運動學自我複製，意思是它們能在不生長的情況下，實質地複製自己的結構與功能。這與較常見的、涉及生物體內或體表生長的複製過程不同。
+研究人員還發現，單獨的人類肺細胞可以自我組裝成能四處移動的微型多細胞生物體。這些「人源機器人」（anthrobots）的行為與結構有著全新的方式。它們不僅能在周圍環境中導航，也能修復自己以及放在附近的受傷神經元細胞。
+綜合來看，這些發現證明了細胞系統內在的可塑性，並挑戰了細胞與生物體只能以事先決定的方式演化的想法。第三種狀態顯示，生物體的死亡可能在生命隨時間轉變的方式中扮演重要角色。
+
+**03. 死後的狀態**
+有幾個因素會影響某些細胞與組織在生物體死亡後能否存活並運作。這些因素包括環境條件、代謝活動與保存技術。
+不同的細胞類型有不同的存活時間。例如，在人類身上，白血球在生物體死亡後 60 至 86 小時之間死亡。在小鼠身上，骨骼肌細胞在死後 14 天仍可再生長，而來自綿羊與山羊的纖維母細胞在死後約一個月左右仍可培養。
+代謝活動在細胞能否繼續存活與運作方面扮演重要角色。需要持續而大量能量供應來維持功能的活躍細胞，比能量需求較低的細胞更難培養。像深低溫保存這類的保存技術，可以讓骨髓等組織樣本的功能與活體捐贈者來源的樣本相似。
+內在的存活機制也在細胞與組織能否繼續存活方面扮演關鍵角色。例如，研究人員觀察到，在生物體死亡後，與壓力相關的基因及與免疫相關的基因，其活性顯著增加，很可能是為了補償穩態的喪失。此外，創傷、感染與死亡後經過的時間等因素，會顯著影響組織與細胞的存活能力。
+年齡、健康、性別與物種類型等因素，進一步塑造了死後的整體情境。這可從培養與移植代謝活躍的胰島細胞（在胰臟中製造胰島素）從捐贈者到接受者的挑戰中看出。研究人員認為，自體免疫過程、高能量成本，以及保護機制的退化，可能是許多胰島移植失敗背後的原因。
+這些變數如何交互作用，讓某些細胞在生物體死亡後繼續運作，目前仍不清楚。有一個假說認為，嵌在細胞外膜上的特殊通道與幫浦，扮演著複雜電路的角色。這些通道與幫浦產生電訊號，讓細胞能彼此溝通並執行特定功能，例如生長與移動，進而塑造它們所形成的生物體的結構。
+不同類型的細胞在死後能經歷轉變的程度，同樣不確定。先前的研究發現，在小鼠、斑馬魚與人類身上，與壓力、免疫及表觀遺傳調控有關的特定基因，在死後都會被啟動，這顯示在各種不同細胞類型中，轉變的潛力很普遍。
+
+**04. 在生物學與醫學方面的意義**
+第三種狀態不僅為細胞的適應能力帶來新的洞見，也為新的治療方式提供了展望。
+例如，人源機器人可以取自個人的活組織，用來遞送藥物，而不會引發不想要的免疫反應。注射到體內的工程化人源機器人，有可能溶解動脈粥狀硬化患者的動脈斑塊，並清除囊腫性纖維化患者體內過多的黏液。
+重要的是，這些多細胞生物體的壽命有限，會在四到六週後自然分解。這種「毀滅開關」可防止具有潛在侵略性的細胞生長。
+更深入了解某些細胞如何在生物體死亡後的一段時間內仍持續運作並轉變為多細胞個體，有望推動個人化與預防性醫學的進展。
+`,
+  questions: `
+**1. What is the “third state” described in Part 1?**
+(A) A temporary coma in which an organism’s heart stops but its brain remains active, allowing later revival.
+(B) The preservation of a dead organism’s cells by freezing them so that they can later be transplanted into a living patient.
+(C) New multicellular life-forms emerging from the cells of a dead organism, a state beyond the traditional boundaries of life and death.
+(D) The continued functioning of donated organs inside a recipient’s body, which blurs the line between the donor’s life and death.
+
+**2. Why are tumors, organoids, and cell lines such as HeLa cells not considered part of the third state?**
+(A) Because they die immediately after the organism does, so they never reach the stage at which new functions could appear.
+(B) Because, although they can divide indefinitely in a petri dish, they do not develop new functions.
+(C) Because they form only inside living organisms and have never been grown in a laboratory dish.
+(D) Because they are always much smaller than xenobots and therefore cannot organize into multicellular bodies.
+
+**3. Which behavior of xenobots goes beyond the original biological role of the frog skin cells they come from?**
+(A) They use their cilia to navigate and move through their surroundings, whereas in a living frog embryo cilia typically move mucus.
+(B) They use their cilia to digest nutrients in the petri dish, a function that frog skin cells normally perform in the gut.
+(C) They grow into complete adult frogs after a few weeks, which shows that the skin cells keep their original biological role.
+(D) They use their cilia to produce electrical signals that repair nearby injured neurons, a role the original skin cells never had.
+
+**4. According to “Postmortem conditions,” why are metabolically active cells harder to culture after an organism’s death?**
+(A) Active cells contain much more DNA than less active cells, which makes the extra genetic material harder to copy in culture.
+(B) Cells that need a continuous, substantial supply of energy to keep functioning are harder to culture than cells with lower energy needs.
+(C) Active cells are always destroyed by cryopreservation, which is why bone marrow samples cannot function like living donor samples.
+(D) Active cells cannot be taken from living donors, so researchers must rely on tissue from organisms that died long ago.
+
+**5. According to the final section, how could anthrobots be used medically, and what safeguard limits their growth?**
+(A) They could deliver drugs without provoking an unwanted immune response, and their finite life span (a “kill switch”) stops potentially invasive cells from growing.
+(B) They could replace donated organs permanently, because they never degrade once they have assembled into a stable body.
+(C) They could suppress the immune system of transplant recipients for life, using a built-in switch that restarts the anthrobots every six weeks.
+(D) They could be grown indefinitely inside the body to produce insulin, since they keep dividing without any natural limit.
+`,
+  answers: `
+**1. 答案：(C)**
+
+* **解析**：第一部分指出，從已死亡生物的細胞中出現新的多細胞生命形式，引入了一種超越傳統生死界線的「第三種狀態」。選項 (C) 正確。(A) 與 (B) 為原文未使用的概念；(D) 器官捐贈只是文中用來說明細胞在死後仍能運作的例子，並不是「第三種狀態」本身。
+
+**2. 答案：(B)**
+
+* **解析**：「Life, death, and emergence of something new」一節指出，腫瘤、類器官與像 HeLa 細胞這類能在培養皿中無限分裂的細胞系，「不被視為第三種狀態的一部分，因為它們並不會發展出新的功能」。選項 (B) 正確。(A)、(C)、(D) 皆與原文不符。
+
+**3. 答案：(A)**
+
+* **解析**：該節指出，異種機器人利用它們的纖毛在周圍環境中導航移動，而在活的蛙類胚胎中，纖毛通常是用來移動黏液的，這表現出遠超出原本生物角色的行為。選項 (A) 正確。(B) 與 (C) 為原文未提；(D) 把人源機器人（anthrobots）能修復受傷神經元的描述，誤套到異種機器人（xenobots）身上。
+
+**4. 答案：(B)**
+
+* **解析**：「Postmortem conditions」一節指出，需要持續而大量能量供應來維持功能的活躍細胞，比能量需求較低的細胞更難培養。選項 (B) 正確。(A) 與 (D) 原文未提；(C) 與原文相反——深低溫保存等技術可讓骨髓等組織樣本的功能與活體捐贈者來源的樣本相似。
+
+**5. 答案：(A)**
+
+* **解析**：最後一節指出，人源機器人可取自個人的活組織來遞送藥物而不引發免疫反應，也可能溶解動脈斑塊或清除過多黏液；而它們壽命有限、會在四到六週後自然分解，這種「毀滅開關」可防止具有潛在侵略性的細胞生長。選項 (A) 正確。(B)、(C)、(D) 與原文不符，尤其 (B) 與 (D) 與「壽命有限、自然分解」相反。
+`,
+
+  evidence: {
+    1: [
+      'But the emergence of new multicellular life-forms from the cells of a dead organism introduces a “third state” that lies beyond the traditional boundaries of life and death.'
+    ],
+    2: [
+      'Tumors, organoids and cell lines that can indefinitely divide in a petri dish, like HeLa cells, are not considered part of the third state because they do not develop new functions.'
+    ],
+    3: [
+      'Specifically, these xenobots use their cilia—small, hair-like structures—to navigate and move through their surroundings, whereas in a living frog embryo, cilia are typically used to move mucus.'
+    ],
+    4: [
+      'Active cells that require a continuous and substantial supply of energy to maintain their function are more difficult to culture than cells with lower energy requirements.'
+    ],
+    5: [
+      'For example, anthrobots could be sourced from an individual’s living tissue to deliver drugs without triggering an unwanted immune response.',
+      'This “kill switch” prevents the growth of potentially invasive cells.'
+    ]
+  }
+},
+{
+  id: 'creepiest-fungus-dead-mans-fingers',
+  title: 'Is this the creepiest fungus in the forest? Yes, definitely.',
+
+  en: `
+**01. Part 1**
+The 'immortal' Dead man's fingers fungus won't eat your brain, just dead wood.
+The best Halloween decorations sometimes come directly from nature. Intricate spider webs, enormous pumpkins, and a fungus that might stop you dead in your tracks. Commonly called dead man’s fingers, Xylaria polymorpha can look like decaying zombie fingers. This and other similar sinister-looking fungi in the genus Xylaria can be found throughout the United States.
+“It might give off the false impression that there’s a dead body, emerging from the leaf litter, but these Xylaria fungi are wood associated,” West Virginia University mycologist Matt Kasson tells Popular Science. “They’re saprotrophs, which means they’ve made a living on dead material. And that dead material, that substrate, happens to be wood.”
+
+**02. Part 2**
+Dead man’s fingers are typically seen at the bottom of decaying or dead trees, where they are breaking down the deceased wood and releasing nutrients into the soil so that new plants can grow. The black, finger-like shapes themselves are the fungi’s sexual reproductive structures. Sexual spores are produced inside tiny flask-like structures inside of each finger.
+“Think about the pores on our skin and blackheads. When we squeeze out a blackhead, you get basically this exuded kind of glob,” says Kasson. “That’s similar to dead man’s fingers. All that black tissue is lined with these flask-like fruit bodies called perithecia.”
+Xylaria are incredibly opportunistic and can release these spores for several months or even years. The structures also have a very stiff exterior, much like a real finger. While other fungi like mushrooms are more ephemeral and fall over, Xy laria’s firmness allows them to keep releasing spores and increase their chances of reproducing. They can also make wispy thread-like structures called hyphae. These grow through the dead or dying wood instead of popping up from the trunk of a tree.
+
+**03. Part 3**
+Some species are known to cause black root rot, but that is typically a problem on trees or shrubs that were already stressed. According to the University of Wisconsin-Madison, this disease is found on trees including apple, crabapple, pear, cherry, plum, American elm, Norway maple, and honey locust.
+“A lot of fungi just kind of take advantage of already weakened and stressed plants. That is, maybe they were drought stressed, or maybe there was an age predisposition, meaning that they were just really old and at the end of life,” says Kasson. “So there’s a lot of fungi like dead man’s fingers that show up.”
+Like with zombies themselves, it’s also important to remember that the finger is merely the tip of the iceberg and will continue to grow as long as they have the right conditions. Armillaria ostoyae—aka the humongous fungus–is considered the world’s largest living organism. The humongous fungus located in eastern Oregon covers more than 3 square miles and is estimated to be between 1,900 and 8,650 years old. So simply plucking a dead man’s finger from the base of a tree doesn’t get rid of the fungi itself.
+“Fungi, in some regards, are immortal,” says Kasson. “If it’s at the base of a single tree, that tree eventually is going to run out of resources. But if it’s a forest of trees that spores can then disseminate, it can keep going on and in perpetuity.”
+`,
+  zh: `
+**01. 第一部分**
+所謂「不死」的死人指頭真菌不會吃你的腦子，只會吃死木頭。
+最棒的萬聖節裝飾，有時直接來自大自然。複雜的蜘蛛網、巨大的南瓜，還有一種可能讓你當場停下腳步的真菌。這種真菌俗稱「死人指頭」（dead man’s fingers），學名 Xylaria polymorpha，看起來像是腐爛的殭屍手指。這種真菌與同屬（Xylaria）的其他外觀同樣陰森的真菌，在美國各地都找得到。
+「它可能會給人一種假象，以為有一具屍體從落葉堆裡冒出來，但這些 Xylaria 真菌其實與木頭有關，」西維吉尼亞大學的真菌學家馬特．卡森（Matt Kasson）告訴《大眾科學》。「它們是腐生生物，意思是它們靠死去的物質維生。而那種死去的物質，也就是受質，剛好是木頭。」
+
+**02. 第二部分**
+死人指頭通常出現在腐朽或死亡樹木的底部，在那裡它們分解死去的木頭，並把養分釋放到土壤中，讓新的植物得以生長。那些黑色、像手指的形狀，其實是這種真菌的有性生殖結構。有性孢子是在每根「手指」內部、微小的瓶狀結構中產生的。
+「想想我們皮膚上的毛孔和黑頭粉刺。當我們把黑頭擠出來時，基本上會得到這種被擠出來的一團東西，」卡森說。「這和死人指頭很類似。那些黑色的組織，裡面填滿了稱為子囊殼（perithecia）的瓶狀子實體。」
+Xylaria 極具機會主義，能在好幾個月甚至好幾年的時間裡釋放這些孢子。這些結構的外表也非常堅硬，就像真正的手指一樣。其他真菌（像蘑菇）比較短命、容易倒下，而 Xylaria 的堅挺讓它們能持續釋放孢子，增加繁殖的機會。它們也能長出稱為菌絲（hyphae）、纖細如絲的結構，這些菌絲會在死去或垂死的木頭中生長，而不是從樹幹冒出來。
+
+**03. 第三部分**
+已知有些物種會造成黑根腐病，但那通常是已經受到壓力的樹木或灌木才會有的問題。根據威斯康辛大學麥迪遜分校的資料，這種病害見於包括蘋果、沙果、梨、櫻桃、李子、美洲榆、挪威楓與美國皂莢在內的樹木上。
+「很多真菌只是利用那些已經衰弱、承受壓力的植物。也就是說，也許它們遭遇過乾旱壓力，或者有年齡上的傾向，意思是它們就是很老了，走到生命的盡頭，」卡森說。「所以有很多像死人指頭這樣的真菌會出現。」
+就像殭屍本身一樣，也要記住：這根手指只是冰山一角，只要條件合適，它就會繼續生長。Armillaria ostoyae——又稱巨大真菌（humongous fungus）——被認為是世界上最大的活體生物。位於奧勒岡州東部的這種巨大真菌，覆蓋超過 3 平方英里，估計年齡介於 1,900 到 8,650 歲之間。所以，光是從樹的根部拔掉一根死人指頭，並不能除去真菌本身。
+「就某些方面而言，真菌是不死的，」卡森說。「如果它在單一棵樹的根部，那棵樹最終會耗盡資源。但如果它是在一片樹林裡，孢子能夠散播開來，那它就能持續下去，直到永遠。」
+`,
+  questions: `
+**1. What does Matt Kasson mean when he calls Xylaria fungi “saprotrophs”?**
+(A) They parasitize living trees until the trees die, then move on to infect healthy neighboring trees in the forest.
+(B) They survive only on animal remains, which is why they resemble decaying zombie fingers in the leaf litter.
+(C) They live on dead material, which in this case happens to be wood.
+(D) They produce spores only after being eaten by animals, which carry the spores through the forest in their droppings.
+
+**2. What are the black, finger-like shapes of Xylaria polymorpha, according to Part 2?**
+(A) The fungus’s sexual reproductive structures, with spores produced inside tiny flask-like structures in each finger.
+(B) Dead tree branches that the fungus has hardened, which fall away from the trunk after the spores have been released and leave black stumps in the leaf litter.
+(C) The fungus’s roots, which absorb nutrients from the soil and carry them up into the decaying wood.
+(D) Mushroom-like fruiting bodies that fall over quickly after releasing their spores, which makes them very short-lived.
+
+**3. According to Part 2, how does the stiff exterior of Xylaria help it compared with mushrooms?**
+(A) It lets Xylaria release all of its spores in a single short burst, after which the finger quickly collapses and is replaced by new growth.
+(B) It makes Xylaria less likely to decay, so it does not need to produce spores in order to reproduce.
+(C) It allows Xylaria to push up through the trunk of a living tree instead of growing within the dead wood.
+(D) Unlike short-lived mushrooms that fall over, its firmness lets it keep releasing spores and improves its chances of reproducing.
+
+**4. According to Kasson, why do fungi like dead man’s fingers often “show up” on certain trees?**
+(A) They actively kill healthy young trees in order to obtain nutrients, and then spread through the surviving forest.
+(B) Many fungi take advantage of plants that are already weakened or stressed, for example by drought or old age.
+(C) They are carried to trees by Halloween decorations, spider webs and other objects that people place in forests.
+(D) They grow only on apple trees, which is why black root rot appears in orchards in Wisconsin.
+
+**5. What does the author mean by saying the visible finger is “merely the tip of the iceberg”?**
+(A) The finger is a rare mutation that disappears after a single season, leaving no trace of the fungus in the wood.
+(B) The finger is the largest part of the fungus, so removing it from the base of the tree kills the whole organism.
+(C) The visible finger is a small part of a fungus that keeps growing under the right conditions, so plucking it does not remove the fungus.
+(D) The finger can be found only in cold climates, where the rest of the fungus remains frozen underground.
+`,
+  answers: `
+**1. 答案：(C)**
+
+* **解析**：第一部分中，卡森說 Xylaria 是「腐生生物，意思是它們靠死去的物質維生」，而那種死去的物質剛好是木頭。選項 (C) 正確。(A) 與原文不符——腐生是靠死去的物質，不是寄生活樹；(B) 與 (D) 原文未提。
+
+**2. 答案：(A)**
+
+* **解析**：第二部分指出，那些黑色、像手指的形狀是這種真菌的有性生殖結構，有性孢子是在每根「手指」內部微小的瓶狀結構中產生的。選項 (A) 正確。(B)、(C) 為原文未提；(D) 與原文相反——Xylaria 外表堅硬，不像蘑菇那樣短命容易倒下。
+
+**3. 答案：(D)**
+
+* **解析**：第二部分指出，其他真菌如蘑菇比較短命而容易倒下，而 Xylaria 的堅挺讓它們能持續釋放孢子（可長達數月甚至數年），增加繁殖的機會。選項 (D) 正確。(A) 與原文相反；(B) 原文未提；(C) 與原文相反——菌絲是在死去或垂死的木頭中生長，而不是從樹幹冒出來。
+
+**4. 答案：(B)**
+
+* **解析**：第三部分中，卡森說「很多真菌只是利用那些已經衰弱、承受壓力的植物」，例如曾遭遇乾旱壓力或已老邁、走到生命盡頭的植物。選項 (B) 正確。(A) 與原文相反；(C) 為不相干的選項；(D) 原文只是舉出黑根腐病見於多種樹木，並未說只長在蘋果樹上。
+
+**5. 答案：(C)**
+
+* **解析**：第三部分指出，這根手指「只是冰山一角，只要條件合適就會繼續生長」，所以光是把死人指頭從樹的根部拔掉，並不能除去真菌本身。選項 (C) 正確。(A)、(D) 原文未提；(B) 與原文相反。
+`,
+
+  evidence: {
+    1: [
+      '“They’re saprotrophs, which means they’ve made a living on dead material.'
+    ],
+    2: [
+      'The black, finger-like shapes themselves are the fungi’s sexual reproductive structures.',
+      'Sexual spores are produced inside tiny flask-like structures inside of each finger.'
+    ],
+    3: [
+      'While other fungi like mushrooms are more ephemeral and fall over, Xy laria’s firmness allows them to keep releasing spores and increase their chances of reproducing.',
+      'Xylaria are incredibly opportunistic and can release these spores for several months or even years.'
+    ],
+    4: [
+      '“A lot of fungi just kind of take advantage of already weakened and stressed plants.'
+    ],
+    5: [
+      'Like with zombies themselves, it’s also important to remember that the finger is merely the tip of the iceberg and will continue to grow as long as they have the right conditions.',
+      'So simply plucking a dead man’s finger from the base of a tree doesn’t get rid of the fungi itself.'
+    ]
+  }
+},
+{
+  id: 'static-electricity-explained',
+  title: 'After 2,600 years, we finally know how static electricity really works',
+
+  en: `
+**01. Part 1**
+It all comes down to nanoscale-level variations.
+The first documentation of static electricity dates back to 600 BCE. Even after 2,600 years’ worth of tiny shocks, however, researchers couldn’t fully explain how rubbing two objects together causes it. But according to a team at Northwestern University, the mystery is finally solved. As explained in a September 17 study published in the journal Nano Letters, the answer is “surprisingly simple.” It all has to do with little imperfections.
+“People have tried, but they could not explain experimental results without making assumptions that were not justified or justifiable,” Lawrence Marks, a professor emeritus of materials science and engineering, said on September 18. “Just having different deformations—and therefore different charges—at the front and back of something sliding leads to current.”
+
+**02. Part 2**
+Marks and their colleagues first began exploring static electricity’s properties back in 2019, when they discovered that rubbing two materials against one another bends miniscule variations on each object’s surface. This movement then generated voltages. From there, the team created a new model that relies on the concept known as “elastic shear,” which happens whenever an object resists a sliding force and creates friction in the process. Once the friction builds up on either side of the nanosized deformations, the difference in electrical charges can create a current—and the resultant shock.
+“We developed a new model that calculates electrical current. The values for the current for a range of different cases were in good agreement w ith experimental results,” said Marks.
+
+**03. Part 3**
+Marks notes that while most people associate static electricity with demonstrations such as hair-raising elementary science experiments or touching a doorknob after rubbing your pet’s fur, the electric charge actually exerts a huge influence on the world “in both simple and profound ways.” An everyday example can be seen when a coffee grinder’s charged grains alters the flavor of beans. But static shocks are also responsible for far more serious issues, such as dosing complications for powdered medicines and industrial fires. Most experts believe the Hindenburg tragedy likely hinged on fires sparked by static electricity. By better understanding the mechanisms involved, experts across industries can help make their products more effective and working conditions safer.
+“The Earth would probably not be a planet without a key step in the clumping of particles that form planets, which occurs because of the static electricity generated by colliding grains,” Marks explained. “It’s amazing how much of our lives are touched by static electricity and how much of the universe depends on it.” And now, after thousands of years, that key phenomenon has an exact explanation.
+`,
+  zh: `
+**01. 第一部分**
+這一切都歸結於奈米尺度層級的變化。
+靜電最早的文獻記載可追溯到西元前 600 年。然而，即使經過了 2,600 年一次次微小電擊的累積，研究人員仍無法完全解釋，為什麼兩個物體互相摩擦會產生靜電。但根據西北大學的一個團隊，這個謎團終於解開了。如九月 17 日發表於《奈米通訊》（Nano Letters）期刊的一項研究所解釋的，答案「簡單得令人驚訝」。這一切都與微小的不完美有關。
+「人們試過，但在不做出不合理或無法被合理化的假設的情況下，他們無法解釋實驗結果，」材料科學與工程的榮譽教授勞倫斯．馬克斯（Lawrence Marks）在 9 月 18 日說。「只要滑動物體的前端和後端有不同的變形——因而有不同的電荷——就會導致電流。」
+
+**02. 第二部分**
+馬克斯與同事早在 2019 年就開始探索靜電的性質，當時他們發現，兩種材料互相摩擦時，會使每個物體表面上極微小的起伏發生彎曲。這種運動接著產生了電壓。從那裡開始，團隊建立了一個新模型，這個模型依賴於稱為「彈性剪切」的概念，也就是當物體抵抗滑動力並在過程中產生摩擦時所發生的現象。一旦摩擦在奈米大小變形的兩側累積起來，電荷的差異就可以產生電流——以及隨之而來的電擊。
+「我們開發了一個計算電流的新模型。在一系列不同情況下算出的電流值，與實驗結果相當吻合，」馬克斯說。
+
+**03. 第三部分**
+馬克斯指出，雖然大多數人把靜電與一些示範聯想在一起，例如讓頭髮豎起來的基礎科學實驗，或是摩擦寵物毛皮之後去碰門把，但電荷其實以「簡單而深遠的方式」對世界產生巨大的影響。一個日常的例子，就是咖啡研磨機裡帶電的顆粒會改變咖啡豆的風味。但靜電也要為更嚴重得多的問題負責，例如粉狀藥物的劑量複雜問題與工業火災。大多數專家認為，興登堡號空難很可能取決於靜電引發的火災。透過更深入了解其中涉及的機制，各行各業的專家可以幫助讓他們的產品更有效，並讓工作條件更安全。
+「如果沒有組成行星的粒子聚集過程中的關鍵一步，地球大概不會成為一顆行星，而這個過程之所以發生，是因為碰撞的顆粒產生了靜電，」馬克斯解釋說。「令人驚奇的是，我們的生活有多少受到靜電的影響，宇宙有多少依賴它。」而現在，經過數千年之後，這個關鍵現象有了精確的解釋。
+`,
+  questions: `
+**1. According to Part 1, what has the Northwestern University team concluded about static electricity?**
+(A) The mystery of how rubbing creates static electricity is finally solved, and the answer is “surprisingly simple,” involving little imperfections.
+(B) Static electricity can be explained only by assuming that rubbed materials release an unknown type of particle, which would overturn the standard model of physics.
+(C) Static electricity has been fully understood since 600 BCE, and the new study merely measured it more precisely.
+(D) Static electricity cannot be produced by rubbing smooth objects, which is why earlier experiments failed repeatedly.
+
+**2. What did Lawrence Marks say about earlier attempts to explain static electricity?**
+(A) They were fully confirmed by laboratory experiments, which is why researchers had long agreed on how rubbing produces static electricity.
+(B) They were never tested against experimental results, so they remained purely theoretical for 2,600 years.
+(C) They relied on precise nanoscale measurements that did not exist until the 2019 experiments of Marks’s team.
+(D) They could not explain experimental results without making assumptions that were not justified or justifiable.
+
+**3. According to Part 2, what leads to electric current in the team’s new model?**
+(A) Heating of the two rubbed surfaces to high temperatures, which frees electrons that then flow between the surfaces and produce a shock.
+(B) Different deformations, and so different charges, at the front and back of a sliding object, arising from “elastic shear” and friction.
+(C) A magnetic field generated by the moving objects, which pushes charges toward the nanosized deformations and creates a current.
+(D) A chemical reaction between the two materials, which creates a voltage whenever their surfaces are pulled apart.
+
+**4. Which of the following does Part 3 identify as a far more serious issue caused by static shocks?**
+(A) A change in the flavor of coffee beans when a grinder’s charged grains alter them, which the passage describes as an everyday example.
+(B) Hair standing on end during elementary science experiments in classrooms, which the passage mentions as a familiar demonstration.
+(C) Dosing complications for powdered medicines and industrial fires, including the fire that likely destroyed the Hindenburg.
+(D) Mild shocks after touching a doorknob when someone has rubbed a pet’s fur, which the passage uses to illustrate static charge.
+
+**5. What role does Marks say static electricity played in the formation of planets?**
+(A) Static electricity generated by colliding grains drives a key step in the clumping of particles that form planets.
+(B) Static electricity prevented particles from clumping together, which delayed the formation of planets for millions of years.
+(C) Static electricity had no role in planet formation, which is why Earth’s origin is unrelated to the team’s new model.
+(D) Static electricity caused newly formed planets to melt, which explains why Earth has a molten core.
+`,
+  answers: `
+**1. 答案：(A)**
+
+* **解析**：第一部分指出，根據西北大學的團隊，兩個物體互相摩擦為何會產生靜電這個謎團「終於解開了」，答案「簡單得令人驚訝」，一切都與微小的不完美有關。選項 (A) 正確。(B)、(D) 原文未提；(C) 與原文相反——即使經過 2,600 年，研究人員仍無法完全解釋。
+
+**2. 答案：(D)**
+
+* **解析**：第一部分中，馬克斯說：「人們試過，但在不做出不合理或無法被合理化的假設的情況下，他們無法解釋實驗結果。」選項 (D) 正確。(A) 與原文相反——文中說研究人員無法完全解釋；(B) 與 (C) 與原文不符。
+
+**3. 答案：(B)**
+
+* **解析**：第二部分指出，新模型依賴「彈性剪切」概念：物體抵抗滑動力並產生摩擦，一旦摩擦在奈米大小變形的兩側累積，電荷的差異就能產生電流及隨之而來的電擊；馬克斯也說滑動物體前後不同的變形（因而有不同電荷）會導致電流。選項 (B) 正確。(A)、(C)、(D) 皆為原文未提的機制。
+
+**4. 答案：(C)**
+
+* **解析**：第三部分指出，靜電的日常例子包括咖啡研磨機的帶電顆粒改變咖啡豆風味，以及讓頭髮豎起來、摸門把被電等常見示範，而靜電更要為「更嚴重得多的問題」負責，例如粉狀藥物的劑量複雜問題與工業火災（興登堡號空難也很可能與靜電引發的火災有關）。選項 (C) 正確。(A)、(B)、(D) 都是文中較輕微的日常示範。
+
+**5. 答案：(A)**
+
+* **解析**：第三部分中，馬克斯說，如果沒有組成行星的粒子聚集過程中的關鍵一步，地球大概不會成為一顆行星，而這個過程之所以發生，是因為碰撞的顆粒產生了靜電。選項 (A) 正確。(B)、(C)、(D) 皆與原文相反或原文未提。
+`,
+
+  evidence: {
+    1: [
+      'But according to a team at Northwestern University, the mystery is finally solved.',
+      'It all has to do with little imperfections.'
+    ],
+    2: [
+      '“People have tried, but they could not explain experimental results without making assumptions that were not justified or justifiable,” Lawrence Marks, a professor emeritus of materials science and engineering, said on September 18.'
+    ],
+    3: [
+      'From there, the team created a new model that relies on the concept known as “elastic shear,” which happens whenever an object resists a sliding force and creates friction in the process.',
+      'Once the friction builds up on either side of the nanosized deformations, the difference in electrical charges can create a current—and the resultant shock.'
+    ],
+    4: [
+      'But static shocks are also responsible for far more serious issues, such as dosing complications for powdered medicines and industrial fires.'
+    ],
+    5: [
+      '“The Earth would probably not be a planet without a key step in the clumping of particles that form planets, which occurs because of the static electricity generated by colliding grains,” Marks explained.'
+    ]
+  }
 }
 ];
 </script>
@@ -1048,7 +2327,7 @@ Don't blame your own incompetence for a dull brain. Many times, you are just too
 /* ============================================================
    小工具
    ============================================================ */
-const STORE = { records: 'rl_records', marks: 'rl_marks', pending: 'rl_pending', voice: 'rl_voice' };
+const STORE = { records: 'rl_records', marks: 'rl_marks', flags: 'rl_flags', pending: 'rl_pending', voice: 'rl_voice' };
 const $ = id => document.getElementById(id);
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
@@ -1198,7 +2477,7 @@ function segText(a, s, p) { return p === 't' ? a.sections[s].title : a.sections[
 /* ============================================================
    狀態與紀錄（本機 + Google）
    ============================================================ */
-const state = { records: [], marks: {}, cloud: 'none' };
+const state = { records: [], marks: {}, flags: {}, cloud: 'none' };
 
 function setCloud(s) {
   state.cloud = s;
@@ -1206,7 +2485,7 @@ function setCloud(s) {
   box.className = 'cloud-status' + (s === 'ok' ? ' ok' : s === 'fail' ? ' fail' : '');
   box.textContent = { none: '☁️ 尚未連接 Google，紀錄只存在這台瀏覽器', sync: '☁️ 同步中…', ok: '✓ 已同步 Google', fail: '⚠️ 雲端同步失敗，紀錄暫存在這台瀏覽器' }[s];
 }
-function saveLocal() { lsSet(STORE.records, state.records); lsSet(STORE.marks, state.marks); }
+function saveLocal() { lsSet(STORE.records, state.records); lsSet(STORE.marks, state.marks); lsSet(STORE.flags, state.flags); }
 
 async function cloudGetAll() {
   const r = await fetch(CLOUD_URL + '?action=getAll&_=' + Date.now());
@@ -1245,18 +2524,21 @@ function mergeFromCloud(d) {
   const localOnly = state.records.filter(r => !have.has(recKey(r)));
   state.records = [...cloudRecs, ...localOnly];
   localOnly.forEach(r => cloudSend({ action: 'saveResult', ...r }));
-  const cm = d.marks || {};
-  Object.keys(state.marks).forEach(id => { if (!(id in cm) && (state.marks[id] || []).length) cloudSend({ action: 'saveMarks', articleId: id, marks: state.marks[id] }); });
+  const cmRaw = d.marks || {}, cm = {}, cf = {};
+  Object.keys(cmRaw).forEach(id => { const arr = Array.isArray(cmRaw[id]) ? cmRaw[id] : []; cm[id] = arr.filter(x => x && typeof x === 'object' && !x.noListening); if (arr.some(x => x && x.noListening)) cf[id] = true; });
+  new Set([...Object.keys(state.marks), ...Object.keys(state.flags)]).forEach(id => { if (!(id in cmRaw) && ((state.marks[id] || []).length || state.flags[id])) cloudSend({ action: 'saveMarks', articleId: id, marks: marksPayload(id) }); });
   state.marks = { ...state.marks, ...cm };
+  Object.keys(cm).forEach(id => { if (cf[id]) state.flags[id] = true; else delete state.flags[id]; });
   saveLocal();
 }
 function addRecord(rec) { state.records.push(rec); saveLocal(); cloudSend({ action: 'saveResult', ...rec }); }
 
+function marksPayload(id) { return [...(state.marks[id] || []), ...(state.flags[id] ? [{ noListening: true }] : [])]; }
 const marksTimers = {};
 function persistMarks(articleId) {
   saveLocal();
   clearTimeout(marksTimers[articleId]);
-  marksTimers[articleId] = setTimeout(() => cloudSend({ action: 'saveMarks', articleId, marks: state.marks[articleId] || [] }), 600);
+  marksTimers[articleId] = setTimeout(() => cloudSend({ action: 'saveMarks', articleId, marks: marksPayload(articleId) }), 600);
 }
 
 function recordsOf(id, mode) { return state.records.filter(r => r.articleId === id && r.mode === mode).sort((x, y) => new Date(x.time) - new Date(y.time)); }
@@ -1268,7 +2550,8 @@ function isUnlocked(id) { return state.records.some(r => r.articleId === id); }
 function articleState(a) {
   const r = modeStatus(a, 'reading'), l = modeStatus(a, 'listening');
   const any = state.records.some(x => x.articleId === a.id);
-  return { r, l, blanks: validMarks(a).length, key: (r.done && l.done) ? 'completed' : any ? 'progress' : 'notstarted' };
+  const noListen = !!state.flags[a.id];
+  return { r, l, noListen, blanks: validMarks(a).length, key: (r.done && (l.done || noListen)) ? 'completed' : any ? 'progress' : 'notstarted' };
 }
 
 function validMarks(a) {
@@ -1291,6 +2574,7 @@ function markKey(m) { return m.s + '.' + m.p + '.' + m.i; }
 const SCREENS = ['home', 'articleView', 'readingQuiz', 'listeningQuiz', 'review'];
 function show(id) {
   SCREENS.forEach(s => $(s).classList.toggle('hidden', s !== id));
+  $('homeFab').classList.toggle('hidden', id === 'home');
   document.body.classList.toggle('rq-mode', id === 'readingQuiz');
   window.scrollTo(0, 0);
 }
@@ -1323,6 +2607,7 @@ function readingLine(st) {
 }
 function listeningLine(st) {
   if (st.l.done) { const r = st.l.lastDone; return ['聽力：✓ 答對 ' + r.correct + '｜答錯 ' + r.wrong + (r.empty ? '｜未答 ' + r.empty : '') + '｜' + fmtDate(r.time), 'ok']; }
+  if (st.noListen) return ['聽力：本篇不考', ''];
   if (!st.blanks) return ['聽力：尚未標記空格', 'warn'];
   return ['聽力：尚未作答（' + st.blanks + ' 個空格）', ''];
 }
@@ -1363,9 +2648,16 @@ function openMenu(id) {
   const [rt, rc] = readingLine(st); $('menuReadingNote').textContent = rt; $('menuReadingNote').className = 'menu-note ' + rc;
   const [lt, lc] = listeningLine(st); $('menuListeningNote').textContent = st.blanks ? lt : (st.l.done ? lt + '｜要再考請先到「文章瀏覽」重新標記空格' : '先到「文章瀏覽」標記空格，才能考聽力');
   $('menuListeningNote').className = 'menu-note ' + (st.blanks ? lc : (st.l.done ? 'ok' : 'warn'));
-  $('menuListening').disabled = !st.blanks;
+  $('menuNoListen').checked = st.noListen;
+  if (st.noListen) { $('menuListeningNote').textContent = st.l.done ? lt : '本篇不考聽力，閱讀完成即算完成'; $('menuListeningNote').className = 'menu-note ' + (st.l.done ? 'ok' : ''); }
+  $('menuListening').disabled = !st.blanks || st.noListen;
   $('menuOverlay').classList.add('show');
 }
+$('homeFab').onclick = () => { if (!$('readingQuiz').classList.contains('hidden') || !$('listeningQuiz').classList.contains('hidden')) leaveQuiz(); else goHome(); };
+$('menuNoListen').onchange = () => {
+  if ($('menuNoListen').checked) state.flags[menuId] = true; else delete state.flags[menuId];
+  persistMarks(menuId); openMenu(menuId); renderHome();
+};
 function closeMenu() { $('menuOverlay').classList.remove('show'); }
 $('menuClose').onclick = closeMenu;
 $('menuOverlay').addEventListener('click', e => { if (e.target === $('menuOverlay')) closeMenu(); });
@@ -1966,6 +3258,7 @@ function readingKeys(e) {
 async function init() {
   state.records = lsGet(STORE.records, []);
   state.marks = lsGet(STORE.marks, {});
+  state.flags = lsGet(STORE.flags, {});
   renderHome(); show('home');
   if (!CLOUD_URL) { setCloud('none'); return; }
   setCloud('sync');
