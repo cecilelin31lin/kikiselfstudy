@@ -350,6 +350,17 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
   <div class="card">
     <div class="filter-grid">
       <select id="fUnit" aria-label="章節"></select>
+      <select id="fSchool" aria-label="學校"></select>
+      <select id="fYear" aria-label="年份"></select>
+      <select id="fRate" aria-label="錯誤率">
+        <option value="all">錯誤率：全部</option>
+        <option value="0-0">0%</option>
+        <option value="0-20">1–20%</option>
+        <option value="20-40">21–40%</option>
+        <option value="40-60">41–60%</option>
+        <option value="60-80">61–80%</option>
+        <option value="80-100">81–100%</option>
+      </select>
       <select id="fLearned" aria-label="學習狀態">
         <option value="all">學習狀態：全部</option>
         <option value="learned">已學過</option>
@@ -367,8 +378,6 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
         <option value="note">筆記</option>
       </select>
       <select id="fType" aria-label="題型"></select>
-      <select id="fSchool" aria-label="學校"></select>
-      <select id="fYear" aria-label="年份"></select>
     </div>
     <div class="chip-row" style="margin-bottom:10px">
       <label class="chip"><input type="checkbox" id="fStar">⭐ 星號</label>
@@ -4612,6 +4621,9 @@ const questions = [
   { id: "nCX112-56", subject: "生化", unit: 6, source: "exam", school: "nCX", year: 112, language: "en", type: 3, group: "", question: "Noncoding RNAs play multiple roles in regulating gene expression. Which of the following statements about noncoding RNA is correct?\n(a) noncoding RNAs include microRNAs, piwi-interacting RNAs, mRNAs, and long noncoding RNAs,\n(b) noncoding RNAs can be translated into polypeptides,\n(c) long noncoding transcript of XIST is essential for condensation of heterochromatin,\n(d) microRNA-protein complexes recognize target mRNA and block its translation,\n(e) piwi-interacting RNAs play an indispensable role in germ cells of animal species.", answer: "cde", options: ["abc", "bcd", "bcde", "acde", "cde"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "nCX112-57", subject: "生化", unit: 6, source: "exam", school: "nCX", year: 112, language: "en", type: 3, group: "", question: "Which of the following mechanism is NOT how bacteria defend against phage infection?", answer: "type II topoisomerases facilitate conformational changes of DNA during replication and transcription", options: ["bacteria with mutant receptors unrecognizable to phages", "restriction enzymes degrade exogenous genetic elements", "type II topoisomerases facilitate conformational changes of DNA during replication and transcription", "CRISPR-Cas system", "none"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "nCX112-58", subject: "生化", unit: 6, source: "exam", school: "nCX", year: 112, language: "en", type: 3, group: "", question: "COVID-19 pandemic outbreak leads to millions of death globally and these catastrophes are caused by the life-threatening SARS-CoV-2. Which of the following statements about the SARS-CoV-2 is NOT correct?", answer: "only affects the upper and lower respiratory tracts", options: ["belongs to coronavirus carrying single-stranded RNA", "only affects the upper and lower respiratory tracts", "accesses host cells via the receptor for ACE2", "uses glycoprotein spike to connect to ACE2 receptor", "none"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
+  { id: "M001", subject: "生化", unit: 6, source: "exam", school: "私醫", year: 92, language: "zh", type: 3, group: "", question: "假設聚合酶鏈反應（Polymerase chain reaction）一個週期需要5分鐘。理論上至少約需多少時間才可將單一基因放大複製成1000倍？", answer: "50分鐘", options: ["30分鐘", "40分鐘", "50分鐘", "60分鐘"], image: "", optionImages: [], needImage: false, explanation: {"text": "PCR 每週期約倍增一次，2¹⁰＝1024 ≥ 1000，故至少需 10 個週期；10 × 5 分鐘＝50 分鐘。", "image": ""} },
+  { id: "M002", subject: "生化", unit: 6, source: "exam", school: "私醫", year: 94, language: "zh", type: 3, group: "", question: "下列有關端粒酶（telomerase）的敘述，何者錯誤？", answer: "端粒上帶有可使細胞通過細胞週期檢查點調控蛋白質的基因，因此端粒變短，細胞就失去分裂的能力", options: ["原核生物沒有端粒", "一般體細胞的端粒會隨細胞分裂的次數增加而縮短，幹細胞則可維持一定長度", "端粒的長度由端粒酶以RNA為模版，透過反轉錄的方式來維持", "端粒上帶有可使細胞通過細胞週期檢查點調控蛋白質的基因，因此端粒變短，細胞就失去分裂的能力"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
+  { id: "M003", subject: "生化", unit: 6, source: "exam", school: "KMU", year: 98, language: "en", type: 3, group: "", question: "Eukaryotic telomeres replicate differently than the rest of the chromosome. Which of the following is the cause?", answer: "Gaps left at the 5' end of the lagging strand because of the need for a 3' onto which nucleotides can attach.", options: ["DNA polymerase that cannot replicate the leading strand template to it 5' end.", "The evolution of telomerase enzyme.", "Gaps left at the 3' end of the lagging strand because of the need for a 5' onto which nucleotides can attach.", "Gaps left at the 3' end of the lagging strand because of the need for a primer.", "Gaps left at the 5' end of the lagging strand because of the need for a 3' onto which nucleotides can attach."], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
 ];
 const QMAP = {};
 questions.forEach(q => { QMAP[q.id] = q; });
@@ -5247,6 +5259,11 @@ document.addEventListener('keydown', e => {
 });
 
 /* 題目卡（結果、總覽、紀錄共用） */
+/* 錯誤率（%），沒練習過回傳 null */
+function wrongRate(id) {
+  const s = st(id), p = Number(s.practice || 0);
+  return p ? Math.round(Number(s.wrong || 0) / p * 100) : null;
+}
 function sumFlags(id) { const s = st(id); return (s.star ? '⭐' : '') + (s.mark ? '🔖' : '') + (s.wrongMark ? '🙀' : '') + (s.skip ? '🚫' : '') + (s.note ? '📝' : ''); }
 function qCardHtml(q, opt = {}) {
   const s = st(q.id);
@@ -5276,7 +5293,7 @@ function qCardHtml(q, opt = {}) {
       ${your}
       ${body}
       ${explainHtml(q)}
-      <div class="qstat">練習 ${Number(s.practice || 0)} 次　答錯 ${Number(s.wrong || 0)} 次${s.last ? '　最近 ' + fmtDate(s.last) : ''}</div>
+      <div class="qstat">練習 ${Number(s.practice || 0)} 次　答錯 ${Number(s.wrong || 0)} 次　錯誤率 ${wrongRate(q.id) === null ? '—' : wrongRate(q.id) + '%'}${s.last ? '　最近 ' + fmtDate(s.last) : ''}</div>
       ${flagBarHtml(q)}
     </div></details>`;
 }
@@ -5340,6 +5357,12 @@ function overviewFiltered() {
     if (v('fType') !== 'all' && String(q.type) !== v('fType')) return false;
     if (v('fSchool') !== 'all' && q.school !== v('fSchool')) return false;
     if (v('fYear') !== 'all' && String(q.year) !== v('fYear')) return false;
+    if (v('fRate') !== 'all') {
+      const r = wrongRate(q.id);
+      if (r === null) return false;
+      const [lo, hi] = v('fRate').split('-').map(Number);
+      if (hi === 0 ? r !== 0 : !(r > lo && r <= hi)) return false;
+    }
     if (c('fStar') && !s.star) return false;
     if (c('fMark') && !s.mark) return false;
     if (c('fWrongMark') && !s.wrongMark) return false;
