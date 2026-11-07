@@ -76,6 +76,17 @@ button{font-family:inherit}
 .article-card:hover{transform:translateY(-1px);border-color:var(--theme-main);box-shadow:0 5px 14px rgba(43,58,85,.06);background:linear-gradient(145deg,#fff,var(--theme-soft))}
 .ac-title{font-family:var(--serif);font-size:16px;font-weight:700;line-height:1.45;letter-spacing:.01em}
 .ac-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.lv{display:inline-block;margin-left:8px;padding:0 8px;border-radius:999px;font-size:11px;font-weight:700;line-height:18px;color:#fff;vertical-align:1px}
+.lv-easy{background:#468189}
+.lv-medium{background:#d9a441}
+.lv-advanced{background:#E8828C}
+.area-toggle{width:100%;background:none;border:0;box-shadow:none;border-radius:0;cursor:pointer;font-family:inherit;font-weight:700;color:inherit;padding:6px 0;margin:0 0 14px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.area-title .area-chev{font-size:12px;color:var(--muted);width:14px;text-align:center;font-weight:400}
+.card-grid[hidden]{display:none}
+.st-pill{display:inline-block;padding:0 8px;border-radius:999px;font-size:11px;font-weight:700;line-height:18px;margin-bottom:2px}
+.st-notstarted{background:#e8eaef;color:#6b7385}
+.st-progress{background:#f6e7c1;color:#8a6a1a}
+.st-completed{background:#d6ebe6;color:#2f6b60}
 .ac-status{text-align:right;font-size:12px;line-height:1.75}
 .ac-line{color:#777}
 .ac-line.ok{color:var(--ok)}
@@ -244,9 +255,7 @@ section:not(.hidden){animation:vocFade .22s ease}
   <section id="home" class="narrow">
     <div id="loadMsgs"></div>
     <div class="card home-card">
-      <div class="home-section"><h2 class="area-title" id="nsTitle">Not Started</h2><div class="card-grid" id="nsGrid"></div></div>
-      <div class="home-section"><h2 class="area-title" id="ipTitle">In Progress</h2><div class="card-grid" id="ipGrid"></div></div>
-      <div class="home-section"><h2 class="area-title" id="cpTitle">Completed</h2><div class="card-grid" id="cpGrid"></div></div>
+      <div id="homeBlocks"></div>
     </div>
   </section>
 
@@ -412,6 +421,7 @@ const ARTICLES_RAW = [
 {
   id: 'speak-well',
   title: 'How to Speak Well When All Eyes Are on You',
+  level: 'easy',
 
   en: `
 **Introduction**
@@ -563,6 +573,7 @@ You do not need a formal speaking invitation to begin recording and reviewing. U
 {
   id: 'focus-on-yourself',
   title: 'Stop Looking Around. Just Focus on Yourself.',
+  level: 'easy',
 
   en: `
 **01. Part 1**
@@ -666,6 +677,7 @@ Stop looking around. Just focus on yourself. This is not only a life strategy, b
 {
   id: 'trapped-by-food-and-fear',
   title: 'Trapped by Food and Fear: The physical and emotional impact of eating disorders',
+  level: 'easy',
 
   en: `
 **01. Overview**
@@ -772,6 +784,7 @@ Mental health counseling is an important part of treatment and helps a person wi
 {
   id: 'how-mistakes-springboard-growth',
   title: "How Mistakes Springboard Conscientious People's Growth",
+  level: 'easy',
 
   en: `
 **01. Why You've Stopped Saying "Let Me Try"**
@@ -881,6 +894,7 @@ Two small moves to try. First, name one thing you've been quietly avoiding becau
 {
   id: 'five-ways-to-reclaim-a-clear-mind',
   title: 'Five Ways to Reclaim a Clear Mind',
+  level: 'easy',
 
   en: `
 **Introduction**
@@ -1047,6 +1061,7 @@ Don't blame your own incompetence for a dull brain. Many times, you are just too
 {
   id: 'cdc-vaccine-panel-hep-b',
   title: 'CDC Vaccine Panel Scraps Guidance for Universal Hepatitis B Shots at Birth',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -1185,6 +1200,7 @@ B 型肝炎是一種傳染力很強、會損害肝臟的病毒性疾病。慢性
 {
   id: 'ai-superintelligence-first-steps',
   title: 'Are We Seeing the First Steps Toward AI Superintelligence?',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -1307,6 +1323,7 @@ Anthropic 也對自家人工智慧系統進行類似的測試。該公司共同�
 {
   id: 'why-adhd-rates-on-the-rise',
   title: 'Why Are ADHD Rates On the Rise?',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -1520,6 +1537,7 @@ ADHD 藥物的長期效果更難以嚴格研究，因此證據更為稀少。在
 {
   id: 'five-second-rule',
   title: 'Is the five-second rule true? Don’t push your luck.',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -1630,6 +1648,7 @@ The next time you’re tempted to eat that cookie you just dropped, remember: ba
 {
   id: 'why-do-we-have-fevers',
   title: 'Why do we have fevers? It’s more complicated than ‘heat kills bugs.’',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -1747,6 +1766,7 @@ Right now though, that’s speculative, he adds. They have the petri dish experi
 {
   id: 'saharan-dust-atlantic-life',
   title: 'Saharan dust sustains life all over the Atlantic Ocean',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -1860,6 +1880,7 @@ According to their findings, the team concludes that dust in areas including the
 {
   id: 'memory-crystal-human-genome',
   title: 'In case of extinction, scientists store human genome on a ‘memory crystal’ that lasts billions of years',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -1969,6 +1990,7 @@ For now, the human genome-encoded “5D memory crystal” is stored in the Memor
 {
   id: 'biobots-from-dead-cells',
   title: 'How biobots arise from the cells of dead organisms',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -2103,6 +2125,7 @@ A better understanding of how some cells continue to function and metamorphose i
 {
   id: 'creepiest-fungus-dead-mans-fingers',
   title: 'Is this the creepiest fungus in the forest? Yes, definitely.',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -2215,6 +2238,7 @@ Xylaria 極具機會主義，能在好幾個月甚至好幾年的時間裡釋放
 {
   id: 'static-electricity-explained',
   title: 'After 2,600 years, we finally know how static electricity really works',
+  level: 'advanced',
 
   en: `
 **01. Part 1**
@@ -2316,6 +2340,112 @@ Marks notes that while most people associate static electricity with demonstrati
       '“The Earth would probably not be a planet without a key step in the clumping of particles that form planets, which occurs because of the static electricity generated by colliding grains,” Marks explained.'
     ]
   }
+},
+{
+  id: 'carnival',
+  title: 'Carnival',
+  level: 'medium',
+
+  en: `
+**01. Part 1**
+Carnival is a major celebration in some parts of the world. It occurs in February or March over the days leading up to Ash Wednesday, which is when the period of Lent begins. For Catholics, carnival is a chance to eat, drink, and be merry before fasting for 40 days.
+
+**02. Part 2**
+As far as carnival celebrations go, the biggest one is in Rio de Janeiro. The Brazilian city organizes countless street parties, but it's the annual parade of the samba schools that gives Rio's carnival its magic. Imagine thousands of dancers in glittering costumes moving to the rhythms of samba.
+
+**03. Part 3**
+The US city of New Orleans is also famous for its festival, which is better known locally as Mardi Gras, French for "Fat Tuesday." The people of New Orleans put on a parade with gorgeous floats, from which coins, strings of beads, and other goodies are thrown to spectators.
+
+**04. Part 4**
+Carnival celebrations in Venice, Italy, are elegant and steeped in tradition. People parade around the city in luxurious costumes and masks, balls are held in centuries-old palaces, and there's also an event known as the Flight of the Angel. That's when a woman dressed as an angel flies over Saint Mark's Square and greets the crowd below. It's truly an incredible sight!
+`,
+  zh: `
+**01. 第一部分**
+嘉年華是世界上某些地區的重大慶典。它在二月或三月，也就是聖灰星期三之前的那幾天舉行，而聖灰星期三正是四旬期開始的日子。對天主教徒來說，嘉年華是在齋戒 40 天之前，盡情吃喝、狂歡作樂的機會。
+
+**02. 第二部分**
+就嘉年華慶典而言，規模最大的在里約熱內盧。這座巴西城市舉辦了無數的街頭派對，但真正讓里約嘉年華充滿魅力的，是每年一度的森巴舞學校大遊行。想像一下，成千上萬的舞者身穿閃閃發光的服裝，隨著森巴的節奏舞動。
+
+**03. 第三部分**
+美國的紐奧良市也以其節慶聞名，當地人較常稱之為「Mardi Gras」，這是法文，意思是「肥胖星期二」（Fat Tuesday）。紐奧良的人們會舉行遊行，有華麗的花車，人們從花車上向觀眾拋出硬幣、成串的珠子和其他小禮物。
+
+**04. 第四部分**
+義大利威尼斯的嘉年華慶典優雅而充滿傳統。人們穿著華麗的服裝、戴著面具在城市裡遊行，在有幾百年歷史的宮殿裡舉辦舞會，還有一項稱為「天使飛行」（Flight of the Angel）的活動。那是一位打扮成天使的女子飛越聖馬可廣場，向下方的群眾致意。這真是令人難以置信的景象！
+`,
+  questions: `
+**1. According to the text, what is the primary religious logic underlying the timing and nature of Carnival celebrations for Catholics?**
+(A) It marks the end of an agrarian harvesting period, allowing communities to trade surplus goods.
+(B) It offers a finite opportunity for sensory indulgence immediately preceding a forty-day period of religious abstinence.
+(C) It encourages individuals to undertake theatrical performances to atone for past moral infractions.
+(D) It commemorates the historical unification of Western European monarchies under a singular faith.
+
+**2. Based on the passage, which feature distinguishes the Mardi Gras celebration in New Orleans from other global festivities?**
+(A) The strict requirement for all attendees to wear centuries-old palace attire.
+(B) The public distribution of physical tokens like coins and decorative beads thrown from parade floats to spectators.
+(C) The execution of high-altitude aerial acrobatics performed above historical city squares.
+(D) The exclusive focus on competitive dance battles organized by certified samba institutions.
+
+**3. What can be inferred about the Venetian Carnival based on its listed traditions and events?**
+(A) Its activities emphasize historical refinement, aristocratic venue settings, and iconic facial disguises.
+(B) It relies entirely on temporary street markets rather than structured institutional parades.
+(C) It prohibits the participation of non-local residents in public square gatherings.
+(D) It functions primarily as a modern trade exposition for prospective mask manufacturers.
+
+**4. According to the passage, what occurs during the "Flight of the Angel" event in Venice?**
+(A) Hot air balloons carrying artistic masks are released over Saint Mark's Square.
+(B) A costumed individual dressed as a celestial figure glides above a major public square to greet spectators.
+(C) Professional dancers jump from historical palace balconies into moving parade floats.
+(D) Pyrotechnic displays resembling angel wings are illuminated along Venetian canals.
+
+**5. Which statement best synthesizes the primary objective of the provided passage?**
+(A) To analyze the economic revenue generated by seasonal tourism during global religious holidays.
+(B) To present a comparative overview of famous international Carnival traditions accompanied by a practical crafting guide.
+(C) To advocate for the preservation of traditional mask-making techniques over modern mass production.
+(D) To detail the architectural history of Venetian palaces used during regional festivals.
+`,
+  answers: `
+**1. 答案：(B)**
+
+* **解析**：第一段指出，嘉年華在聖灰星期三（四旬期開始）之前的日子舉行，對天主教徒而言是「在齋戒 40 天之前，盡情吃喝、狂歡作樂的機會」。選項 (B) 為精準的同義改寫（Paraphrase）。(A) 農業收成與交易物資、(C) 以戲劇演出贖罪、(D) 紀念西歐君主國在單一信仰下統一，皆為原文未提及。
+
+**2. 答案：(B)**
+
+* **解析**：第三段指出，紐奧良的人們舉行有華麗花車的遊行，並從花車上向觀眾拋出硬幣、成串的珠子和其他小禮物。選項 (B) 為精準的同義改寫。(A) 原文只提到威尼斯的舞會在有幾百年歷史的宮殿舉行，並沒有要求所有人穿著特定服飾；(C) 空中表演是威尼斯的「天使飛行」；(D) 森巴舞學校的遊行是里約的特色。
+
+**3. 答案：(A)**
+
+* **解析**：第四段描述威尼斯的嘉年華「優雅而充滿傳統」，人們穿著華麗服裝與面具遊行、在有幾百年歷史的宮殿舉辦舞會，還有天使飛行。選項 (A)「強調歷史的精緻、貴族式的場地與標誌性的面部偽裝（面具）」是合理的推論。(B) 與原文不符，文中有遊行與固定活動，並非只有臨時市集；(C) 與 (D) 原文均未提及。
+
+**4. 答案：(B)**
+
+* **解析**：第四段指出，天使飛行是「一位打扮成天使的女子飛越聖馬可廣場，向下方的群眾致意」。選項 (B) 為同義改寫（celestial figure ＝ 天使；major public square ＝ 聖馬可廣場）。(A) 熱氣球、(C) 舞者從陽台跳進花車、(D) 沿運河施放天使翅膀形狀的煙火，皆為原文未提及。
+
+**5. 答案：(B)**
+
+* **解析**：全文先說明嘉年華的時間與宗教背景，再依序介紹里約、紐奧良、威尼斯三地的慶祝方式，目的在於概述並比較各地著名的嘉年華傳統。選項 (B) 前半段最能概括全文；其後半段「實用手作指南」原文並未出現，但相較之下，(A) 旅遊經濟收益、(C) 面具工藝的保存、(D) 威尼斯宮殿的建築史，都離文章主旨更遠，所以 (B) 是最佳答案。
+`,
+
+  evidence: {
+    1: [
+      'It occurs in February or March over the days leading up to Ash Wednesday, which is when the period of Lent begins.',
+      'For Catholics, carnival is a chance to eat, drink, and be merry before fasting for 40 days.'
+    ],
+    2: [
+      'The people of New Orleans put on a parade with gorgeous floats, from which coins, strings of beads, and other goodies are thrown to spectators.'
+    ],
+    3: [
+      'Carnival celebrations in Venice, Italy, are elegant and steeped in tradition.',
+      "People parade around the city in luxurious costumes and masks, balls are held in centuries-old palaces, and there's also an event known as the Flight of the Angel."
+    ],
+    4: [
+      "That's when a woman dressed as an angel flies over Saint Mark's Square and greets the crowd below."
+    ],
+    5: [
+      'As far as carnival celebrations go, the biggest one is in Rio de Janeiro.',
+      'The US city of New Orleans is also famous for its festival, which is better known locally as Mardi Gras, French for "Fat Tuesday."',
+      'Carnival celebrations in Venice, Italy, are elegant and steeped in tradition.'
+    ]
+  }
 }
 ];
 </script>
@@ -2327,7 +2457,7 @@ Marks notes that while most people associate static electricity with demonstrati
 /* ============================================================
    小工具
    ============================================================ */
-const STORE = { records: 'rl_records', marks: 'rl_marks', flags: 'rl_flags', pending: 'rl_pending', voice: 'rl_voice' };
+const STORE = { records: 'rl_records', marks: 'rl_marks', flags: 'rl_flags', pending: 'rl_pending', voice: 'rl_voice', collapsed: 'rl_collapsed' };
 const $ = id => document.getElementById(id);
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
@@ -2335,6 +2465,8 @@ function fmt(sec) { const m = Math.floor(sec / 60), s = sec % 60; return m + ':'
 function fmtDate(iso) { const d = new Date(iso); return isNaN(d) ? '' : (d.getMonth() + 1) + '/' + d.getDate(); }
 function lsGet(k, def) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+const LEVEL_ORDER = ['easy', 'medium', 'advanced'];
+const collapsed = lsGet(STORE.collapsed, {});
 function normalizeWord(s) { return String(s).trim().toLowerCase().replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' '); }
 function rateLabel(r) { const s = String(Math.round(r * 100) / 100); return (s.includes('.') ? s : s + '.0') + '×'; }
 
@@ -2421,7 +2553,7 @@ function detectEvidence(expl, sections) {
 }
 function parseArticle(raw) {
   const errors = [], warnings = [];
-  const id = String(raw.id || '').trim(), title = String(raw.title || '').trim() || '(沒有標題)';
+  const id = String(raw.id || '').trim(), title = String(raw.title || '').trim() || '(沒有標題)', level = String(raw.level || '').trim().toLowerCase();
   if (!/^[A-Za-z0-9_-]+$/.test(id)) errors.push('id 格式錯誤');
 
   const en = splitByHeadings(raw.en);
@@ -2461,7 +2593,7 @@ function parseArticle(raw) {
     } else q.evidence = detectEvidence(q.explanation.text, sections);
   });
 
-  return { errors: [], warnings: [], article: { id, title, sections, questions } };
+  return { errors: [], warnings: [], article: { id, title, level, sections, questions } };
 }
 
 const articles = [];
@@ -2612,28 +2744,39 @@ function listeningLine(st) {
   return ['聽力：尚未作答（' + st.blanks + ' 個空格）', ''];
 }
 function renderHome() {
-  const groups = { notstarted: [], progress: [], completed: [] };
-  articles.forEach(a => { const st = articleState(a); groups[st.key].push({ a, st }); });
-  [['nsTitle', 'nsGrid', 'notstarted', 'Not Started'], ['ipTitle', 'ipGrid', 'progress', 'In Progress'], ['cpTitle', 'cpGrid', 'completed', 'Completed']].forEach(([t, g, k, name]) => {
-    const list = groups[k];
-    $(t).innerHTML = ''; $(t).appendChild(document.createTextNode(name)); if (list.length) $(t).appendChild(el('span', null, '（' + list.length + '）'));
-    const grid = $(g); grid.innerHTML = '';
-    if (!list.length) { grid.appendChild(el('div', 'empty-hint', '—')); return; }
-    list.forEach(({ a, st }) => {
+  const root = $('homeBlocks'); root.innerHTML = '';
+  const ST = { notstarted: 'Not Started', progress: 'In Progress', completed: 'Completed' };
+  const byLevel = {};
+  articles.forEach(a => { const st = articleState(a), lv = a.level || 'other'; (byLevel[lv] = byLevel[lv] || []).push({ a, st }); });
+  const levels = [...LEVEL_ORDER.filter(l => byLevel[l]), ...Object.keys(byLevel).filter(l => !LEVEL_ORDER.includes(l))];
+  levels.forEach(lv => {
+    const SORT = { notstarted: 0, progress: 1, completed: 2 };
+    const items = byLevel[lv].sort((x, y) => SORT[x.st.key] - SORT[y.st.key]), key = 'lv:' + lv;
+    const sec = el('div', 'home-section'), head = el('button', 'area-title area-toggle'), grid = el('div', 'card-grid');
+    head.type = 'button';
+    const chev = el('span', 'area-chev', '▾');
+    head.appendChild(chev); head.appendChild(document.createTextNode(lv.charAt(0).toUpperCase() + lv.slice(1))); head.appendChild(el('span', null, '（' + items.length + '）'));
+    const apply = () => { const c = !!collapsed[key]; grid.hidden = c; head.setAttribute('aria-expanded', String(!c)); chev.textContent = c ? '▸' : '▾'; };
+    head.onclick = () => { if (collapsed[key]) delete collapsed[key]; else collapsed[key] = true; lsSet(STORE.collapsed, collapsed); apply(); };
+    apply();
+    items.forEach(({ a, st }) => {
       const card = el('button', 'article-card'); card.dataset.id = a.id;
       const main = el('div', 'ac-main');
       main.appendChild(el('div', 'ac-title', a.title));
-      main.appendChild(el('div', 'ac-meta', a.sections.length + ' 段 · ' + a.questions.length + ' 題'));
+      const meta = el('div', 'ac-meta', a.sections.length + ' 段 · ' + a.questions.length + ' 題');
+      main.appendChild(meta);
       card.appendChild(main);
-      if (k !== 'notstarted') {
+      const status = el('div', 'ac-status');
+      status.appendChild(el('span', 'st-pill st-' + st.key, ST[st.key]));
+      if (st.key !== 'notstarted') {
         const [rt, rc] = readingLine(st), [lt, lc] = listeningLine(st);
-        const status = el('div', 'ac-status');
         status.appendChild(el('div', 'ac-line ' + rc, rt)); status.appendChild(el('div', 'ac-line ' + lc, lt));
-        card.appendChild(status);
       }
+      card.appendChild(status);
       card.onclick = () => openMenu(a.id);
       grid.appendChild(card);
     });
+    sec.appendChild(head); sec.appendChild(grid); root.appendChild(sec);
   });
 }
 
