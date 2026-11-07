@@ -241,14 +241,6 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
       <div class="mode-options" id="modeOptions"></div>
       <div class="mode-desc" id="modeDesc"></div>
     </div>
-    <div class="opt-group">
-      <div class="opt-label">語言</div>
-      <div class="chip-row" id="langOptions"></div>
-    </div>
-    <div class="opt-group">
-      <div class="opt-label">來源</div>
-      <div class="chip-row" id="sourceOptions"></div>
-    </div>
     <div class="opt-group" id="schoolGroup">
       <div class="opt-label">學校（不選＝不限）</div>
       <div class="chip-row" id="schoolOptions"></div>
@@ -258,8 +250,20 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
       <div class="chip-row" id="yearOptions"></div>
     </div>
     <div class="opt-group">
+      <div class="opt-label">來源</div>
+      <div class="chip-row" id="sourceOptions"></div>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">語言</div>
+      <div class="chip-row" id="langOptions"></div>
+    </div>
+    <div class="opt-group">
       <div class="opt-label">標籤（不選＝不限）</div>
       <div class="chip-row" id="tagOptions"></div>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">錯誤率範圍（只從練習過的題目抽）</div>
+      <div class="chip-row" id="rateOptions"></div>
     </div>
     <div class="opt-group" id="countGroup">
       <div class="opt-label">題數</div>
@@ -617,7 +621,7 @@ const questions = [
   { id: "T2-2", subject: "生物", unit: 1, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "細胞外間質（Extracellular Matrix）的組成蛋白中，不包含下列何者？", answer: "肌動蛋白（actin）", options: ["膠原蛋白（collagen）", "肌動蛋白（actin）", "基膜黏連蛋白（laminin）", "彈力蛋白（elastin）", "纖維醣蛋白（fibronectin）"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T2-3", subject: "生物", unit: 1, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "真核細胞有絲分裂時，紡錘體（mitotic spindle）主要是由下列何者所形成？", answer: "微管（microtubule）", options: ["微管（microtubule）", "中間絲（intermediate filament）", "微絲（microfilament）", "中心體（centrosome）"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T2-4", subject: "生物", unit: 1, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "細胞自噬作用（autophagy）的異常會導致某些神經退化性疾病；自噬作用會先利用細胞內自噬體（autophagosome）包覆老化胞器，再藉由與下列何種胞器結合，始將老化胞器分解成基礎的有機分子，供細胞重新利用？", answer: "lysosome", options: ["peroxisome", "mitochondria", "lysosome", "endoplasmic reticulum"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
-  { id: "T2-5", subject: "生物", unit: 1, source: "exam", school: "", year: null, language: "en", type: 3, group: "", question: "The fact that the outer membrane of the nuclear envelope has bound ribosomes allows one to most reliably conclude that", answer: "at least some of the proteins that function in the nuclear envelope are made by the ribosomes on the nuclear envelope.", options: ["the nuclear envelope is physically continuous with the endoplasmic reticulum.", "the nuclear envelope is not part of the endomembrane system.", "at least some of the proteins that function in the nuclear envelope are made by the ribosomes on the nuclear envelope.", "nuclear pore complexes contain proteins.", "small vesicles from the Golgi fuse with the nuclear envelope."], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
+  { id: "T2-5", subject: "生物", unit: 1, source: "exam", school: "", year: null, language: "en", type: 3, group: "", question: "The fact that the outer membrane of the nuclear envelope has bound ribosomes allows one to most reliably conclude that", answer: "the nuclear envelope is physically continuous with the endoplasmic reticulum.", options: ["the nuclear envelope is physically continuous with the endoplasmic reticulum.", "the nuclear envelope is not part of the endomembrane system.", "at least some of the proteins that function in the nuclear envelope are made by the ribosomes on the nuclear envelope.", "nuclear pore complexes contain proteins.", "small vesicles from the Golgi fuse with the nuclear envelope."], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T2-6", subject: "生物", unit: 1, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "2016年諾貝爾生理醫學獎得主大隅良典（Yoshinori Ohsumi）發現細胞自噬（autophagy）機制，細胞可以經由下列何者將老化或受損的胞器、錯誤折疊的蛋白及其他巨分子複合體降解並且再利用？", answer: "溶酶體（lysosome）", options: ["溶酶體（lysosome）", "胞內體（endosome）", "微粒體（microsome）", "過氧化小體（peroxisome）"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T2-7", subject: "生物", unit: 1, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "在動物或植物細胞內可見許多膜狀區隔（如：粒線體及細胞核），這些區隔具有哪些特色？", answer: "有利於各種不同代謝反應的進行", options: ["所有細胞包括細菌及真菌都是常見的構造", "便於細胞分裂時將細胞內成份平均分配到兩個細胞中", "可作為支撐細胞的骨架", "便於儲存生化代謝物", "有利於各種不同代謝反應的進行"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T2-8", subject: "生物", unit: 1, source: "exam", school: "", year: null, language: "en", type: 3, group: "", question: "Which structure is NOT part of the endomembrane system?", answer: "chloroplast", options: ["nuclear envelope", "chloroplast", "Golgi apparatus", "plasma membrane", "ER"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
@@ -4730,7 +4734,7 @@ function goHome() { renderHome(); show('pageHome'); }
    科目頁面
    ============================================================ */
 let currentSubject = null;
-const sel = { units: new Set(), mode: 'random', lang: 'all', source: 'all', tags: new Set(), schools: new Set(), years: new Set(), manual: new Set() };
+const sel = { units: new Set(), mode: 'random', lang: 'all', source: 'all', rate: 'all', tags: new Set(), schools: new Set(), years: new Set(), manual: new Set() };
 const openAreas = new Set();
 let manualShown = 50;
 
@@ -4740,7 +4744,7 @@ function openSubject(name) {
   if (currentSubject !== name) {
     currentSubject = name;
     sel.units = new Set(); sel.tags = new Set(); sel.schools = new Set(); sel.years = new Set(); sel.manual = new Set(); openAreas.clear();
-    sel.mode = 'random'; sel.lang = 'all'; sel.source = 'all';
+    sel.mode = 'random'; sel.lang = 'all'; sel.source = 'all'; sel.rate = 'all';
   }
   document.getElementById('subjectTitle').textContent = name;
   const all = subjQs();
@@ -4817,6 +4821,7 @@ function renderOptionsRows() {
     `<label class="chip"><input type="radio" name="${name}" value="${v}" ${cur === v ? 'checked' : ''}>${t}</label>`).join('');
   document.getElementById('langOptions').innerHTML = radioRow('lang', [['all', '全部'], ['zh', '中文'], ['en', '英文']], sel.lang);
   document.getElementById('sourceOptions').innerHTML = radioRow('source', [['all', '全部'], ['exam', '考古題'], ['note', '筆記']], sel.source);
+  document.getElementById('rateOptions').innerHTML = radioRow('rate', [['all', '全部'], ['0-0', '0%'], ['0-20', '1–20%'], ['20-40', '21–40%'], ['40-60', '41–60%'], ['60-80', '61–80%'], ['80-100', '81–100%']], sel.rate || 'all');
   renderSchoolYearOptions();
   renderTagOptions();
 }
@@ -4853,6 +4858,7 @@ function basePool() {
     (!sel.tags.size || tagsOf(q.id).some(t => sel.tags.has(t))) &&
     (!sel.schools.size || sel.schools.has(q.school)) &&
     (!sel.years.size || sel.years.has(q.year)) &&
+    rateMatch(q.id, sel.rate) &&
     !q.needImage && !st(q.id).skip);
 }
 function modePool(mode, base) {
@@ -4912,6 +4918,7 @@ document.addEventListener('change', e => {
     renderUnits(); updateSubject();
   } else if (t.name === 'drawMode') { sel.mode = t.value; manualShown = 50; updateSubject(); }
   else if (t.name === 'lang') { sel.lang = t.value; updateSubject(); }
+  else if (t.name === 'rate') { sel.rate = t.value; updateSubject(); }
   else if (t.name === 'source') { sel.source = t.value; updateSubject(); }
   else if (t.dataset.schoolFilter !== undefined) { t.checked ? sel.schools.add(t.dataset.schoolFilter) : sel.schools.delete(t.dataset.schoolFilter); updateSubject(); }
   else if (t.dataset.yearFilter !== undefined) { const y = Number(t.dataset.yearFilter); t.checked ? sel.years.add(y) : sel.years.delete(y); updateSubject(); }
@@ -5259,6 +5266,14 @@ document.addEventListener('keydown', e => {
 });
 
 /* 題目卡（結果、總覽、紀錄共用） */
+/* 錯誤率範圍判斷：'all' 不限；其他只算練習過的題目 */
+function rateMatch(id, range) {
+  if (!range || range === 'all') return true;
+  const r = wrongRate(id);
+  if (r === null) return false;
+  const [lo, hi] = range.split('-').map(Number);
+  return hi === 0 ? r === 0 : r > lo && r <= hi;
+}
 /* 錯誤率（%），沒練習過回傳 null */
 function wrongRate(id) {
   const s = st(id), p = Number(s.practice || 0);
@@ -5277,9 +5292,9 @@ function qCardHtml(q, opt = {}) {
       const right = isRightOption(q, o);
       const wrongPick = inQuiz && opt.picked && opt.picked.has(i) && !right;
       const mk = inQuiz ? `<span class="mk" aria-label="${opt.marks.has(i) ? '有記號' : '沒記號'}">${opt.marks.has(i) ? '☑' : '☐'}</span>` : '';
-      return `<li class="${right ? 'right' : ''}${wrongPick ? ' wrongpick' : ''}">${mk}${LETTERS[i]}. ${esc(o)}${img}</li>`;
+      return `<li class="${right && inQuiz ? 'right' : ''}${wrongPick ? ' wrongpick' : ''}">${mk}${LETTERS[i]}. ${esc(o)}${img}</li>`;
     }).join('') + '</ol>';
-    if (q.type === 2 || inQuiz) body += `<div class="answer-line">正確答案：<b>${esc(answerText(q))}</b></div>`;
+    body += `<div class="answer-line">正確答案：<b>${esc(answerText(q))}</b></div>`;
   } else {
     body = `<div class="answer-line">正確答案：<b>${esc(answerText(q))}</b></div>`;
   }
