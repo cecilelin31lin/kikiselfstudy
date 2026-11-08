@@ -424,13 +424,13 @@ h1::after{
 #s7options .option-btn{font-family:Georgia,'Times New Roman',serif}
 /* 戳泡泡 */
 .balloon-area{display:flex;flex-wrap:wrap;gap:14px 18px;justify-content:center;align-items:flex-start;min-height:96px;padding:12px 8px 18px;margin-bottom:10px;border-radius:14px;background:rgba(var(--theme-rgb),.10)}
-.balloon-pair{display:flex;gap:6px;align-items:flex-start;position:relative;padding:4px 6px 2px;border-radius:12px;transition:background .2s}
+.balloon-pair{display:flex;flex-wrap:wrap;justify-content:center;max-width:100%;gap:6px;align-items:flex-start;position:relative;padding:4px 6px 2px;border-radius:12px;transition:background .2s}
 .balloon-pair.pending .balloon{animation:balloonPulse 1s ease-in-out infinite}
 .balloon-pair.correct{background:rgba(70,129,137,.12)}
 .balloon-pair.wrong{background:rgba(232,130,140,.18)}
 .pair-mark{position:absolute;top:-10px;right:-8px;font-size:13px;font-weight:700;border-radius:999px;padding:1px 7px;color:#fff}
 .balloon-pair.correct .pair-mark{background:#468189}.balloon-pair.wrong .pair-mark{background:#E8828C}
-.balloon{position:relative;min-width:64px;max-width:150px;padding:12px 12px 14px;border-radius:50% 50% 46% 46%/55% 55% 45% 45%;color:#2B3A55;font-size:14px;line-height:1.35;text-align:center;cursor:pointer;box-shadow:inset -6px -8px 0 rgba(0,0,0,.06),0 4px 10px rgba(43,58,85,.12);animation:balloonUp .6s ease-out;margin-bottom:22px;word-break:break-word}
+.balloon{position:relative;display:flex;align-items:center;justify-content:center;padding:0 20px;white-space:nowrap;border-radius:50% 50% 47% 47%/56% 56% 44% 44%;color:#2B3A55;font-size:14px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,.55);box-shadow:inset -5px -7px 12px rgba(43,58,85,.06),0 4px 10px rgba(43,58,85,.08);animation:balloonUp .6s ease-out;margin-bottom:22px}
 .balloon::after{content:'';position:absolute;left:50%;bottom:-20px;width:1px;height:18px;background:rgba(43,58,85,.35)}
 .balloon::before{content:'';position:absolute;left:calc(50% - 4px);bottom:-5px;border:4px solid transparent;border-top-color:inherit}
 .balloon.en{font-family:Georgia,'Times New Roman',serif;font-size:15px}
@@ -439,7 +439,7 @@ h1::after{
 @keyframes balloonPulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 .s8-msg{display:none;padding:10px;border-radius:11px;margin:0 0 12px;text-align:center;font-size:13px;font-weight:600}.s8-msg.show{display:block}.s8-msg.success{background:rgba(70,129,137,.14);border:.5px solid #468189;color:#468189}.s8-msg.error{background:rgba(232,130,140,.16);border:.5px solid #E8828C;color:#E8828C}
 .bubble-area{position:relative;overflow:hidden;border-radius:16px;background:linear-gradient(180deg,rgba(var(--theme-rgb),.06),rgba(var(--theme-rgb),.20));border:1px solid rgba(var(--theme-rgb),.35);margin-bottom:12px;touch-action:manipulation}
-.bubble{position:absolute;left:0;top:0;max-width:150px;padding:12px 14px;border-radius:999px;background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.95) 0 10%,rgba(255,255,255,.55) 32%,rgba(var(--theme-rgb),.28) 100%);border:1.5px solid rgba(var(--theme-rgb),.65);box-shadow:inset 0 0 12px rgba(255,255,255,.7),0 3px 8px rgba(43,58,85,.08);color:#2B3A55;font-size:14px;line-height:1.35;text-align:center;cursor:pointer;user-select:none;will-change:transform;word-break:break-word}
+.bubble{position:absolute;left:0;top:0;display:flex;align-items:center;justify-content:center;padding:0 20px;white-space:nowrap;border-radius:50%;background:radial-gradient(circle at 30% 28%,rgba(255,255,255,.95) 0 10%,rgba(255,255,255,.55) 32%,rgba(var(--theme-rgb),.28) 100%);border:1.5px solid rgba(var(--theme-rgb),.65);box-shadow:inset 0 0 12px rgba(255,255,255,.7),0 3px 8px rgba(43,58,85,.08);color:#2B3A55;font-size:14px;text-align:center;cursor:pointer;user-select:none;will-change:transform}
 .bubble.en{font-family:Georgia,'Times New Roman',serif;font-size:15px}
 .bubble.popping{animation:bubblePop .25s ease-out forwards;pointer-events:none}
 .bubble.shake{animation:bubbleShake .35s}
@@ -2119,28 +2119,44 @@ function initS8(){
   picked.forEach((x,i)=>s8items.push(i<2?{word:x.word,lang:'en',text:x.word,real:false}:{word:x.word,lang:'zh',text:x.meaning,real:false}));
   s8items.forEach((it,i)=>it.id=i);
   const area=document.getElementById('s8bubbles');area.innerHTML='';
-  area.style.height=Math.max(300,Math.min(560,s8items.length*26))+'px';
+  area.style.height='300px';
   document.getElementById('s8balloons').innerHTML='';
   document.getElementById('s8feedback').className='s8-msg';
   shuffle(s8items).forEach(it=>s8makeBubble(it,false));
+  // 依泡泡總面積決定泡泡區高度（手機比較窄就會比較高），再重新排一次位置
+  const W=area.clientWidth||600,total=s8items.reduce((n,it)=>n+it.w*it.h,0);
+  area.style.height=Math.max(300,Math.min(1100,Math.ceil(total*2.6/W)))+'px';
+  const placed=[];s8items.forEach(it=>{const H=area.clientHeight;let best=null;for(let t=0;t<60;t++){const x=Math.random()*Math.max(1,W-it.w),y=Math.random()*Math.max(1,H-it.h);if(!placed.some(o=>x<o.x+o.w+6&&o.x<x+it.w+6&&y<o.y+o.h+6&&o.y<y+it.h+6)){best={x,y};break}best=best||{x,y}}it.x=best.x;it.y=best.y;placed.push(it);it.el.style.transform=`translate(${it.x}px,${it.y}px)`});
   s8update();startTimer('s8timer');s8last=performance.now();s8anim=requestAnimationFrame(s8tick);
 }
 function s8makeBubble(it,drop){
   const area=document.getElementById('s8bubbles'),el=document.createElement('div');
   el.className='bubble '+it.lang;el.textContent=it.text;el.onclick=()=>s8pop(it);area.appendChild(el);it.el=el;it.state='bubble';
+  s8fitShape(el,.42,46,96);
   const W=area.clientWidth||600,H=area.clientHeight||300,w=el.offsetWidth,h=el.offsetHeight;
-  it.w=w;it.h=h;it.x=Math.random()*Math.max(1,W-w);it.y=drop?-h:Math.random()*Math.max(1,H-h);
-  const sp=18+Math.random()*16,ang=Math.random()*Math.PI*2;it.vx=Math.cos(ang)*sp;it.vy=Math.sin(ang)*sp+(drop?40:0);
+  it.w=w;it.h=h;
+  // 初始位置盡量不跟其他泡泡重疊
+  let best=null;for(let t=0;t<40;t++){const x=Math.random()*Math.max(1,W-w),y=drop?-h:Math.random()*Math.max(1,H-h);const hit=s8items.some(o=>o!==it&&o.state==='bubble'&&o.el&&o.x!==undefined&&x<o.x+o.w&&o.x<x+w&&y<o.y+o.h&&o.y<y+h);best={x,y};if(!hit)break}
+  it.x=best.x;it.y=best.y;
+  const sp=7+Math.random()*7,ang=Math.random()*Math.PI*2;it.vx=Math.cos(ang)*sp;it.vy=Math.sin(ang)*sp+(drop?25:0);
   el.style.transform=`translate(${it.x}px,${it.y}px)`;
 }
 function s8tick(now){
   const stage=document.getElementById('stage8');if(stage.classList.contains('hidden')||currentStage!==8)return;
   const dt=Math.min(.05,(now-s8last)/1000);s8last=now;const area=document.getElementById('s8bubbles'),W=area.clientWidth,H=area.clientHeight;
   s8items.forEach(it=>{if(it.state!=='bubble')return;it.x+=it.vx*dt;it.y+=it.vy*dt;
-    if(it.vy>34)it.vy-=60*dt;
+    if(it.vy>16)it.vy-=40*dt;
     if(it.x<0){it.x=0;it.vx=Math.abs(it.vx)}if(it.x>W-it.w){it.x=Math.max(0,W-it.w);it.vx=-Math.abs(it.vx)}
     if(it.y<0&&it.vy<0){it.y=0;it.vy=Math.abs(it.vy)}if(it.y>H-it.h){it.y=Math.max(0,H-it.h);it.vy=-Math.abs(it.vy)}
-    it.el.style.transform=`translate(${it.x}px,${it.y}px)`});
+  });
+  // 泡泡碰到彼此就輕輕彈開，避免字疊在一起
+  const live=s8items.filter(it=>it.state==='bubble'&&it.y>=0);
+  for(let i=0;i<live.length;i++)for(let j=i+1;j<live.length;j++){const a=live[i],b=live[j];
+    const ox=Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x),oy=Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y);
+    if(ox<=0||oy<=0)continue;
+    if(ox<oy){const d=ox/2*(a.x<b.x?-1:1);a.x+=d;b.x-=d;if((a.x<b.x&&a.vx>b.vx)||(a.x>b.x&&a.vx<b.vx)){const t=a.vx;a.vx=b.vx;b.vx=t}}
+    else{const d=oy/2*(a.y<b.y?-1:1);a.y+=d;b.y-=d;if((a.y<b.y&&a.vy>b.vy)||(a.y>b.y&&a.vy<b.vy)){const t=a.vy;a.vy=b.vy;b.vy=t}}}
+  s8items.forEach(it=>{if(it.state!=='bubble')return;it.x=Math.max(0,Math.min(it.x,W-it.w));if(it.y>=0)it.y=Math.min(it.y,H-it.h);it.el.style.transform=`translate(${it.x}px,${it.y}px)`});
   s8anim=requestAnimationFrame(s8tick);
 }
 function s8pop(it){
@@ -2151,7 +2167,10 @@ function s8pop(it){
   else{const p={id:++s8seq,color:s8color(),a:it,b:null,status:'open'};it.pair=p;s8pairs.push(p);s8pending=p;const g=document.createElement('div');g.className='balloon-pair pending';p.el=g;document.getElementById('s8balloons').appendChild(g);s8addBalloon(p,it)}
   s8msg('','');s8update();
 }
-function s8addBalloon(p,it){const b=document.createElement('div');b.className='balloon '+it.lang;b.style.background=p.color;b.style.borderTopColor=p.color;b.textContent=it.text;b.onclick=()=>s8split(p);p.el.appendChild(b)}
+// 泡泡、氣球都是單行：依文字寬度算出高度，維持同樣比例的橢圓，字多的就整顆等比例放大
+function s8fitShape(el,ratio,minH,maxH){el.style.height='';const w=el.offsetWidth;el.style.height=Math.round(Math.min(maxH,Math.max(minH,w*ratio)))+'px'}
+function s8alpha(c,a){if(c.startsWith('#')){const n=parseInt(c.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`}return c.replace('hsl(','hsla(').replace(')',`,${a})`)}
+function s8addBalloon(p,it){const b=document.createElement('div');b.className='balloon '+it.lang;const c=s8alpha(p.color,.55);b.style.background=`radial-gradient(circle at 30% 26%,rgba(255,255,255,.7) 0 7%,rgba(255,255,255,0) 24%),${c}`;b.style.borderTopColor=c;b.textContent=it.text;b.onclick=()=>s8split(p);p.el.appendChild(b);s8fitShape(b,.5,52,100)}
 function s8split(p){
   if(p.status==='correct')return;
   [p.a,p.b].forEach(it=>{if(it){it.pair=null;s8makeBubble(it,true)}});
@@ -2273,7 +2292,7 @@ function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el
 showRandomQuote();
 
 const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.2}},
+  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1}},
   {id:'YSH',name:'楊',icon:'🐱',password:'',active:1,defaults:{stages:[1,3,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'CTY',name:'張',icon:'🐶',password:'1234',active:0,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}}
