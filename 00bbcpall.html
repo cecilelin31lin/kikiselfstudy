@@ -148,6 +148,12 @@ a.secondary{text-decoration:none;display:inline-block}
 .flag-btn{background:#fff;border:1px solid #ddd;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--ink)}
 .flag-btn.on{background:var(--theme-selected);border-color:var(--theme-main);font-weight:600}
 .flag-btn[data-flag="skip"].on{background:var(--bad-soft);border-color:var(--bad)}
+.link-box{margin-top:8px}
+.link-row{display:flex;align-items:center;gap:6px;font-size:14px;margin:4px 0}
+.link-row a{color:var(--ink);word-break:break-all}
+.link-row button{border:none;background:none;color:#999;cursor:pointer;font-size:14px}
+.link-add{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.link-add input{flex:1;min-width:120px;padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit}
 .note-box{width:100%;min-height:64px;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;resize:vertical}
 .note-saved{font-size:12px;color:var(--ok);height:16px}
 .tag-editor{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
@@ -5486,7 +5492,17 @@ document.addEventListener('click', e => {
   if (td) { removeTag(td.dataset.tagId, td.dataset.tagDel); return; }
   const ta = e.target.closest('[data-tag-add]');
   if (ta) { const inp = ta.parentElement.querySelector('.tag-input'); addTag(ta.dataset.tagAdd, inp.value); return; }
+  const la = e.target.closest('[data-link-add]');
+  if (la) { addLink(la.dataset.linkAdd, la.parentElement); return; }
+  const ld = e.target.closest('[data-link-del]');
+  if (ld) { const id = ld.dataset.linkId, l = linksOf(id).slice(); l.splice(Number(ld.dataset.linkDel), 1); saveLinks(id, l); return; }
 });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList && (e.target.classList.contains('link-url') || e.target.classList.contains('link-name'))) {
+    e.preventDefault(); e.stopPropagation();
+    const b = e.target.parentElement.querySelector('[data-link-add]'); if (b) addLink(b.dataset.linkAdd, e.target.parentElement);
+  }
+}, true);
 document.getElementById('manualSearch').addEventListener('input', () => { manualShown = 50; renderManualList(); });
 
 /* ============================================================
@@ -5770,7 +5786,31 @@ function flagBarHtml(q) {
   return `<div class="flag-bar">${fbtn('star', '⭐ 星號')}${fbtn('mark', '🔖 標記')}${fbtn('wrongMark', '🙀 錯題')}${fbtn('skip', '🚫 不出')}</div>
     <div class="tag-editor" data-tag-box="${id}">${tagChipsHtml(q.id)}</div>
     <textarea class="note-box" data-note-id="${id}" placeholder="注記：為什麼錯、要注意什麼">${esc(s.note || '')}</textarea>
-    <div class="note-saved" data-note-saved="${id}"></div>`;
+    <div class="note-saved" data-note-saved="${id}"></div>
+    <div class="link-box" data-link-box="${id}">${linksHtml(q.id)}</div>`;
+}
+/* ---- 超連結（存在 Google Sheet 題目紀錄的「連結」欄）---- */
+function linksOf(id) { const l = st(id).links; return Array.isArray(l) ? l : []; }
+function linksHtml(id) {
+  const e = esc(id);
+  return linksOf(id).map((l, i) => `<div class="link-row"><a href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.text || l.url)}</a><button data-link-del="${i}" data-link-id="${e}" aria-label="刪除連結">×</button></div>`).join('')
+    + `<div class="link-add"><input class="link-name" placeholder="連結名稱"><input class="link-url" placeholder="網址 https://..."><button class="secondary small" data-link-add="${e}">加入連結</button></div>
+    <div class="note-saved" data-link-saved="${e}"></div>`;
+}
+function saveLinks(id, list) {
+  const q = QMAP[id], cur = data.stats[id] || {};
+  data.stats[id] = Object.assign({}, cur, { links: list });
+  document.querySelectorAll('[data-link-box]').forEach(b => { if (b.dataset.linkBox === id) b.innerHTML = linksHtml(id); });
+  cloudPost({ action: 'setFlag', player: currentPlayer, id, subject: q.subject, field: 'links', value: JSON.stringify(list) }).then(ok => {
+    document.querySelectorAll('[data-link-saved]').forEach(s => { if (s.dataset.linkSaved === id) s.textContent = ok ? '✓ 連結已儲存' : '⚠️ 連結沒有存到雲端'; });
+  });
+}
+function addLink(id, box) {
+  const name = box.querySelector('.link-name').value.trim();
+  let url = box.querySelector('.link-url').value.trim();
+  if (!url) { alert('請輸入網址'); return; }
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  saveLinks(id, linksOf(id).concat([{ text: name || url, url }]));
 }
 function tagChipsHtml(id) {
   const e = esc(id);
