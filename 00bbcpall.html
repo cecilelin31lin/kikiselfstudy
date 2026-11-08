@@ -564,6 +564,16 @@ const blueThemes=[
 {main:'#AFC8E8',hover:'#91B1D9',rgb:'175,200,232'},
 {main:'#BDBCE8',hover:'#A3A1D9',rgb:'189,188,232'},
 {main:'#D1B9E6',hover:'#BE9ED8',rgb:'209,185,230'},
+{main:'#C68B59', hover:'#B57A48', rgb:'198,139,89'},  // 焦糖棕
+{main:'#C96F4A', hover:'#B35D3A', rgb:'201,111,74'},  // 赤陶
+{main:'#D98A3D', hover:'#C4762B', rgb:'217,138,61'},  // 南瓜橙
+{main:'#D6A84B', hover:'#C29236', rgb:'214,168,75'},  // 芥末黃
+{main:'#8F9A5B', hover:'#788344', rgb:'143,154,91'},  // 橄欖綠
+{main:'#7E8F6A', hover:'#687A55', rgb:'126,143,106'}, // 苔蘚綠
+{main:'#B85C4A', hover:'#A04837', rgb:'184,92,74'},   // 磚紅
+{main:'#A97142', hover:'#915B30', rgb:'169,113,66'},  // 深赭石
+{main:'#C98B7A', hover:'#B37463', rgb:'201,139,122'}, // 陶土粉
+{main:'#9C6B4E', hover:'#83563C', rgb:'156,107,78'},   // 秋葉褐
 {main:'#E7B9CF',hover:'#D79DBA',rgb:'231,185,207'}
 ];
 let lastTheme = -1;
@@ -2555,7 +2565,7 @@ const questions = [
   { id: "T30-26", subject: "生物", unit: 17, source: "exam", school: "", year: null, language: "en", type: 3, group: "", question: "Place the following events of mitosis in the correct order.\nI. Sister chromatids align on the metaphase plate.\nII. The cleavage furrow forms.\nIII. The nuclear membrane breaks up.\nIV. Sister chromatids condense.\nV. Sister chromatids separate.", answer: "IV, III, I, V, II", options: ["I, II, III, IV, V", "III, IV, I, V, II", "IV, III, I, V, II", "III, II, I, IV, V", "IV, I, III, V, II"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T30-27", subject: "生物", unit: 17, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "生物學家在觀察細胞有絲分裂（mitosis）時發現姊妹染色分體（sister chromatids）分離且開始向細胞兩極移動。請問此時是有絲分裂的那個時期？", answer: "後期（anaphase）", options: ["前期（prophase）", "中期（metaphase）", "後期（anaphase）", "末期（telophase）"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T30-28", subject: "生物", unit: 17, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "在細胞分裂過程中，下列何者為染色體移動的機制？", answer: "微管（microtubule）的組裝", options: ["微管（microtubule）的組裝", "微絲（microfilament）的組裝", "動力蛋白（dynein）的組裝", "微絲與動力蛋白二者的組裝"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
-  { id: "T30-29", subject: "生物", unit: 17, source: "exam", KMU: "", year: 97, language: "en", type: 3, group: "", question: "MPF is a cyclin-Cdk complex that was discovered first in Xenopus egg. Its activity fluctuates during cell cycle. Which of the following is NOT its characteristic?", answer: "The peak of the MPF activity is G2 phase.", options: ["Fluctuation of the cyclin concentration is the same as MPF activity.", "The peak of the MPF activity is G2 phase.", "The peak of the MPF activity is M phase.", "The breakdown of the MPF occurs abruptly during M phase.", "The activity of the MPF promotes mitosis by phosphorylating various proteins."], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
+  { id: "T30-29", subject: "生物", unit: 17, source: "exam", school: "KMU", year: 97, number: 31, language: "en", type: 3, group: "", question: "MPF is a cyclin-Cdk complex that was discovered first in Xenopus egg. Its activity fluctuates during cell cycle. Which of the following is NOT its characteristic?", answer: "The peak of the MPF activity is G2 phase.", options: ["Fluctuation of the cyclin concentration is the same as MPF activity.", "The peak of the MPF activity is G2 phase.", "The peak of the MPF activity is M phase.", "The breakdown of the MPF occurs abruptly during M phase.", "The activity of the MPF promotes mitosis by phosphorylating various proteins."], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T30-30", subject: "生物", unit: 17, source: "exam", school: "", year: null, language: "en", type: 3, group: "", question: "Which statement regarding the function of mitosis is false?", answer: "Mitosis promotes genetic diversity.", options: ["Mitosis allows organisms to grow.", "Mitosis promotes genetic diversity.", "Mitosis is necessary for asexual reproduction in eukaryotes.", "Mitosis promotes repair tissues.", "All are incorrect."], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T30-31", subject: "生物", unit: 17, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "細胞生長和分裂有一定的週期，週期中有關卡（checkpoints）來控制週期的終止和前進，下列何段時期不具有關卡？", answer: "S期", options: ["M期", "G1期", "S期", "G2期", "M和G1期"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   { id: "T30-32", subject: "生物", unit: 17, source: "exam", school: "", year: null, language: "zh", type: 3, group: "", question: "關於希拉細胞（HeLa cells）的描述，下列何者錯誤？", answer: "此細胞最多只能分裂20－50次", options: ["其細胞株（cell line）首度在1951年被分離出來", "此細胞來自一名得子宮頸癌的病人", "此細胞已經過轉型作用（transformation）", "其名稱來自一名叫Henrietta Lacks的美國婦女", "此細胞最多只能分裂20－50次"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
@@ -5235,6 +5245,7 @@ const QUOTES = [
   '把不會的留下來練，就是在縮小弱點。',
   '錯過的題目再做一次，就不是白錯。',
   '讀一點也算讀，記一個也算進步。',
+  'Every time I choose to study, I am investing in my future self.',
   '現在覺得難的字，以後會變成一眼就認得。',
   '每一個深夜的苦讀，都是為了迎接黎明的曙光。',
   '考試不是人生的全部，但它絕對是你現在能掌握的最大機會。',
@@ -5244,6 +5255,16 @@ const QUOTES = [
   '爬山的過程很累，但山頂的風景值得你流下的每一滴汗。',
   'Progress, not perfection.',
   'Small steps every day add up to big results.',
+  '考場上的從容，來自平時一次次的準備。',
+  '你現在讀過的每個細節，都可能成為考場上的關鍵。',
+  '準備得越充分，面對未知就越有勇氣。',
+  '不要等到有信心才努力，努力會慢慢帶來信心。',
+  '把今天能做的做好，剩下的交給時間。',
+  '考試當天的實力，來自考試前的每一天。',
+  '你無法控制考題，但可以控制自己的準備。',
+  '撐過現在的困難，未來才有更多選擇。',
+  'Success is the sum of small efforts, repeated day in and day out.',
+  'The secret of getting ahead is getting started.',
   'The expert in anything was once a beginner.',
   'Mistakes are proof that you are trying.',
   '每一次答錯，都是在幫考試那天的自己除錯。',
