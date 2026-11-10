@@ -507,7 +507,7 @@ h1::after{
     <div id="stage5" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="s5progress"></div></div><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s5timer">0:00</div></div></div><div class="instruction">第三關｜挑句子：上方會給一個單字，請從三個挖空例句中選出它真正適合的位置。兩個干擾例句會從完整 data 抽取。</div><div class="question-container"><div class="question-text" id="s5word"></div><div id="s5options"></div><div class="feedback" id="s5feedback"></div></div><div class="btn-row center-row"><button class="primary" id="s5submitBtn" onclick="s5submit()">確認答案</button></div></div>
     <div id="stage6" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s6timer">0:00</div></div><div class="stat-card"><div class="stat-label">✓ 配對</div><div class="stat-value" id="s6matched">0/0</div></div></div><div class="instruction">第五關｜字句配：選擇一個單字，再點擊句子中的空白填入。</div><div class="word-buttons" id="s6wordButtons"></div><div class="sentences" id="s6sentences"></div></div>
     <div id="stage7" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="s7progress"></div></div><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s7timer">0:00</div></div></div><div class="instruction">第四關｜挑單字：看挖空的例句，選出正確的單字。</div><div class="question-container"><div class="question-text" id="s7question"></div><div id="s7options"></div><div class="feedback" id="s7feedback"></div></div><div class="btn-row center-row"><button class="primary" id="s7submitBtn" onclick="s7submit()">確認答案</button></div></div>
-    <div id="stage8" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s8timer">0:00</div></div><div class="stat-card"><div class="stat-label">🎈 配對</div><div class="stat-value" id="s8count">0/0</div></div></div><div class="instruction">第八關｜戳泡泡：點泡泡戳破它，會變成氣球飄到上方；接著戳的那一顆會變成同色氣球，兩顆配成一對（一個英文、一個中文）。點上方的氣球可以拆開重配。有些泡泡找不到對應的，不用配。配好後按「確認」。</div><div class="balloon-area" id="s8balloons"></div><div class="bubble-area" id="s8bubbles"></div><div class="s8-msg" id="s8feedback"></div><div class="btn-row center-row"><button class="primary" id="s8confirmBtn" onclick="s8confirm()" disabled>確認</button></div></div>
+    <div id="stage8" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s8timer">0:00</div></div><div class="stat-card"><div class="stat-label">🎈 配對</div><div class="stat-value" id="s8count">0/0</div></div></div><div class="instruction">第八關｜戳泡泡：點泡泡戳破它，會變成氣球飄到上方；接著戳的那一顆會變成同色氣球，兩顆配成一對（一個英文、一個中文）。點上方的氣球可以拆開重配。有些泡泡找不到對應的，不用配。配好後按「交卷」；沒配完或配錯也可以交卷。</div><div class="balloon-area" id="s8balloons"></div><div class="bubble-area" id="s8bubbles"></div><div class="s8-msg" id="s8feedback"></div><div class="btn-row center-row"><button class="primary" id="s8confirmBtn" onclick="s8confirm()">交卷</button></div></div>
   </div>
 
   <div class="review-container" id="reviewContainer"><div class="review-header"><h2>📋 查看解析</h2><div class="review-actions"><button class="secondary" onclick="restartPractice(false)">回首頁</button><button class="secondary" onclick="showPersonalRecord()">個人紀錄</button><button class="secondary" id="wrongPracticeBtn" onclick="practiceWrongWords()">錯題再練習</button><button class="primary" onclick="repeatSamePractice()">再練習一次</button></div></div><div class="review-completed" id="reviewCompleted"></div><div id="reviewList"></div><div class="review-quote" id="reviewQuote"></div></div>
@@ -2124,10 +2124,10 @@ function s7submit(){if(s7answered)return;if(s7sel===null){alert('請先選答案
 
 /* 8 戳泡泡：本次單字的英文＋中文泡泡，加上 4 個找不到對應的干擾泡泡（2 個只有英文、2 個只有中文，來自學過的字） */
 const PAIR_COLORS=['#FFE135','#B0C4DE','#E8828C','#DDA0DD','#A8D5BA','#E6D89C'];
-let s8items=[],s8pairs=[],s8pending=null,s8wrong=[],s8anim=null,s8last=0,s8seq=0;
+let s8items=[],s8pairs=[],s8pending=null,s8wrong=[],s8anim=null,s8last=0,s8seq=0,s8busy=false;
 function s8color(){const used=new Set(s8pairs.map(p=>p.color));for(const c of PAIR_COLORS)if(!used.has(c))return c;for(let i=0;;i++){const c=`hsl(${Math.round((i*137.5+20)%360)},70%,78%)`;if(!used.has(c))return c}}
 function initS8(){
-  cancelAnimationFrame(s8anim);s8items=[];s8pairs=[];s8pending=null;s8wrong=[];
+  cancelAnimationFrame(s8anim);s8items=[];s8pairs=[];s8pending=null;s8wrong=[];s8busy=false;
   const meanings=new Set(gameWords.map(w=>w.meaning));
   const pool=learnedDistractorPool([]).filter(x=>!meanings.has(x.meaning));
   const picked=[];for(const x of pool){if(picked.length>=4)break;if(!picked.some(y=>conflicts(x.word,y.word)||y.meaning===x.meaning))picked.push(x)}
@@ -2196,11 +2196,14 @@ function s8split(p){
 function s8update(){
   const done=s8pairs.filter(p=>p.b).length,correct=s8pairs.filter(p=>p.status==='correct').length;
   document.getElementById('s8count').textContent=correct+'/'+gameWords.length;
-  document.getElementById('s8confirmBtn').disabled=!(done===gameWords.length&&!s8pending);
+  document.getElementById('s8confirmBtn').disabled=s8busy;
 }
 function s8msg(t,cls){const f=document.getElementById('s8feedback');f.textContent=t;f.className='s8-msg'+(t?' show '+cls:'')}
 function s8confirm(){
-  if(s8pending||s8pairs.filter(p=>p.b).length!==gameWords.length)return;
+  // 隨時可以交卷：沒配完先確認；配完後對答案，有錯可選擇交卷或繼續重配
+  if(s8busy)return;
+  const N=gameWords.length,done=s8pairs.filter(p=>p.b).length,unanswered=N-done;
+  if(unanswered>0){if(!confirm(`還有 ${unanswered} 個單字沒配對，確定要交卷嗎？`))return}
   const check=s8pairs.filter(p=>p.b&&p.status!=='correct');let wrongPairs=[];
   check.forEach(p=>{const en=p.a.lang==='en'?p.a:p.b,zh=p.a.lang==='zh'?p.a:p.b,ok=en.real&&zh.real&&en.word===zh.word;
     const mark=document.createElement('div');mark.className='pair-mark';
@@ -2208,10 +2211,23 @@ function s8confirm(){
     else{p.el.classList.add('wrong');mark.textContent='✗';wrongPairs.push(p);s8wrong.push(en.text+' ↔ '+zh.text);[en,zh].forEach(x=>{if(x.real)markStage(x.word,8,false)})}
     p.el.appendChild(mark)});
   s8update();
-  if(!wrongPairs.length&&s8pairs.filter(p=>p.status==='correct').length===gameWords.length){s8msg('全部配對正確！','success');cancelAnimationFrame(s8anim);setTimeout(()=>finishStage(8,s8wrong),700);return}
-  s8msg('有 '+wrongPairs.length+' 對配錯了，錯的氣球會變回泡泡，再試一次','error');
-  document.getElementById('s8confirmBtn').disabled=true;
-  setTimeout(()=>{wrongPairs.forEach(s8split);s8update()},1100);
+  const correctWords=new Set(s8pairs.filter(p=>p.status==='correct').map(p=>p.a.word));
+  const submit=()=>{
+    // 交卷：沒配到正確的字都記為答錯
+    gameWords.forEach(w=>{if(!correctWords.has(w.word)){const x=getSW(w.word);if(!x.stages[8]||!x.stages[8].wrong)markStage(w.word,8,false);if(!s8wrong.some(t=>t.startsWith(w.word+' ↔')||t.endsWith('↔ '+w.meaning)))s8wrong.push(w.word+'（未配對）')}});
+    s8busy=true;s8update();cancelAnimationFrame(s8anim);
+    s8msg(correctWords.size===N?'全部配對正確！':`交卷：配對正確 ${correctWords.size}/${N}`,correctWords.size===N?'success':'error');
+    setTimeout(()=>finishStage(8,s8wrong),900);
+  };
+  if(unanswered>0||correctWords.size===N){submit();return}
+  // 配完但有錯
+  s8msg('有 '+wrongPairs.length+' 對配錯了','error');
+  s8busy=true;s8update();
+  setTimeout(()=>{
+    s8busy=false;
+    if(confirm(`有 ${wrongPairs.length} 對配錯了，確定要交卷嗎？\n按「取消」可以繼續重配。`)){submit();return}
+    wrongPairs.forEach(s8split);s8msg('錯的氣球變回泡泡了，再試一次','error');s8update();
+  },400);
 }
 
 /* 2 */
