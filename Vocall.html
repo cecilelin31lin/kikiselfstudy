@@ -418,6 +418,7 @@ h1::after{
 /* 單字卡：主題色邊框、常見用法區、單字總覽字數 */
 .review-item{border-color:var(--theme-main)}
 .usage-block{border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:14px}
+.kk{margin-left:8px;font-weight:400;color:#657086;font-family:'Lucida Sans Unicode','Segoe UI','Arial Unicode MS',Arial,sans-serif;white-space:nowrap}
 .all-words-count{margin:6px 0 10px;font-size:14px;font-weight:700;color:#657086}
 /* 挑單字 */
 #s7question{font-size:18px;font-weight:500;line-height:1.7}
@@ -602,261 +603,261 @@ let lastTheme=-1;function applyRandomTheme(){let i=Math.floor(Math.random()*blue
 const words = [
   { word: 'pursue', meaning: '追求、從事', pos: 'v.', sentences: [
     {en: 'She decided to pursue a career in medicine after volunteering at the hospital.', zh: '她在醫院當志工後，決定從事醫療相關的職業。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'pɚˋsu' },
   { word: 'undocumented', meaning: '未記錄的、無正式紀錄的', pos: 'adj.', sentences: [
     {en: 'The report revealed several undocumented cases of the disease in rural areas.', zh: '這份報告揭露了農村地區數起未被記錄的疾病病例。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnˋdɑkjəmɛntɪd' },
   { word: 'meddle', meaning: '干涉、插手', pos: 'v.', sentences: [
     {en: 'He warned his brother not to meddle in his personal affairs.', zh: '他警告他的兄弟不要干涉他的私事。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋmɛdḷ' },
   { word: 'sphere', meaning: '領域、範圍', pos: 'n.', sentences: [
     {en: 'Her influence extended far beyond the political sphere.', zh: '她的影響力遠遠超出了政治領域。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'sfɪr' },
   { word: 'overrule', meaning: '否決、駁回', pos: 'v.', sentences: [
     {en: 'The judge decided to overrule the objection raised by the defense.', zh: '法官決定駁回辯方提出的異議。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏovɚˋrul' },
   { word: 'prior to', meaning: '在⋯⋯之前', pos: 'prep.', sentences: [
     {en: 'Prior to the meeting, please review the attached documents.', zh: '在會議之前，請先查閱附件文件。'},
     {en: 'All expenses must be approved prior to the trip.', zh: '所有費用在旅行前都必須獲得批准。'}
-  ], avoid: [], roots: [], usages: ['prior to + N./V-ing 在……之前'], forms: [] },
+  ], avoid: [], roots: [], usages: ['prior to + N./V-ing 在……之前'], forms: [], kk: 'ˋpraɪɚ tu' },
   { word: 'nerve-racking', meaning: '令人緊張的、傷腦筋的、極度考驗神經的', pos: 'adj.', sentences: [
     {en: 'Waiting for the exam results was a nerve-racking experience.', zh: '等待考試結果是一段令人緊張的經歷。'},
     {en: 'It was a nerve-racking drive through the heavy snow.', zh: '在大雪中開車是一趟令人神經緊繃的旅程。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'nɝv-ˋrækɪŋ' },
   { word: 'incorporate', meaning: '包含、吸收；將⋯合併、納入', pos: 'v.', sentences: [
     {en: 'The new design incorporates elements of traditional Chinese architecture.', zh: '這個新設計融入了中國傳統建築的元素。'},
     {en: 'We will incorporate your feedback into the final report.', zh: '我們會將您的回饋納入最終報告。'}
-  ], avoid: [], roots: ['corp'], usages: ['incorporate A into B 將A納入B中'], forms: [] },
+  ], avoid: [], roots: ['corp'], usages: ['incorporate A into B 將A納入B中'], forms: [], kk: 'ɪnˋkɔrpəˏret' },
   { word: 'extract', meaning: '提取、擷取', pos: 'v.', sentences: [
     {en: 'We need to extract relevant information from the report.', zh: '我們需要從報告中提取相關資訊。'}
-  ], avoid: [], roots: ['tract'], usages: [], forms: [] },
+  ], avoid: [], roots: ['tract'], usages: [], forms: [], kk: 'ɪkˋstrækt' },
   { word: 'beleaguered', meaning: '陷入困境的', pos: 'adj.', sentences: [
     {en: 'The beleaguered company is struggling to survive in a competitive market.', zh: '這家陷入困境的公司正在競爭激烈的市場中掙扎求生。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'bɪˋligɚd' },
   { word: 'sordid', meaning: '骯髒的、卑劣的', pos: 'adj.', sentences: [
     {en: 'The scandal revealed the sordid truth behind the company’s success.', zh: '這起醜聞揭露了公司成功背後骯髒的真相。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɔrdɪd' },
   { word: 'delightful', meaning: '令人愉快的、討人喜歡的', pos: 'adj.', sentences: [
     {en: 'We had a delightful time at the beach last weekend.', zh: '上週末我們在海灘度過了愉快的時光。'},
     {en: 'She is a delightful person to work with.', zh: '她是一個很好相處、令人愉快的工作夥伴。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋlaɪtfəl' },
   { word: 'yoke', meaning: '枷鎖、束縛', pos: 'n.', sentences: [
     {en: 'Many people lived under the yoke of tyranny.', zh: '許多人生活在暴政的枷鎖之下。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'jok' },
   { word: 'snail', meaning: '蝸牛；（引申指）緩慢的人或事物', pos: 'n.', sentences: [
     {en: 'The snail left a trail of slime as it crawled across the leaf.', zh: '蝸牛爬過葉子時留下一道黏液痕跡。'},
     {en: 'The traffic was moving at a snail\'s pace due to the heavy rain.', zh: '由於大雨，交通以蝸牛般的速度緩慢前進。'}
-  ], avoid: [], roots: [], usages: ['at a snail\'s pace 極緩慢地、以蝸牛般的速度'] },
+  ], avoid: [], roots: [], usages: ['at a snail\'s pace 極緩慢地、以蝸牛般的速度'], kk: 'snel' },
   { word: 'stifle', meaning: '壓制、抑制', pos: 'v.', sentences: [
     {en: 'The government attempted to stifle any criticism of its new policy by controlling the media.', zh: '該政府試圖通過控制媒體來壓制對其新政策的任何批評。'}
-  ], avoid: [], roots: ['stiff'], usages: [], forms: [] },
+  ], avoid: [], roots: ['stiff'], usages: [], forms: [], kk: 'ˋstaɪfḷ' },
   { word: 'omnibus', meaning: '文集、公車、綜括的、多項的、多用途的', pos: 'n., adj.', sentences: [
     {en: "The omnibus contains all of the author's short stories.", zh: '這本文集包含了作者的所有短篇故事。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋɑmnəbəs' },
   { word: 'illusory', meaning: '虛幻的、錯覺的、不切實際的', pos: 'adj.', sentences: [
     {en: 'He thought he had found true love, but it turned out to be an illusory hope.', zh: '他以為自己找到了真愛，但那到頭來只是一個虛幻的希望。'},
     {en: 'The feeling of safety provided by the high walls was merely illusory.', zh: '高牆所帶來的那種安全感只不過是虛幻的。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪˋlusərɪ' },
   { word: 'millennium', meaning: '千禧年、一千年（複數 millennia）', pos: 'n.', sentences: [
     {en: 'We are at the beginning of the third millennium.', zh: '我們處於第三個千禧年的開始。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'məˋlɛnɪəm' },
   { word: 'megaphone', meaning: '擴音器', pos: 'n.', sentences: [
     {en: 'The leader of the parade uses a megaphone to keep order.', zh: '遊行隊伍的領導者用擴音器維持秩序。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋmɛgəˏfon' },
   { word: 'megalomania', meaning: '自大狂', pos: 'n.', sentences: [
     {en: 'The man suffers from megalomania and believes he must save the world.', zh: '這個人患有自大狂，相信他必須拯救世界。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏmɛgəloˋmenɪə' },
   { word: 'gigantic', meaning: '巨大的', pos: 'adj.', sentences: [
     {en: 'The budget for national defense is gigantic.', zh: '國防預算是巨大的。'}
-  ], avoid: ['prodigious'], roots: [], usages: [], forms: [] },
+  ], avoid: ['prodigious'], roots: [], usages: [], forms: [], kk: 'dʒaɪˋgæntɪk' },
   { word: 'median', meaning: '中等的、中間值的', pos: 'adj.', sentences: [
     {en: 'Median household income has increased, but not as fast as inflation.', zh: '中位數家庭收入有所增加，但增長速度不如通貨膨脹快。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋmidɪən' },
   { word: 'intermediate', meaning: '中間的、中等程度的', pos: 'adj.', sentences: [
     {en: "This class is at the intermediate level, which means it's neither too hard nor too easy.", zh: '這個班級處於中級水平，意味著既不太難也不太容易。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏɪntɚˋmidɪɪt' },
   { word: 'mediation', meaning: '調停、調解', pos: 'n.', sentences: [
     {en: 'The mediation successfully averted disaster.', zh: '調解成功地避免了災難。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏmidɪˋeʃən' },
   { word: 'medieval', meaning: '中古時代的', pos: 'adj.', sentences: [
     {en: 'This cathedral is a medieval building.', zh: '這座大教堂是一座中古時代的建築。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'mɪˋdivḷ' },
   { word: 'minus', meaning: '減、負數、缺點', pos: 'prep., n.', sentences: [
     {en: 'Profit is revenue minus cost.', zh: '利潤是收入減去成本。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋmaɪnəs' },
   { word: 'minuscule', meaning: '微小的', pos: 'adj.', sentences: [
     {en: 'The cactus only requires a minuscule amount of water to survive.', zh: '仙人掌只需要微小的水量就能存活。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋmɪnəˏskjul' },
   { word: 'administration', meaning: '行政、政府', pos: 'n.', sentences: [
     {en: "I like teaching, but don't like administration.", zh: '我喜歡教學，但不喜歡行政工作。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ədˏmɪnəˋstreʃən' },
   { word: 'diminish', meaning: '減少、變小', pos: 'v.', sentences: [
     {en: 'The sound of the parade diminished in the distance.', zh: '遊行的聲音在遠處漸漸消退。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋmɪnɪʃ' },
   { word: 'fort', meaning: '堡壘、要塞', pos: 'n.', sentences: [
     {en: 'The military fort gradually developed into a city.', zh: '軍事堡壘逐漸發展成了一座城市。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'fɔrt' },
   { word: 'fortify', meaning: '加強、增強', pos: 'v.', sentences: [
     {en: 'In the baby formula, milk is fortified with more than a dozen nutrients.', zh: '在嬰兒配方奶粉中，牛奶中加強了十多種營養物質。'}
-  ], avoid: ['reinforce'], roots: [], usages: [], forms: [] },
+  ], avoid: ['reinforce'], roots: [], usages: [], forms: [], kk: 'ˋfɔrtɪˏfaɪ' },
   { word: 'enforcement', meaning: '強制執行', pos: 'n.', sentences: [
     {en: 'Policemen are law enforcement officers.', zh: '警察是執法人員。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɛnˋfɔrsmənt' },
   { word: 'forte', meaning: '強音、強項、拿手項目', pos: 'n.', sentences: [
     {en: "Math is my forte, but English is my Achilles' heel.", zh: '數學是我的強項，但英語是我的弱點。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'fɔrt; ˋfɔrte' },
   { word: 'fortitude', meaning: '堅韌、堅毅', pos: 'n.', sentences: [
     {en: 'The orphans demonstrated admirable fortitude and learned to support themselves.', zh: '孤兒們展現了令人欽佩的堅毅精神，學會了自給自足。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋfɔrtɪˏtud' },
   { word: 'reinforce', meaning: '加強、增援', pos: 'v.', sentences: [
     {en: 'The general decided to reinforce the troops with 2,000 new men.', zh: '將軍決定用2000名新兵增援部隊。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏriɪnˋfɔrs' },
   { word: 'endure', meaning: '持續、忍耐', pos: 'v.', sentences: [
     {en: 'Chinese writing has endured for thousands of years.', zh: '中文書寫已經持續了幾千年。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɛnˋdjʊr' },
   { word: 'duration', meaning: '持續期間', pos: 'n.', sentences: [
     {en: 'We had to stay home for the duration of the quarantine.', zh: '我們必須在隔離期間待在家裡。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dʊˋreʃən' },
   { word: 'duress', meaning: '強制、強迫', pos: 'n.', sentences: [
     {en: 'Contracts signed under duress are null and void.', zh: '在強迫下簽訂的合約無效。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dʊˋrɛs' },
   { word: 'relieve', meaning: '緩和、減輕、接替', pos: 'v.', sentences: [
     {en: 'She was given a shot of morphine to relieve the pain.', zh: '她被注射了嗎啡以緩解疼痛。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˋliv' },
   { word: 'assign', meaning: '指派、分配', pos: 'v.', sentences: [
     {en: 'The case has been assigned to our most senior officer.', zh: '這個案件已被分配給我們最資深的官員。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋsaɪn' },
   { word: 'significance', meaning: '意義、重要性', pos: 'n.', sentences: [
     {en: 'The significance of this finding is beyond comprehension.', zh: '這項發現的重要性超出理解。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'səgˋnɪfɪkəns' },
   { word: 'insignia', meaning: '標誌、徽章', pos: 'n.', sentences: [
     {en: "Their jackets have the school's insignia on the front.", zh: '他們的夾克前面有學校的徽章。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪnˋsɪgnɪə' },
   { word: 'designate', meaning: '標示、委任、指派', pos: 'v.', sentences: [
     {en: 'The wooden stakes designate the edge of the building site.', zh: '木樁標示了建築工地的邊界。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋdɛzəgˏnet' },
   { word: 'affinity', meaning: '相像、喜好', pos: 'n.', sentences: [
     {en: 'Many people really feel an affinity for dolphins.', zh: '許多人真的對海豚有好感。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋfɪnətɪ' },
   { word: 'substitute', meaning: '代替品、替代者；代替、替換', pos: 'n., v.', sentences: [
     {en: 'You can substitute honey for sugar in this recipe.', zh: '在這個食譜中，你可以用蜂蜜代替糖。'},
     {en: 'He is a substitute teacher for the fifth-grade class.', zh: '他是五年級班的代課老師。'}
-  ], avoid: [], roots: ['stit, stat'], usages: ['substitute A for B 用A代替B'], forms: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: ['substitute A for B 用A代替B'], forms: [], kk: 'ˋsʌbstəˏtut' },
   { word: 'determine', meaning: '決定、判定', pos: 'v.', sentences: [
     {en: 'How do you determine the age of this antique desk?', zh: '你如何判定這張古董桌子的年代？'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋtɝmɪn' },
   { word: 'term', meaning: '條件、術語、學期、任期', pos: 'n.', sentences: [
     {en: 'The company has agreed to bail us out, but what are its terms?', zh: '公司同意幫助我們，但條件是什麼？'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'tɝm' },
   { word: 'conterminous', meaning: '有交界的、相鄰的', pos: 'adj.', sentences: [
     {en: 'The two countries are conterminous for over 1,000 miles.', zh: '這兩個國家相鄰超過1000英里。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kənˋtɝmənəs' },
   { word: 'bulimia nervosa', meaning: '神經性暴食症', pos: 'n.', sentences: [
     {en: 'Bulimia nervosa is an eating disorder characterized by episodes of binge eating followed by purging.', zh: '神經性暴食症是一種進食障礙，特徵是暴飲暴食後進行催吐。'},
     {en: 'Treatment for bulimia nervosa often involves psychotherapy and nutritional counseling.', zh: '神經性暴食症的治療通常包括心理治療和營養諮詢。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'bjuˋlɪmɪə nɚˋvosə' },
   { word: 'anorexia nervosa', meaning: '神經性厭食症', pos: 'n.', sentences: [
     {en: 'Anorexia nervosa is a serious eating disorder characterized by an intense fear of gaining weight.', zh: '神經性厭食症是一種嚴重的進食障礙，特徵是對體重增加有強烈的恐懼。'},
     {en: 'She was hospitalized due to complications from anorexia nervosa.', zh: '她因神經性厭食症的併發症而住院。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏænəˋrɛksɪə nɚˋvosə' },
   { word: 'stunted', meaning: '發育不良的、生長受阻的', pos: 'adj.', sentences: [
     {en: 'The tree\'s growth was stunted by the lack of sunlight.', zh: '這棵樹的生長因缺乏陽光而受阻。'},
-  ], avoid: [], roots: [], usages: [ 'stunted growth 生長受阻、發育不良'], forms: [] },
+  ], avoid: [], roots: [], usages: [ 'stunted growth 生長受阻、發育不良'], forms: [], kk: 'ˋstʌntɪd' },
   { word: 'exterminate', meaning: '消滅、根除', pos: 'v.', sentences: [
     {en: 'The government launched a campaign to exterminate the disease-carrying insects.', zh: '政府發起了一項行動，以消滅攜帶疾病的昆蟲。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪkˋstɝməˏnet' },
   { word: 'terminal', meaning: '末期的、終點站、終端機', pos: 'adj., n.', sentences: [
     {en: 'The terminal patient has decided to check out of the hospital.', zh: '末期患者已決定出院。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋtɝmənḷ' },
   { word: 'fluent', meaning: '流利的', pos: 'adj.', sentences: [
     {en: 'I am fluent in oral and written English.', zh: '我能流利地說和寫英文。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'ˋfluənt' },
   { word: 'fluctuation', meaning: '波動、起伏', pos: 'n.', sentences: [
     {en: "Don't worry too much about the normal fluctuations on the stock market.", zh: '不要太擔心股票市場的正常波動。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'ˏflʌktʃuˋeʃən' },
   { word: 'affluent', meaning: '富裕的', pos: 'adj.', sentences: [
     {en: 'Waste is a sign of an affluent society.', zh: '浪費是富裕社會的標誌。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'ˋæfluənt' },
   { word: 'confluence', meaning: '匯流、匯合', pos: 'n.', sentences: [
     {en: 'A city developed at the confluence of the two rivers.', zh: '一座城市在兩條河的匯合處發展。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'ˋkɑnfluəns' },
   { word: 'influx', meaning: '流入、湧入', pos: 'n.', sentences: [
     {en: 'The influx of hot money boosted stock prices.', zh: '熱錢的湧入推高了股票價格。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'ˋɪnˏflʌks' },
   { word: 'brittle', meaning: '易碎的、脆弱的', pos: 'adj.', sentences: [
     {en: 'The old, brittle paper crumbled in his hands.', zh: '那張老舊易碎的紙在他手中碎成了粉末。'},
     {en: 'Her bones have become brittle with age.', zh: '隨著年齡的增長，她的骨頭變得脆弱了。'}
-  ], avoid: [], roots: [], usages: ['brittle nail 脆弱的指甲'], forms: [] },
+  ], avoid: [], roots: [], usages: ['brittle nail 脆弱的指甲'], forms: [], kk: 'ˋbrɪtḷ' },
   { word: 'fluid', meaning: '流體、液體、流暢的、流動的', pos: 'n., adj.', sentences: [
     {en: 'I drink a lot of fluids when I have a cold.', zh: '我感冒時喝很多液體。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'ˋfluɪd' },
   { word: 'flush', meaning: '一陣、臉紅、沖水', pos: 'n., v.', sentences: [
     {en: 'In a flush of anger, he left the room.', zh: '在一陣憤怒中，他離開了房間。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'flʌʃ' },
   { word: 'purge', meaning: '清除、清洗、催吐；瀉藥', pos: 'v., n.', sentences: [
     {en: 'The new leader purged the party of all his opponents.', zh: '新領導人清除了黨內所有的反對者。'},
     {en: 'The medicine is used to purge the body of toxins.', zh: '這種藥用於清除體內毒素。'}
-  ], avoid: [], roots: [], usages: ['purge A of B 清除A中的B'], forms: [] },
+  ], avoid: [], roots: [], usages: ['purge A of B 清除A中的B'], forms: [], kk: 'pɝdʒ' },
   { word: 'superfluous', meaning: '多餘的、不必要的', pos: 'adj.', sentences: [
     {en: "While you're running in a race, all superfluous movements should be eliminated.", zh: '在賽跑時，所有多餘的動作都應該被消除。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'sʊˋpɝfluəs' },
   { word: 'effluent', meaning: '流出物、廢水、排水', pos: 'n.', sentences: [
     {en: 'Effluents from local factories are finding their way into the river.', zh: '當地工廠的廢水正流入河流。'}
-  ], avoid: [], roots: ['flu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['flu'], usages: [], forms: [], kk: 'ˋɛfluənt' },
   { word: 'anniversary', meaning: '週年紀念、週年的', pos: 'n., adj.', sentences: [
     {en: 'The old couple will soon be celebrating their 50th wedding anniversary.', zh: '這對老夫婦很快將慶祝他們的第50個結婚週年紀念。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏænəˋvɝsərɪ' },
   { word: 'annual', meaning: '年度的、一年生植物', pos: 'adj., n.', sentences: [
     {en: 'Welcome to our annual conference.', zh: '歡迎來到我們的年度會議。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋænjuəl' },
   { word: 'chronological', meaning: '按時間順序的', pos: 'adj.', sentences: [
     {en: 'Events in the narrative are arranged in chronological order.', zh: '敘述中的事件按時間順序排列。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏkrɑnəˋlɑdʒɪkḷ' },
   { word: 'chronic', meaning: '慢性的、長期的、習慣性的', pos: 'adj.', sentences: [
     {en: 'Arthritis is a chronic disease.', zh: '關節炎是一種慢性疾病。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkrɑnɪk' },
   { word: 'chronicle', meaning: '編年史、記事、（依時間順序）記錄', pos: 'n., v.', sentences: [
     {en: 'The book is a chronicle of the American Civil War.', zh: '這本書是美國內戰的編年史。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkrɑnɪkḷ' },
   { word: 'synchronous', meaning: '同時的、同步的', pos: 'adj.', sentences: [
     {en: 'The synchronous arrival of a baby sister and loss of a beloved grandmother strongly affected the child.', zh: '妹妹的同時出生和所愛祖母的去世深深影響了這個孩子。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪŋkrənəs' },
   { word: 'recital', meaning: '背誦、獨奏會', pos: 'n.', sentences: [
     {en: "There's a piano recital at the music hall tonight.", zh: '今晚音樂廳有鋼琴獨奏會。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rəˋsaɪtḷ' },
   { word: 'kinetic', meaning: '動能的', pos: 'adj.', sentences: [
     {en: 'The kinetic energy in the tides can be harnessed for power generation.', zh: '潮汐中的動能可以被利用來發電。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kəˋnɛtɪk' },
   { word: 'solicit', meaning: '懇請、請求', pos: 'v.', sentences: [
     {en: 'The social worker is soliciting donations for the earthquake victims.', zh: '社工正在為地震受害者募捐。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'səˋlɪsɪt' },
   { word: 'solicitous', meaning: '熱心的、關心的', pos: 'adj.', sentences: [
     {en: 'I appreciate his solicitous inquiry about my health.', zh: '我感謝他關切地詢問我的健康狀況。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'səˋlɪsətəs' },
   { word: 'cite', meaning: '引用、舉證、表揚', pos: 'v.', sentences: [
     {en: 'She cites T.S. Eliot in her work.', zh: '她在她的作品中引用了T.S. 艾略特。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'saɪt' },
   { word: 'commensurate', meaning: '等量的、相稱的', pos: 'adj.', sentences: [
     {en: 'I am looking for a salary that is commensurate with my skills and experience.', zh: '我在尋找與我的技能和經驗相稱的薪水。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kəˋmɛnsərɪt' },
   { word: 'secretive', meaning: '保密的、隱瞞的、偷偷摸摸的', pos: 'adj.', sentences: [
     {en: 'The secretive organization refuses to reveal its members\' identities.', zh: '這個神秘（保密）的組織拒絕透露其成員的身份。'},
     {en: 'He was very secretive about his plans for the weekend.', zh: '他對週末的計畫非常保密。'},
   ], avoid: [], roots: [], usages: [
     'be secretive about something 對某事保密、諱莫如深',
-  ], forms: [] },
+  ], forms: [], kk: 'ˋsikrətɪv' },
   { word: 'counsel', meaning: '顧問、律師、建議', pos: 'n., v.', sentences: [
     {en: 'The judge became counsel to the President.', zh: '這位法官成為了總統的顧問。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkaʊnsḷ' },
   { word: 'dietitian', meaning: '營養師', pos: 'n.', sentences: [
     {en: 'The dietitian advised him to eat more vegetables and less red meat.', zh: '營養師建議他多吃蔬菜，少吃紅肉。'},
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏdaɪəˋtɪʃən' },
   { word: 'symbol', meaning: '象徵、符號', pos: 'n.', sentences: [
     {en: 'The Statue of Liberty is a symbol of freedom.', zh: '自由女神像是自由的象徵。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪmbḷ' },
   { word: 'synchronize', meaning: '同步化、對時', pos: 'v.', sentences: [
     {en: "Let's synchronize our watches.", zh: '讓我們同步調整我們的手錶。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪŋkrəˏnaɪz' },
   { word: 'wind up', meaning: '最後落得、最後收場；結束；上緊（發條）', pos: 'phr. v.', sentences: [
     {en: 'If you keep spending money like that, you will wind up in debt.', zh: '如果你繼續那樣花錢，你最後會負債。'},
     {en: 'They took a wrong turn and wound up getting lost in the forest.', zh: '他們轉錯了一個彎，最後在森林裡迷了路。'},
@@ -865,791 +866,791 @@ const words = [
     'wind up + Ving 最後做了某事（通常指非預期或無奈的結果）',
     'wind up in + 地點/狀態 最後落得⋯的地步',
     'wind up with + sth 最後得到某物',
-  ], forms: ['wound up'] },
+  ], forms: ['wound up'], kk: 'waɪnd ʌp' },
   { word: 'glitter', meaning: '閃閃發光、閃耀；閃光、魅力', pos: 'v., n.', sentences: [
     {en: 'The diamond ring glittered under the bright light.', zh: '鑽戒在明亮的燈光下閃閃發光。'},
     {en: 'All that glitters is not gold.', zh: '閃閃發光的未必都是金子。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋglɪtɚ' },
   { word: 'comparative', meaning: '比較的、相對的；（文法）比較級', pos: 'adj., n.', sentences: [
     {en: 'She is doing a comparative study of the two languages.', zh: '她正在對這兩種語言進行比較研究。'},
     {en: 'The comparative form of "good" is "better".', zh: '"good" 的比較級是 "better"。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kəmˋpɛrətɪv' },
   { word: 'yarn', meaning: '紗線、毛線；奇談、故事', pos: 'n.', sentences: [
     {en: 'She knitted a sweater with a ball of yarn.', zh: '她用一團毛線織了一件毛衣。'},
     {en: 'Grandpa loves to spin a yarn about his childhood.', zh: '爺爺喜歡講述他童年的奇聞趣事。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'jɑrn' },
   { word: 'spectator', meaning: '觀眾、旁觀者', pos: 'n.', sentences: [
     {en: 'The stadium was packed with thousands of spectators.', zh: '體育場裡擠滿了成千上萬的觀眾。'},
     {en: 'The match attracted a large crowd of spectators.', zh: '這場比賽吸引了大量的觀眾。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋspɛkˏtetɚ' },
   { word: 'synthetic', meaning: '合成的', pos: 'adj.', sentences: [
     {en: 'Nylon was the first synthetic, or artificial, fiber.', zh: '尼龍是第一種合成或人造纖維。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'sɪnˋθɛtɪk' },
   { word: 'photosynthesis', meaning: '光合作用', pos: 'n.', sentences: [
     {en: 'Without photosynthesis, oxygen in the air would have been depleted long ago.', zh: '沒有光合作用，空氣中的氧氣早就耗盡了。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏfotoˋsɪnθəsɪs' },
   { word: 'simultaneously', meaning: '同時地', pos: 'adv.', sentences: [
     {en: 'Two in the audience raised their hands simultaneously.', zh: '觀眾中有兩人同時舉起了手。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏsaɪməlˋtenɪəslɪ' },
   { word: 'erudite', meaning: '飽學的、博學的', pos: 'adj.', sentences: [
     {en: 'The most erudite people in medical research attended the conference.', zh: '醫學研究領域中最博學的人參加了這次會議。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋɛrəˏdaɪt' },
   { word: 'abysmal', meaning: '無底的、極度的', pos: 'adj.', sentences: [
     {en: 'Visitors to the slum were appalled by the abysmal living conditions they saw.', zh: '貧民區的訪客對他們看到的極其糟糕的生活條件感到震驚。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋbɪzmḷ' },
   { word: 'atrophy', meaning: '萎縮', pos: 'n., v.', sentences: [
     {en: 'Astronauts returning from extended stays in zero gravity often suffer from muscular atrophy.', zh: '從零重力環境中長期停留返回的宇航員經常遭受肌肉萎縮。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋætrəfɪ' },
   { word: 'anemic', meaning: '貧血的、虛弱的', pos: 'adj.', sentences: [
     {en: 'Sales in this quarter have been anemic.', zh: '本季度銷售一直很虛弱。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋnimɪk' },
   { word: 'asymptomatic', meaning: '無症狀的', pos: 'adj.', sentences: [
     {en: 'Research shows that many coronavirus infections are asymptomatic.', zh: '研究表明許多冠狀病毒感染是無症狀的。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏeˏsɪmptəˋmætɪk' },
   { word: 'amoral', meaning: '無關道德的', pos: 'adj.', sentences: [
     {en: 'Science as a subject is amoral in nature.', zh: '作為一門學科，科學本質上是無關道德的。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'eˋmɔrəl' },
   { word: 'anecdote', meaning: '軼事、趣聞', pos: 'n.', sentences: [
   {en: 'He told a funny anecdote about his childhood.', zh: '他講了一個關於他童年的有趣軼事。'},
   {en: 'The professor often uses personal anecdotes to make his lectures more interesting.', zh: '這位教授經常使用個人軼事來使他的講座更有趣。'}
 ], avoid: [], roots: [], usages: [
     'tell / share an anecdote 講述／分享軼事'
-  ], forms: [] },
+  ], forms: [], kk: 'ˋænəkˏdot' },
   { word: 'analgesic', meaning: '止痛劑、止痛的', pos: 'n., adj.', sentences: [
     {en: 'The nurse gave the girl some analgesics for her pain.', zh: '護士給女孩一些止痛藥來緩解她的疼痛。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏænəlˋdʒisɪk' },
   { word: 'arrhythmia', meaning: '心律不整', pos: 'n.', sentences: [
     {en: 'Arrhythmia is among the side effects of this drug.', zh: '心律不整是這種藥物的副作用之一。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋrɪðmɪə' },
   { word: 'prodigious', meaning: '巨大的', pos: 'adj.', sentences: [
     {en: 'In the basement there is a prodigious supply of canned food for emergencies.', zh: '地下室裡有大量的罐頭食品供緊急使用。'}
-  ], avoid: [], roots: ['prodigium'], usages: [], forms: [] },
+  ], avoid: [], roots: ['prodigium'], usages: [], forms: [], kk: 'prəˋdɪdʒəs' },
   { word: 'prodigy', meaning: '奇蹟、天才', pos: 'n.', sentences: [
     {en: 'My kid brother is a real child prodigy.', zh: '我的弟弟是一個真正的神童。'}
-  ], avoid: [], roots: ['prodigium'], usages: [], forms: [] },
+  ], avoid: [], roots: ['prodigium'], usages: [], forms: [], kk: 'ˋprɑdədʒɪ' },
   { word: 'navigate', meaning: '航行、導航', pos: 'v.', sentences: [
     {en: 'For thousands of years, sailors navigated by the stars.', zh: '幾千年來，水手們按照星星導航。'}
-  ], avoid: [], roots: ['nav'], usages: [], forms: [] },
+  ], avoid: [], roots: ['nav'], usages: [], forms: [], kk: 'ˋnævəˏget' },
   { word: 'tooth decay', meaning: '蛀牙、齲齒', pos: 'n.', sentences: [
     {en: 'Tooth decay is caused by bacteria that produce acid.', zh: '蛀牙是由產生酸性的細菌引起的。'},
     {en: 'Regular brushing and flossing can help prevent tooth decay.', zh: '定期刷牙和使用牙線有助於預防蛀牙。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'tuθ dɪˋke' },
   { word: 'coagulate', meaning: '凝結、凝固', pos: 'v.', sentences: [
     {en: 'The eggs coagulate when heated.', zh: '雞蛋受熱時會凝固。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'koˋægjəˏlet' },
   { word: 'exacting', meaning: '要求嚴格的', pos: 'adj.', sentences: [
     {en: "It's not easy working for an exacting employer.", zh: '為一個要求嚴格的僱主工作並不容易。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪgˋzæktɪŋ' },
   { word: 'agony', meaning: '痛苦、折磨', pos: 'n.', sentences: [
     {en: 'She was in terrible agony after breaking her leg.', zh: '她斷腿後處於極大的痛苦中。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋægənɪ' },
   { word: 'turmoil', meaning: '騷動、混亂', pos: 'n.', sentences: [
     {en: 'The city was in turmoil after the iniquitous sentence was announced.', zh: '不公正的判決宣布後，城市陷入混亂。'}
-  ], avoid: [], roots: ['turb'], usages: [], forms: [] },
+  ], avoid: [], roots: ['turb'], usages: [], forms: [], kk: 'ˋtɝˏmɔɪl' },
   { word: 'turbulent', meaning: '動盪的、混亂的、湍急的', pos: 'adj.', sentences: [
     {en: 'The sixties were a turbulent period in American history.', zh: '六十年代是美國歷史上一個動蕩的時期。'}
-  ], avoid: ['unkempt'], roots: ['turb'], usages: [], forms: [] },
+  ], avoid: ['unkempt'], roots: ['turb'], usages: [], forms: [], kk: 'ˋtɝbjələnt' },
   { word: 'imperturbable', meaning: '冷靜的、鎮定的', pos: 'adj.', sentences: [
     {en: 'The chef was absolutely imperturbable—even when the kitchen caught on fire.', zh: '廚師絕對沉著冷靜——即使廚房著火了。'}
-  ], avoid: [], roots: ['turb'], usages: [], forms: [] },
+  ], avoid: [], roots: ['turb'], usages: [], forms: [], kk: 'ˏɪmpɚˋtɝbəbḷ' },
   { word: 'involve', meaning: '牽涉到', pos: 'v.', sentences: [
     {en: 'My job as a salesperson involves a lot of traveling.', zh: '我作為銷售員的工作涉及大量旅行。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪnˋvɑlv' },
   { word: 'evolution', meaning: '演化、進化', pos: 'n.', sentences: [
     {en: "Darwin's theory of evolution has been called the greatest intellectual achievement of the 19th century.", zh: '達爾文的進化論被稱為19世紀最偉大的智力成就。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏɛvəˋluʃən' },
   { word: 'revolve', meaning: '旋轉', pos: 'v.', sentences: [
     {en: 'Medieval people believed that the sun revolved around the earth.', zh: '中世紀人民相信太陽繞地球旋轉。'}
-  ], avoid: [], roots: ['volv, volu'], usages: [], forms: [] },
+  ], avoid: [], roots: ['volv, volu'], usages: [], forms: [], kk: 'rɪˋvɑlv' },
   { word: 'devolve', meaning: '被移交、轉讓', pos: 'v.', sentences: [
     {en: 'A good manager knows how to devolve responsibility downwards.', zh: '一個優秀的管理者知道如何向下移交責任。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋvɑlv' },
   { word: 'convoluted', meaning: '曲折的、複雜難懂的', pos: 'adj.', sentences: [
     {en: 'The convoluted explanation left the listeners even more confused than before.', zh: '複雜的解釋讓聽眾比之前更困惑。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkɑnvəˏlutɪd' },
   { word: 'voluble', meaning: '滔滔不絕的、健談的', pos: 'adj.', sentences: [
     {en: 'The woman was as voluble as her husband was reticent.', zh: '女人像她丈夫一樣寡言寡語的反面一樣健談。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋvɑljəbḷ' },
   { word: 'voluminous', meaning: '大量的、（衣服）寬鬆的、長篇的', pos: 'adj.', sentences: [
     {en: 'Isaac Asimov was a writer of voluminous output.', zh: '艾薩克·阿西莫夫是一位著作豐富的作家。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'vəˋlumənəs' },
   { word: 'transgression', meaning: '犯法、犯規', pos: 'n.', sentences: [
     {en: "The teacher said she'd be keeping an eye out for further transgressions.", zh: '老師說她會監視進一步的違規行為。'}
-  ], avoid: [], roots: ['grad, gress'], usages: [], forms: [] },
+  ], avoid: [], roots: ['grad, gress'], usages: [], forms: [], kk: 'trænzˋgrɛʃən' },
   { word: 'digression', meaning: '離題', pos: 'n.', sentences: [
     {en: 'The lecturer made so many digressions that he couldn\'t finish on time.', zh: '演講者做了這麼多離題，以至於他無法按時完成。'}
-  ], avoid: [], roots: ['grad, gress'], usages: [], forms: [] },
+  ], avoid: [], roots: ['grad, gress'], usages: [], forms: [], kk: 'daɪˋgrɛʃən' },
   { word: 'derelict', meaning: '被遺棄的、破敗的、玩忽職守的', pos: 'adj.', sentences: [
     {en: "There's a derelict old building down the street.", zh: '街下面有一座被遺棄的舊建築。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋdɛrəˏlɪkt' },
   { word: 'relinquish', meaning: '放棄、交出', pos: 'v.', sentences: [
     {en: 'The court ordered him to relinquish custody of his child.', zh: '法院命令他放棄對孩子的監護權。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˋlɪŋkwɪʃ' },
   { word: 'delinquent', meaning: '有過失、犯罪、違法者', pos: 'adj., n.', sentences: [
     {en: 'In the army, all delinquent behavior will be severely punished.', zh: '在軍隊中，所有違紀行為都會受到嚴厲懲罰。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋlɪŋkwənt' },
   { word: 'bloated', meaning: '腹脹的、臃腫的、膨脹的', pos: 'adj.', sentences: [
     {en: 'I always feel bloated after eating a huge meal.', zh: '我大吃一頓後總是感到腹脹。'},
     {en: 'The company has become bloated with too many managers.', zh: '這家公司因為經理過多而變得臃腫。'}
-  ], avoid: ['puffy'], roots: [], usages: ['feel bloated 感到腹脹'], forms: [] },
+  ], avoid: ['puffy'], roots: [], usages: ['feel bloated 感到腹脹'], forms: [], kk: 'ˋblotɪd' },
   { word: 'puffy', meaning: '浮腫的、腫脹的；鬆軟的、蓬鬆的', pos: 'adj.', sentences: [
     {en: 'She woke up with puffy eyes after crying all night.', zh: '她哭了一整夜，醒來時眼睛浮腫。'},
     {en: 'The sky was filled with puffy white clouds.', zh: '天空中佈滿了蓬鬆的白雲。'},
-  ], avoid: ['bloated'], roots: [], usages: [], forms: [] },
+  ], avoid: ['bloated'], roots: [], usages: [], forms: [], kk: 'ˋpʌfɪ' },
   { word: 'relic', meaning: '遺物、遺跡', pos: 'n.', sentences: [
     {en: 'The archeologist found some relics from the Stone Age.', zh: '考古學家發現了一些石器時代的遺物。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋrɛlɪk' },
   { word: 'erratic', meaning: '不規律的、怪異的', pos: 'adj.', sentences: [
     {en: 'The young artist keeps erratic hours.', zh: '年輕藝術家保持著不規律的作息時間。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪˋrætɪk' },
   { word: 'aberrant', meaning: '偏離常態的', pos: 'adj.', sentences: [
     {en: 'The psychologist specializes in aberrant behavior.', zh: '心理學家專門研究異常行為。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'æˋbɛrənt' },
   { word: 'protest', meaning: '抗議', pos: 'n., v.', sentences: [
     {en: 'The villagers marched in protest of the new factory.', zh: '村民們遊行抗議新工廠的建設。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋproˏtɛst' },
   { word: 'promulgate', meaning: '宣告、散布', pos: 'v.', sentences: [
     {en: 'The new law was promulgated last summer.', zh: '新法律去年夏天頒布了。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋprɑməlˏget' },
   { word: 'proactive', meaning: '積極主動的', pos: 'adj.', sentences: [
     {en: 'The company has decided to take a proactive approach toward environmental protection.', zh: '公司決定採取主動的方式來保護環境。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'proˋæktɪv' },
   { word: 'reserve', meaning: '預留、預訂、保留', pos: 'v.', sentences: [
     {en: 'You can go online to reserve a ticket to the opera.', zh: '你可以在線預訂歌劇票。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˋzɝv' },
   { word: 'recuperation', meaning: '康復、療養', pos: 'n.', sentences: [
     {en: 'After the surgery, the man went to the countryside for recuperation.', zh: '手術後，這個人去了鄉下休養。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˏkupəˋreʃən' },
   { word: 'regenerate', meaning: '再生', pos: 'v.', sentences: [
     {en: 'A lizard can regenerate a tail easily.', zh: '蜥蜴可以輕鬆地再生尾巴。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˋdʒɛnəˏret' },
   { word: 'reconcile', meaning: '調解、和解', pos: 'v.', sentences: [
     {en: 'It is sometimes difficult to reconcile science with religion.', zh: '有時很難將科學與宗教調和。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋrɛkənˏsaɪl' },
   { word: 'rehabilitation', meaning: '復健、恢復', pos: 'n.', sentences: [
     {en: 'The drug addict was sent to the rehabilitation center.', zh: '這位吸毒者被送入了康復中心。'}
-  ], avoid: ['remission'], roots: [], usages: [], forms: [] },
+  ], avoid: ['remission'], roots: [], usages: [], forms: [], kk: 'ˏrihəˏbɪləˋteʃən' },
   { word: 'survive', meaning: '生存、存活', pos: 'v.', sentences: [
     {en: 'We teach students how to survive in the society.', zh: '我們教導學生如何在社會中生存。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'sɚˋvaɪv' },
   { word: 'survey', meaning: '概論、導論、測量、調查', pos: 'n., v.', sentences: [
     {en: 'This is a survey course on biology.', zh: '這是一門生物學概論課程。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɝˏve' },
   { word: 'superb', meaning: '卓越的', pos: 'adj.', sentences: [
     {en: 'The performance last night was superb.', zh: '昨晚的表演非常卓越。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'sʊˋpɝb' },
   { word: 'superficial', meaning: '表面的、膚淺的', pos: 'adj.', sentences: [
     {en: 'There are only superficial similarities between these very different species.', zh: '這些差異很大的物種之間只有表面上的相似之處。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏsupɚˋfɪʃḷ' },
   { word: 'supervise', meaning: '監督', pos: 'v.', sentences: [
     {en: 'The team leader supervises five people at work.', zh: '團隊領導者在工作中監督五個人。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsupɚˏvaɪz' },
   { word: 'supremacy', meaning: '優勢、霸主地位', pos: 'n.', sentences: [
     {en: 'The US has enjoyed nuclear supremacy ever since the collapse of the USSR.', zh: '自蘇聯解體以來，美國一直享有核優勢。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'səˋprɛməsɪ' },
   { word: 'surplus', meaning: '盈餘、過剩的', pos: 'n., adj.', sentences: [
     {en: 'Japan enjoys huge amounts of trade surplus.', zh: '日本享有巨大的貿易盈餘。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɝpləs' },
   { word: 'surcharge', meaning: '附加費、超收費用', pos: 'n., v.', sentences: [
     {en: 'A surcharge may be made for deliveries outside of normal hours.', zh: '可能會對非正常時間的送貨收取附加費。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɝˏtʃɑrdʒ' },
   { word: 'proprietary', meaning: '私有的、專利的', pos: 'adj.', sentences: [
     {en: 'This is proprietary software and cannot be distributed.', zh: '這是專有軟體，不能分發。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'prəˋpraɪəˏtɛrɪ' },
   { word: 'appropriate', meaning: '擁款、挪用、恰當的、合適的', pos: 'v., adj.', sentences: [
     {en: 'Congress will appropriate money for the research program.', zh: '國會將為研究項目撥款。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋproprɪˏet' },
   { word: 'apprehension', meaning: '理解力、逮捕、擔憂', pos: 'n.', sentences: [
     {en: 'The officer was cited for the successful apprehension of the criminal.', zh: '這名官員因成功逮捕罪犯而受到表揚。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏæprɪˋhɛnʃən' },
   { word: 'comprehensive', meaning: '廣泛的、無所不包的、全面的', pos: 'adj.', sentences: [
     {en: 'The new driver bought comprehensive auto insurance.', zh: '新駕駛員購買了全面的汽車保險。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏkɑmprɪˋhɛnsɪv' },
   { word: 'reprisal', meaning: '報復', pos: 'n.', sentences: [
     {en: 'He declined to be named for fear of reprisal.', zh: '他因擔心報復而拒絕透露姓名。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˋpraɪzḷ' },
   { word: 'comprise', meaning: '包含、由...構成', pos: 'v.', sentences: [
     {en: 'The factory comprises 20 buildings.', zh: '這家工廠由20棟建築組成。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kəmˋpraɪz' },
   { word: 'opposition', meaning: '反對', pos: 'n.', sentences: [
     {en: 'Most legislators are in opposition to the tax hike.', zh: '大多數立法者反對增稅。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏɑpəˋzɪʃən' },
   { word: 'descry', meaning: '看見、看出、發現', pos: 'v.', sentences: [
     {en: 'They could just descry the ship coming over the horizon.', zh: '他們只能勉強看到船從地平線上駛來。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋskraɪ' },
   { word: 'discernment', meaning: '識別（力）、眼光', pos: 'n.', sentences: [
     {en: 'His lack of discernment led to his disastrous choice of business partners.', zh: '他缺乏辨別力導致他對商業夥伴做出了災難性的選擇。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋsɝnmənt' },
   { word: 'critical', meaning: '批判的、批評的、關鍵的、不可或缺的', pos: 'adj.', sentences: [
     {en: "The paper presents a critical analysis of the government's strategies.", zh: '這篇論文對政府的策略進行了批判性分析。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkrɪtɪkḷ' },
   { word: 'discriminating', meaning: '有眼力的、差別待遇的', pos: 'adj.', sentences: [
     {en: 'Discriminating readers will know what the parody is about.', zh: '眼光敏銳的讀者會知道這個諷刺作品是關於什麼的。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋskrɪməˏnetɪŋ' },
   { word: 'criterion', meaning: '標準、準則', pos: 'n.', sentences: [
     {en: 'What were the criteria used to choose the winner?', zh: '選擇獲勝者使用了什麼標準？'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kraɪˋtɪrɪən' },
   { word: 'decree', meaning: '命令、頒布', pos: 'n., v.', sentences: [
     {en: "The President's decree banned adult males from fleeing the country.", zh: '總統的命令禁止成年男性逃離該國。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋkri' },
   { word: 'discrete', meaning: '分離的、不連接的', pos: 'adj.', sentences: [
     {en: 'Information on the Web is transferred in discrete packets.', zh: '網路上的資訊以離散的封包傳輸。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋskrit' },
   { word: 'discreet', meaning: '謹慎的', pos: 'adj.', sentences: [
     {en: 'The private detective followed at a discreet distance.', zh: '私家偵探跟著保持著謹慎的距離。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋskrit' },
   { word: 'disrupt', meaning: '打斷、破壞', pos: 'v.', sentences: [
     {en: 'The negotiation was disrupted when protestors started throwing eggs.', zh: '當抗議者開始扔雞蛋時，談判被中斷了。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪsˋrʌpt' },
   { word: 'abrupt', meaning: '突然的', pos: 'adj.', sentences: [
     {en: 'You should avoid any abrupt movements on the little boat.', zh: '你應該避免在小船上做任何突然的動作。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋbrʌpt' },
   { word: 'bankruptcy', meaning: '破產', pos: 'n.', sentences: [
     {en: 'The company went from insolvency to bankruptcy.', zh: '公司從無償付能力走向破產。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋbæŋkrəpsɪ' },
   { word: 'corruption', meaning: '貪污、腐敗', pos: 'n.', sentences: [
     {en: 'The biggest problem now is widespread corruption among government officials.', zh: '現在最大的問題是政府官員之間的普遍腐敗。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kəˋrʌpʃən' },
   { word: 'erupt', meaning: '爆發', pos: 'v.', sentences: [
     {en: 'Violence erupted when the pro-life and pro-choice crowds came to the same square.', zh: '當贊成生命權和贊成選擇權的人群來到同一廣場時，暴力爆發了。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪˋrʌpt' },
   { word: 'rupture', meaning: '破裂', pos: 'n., v.', sentences: [
     {en: 'The weight-lifter had a muscle rupture.', zh: '舉重運動員肌肉破裂。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋrʌptʃɚ' },
   { word: 'destroy', meaning: '毀滅、破壞', pos: 'v.', sentences: [
     {en: 'An earthquake destroyed most of the city.', zh: '地震摧毀了城市的大部分地區。'}
-  ], avoid: ['sabotage'], roots: [], usages: [], forms: [] },
+  ], avoid: ['sabotage'], roots: [], usages: [], forms: [], kk: 'dɪˋstrɔɪ' },
   { word: 'precursor', meaning: '前身、先導', pos: 'n.', sentences: [
     {en: 'SO is a precursor of acid rain.', zh: '二氧化硫是酸雨的前驅物。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'prɪˋkɝsɚ' },
   { word: 'recourse', meaning: '依靠、退路、手段', pos: 'n.', sentences: [
     {en: 'It is best to resolve the case without recourse to law.', zh: '最好不訴諸法律來解決此案。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋrikɔrs' },
   { word: 'confusion', meaning: '混亂、混淆', pos: 'n.', sentences: [
     {en: 'To avoid confusion, the twins never wore the same clothes.', zh: '為了避免混淆，這對雙胞胎從不穿相同的衣服。'}
-  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [], kk: 'kənˋfjuʒən' },
   { word: 'infuse', meaning: '注入、浸泡', pos: 'v.', sentences: [
     {en: 'His arrival infused new life and energy into the group.', zh: '他的到來為團體注入了新的生命和能量。'}
-  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [], kk: 'ɪnˋfjuz' },
   { word: 'effusive', meaning: '熱情洋溢的', pos: 'adj.', sentences: [
     {en: "She blushed at her supervisor's effusive praise.", zh: '她因監督員熱情洋溢的表揚而臉紅。'}
-  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [], kk: 'ɪˋfjusɪv' },
   { word: 'futile', meaning: '徒勞的、無效的', pos: 'adj.', sentences: [
     {en: 'All our efforts proved futile.', zh: '我們所有的努力都白費了。'}
-  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [], kk: 'ˋfjutḷ' },
   { word: 'confound', meaning: '使困惑', pos: 'v.', sentences: [
     {en: 'The strategy confounded our opponents.', zh: '這個策略讓我們的對手困惑。'}
-  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [], kk: 'kənˋfaʊnd' },
   { word: 'profuse', meaning: '豐富的、大量的', pos: 'adj.', sentences: [
     {en: 'The victims were profuse in their thanks to the donors.', zh: '受害者對捐獻者表達了豐富的感謝。'}
-  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [], kk: 'prəˋfjus' },
   { word: 'perfusion', meaning: '布滿、灌注', pos: 'n.', sentences: [
     {en: 'Perfusion of an organ during transplant can improve the outcome of the operation.', zh: '移植期間器官灌注可以改善手術效果。'}
-  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['fund, fus'], usages: [], forms: [], kk: 'pɚˋfjuʒən' },
   { word: 'intermission', meaning: '中場休息時間', pos: 'n.', sentences: [
     {en: 'The man went out to have a smoke during the intermission.', zh: '那個人在中場休息時出去抽煙。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏɪntɚˋmɪʃən' },
   { word: 'intermittent', meaning: '斷續的、間歇的', pos: 'adj.', sentences: [
     {en: 'There was intermittent rain all night.', zh: '整晚都有間歇性的雨。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏɪntɚˋmɪtənt' },
   { word: 'dismiss', meaning: '遣散、免職、不理會', pos: 'v.', sentences: [
     {en: 'He has been dismissed from his job for incompetence.', zh: '他因無能而被解雇。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪsˋmɪs' },
   { word: 'emit', meaning: '發出', pos: 'v.', sentences: [
     {en: 'All living organisms emit heat, which can be picked up by infrared sensors.', zh: '所有生物體都會發出熱，可被紅外傳感器檢測到。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪˋmɪt' },
   { word: 'permission', meaning: '允許、許可', pos: 'n.', sentences: [
     {en: "I have the author's permission to quote from his article.", zh: '我有作者的許可引用他的文章。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'pɚˋmɪʃən' },
   { word: 'permit', meaning: '允許、許可證', pos: 'v., n.', sentences: [
     {en: 'Smoking is not permitted in this restaurant.', zh: '此餐廳不允許吸煙。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'pɚˋmɪt' },
   { word: 'remit', meaning: '匯（款）、寬恕、緩解', pos: 'v.', sentences: [
     {en: 'The young man remits half his monthly salary to his parents back home.', zh: '年輕人每月將一半的薪水匯給他在家的父母。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˋmɪt' },
   { word: 'remission', meaning: '寬恕、緩解', pos: 'n.', sentences: [
     {en: 'The cancer is currently in remission.', zh: '癌症目前處於緩解期。'}
-  ], avoid: ['rehabilitation'], roots: ['miss, mit'], usages: [], forms: [] },
+  ], avoid: ['rehabilitation'], roots: ['miss, mit'], usages: [], forms: [], kk: 'rɪˋmɪʃən' },
   { word: 'transmit', meaning: '傳送、傳播', pos: 'v.', sentences: [
     {en: 'The message is transmitted over short-wave radio.', zh: '該信息通過短波無線電傳輸。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'trænzˋmɪt' },
   { word: 'transmission', meaning: '傳送、傳播', pos: 'n.', sentences: [
     {en: 'We apologize for the interruption to our transmissions this afternoon.', zh: '我們為今天下午廣播節目的中斷表示歉意。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'trænsˋmɪʃən' },
   { word: 'neurotransmitter', meaning: '神經傳導物質', pos: 'n.', sentences: [
     {en: 'Serotonin is an important neurotransmitter.', zh: '血清素是一種重要的神經遞質。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏnʊroˋtrænsˏmɪtɚ' },
   { word: 'erode', meaning: '逐步侵蝕', pos: 'v.', sentences: [
     {en: 'The constant criticism eroded his confidence to the point where he no longer believed in himself.', zh: '持續的批評削弱了他的自信，到了他不再相信自己的地步。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪˋrod' },
   { word: 'intertwined', meaning: '交織的、密不可分的', pos: 'adj.', sentences: [
     {en: 'Economic growth is closely intertwined with environmental sustainability.', zh: '經濟成長與環境永續密切相關。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏɪntɚˋtwaɪnd' },
   { word: 'bedrock', meaning: '基礎、根基、基本原則', pos: 'n.', sentences: [
     {en: 'Economic stability is the bedrock upon which long-term prosperity is built.', zh: '經濟穩定是長期繁榮所建立的基礎。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋbɛdˏrɑk' },
   { word: 'pose', meaning: '提出、造成', pos: 'v.', sentences: [
     {en: 'The lack of funding poses a major challenge to the project.', zh: '資金缺乏對該計畫構成了重大挑戰。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'poz' },
   { word: 'insulated', meaning: '被隔絕的、被絕緣的、受保護的', pos: 'adj.', sentences: [
     {en: 'The wealthy neighborhood is insulated from the economic hardships faced by the rest of the city.', zh: '該富裕社區與城市其他地區所面臨的經濟困難相隔離。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋɪnsəˏletɪd' },
   { word: 'unanimous', meaning: '無異議的、意見一致的', pos: 'adj.', sentences: [
     {en: 'The bill had unanimous approval in Congress.', zh: '該法案在國會獲得一致批准。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'juˋnænəməs' },
   { word: 'unification', meaning: '統一', pos: 'n.', sentences: [
     {en: 'The unification of East and West Germany has been a success so far.', zh: '東西德統一到目前為止一直是成功的。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏjunəfəˋkeʃən' },
   { word: 'union', meaning: '結合、工會、聯邦', pos: 'n.', sentences: [
     {en: 'Marriage should be the union of two people in love.', zh: '婚姻應該是兩個相愛的人的結合。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋjunjən' },
   { word: 'unique', meaning: '獨一無二的', pos: 'adj.', sentences: [
     {en: 'Your handwriting is unique and easily recognizable.', zh: '你的筆跡是獨特的，容易辨認。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'juˋnik' },
   { word: 'bilingual', meaning: '雙語的', pos: 'adj.', sentences: [
     {en: 'This is a Chinese-English bilingual dictionary.', zh: '這是一部英漢雙語詞典。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'baɪˋlɪŋgwəl' },
   { word: 'bigamy', meaning: '重婚', pos: 'n.', sentences: [
     {en: 'Bigamy is a civil offense in Taiwan.', zh: '重婚在台灣是一種民事犯罪。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋbɪgəmɪ' },
   { word: 'biennial', meaning: '兩年一次的、雙年展、二年生植物', pos: 'adj., n.', sentences: [
     {en: 'There is a famous biennial art exhibition at Venice.', zh: '威尼斯有一個著名的雙年藝術展覽。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'baɪˋɛnɪəl' },
   { word: 'bilateral', meaning: '雙邊的', pos: 'adj.', sentences: [
     {en: "This year's Taiwan-American bilateral trade talks are going on at the International Conference Center.", zh: '今年台美雙邊貿易談判正在國際會議中心進行。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'baɪˋlætərəl' },
   { word: 'contribute', meaning: '貢獻、捐獻', pos: 'v.', sentences: [
     {en: 'The winner of the lottery contributed large sums to charity.', zh: '這位彩票獲獎者向慈善機構捐獻了大筆款項。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kənˋtrɪbjut' },
   { word: 'distribute', meaning: '分配、分佈、分發', pos: 'v.', sentences: [
     {en: 'Donated foodstuff was quickly distributed to the stricken areas.', zh: '捐贈的食物很快被分配到災區。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋstrɪbjut' },
   { word: 'tribute', meaning: '貢品、敬意、禮讚', pos: 'n.', sentences: [
     {en: 'In the ceremony, artists and musicians paid tribute to the famous composer.', zh: '在儀式上，藝術家和音樂家向這位著名的作曲家致敬。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋtrɪbjut' },
   { word: 'attribute', meaning: '特性、特質、歸因於', pos: 'n., v.', sentences: [
     {en: 'Both candidates possess the attributes we want in a leader.', zh: '兩位候選人都具備我們想要的領導者素質。'},
     {en: 'She attributes her success to hard work and determination.', zh: '她將自己的成功歸因於努力與決心。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋætrəˏbjut' },
   { word: 'tributary', meaning: '進貢國、支流、進貢的、貢獻的', pos: 'n., adj.', sentences: [
     {en: 'This stream is a tributary of the Ohio River.', zh: '這條溪流是俄亥俄河的支流。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋtrɪbjəˏtɛrɪ' },
   { word: 'retribution', meaning: '報復、報應', pos: 'n.', sentences: [
     {en: 'The killer acted without fear of retribution.', zh: '殺手不怕報復。'}
-  ], avoid: ['reprisal'], roots: [], usages: [], forms: [] },
+  ], avoid: ['reprisal'], roots: [], usages: [], forms: [], kk: 'ˏrɛtrəˋbjuʃən' },
   { word: 'ensue', meaning: '接著發生', pos: 'v.', sentences: [
     {en: 'Trouble ensued after the new law took effect.', zh: '新法律生效後，麻煩隨之而來。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪnˋsu' },
   { word: 'terrain', meaning: '地形、地勢', pos: 'n.', sentences: [
     {en: 'The army chose its position based on the defensive advantages of the surrounding terrain.', zh: '軍隊根據周圍地形的防禦優勢選擇了其陣地。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'təˋren' },
   { word: 'disclose', meaning: '透露、揭曉', pos: 'v.', sentences: [
     {en: 'The winner will be disclosed in a minute.', zh: '獲勝者將在一分鐘內揭曉。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋskloz' },
   { word: 'disorder', meaning: '混亂、疾病', pos: 'n.', sentences: [
     {en: 'The classroom fell into disorder after the teacher left.', zh: '老師離開後教室陷入混亂。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋsɔrdɚ' },
   { word: 'display', meaning: '展現、陳列', pos: 'v., n.', sentences: [
     {en: 'Family photos are displayed on the wall.', zh: '家庭照片展示在牆上。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋsple' },
   { word: 'disembodied', meaning: '無形的', pos: 'adj.', sentences: [
     {en: 'A disembodied voice came from the radio.', zh: '一個幽靈般的聲音從收音機裡傳來。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪsɪˋbɑdɪd' },
   { word: 'diffident', meaning: '缺乏自信的', pos: 'adj.', sentences: [
     {en: 'My kid sister is a shy, diffident girl.', zh: '我的妹妹是一個害羞、自信不足的女孩。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋdɪfədənt' },
   { word: 'diffuse', meaning: '散漫的、滲透、撒散', pos: 'adj., v.', sentences: [
     {en: 'The lecturer spoke in a wordy, diffuse style.', zh: '演講者用冗長、散漫的風格說話。'}
-  ], avoid: [], roots: ['dis', 'fund, fus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['dis', 'fund, fus'], usages: [], forms: [], kk: 'dɪˋfjus' },
   { word: 'dilate', meaning: '擴張', pos: 'v.', sentences: [
     {en: 'The pupils of the eyes dilate in darkness.', zh: '眼睛的瞳孔在黑暗中擴張。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'daɪˋlet' },
   { word: 'discrepancy', meaning: '差異、不一致', pos: 'n.', sentences: [
     {en: 'There is some discrepancy between the two accounts.', zh: '這兩個帳戶之間存在一些差異。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋskrɛpənsɪ' },
   { word: 'uncontested', meaning: '無異議的、無爭議的', pos: 'adj.', sentences: [
     {en: 'The pole-vaulter is the uncontested world champion.', zh: '這位撐竿跳高運動員是無可爭議的世界冠軍。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnkənˋtɛstɪd' },
   { word: 'undaunted', meaning: '不怕的、無懼的', pos: 'adj.', sentences: [
     {en: 'Undaunted by the warning, the man pressed ahead.', zh: '不被警告所阻嚇，這個人繼續前進。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnˋdɔntɪd' },
   { word: 'unkempt', meaning: '滂亂、不整的', pos: 'adj.', sentences: [
     {en: 'The lawn is neglected and quite unkempt.', zh: '草坪被忽視且相當凌亂。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnˋkɛmpt' },
   { word: 'unnerving', meaning: '令人膽怯的', pos: 'adj.', sentences: [
     {en: 'Facing a gun for the first time is quite an unnerving experience.', zh: '第一次面對槍支是一個相當令人不安的經歷。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnˋnɝvɪŋ' },
   { word: 'unscathed', meaning: '毫髮無損', pos: 'adj.', sentences: [
     {en: 'He survived the car crash unscathed.', zh: '他在汽車碰撞中毫髮無損地倖存下來。'}
-  ], avoid: [], roots: ['scath'], usages: [], forms: [] },
+  ], avoid: [], roots: ['scath'], usages: [], forms: [], kk: 'ʌnˋskeðd' },
   { word: 'unleash', meaning: '釋放、放出', pos: 'v.', sentences: [
     {en: 'At worst, nuclear war could be unleashed.', zh: '最糟的情況下，核戰爭可能被引發。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnˋliʃ' },
   { word: 'unravel', meaning: '解開', pos: 'v.', sentences: [
     {en: 'Scientists are still trying to unravel the secrets of genetics.', zh: '科學家仍在努力解開遺傳學的秘密。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnˋrævḷ' },
   { word: 'unbridled', meaning: '毫無節制的、如脫韁野馬的', pos: 'adj.', sentences: [
     {en: 'Unbridled growth may end in economic collapse.', zh: '無節制的增長可能導致經濟崩潰。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnˋbraɪdəld' },
   { word: 'nonprofit', meaning: '非營利的', pos: 'adj.', sentences: [
     {en: 'The CFCT is a nonprofit, nongovernmental organization.', zh: 'CFCT是一個非營利、非政府組織。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'nɑnˋprɑfɪt' },
   { word: 'weigh', meaning: '稱重、權衡、考量', pos: 'v.', sentences: [
     {en: 'The stress of the situation has been weighing on her all week.', zh: '這種情況帶來的壓力整週都壓在她心頭。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'we' },
   { word: 'soar', meaning: '翱翔、急劇上升', pos: 'v.', sentences: [
     {en: 'Her spirits soared when she heard the good news.', zh: '當她聽到好消息時，情緒頓時高昂起來。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'sɔr' },
   { word: 'monumental', meaning: '巨大的、非常龐大的', pos: 'adj.', sentences: [
     {en: 'The failure of the project was a monumental disaster for the company.', zh: '該專案的失敗對公司來說是一場巨大的災難。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏmɑnjəˋmɛntḷ' },
   { word: 'facade', meaning: '建築的正面、外表、假象', pos: 'n.', sentences: [
     {en: 'She maintained a facade of calm even though she was deeply anxious inside.', zh: '儘管內心極度焦慮，她仍然維持著平靜的外表。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'fəˋsɑd' },
   { word: 'disciple', meaning: '門徒、追隨者', pos: 'n.', sentences: [
     {en: 'She is a disciple of the movement that advocates for sustainable living.', zh: '她是倡導永續生活運動的忠實擁護者。'}
-  ], avoid: [], roots: ['capt, cept, cip'], usages: [], forms: [] },
+  ], avoid: [], roots: ['capt, cept, cip'], usages: [], forms: [], kk: 'dɪˋsaɪpḷ' },
   { word: 'handcrafted', meaning: '手工藝製作的', pos: 'adj.', sentences: [
     {en: 'All of the jewelry is handcrafted using traditional techniques passed down through generations.', zh: '所有的珠寶都是使用世代相傳的傳統技術手工製作的。'}
-  ], avoid: ['crafted'], roots: [], usages: [], forms: [] },
+  ], avoid: ['crafted'], roots: [], usages: [], forms: [], kk: 'ˋhændˏkræftɪd' },
   { word: 'mock-up', meaning: '實體模型、草稿', pos: 'n.', sentences: [
     {en: 'Before mass production, the company built a full-scale mock-up of the new car.', zh: '在大規模生產之前，該公司建造了該新車的全尺寸模型。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'mɑk-ʌp' },
   { word: 'comb through', meaning: '仔細推敲、徹底查核', pos: 'phrasal verb.', sentences: [
     {en: 'The detective combed through the evidence for any clue that might solve the case.', zh: '該偵探仔細搜查了證據，尋找任何可能破案的線索。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kom θru' },
   { word: 'conventional', meaning: '傳統的、常規的', pos: 'adj.', sentences: [
     {en: 'The new drug is more effective than conventional treatments for the disease.', zh: '該新藥比該疾病的傳統治療方法更有效。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kənˋvɛnʃənḷ' },
   { word: 'sacred', meaning: '神聖的、極其重要的、不可侵犯的', pos: 'adj.', sentences: [
     {en: 'The protection of human life is a sacred duty for doctors.', zh: '保護人命是醫生一項神聖的職責。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsekrɪd' },
   { word: 'ameliorate', meaning: '改善', pos: 'v.', sentences: [
     {en: 'Huge donations greatly ameliorated the situations at the earthquake-stricken area.', zh: '巨大的捐款大大改善了地震災區的狀況。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋmiljəˏret' },
   { word: 'appalling', meaning: '駭人的', pos: 'adj.', sentences: [
     {en: 'The footage revealed the appalling conditions in the war zone.', zh: '這段影像揭露了戰爭地區令人震驚的狀況。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋpɔlɪŋ' },
   { word: 'appeal', meaning: '呼籲、吸引、吸引力', pos: 'v., n.', sentences: [
     {en: 'Civic organizations appealed to the government to halt the war.', zh: '民間組織呼籲政府停止戰爭。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋpil' },
   { word: 'appease', meaning: '平息、緩和', pos: 'v.', sentences: [
     {en: 'The government made some concessions to appease the protesters.', zh: '政府做出一些讓步以安撫抗議者。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋpiz' },
   { word: 'appetite', meaning: '胃口、食慾', pos: 'n.', sentences: [
     {en: 'The virus may lead to loss of appetite.', zh: '這種病毒可能導致食慾不振。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋæpəˏtaɪt' },
   { word: 'appraise', meaning: '估價、評估', pos: 'v.', sentences: [
     {en: 'The government is trying to appraise the damage caused by the hurricane.', zh: '政府正在評估颶風造成的損害。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋprez' },
   { word: 'appreciate', meaning: '升值、欣賞、感激', pos: 'v.', sentences: [
     {en: 'The Euro has appreciated a lot against the dollar.', zh: '歐元對美元大幅升值。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋpriʃɪˏet' },
   { word: 'ascertain', meaning: '確定、查明', pos: 'v.', sentences: [
     {en: 'The information can be easily ascertained on the Web.', zh: '這些資訊可以在網上輕鬆確認。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏæsɚˋten' },
   { word: 'array', meaning: '系列', pos: 'n.', sentences: [
     {en: 'In the buffet there is an array of delicious food to choose from.', zh: '自助餐中有一系列美味的食物可供選擇。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋre' },
   { word: 'delicate', meaning: '精緻的、脆弱的、棘手的', pos: 'adj.', sentences: [
     {en: 'The negotiator handled the delicate matter with great sensitivity.', zh: '該談判者以極大的敏感度處理了這個棘手的問題。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋdɛləkɪt' },
   { word: 'postmodern', meaning: '後現代', pos: 'adj.', sentences: [
     {en: 'Postmodern architecture is not completely utilitarian.', zh: '後現代建築並不完全實用主義。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'postˋmɑdɚn' },
   { word: 'postpone', meaning: '延後、延期', pos: 'v.', sentences: [
     {en: 'The meeting had to be postponed for the typhoon.', zh: '會議因颱風不得不延期。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'postˋpon' },
   { word: 'preposterous', meaning: '荒謬的、可笑的', pos: 'adj.', sentences: [
     {en: 'The claim that Confucius was Korean is simply preposterous.', zh: '孔子是韓國人的說法簡直是荒謬的。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'prɪˋpɑstərəs' },
   { word: 'abbreviate', meaning: '簡寫、縮寫', pos: 'v.', sentences: [
     {en: '"Vice President" is often abbreviated to "VP."', zh: '「副總統」經常縮寫為「副總」。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋbrivɪˏet' },
   { word: 'accuse', meaning: '指責、指控', pos: 'v.', sentences: [
     {en: 'The woman accused her husband of committing domestic violence.', zh: '這位女性指控她的丈夫犯了家庭暴力罪。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋkjuz' },
   { word: 'address', meaning: '處理、對...演講、演說、地址', pos: 'v., n.', sentences: [
     {en: 'He addressed a few introductory remarks to the audience.', zh: '他向觀眾說了幾句開場白。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋdrɛs' },
   { word: 'admiration', meaning: '景仰、欽佩', pos: 'n.', sentences: [
     {en: 'The girl gazed at the superstar in admiration.', zh: '女孩帶著欽佩地凝視著這位超級明星。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏædməˋreʃən' },
   { word: 'admonish', meaning: '警告、提醒', pos: 'v.', sentences: [
     {en: 'The teacher admonished all the students not to cheat.', zh: '老師警告所有學生不要作弊。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ædˋmɑnɪʃ' },
   { word: 'advance', meaning: '前進、促進、進展、預先的', pos: 'v., n., adj.', sentences: [
     {en: 'The demonstrators advanced on the Presidential Hall.', zh: '示威者向總統大樓前進。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ədˋvæns' },
   { word: 'evaporate', meaning: '蒸發', pos: 'v.', sentences: [
     {en: 'Water evaporates faster when humidity is low.', zh: '當濕度低時，水蒸發得更快。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪˋvæpəˏret' },
   { word: 'exasperated', meaning: '惱火的', pos: 'adj.', sentences: [
     {en: 'The patron is feeling increasingly exasperated with the endless waiting.', zh: '顧客對無盡的等待感到越來越惱火。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪgˋzæspəˏretɪd' },
   { word: 'exhaust', meaning: '耗盡、用光、廢氣', pos: 'v., n.', sentences: [
     {en: 'The climb to the mountaintop exhausted everybody.', zh: '爬到山頂讓每個人都筋疲力盡。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪgˋzɔst' },
   { word: 'external', meaning: '外在的、外部的', pos: 'adj.', sentences: [
     {en: 'The cream is for external use only.', zh: '這種乳霜只供外用。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪkˋstɝnḷ' },
   { word: 'extremities', meaning: '末端、肢體末梢', pos: 'n.', sentences: [
     {en: 'In low temperatures, your heart pumps faster to prevent your extremities from freezing.', zh: '在低溫下，你的心臟跳動更快以防止你的肢體凍結。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɛkˋstrɛmətɪz' },
   { word: 'extravagant', meaning: '奢侈的、過分的', pos: 'adj.', sentences: [
     {en: 'The show offers a view of the extravagant lifestyles of various movie stars.', zh: '這個節目展現了各位電影明星的奢侈生活方式。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɛkˋstrævəgənt' },
   { word: 'escalate', meaning: '升高、升級', pos: 'v.', sentences: [
     {en: 'A small territorial conflict quickly escalated into an all-out war.', zh: '一場小的領土衝突迅速升級為全面戰爭。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋɛskəˏlet' },
   { word: 'decipher', meaning: '破解（密碼等）、解釋', pos: 'v.', sentences: [
     {en: 'Army intelligence is trying to decipher a piece of enemy communication.', zh: '軍事情報部門正在試圖破解一份敵方通信。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋsaɪfɚ' },
   { word: 'debilitate', meaning: '令人喪失能力', pos: 'v.', sentences: [
     {en: 'Chemotherapy debilitated and exhausted him.', zh: '化療使他身體虛弱並筋疲力盡。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dəˋbɪləˏtet' },
   { word: 'decompose', meaning: '分解、腐敗', pos: 'v.', sentences: [
     {en: 'After an animal dies, its body starts to decompose.', zh: '動物死亡後，其屍體開始分解。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏdikəmˋpoz' },
   { word: 'dehydrated', meaning: '脫水的、乾燥的', pos: 'adj.', sentences: [
     {en: 'Dehydrated food was originally developed by NASA for astronauts.', zh: '脫水食物最初是由美國宇航局為宇航員開發的。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋhaɪˏdretɪd' },
   { word: 'deliberate', meaning: '故意的、慎重的、考慮', pos: 'adj., v.', sentences: [
     {en: 'That was no accident but a deliberate attack.', zh: '那不是意外，而是故意的攻擊。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋlɪbərɪt' },
   { word: 'delineate', meaning: '勾勒、描繪', pos: 'v.', sentences: [
     {en: 'The boundary of the park is delineated by a low fence.', zh: '公園的邊界由低柵欄標示。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋlɪnɪˏet' },
   { word: 'demented', meaning: '精神錯亂的、瘋狂的、失智的', pos: 'adj.', sentences: [
     {en: "His wife was demented with worry when she couldn't reach him for the third day.", zh: '當他妻子第三天無法聯繫到他時，她因擔憂而精神錯亂。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋmɛntɪd' },
   { word: 'rubble', meaning: '碎石、瓦礫堆', pos: 'n.', sentences: [
     {en: 'Many houses in the war zone were reduced to rubble.', zh: '戰爭地區的許多房屋被夷為平地。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋrʌbḷ' },
   { word: 'rumble', meaning: '隆隆聲', pos: 'n., v.', sentences: [
     {en: 'In the city there is no escape from the continuous rumble of traffic.', zh: '在城市裡無法逃脫持續不斷的交通隆隆聲。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋrʌmbḷ' },
   { word: 'rumor', meaning: '謠言', pos: 'n.', sentences: [
     {en: 'Rumor has it that the candidate has an illegitimate child.', zh: '傳言這位候選人有私生子。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋrumɚ' },
   { word: 'sabotage', meaning: '蓄意破壞', pos: 'n., v.', sentences: [
     {en: 'An investigative reporter concluded that the oil pipeline was blown in an act of sabotage.', zh: '一位調查記者得出結論，石油管道是在一次破壞行為中被炸毀的。'}
-  ], avoid: ['destroy'], roots: [], usages: [], forms: [] },
+  ], avoid: ['destroy'], roots: [], usages: [], forms: [], kk: 'ˋsæbəˏtɑʒ' },
   { word: 'sagacious', meaning: '睿智的', pos: 'adj.', sentences: [
     {en: 'The old man gave him sagacious advice.', zh: '這位老人給了他睿智的建議。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'səˋgeʃəs' },
   { word: 'salvage', meaning: '搶救、拯救、打撈', pos: 'n., v.', sentences: [
     {en: 'Salvage operations started 30 years after the shipwreck.', zh: '搶救作業在沉船30年後開始。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsælvədʒ' },
   { word: 'sanguine', meaning: '樂觀的、自信的、紅潮的、血腥的', pos: 'adj.', sentences: [
     {en: 'They remained sanguine about the prospect of peace.', zh: '他們對和平的前景保持樂觀。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsæŋgwɪn' },
   { word: 'savage', meaning: '野蠻的、殘酷的；野蠻人', pos: 'adj., n.', sentences: [
     {en: 'The savage invasion is universally condemned.', zh: '這場野蠻的入侵受到普遍譴責。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsævədʒ' },
   { word: 'savvy', meaning: '精明的；理解能力', pos: 'adj., n.', sentences: [
     {en: 'You need to be financially savvy to navigate the complexities of the stock market.', zh: '你需要具備財務頭腦，才能在股市的複雜性中游刃有餘。'},
     {en: 'Our manager is a savvy businessman.', zh: '我們的經理是位精明的商人。'},
     {en: 'His business savvy helped the company survive the economic downturn.', zh: '他的商業頭腦幫助公司度過了經濟衰退。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsævɪ' },
   { word: 'scorch', meaning: '烤焦、灼傷', pos: 'v.', sentences: [
     {en: 'The surrounding buildings were scorched by the heat of the explosion.', zh: '周邊建築物被爆炸產生的熱量烤焦。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'skɔrtʃ' },
   { word: 'slay', meaning: '殺害、殺死', pos: 'v.', sentences: [
     {en: 'They believe he was slain for organizing workers.', zh: '他們認為他因組織工人而被殺害。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'sle' },
   { word: 'slight', meaning: '輕微的', pos: 'adj.', sentences: [
     {en: 'He speaks English with a slight Taiwanese accent.', zh: '他說英文時帶有輕微的台灣口音。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'slaɪt' },
   { word: 'sluggish', meaning: '緩慢的、遲緩', pos: 'adj.', sentences: [
     {en: 'The sedative made the patient sluggish.', zh: '鎮靜劑使病人變得遲鈍。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋslʌgɪʃ' },
   { word: 'soothe', meaning: '使平息、撫慰', pos: 'v.', sentences: [
     {en: 'A shot of brandy may soothe your nerves.', zh: '一杯白蘭地可能會撫慰你的神經。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'suð' },
   { word: 'smash', meaning: '打破、粉碎', pos: 'v.', sentences: [
     {en: 'Results of the game smashed a lot of records.', zh: '遊戲結果打破了許多紀錄。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'smæʃ' },
   { word: 'somatic', meaning: '身體的', pos: 'adj.', sentences: [
     {en: 'Psychological problems may show somatic symptoms such as headaches or stomach aches.', zh: '心理問題可能表現為身體症狀，如頭痛或胃痛。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'soˋmætɪk' },
   { word: 'spare', meaning: '饒恕、省下；備用的、多出來的；備用品', pos: 'v., adj., n.', sentences: [
     {en: 'The occupation army spared women and children but imprisoned all adult males.', zh: '佔領軍饒恕了婦女和兒童，但監禁了所有成年男性。'},
     {en: 'We have a spare room if you want to stay overnight with us.', zh: '要是你想在我們這裡過夜的話，我們有一個空房間。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'spɛr' },
   { word: 'sparing', meaning: '節約的、不濫用的', pos: 'adj.', sentences: [
     {en: "Be sparing with the butter as there isn't much left.", zh: '節省使用黃油，因為沒有剩下太多了。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋspɛrɪŋ' },
   { word: 'spark', meaning: '點燃、火星', pos: 'v., n.', sentences: [
     {en: 'The tax hike sparked revolt.', zh: '增稅引發了反抗。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'spɑrk' },
   { word: 'apathetic', meaning: '冷漠、不關心', pos: 'adj.', sentences: [
     {en: "You mustn't be apathetic about environmental protection.", zh: '你不能對環境保護漠不關心。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏæpəˋθɛtɪk' },
   { word: 'atheist', meaning: '無神論者', pos: 'n.', sentences: [
     {en: "He's an atheist and doesn't pray.", zh: '他是個無神論者，不祈禱。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋeθɪəst' },
   { word: 'amorphous', meaning: '無固定形狀的、亂七八糟的', pos: 'adj.', sentences: [
     {en: 'There is an amorphous mass of jelly on the toast.', zh: '吐司上有一團不定形的果凍。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋmɔrfəs' },
   { word: 'anonymous', meaning: '匿名的', pos: 'adj.', sentences: [
     {en: 'I never pay attention to anonymous letters.', zh: '我從不注意匿名信件。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋnɑnəməs' },
   { word: 'analphabetic', meaning: '不識字的、文盲', pos: 'adj., n.', sentences: [
     {en: 'Fewer and fewer people are analphabetic nowadays.', zh: '如今識字能力低的人越來越少。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏænælfəˋbɛtɪk' },
   { word: 'anesthesia', meaning: '麻醉', pos: 'n.', sentences: [
     {en: 'Under local anesthesia, the patient remains conscious.', zh: '在局部麻醉下，患者保持清醒。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏænɪsˋθiʒə' },
   { word: 'controversial', meaning: '引起爭議的、有爭議的', pos: 'adj.', sentences: [
     {en: 'Abortion is a highly controversial issue in the U.S.', zh: '墮胎在美國是一個高度有爭議的問題。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏkɑntrəˋvɝʃḷ' },
   { word: 'counterfeit', meaning: '偽造的、偽造、偽造品', pos: 'adj., v., n.', sentences: [
     {en: 'I got some counterfeit money in change this morning.', zh: '我今天早上找回的零錢中有一些假幣。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkaʊntɚˏfɪt' },
   { word: 'counteract', meaning: '抵銷、制衡、反制', pos: 'v.', sentences: [
     {en: 'This pill will counteract your stomach acid.', zh: '這種藥丸將抵消你的胃酸。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏkaʊntɚˋækt' },
   { word: 'encounter', meaning: '遭遇', pos: 'v., n.', sentences: [
     {en: "You're going to encounter enormous difficulties if you push for reform.", zh: '如果你推行改革，你將遇到巨大的困難。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪnˋkaʊntɚ' },
   { word: 'counterpart', meaning: '另一半、對應之人或物', pos: 'n.', sentences: [
     {en: 'The President and his British counterpart—the Prime Minister—will have a summit soon.', zh: '總統和他的英國對應人物——首相——將很快舉行峰會。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkaʊntɚˏpɑrt' },
   { word: 'disinterested', meaning: '立場超然的、無利益衝突的', pos: 'adj.', sentences: [
     {en: 'Both sides are willing to listen to a disinterested third party.', zh: '雙方都願意聽取立場超然的第三方的意見。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋsɪntrɪstɪd' },
   { word: 'dissect', meaning: '解剖、分解', pos: 'v.', sentences: [
     {en: 'The students learn to dissect a frog in biology class.', zh: '學生在生物課上學會解剖青蛙。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'daɪˋsɛkt' },
   { word: 'distant', meaning: '遙遠的', pos: 'adj.', sentences: [
     {en: 'Distant mountains often appear pale blue.', zh: '遠方的山峰通常呈現淡藍色。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋdɪstənt' },
   { word: 'disability', meaning: '失能', pos: 'n.', sentences: [
     {en: 'The man suffers from a visual disability.', zh: '這個人患有視覺障礙。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏdɪsəˋbɪlɪtɪ' },
   { word: 'insatiable', meaning: '無法滿足的', pos: 'adj.', sentences: [
     {en: "The country's insatiable demands for oil and steel have driven up prices.", zh: '這個國家對油氣和鋼鐵無法滿足的需求推高了價格。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪnˋseʃəbḷ' },
   { word: 'insomnia', meaning: '失眠症', pos: 'n.', sentences: [
     {en: "The man suffers from insomnia and can't sleep without sleeping pills.", zh: '這個人患有失眠症，不吃安眠藥無法睡眠。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪnˋsɑmnɪə' },
   { word: 'impartially', meaning: '公正地', pos: 'adv.', sentences: [
     {en: 'The mediator treated both parties impartially.', zh: '調解者公正地對待雙方。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪmˋpɑrʃəlɪ' },
   { word: 'impervious', meaning: '透不過的、不受影響的', pos: 'adj.', sentences: [
     {en: 'The plastic raincoat is impervious to water.', zh: '塑膠雨衣防水。'},
     {en: 'He is impervious to criticism and rational argument.', zh: '他對批評和說理都無動於衷。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪmˋpɝvɪəs' },
   { word: 'transplant', meaning: '移植', pos: 'n., v.', sentences: [
     {en: 'Nothing short of a heart transplant can save the patient.', zh: '除了心臟移植外，沒有其他辦法能救這個病人。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'trænsˋplænt' },
   { word: 'tranquil', meaning: '寧靜', pos: 'adj.', sentences: [
     {en: 'He retired to a tranquil life in the countryside.', zh: '他退休後過著鄉村的寧靜生活。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋtræŋkwəl' },
   { word: 'trespassing', meaning: '擅入、強行穿越', pos: 'n.', sentences: [
     {en: 'The sign says "Private property. No trespassing."', zh: '標誌牌上寫著「私有財產.禁止擅入」。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋtrɛspəsɪŋ' },
   { word: 'diaphanous', meaning: '薄而透明的', pos: 'adj.', sentences: [
     {en: 'The bride wore a diaphanous veil.', zh: '新娘穿著透明的面紗。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'daɪˋæfənəs' },
   { word: 'diagonal', meaning: '斜的、對角的、對角線、斜線', pos: 'adj., n.', sentences: [
     {en: 'The blanket is covered with diagonal stripes.', zh: '毯子上覆蓋著斜紋。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'daɪˋægənḷ' },
   { word: 'dialect', meaning: '方言', pos: 'n.', sentences: [
     {en: 'There are literally hundreds of different dialects in use in China.', zh: '中國有字面上數百種不同的方言在使用。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋdaɪəˏlɛkt' },
   { word: 'diaphragm', meaning: '橫隔膜', pos: 'n.', sentences: [
     {en: 'Carrying around weight adds pressure on the diaphragm, which needs to move to breathe.', zh: '攜帶重物會對橫隔膜施加壓力，橫隔膜需要運動才能呼吸。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋdaɪəˏfræm' },
   { word: 'interaction', meaning: '互動', pos: 'n.', sentences: [
     {en: "There's not enough interaction between management and the workers.", zh: '管理層和工人之間的互動不夠。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏɪntɚˋækʃən' },
   { word: 'volatile', meaning: '易變的、不穩定的、容易爆炸的、易激動的', pos: 'adj.', sentences: [
     {en: 'The political situation in the region remains volatile and unpredictable.', zh: '該地區的政治局勢仍然不穩定且不可預測。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋvɑlətḷ' },
   { word: 'even-keeled', meaning: '保持平穩的、沉著的、不易動搖的', pos: 'adj.', sentences: [
     {en: 'Despite the chaos around her, she remained even-keeled and focused on the task.', zh: '儘管周圍混亂，她仍然保持冷靜並專注於任務。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋivən-ˋkild' },
   { word: 'snappish', meaning: '易怒的、容易發脾氣的', pos: 'adj.', sentences: [
     {en: 'The customer was snappish with the waiter over a minor mistake.', zh: '顧客因為服務生的小錯誤而對他發脾氣。'}
-  ], avoid: [], roots: [], usages: ['be snappish with sb 對某人生氣'], forms: [] },
+  ], avoid: [], roots: [], usages: ['be snappish with sb 對某人生氣'], forms: [], kk: 'ˋsnæpɪʃ' },
   { word: 'slam', meaning: '用力關閉、猛然放下、抨擊', pos: 'v., n.', sentences: [
     {en: 'He slammed the door angrily and stormed out of the room.', zh: '他生氣地砰地關上門，衝出了房間。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'slæm' },
   { word: 'assume', meaning: '假設、承擔、假裝', pos: 'v.', sentences: [
     {en: 'The teacher assumed that all students had read the chapter beforehand.', zh: '老師假設所有學生都提前讀過這一章。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'əˋsum' },
   { word: 'secede', meaning: '脫離', pos: 'v.', sentences: [
     {en: 'The South seceded from the Union in 1860.', zh: '1860年，南方脫離了聯邦。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'sɪˋsid' },
   { word: 'secluded', meaning: '僻靜的、與世隔離的', pos: 'adj.', sentences: [
     {en: 'The hermit lives alone by a secluded lake.', zh: '隱士獨自住在一個僻靜的湖邊。'}
-  ], avoid: [], roots: ['clud, clus, claus'], usages: [], forms: [] },
+  ], avoid: [], roots: ['clud, clus, claus'], usages: [], forms: [], kk: 'sɪˋkludɪd' },
   { word: 'seduce', meaning: '引誘、誘惑', pos: 'v.', sentences: [
     {en: 'I joined the tour because I was seduced by the price.', zh: '我因為價格的吸引而報名參加了這次旅行。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'sɪˋdus' },
   { word: 'segregation', meaning: '種族隔離', pos: 'n.', sentences: [
     {en: 'Modern nations no longer practice racial segregation.', zh: '現代國家不再實行種族隔離。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏsɛgrəˋgeʃən' },
   { word: 'telecommunications', meaning: '電信', pos: 'n.', sentences: [
     {en: 'Chunghwa Telecom is a telecommunications provider.', zh: '中華電信是一家電信服務商。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏtɛləkəˏmjunəˋkeʃənz' },
   { word: 'telecommute', meaning: '遠距辦公', pos: 'v.', sentences: [
     {en: 'The magazine editor telecommutes via email.', zh: '這位雜誌編輯透過電子郵件遠距辦公。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋtɛləkəˏmjut' },
   { word: 'teleconferencing', meaning: '電信會議', pos: 'n.', sentences: [
     {en: 'The company has branches all over the world and relies on teleconferencing to keep in sync.', zh: '這家公司在全球各地設有分支機構，依賴視訊會議保持同步。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏtɛləˋkɑnfrənsɪŋ' },
   { word: 'telemarketing', meaning: '電話行銷', pos: 'n.', sentences: [
     {en: 'Most people find telemarketing annoying.', zh: '大多數人覺得電話行銷很煩人。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏtɛləˋmɑrkətɪŋ' },
   { word: 'telepathy', meaning: '超感應、第六感', pos: 'n.', sentences: [
     {en: 'The magician claimed to be capable of telepathy, and then started reading the audience\'s minds.', zh: '魔術師聲稱能夠心靈感應，然後開始讀取觀眾的心思。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'təˋlɛpəθɪ' },
   { word: 'unearthed', meaning: '出土的、發掘出來的、揭露的', pos: 'v., adj.', sentences: [
     {en: 'Archaeologists unearthed ancient artifacts at the construction site.', zh: '考古學家在施工現場發掘出了古代文物。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ʌnˋɝθt' },
   { word: 'duo', meaning: '二重奏、二人組、雙人組合', pos: 'n.', sentences: [
     {en: 'The comedy duo had the audience laughing throughout the entire show.', zh: '這對喜劇雙人組合讓全場觀眾在整場表演中笑聲不斷。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋduo' },
   { word: 'scarf', meaning: '狼吞虎嚥地吃、大口吞食', pos: 'v.', sentences: [
     {en: 'He scarfed down his lunch in less than five minutes because he was in a rush.', zh: '因為趕時間，他不到五分鐘就把午餐狼吞虎嚥地吃完了。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'skɑrf' },
   { word: 'handful', meaning: '少數、一把', pos: 'n.', sentences: [
     {en: 'Only a handful of people showed up for the meeting this morning.', zh: '今天早上只有少數幾個人參加了會議。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋhændˏfʊl' },
   { word: 'intractable', meaning: '棘手的、難解的、頑固的', pos: 'adj.', sentences: [
     {en: 'The two countries have been trying to solve their intractable dispute for decades.', zh: '這兩個國家數十年來一直試圖解決他們之間棘手的爭端。'},
     {en: 'The professor is known for his intractable insistence on academic rigor.', zh: '這位教授以對學術嚴謹的頑固堅持而聞名。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ɪnˋtræktəbḷ' },
   { word: 'unattended', meaning: '無人看管的、無人照料的', pos: 'adj.', sentences: [
   {en: 'Children should never be left unattended near the swimming pool.', zh: '孩子絕不能在游泳池附近無人看管。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'ʌnəˋtɛndɪd' },
   { word: 'resolution', meaning: '解決、決定', pos: 'n.', sentences: [
   {en: 'We found a resolution to the dispute.', zh: '我們找到了解決爭端的方法。'}
-], avoid: [], roots: ['solu, solv'], usages: [], forms: [] },
+], avoid: [], roots: ['solu, solv'], usages: [], forms: [], kk: 'ˏrɛzəˋluʃən' },
 { word: 'lax', meaning: '鬆弛的、鬆懈的', pos: 'adj.', sentences: [
   {en: 'The university has been lax about enforcing these rules.', zh: '這所大學在執行這些規定方面一直很鬆懈。'}
-], avoid: [], roots: ['lax'], usages: [], forms: [] },
+], avoid: [], roots: ['lax'], usages: [], forms: [], kk: 'læks' },
 { word: 'languid', meaning: '慵懶的、無力的', pos: 'adj.', sentences: [
   {en: 'It was a hot, languid summer day.', zh: '那是一個炎熱、慵懶的夏日。'}
-], avoid: [], roots: ['lax'], usages: [], forms: [] },
+], avoid: [], roots: ['lax'], usages: [], forms: [], kk: 'ˋlæŋgwɪd' },
 { word: 'lassitude', meaning: '困乏、無力', pos: 'n.', sentences: [
   {en: 'Symptoms of the disease include paleness and lassitude.', zh: '這種疾病的症狀包括臉色蒼白和身體乏力。'}
-], avoid: [], roots: ['lax'], usages: [], forms: [] },
+], avoid: [], roots: ['lax'], usages: [], forms: [], kk: 'ˋlæsəˏtud' },
 { word: 'slake', meaning: '消解、滿足', pos: 'v.', sentences: [
   {en: 'This lemonade will slake your thirst.', zh: '這杯檸檬水能解渴。'}
-], avoid: [], roots: ['lax'], usages: [], forms: [] },
+], avoid: [], roots: ['lax'], usages: [], forms: [], kk: 'slek' },
 { word: 'slack', meaning: '鬆弛的、懈怠的', pos: 'adj.', sentences: [
   {en: 'These tent ropes are too slack and need tightening.', zh: '這些帳篷繩太鬆了，需要拉緊。'}
-], avoid: [], roots: ['lax'], usages: [], forms: [] },
+], avoid: [], roots: ['lax'], usages: [], forms: [], kk: 'slæk' },
 { word: 'lag', meaning: '落後、延遲', pos: 'v., n.', sentences: [
   {en: "Hurry up! We're lagging behind.", zh: '快點！我們落後了。'}
-], avoid: [], roots: ['lax'], usages: [], forms: [] },
+], avoid: [], roots: ['lax'], usages: [], forms: [], kk: 'læg' },
 { word: 'laxative', meaning: '瀉藥', pos: 'n.', sentences: [
   {en: 'Constipation can be easily alleviated with laxatives.', zh: '便秘可以透過瀉藥輕易緩解。'}
-], avoid: [], roots: ['lax'], usages: [], forms: [] },
+], avoid: [], roots: ['lax'], usages: [], forms: [], kk: 'ˋlæksətɪv' },
   { word: 'bandwagon', meaning: '跟風、潮流', pos: 'n.', sentences: [
   {en: 'Many small companies decided to jump on the bandwagon and start selling eco-friendly products.', zh: '許多小公司決定跟風，開始銷售環保產品。'},
   {en: 'Unless you jump on the global social media bandwagon, you will lack a competitive edge.', zh: '除非追隨全球社群媒體的潮流，否則你將缺乏競爭優勢。'}
@@ -1659,54 +1660,54 @@ const words = [
     'get on the bandwagon 跟上潮流',
     'the bandwagon effect 從眾效應',
     'bandwagon appeal 從眾訴求（廣告或宣傳手法）'
-  ], forms: [] },
+  ], forms: [], kk: 'ˋbændˏwægən' },
 { word: 'strain', meaning: '緊張、壓力；繃緊、用力', pos: 'n., v.', sentences: [
   {en: 'The new manager is under a lot of strain.', zh: '新經理承受著很大的壓力。'}
-], avoid: [], roots: ['strain'], usages: [], forms: [] },
+], avoid: [], roots: ['strain'], usages: [], forms: [], kk: 'stren' },
 { word: 'strict', meaning: '嚴格的', pos: 'adj.', sentences: [
   {en: 'Ms. Lin is a strict teacher who made a lot of stringent rules.', zh: '林老師是一位嚴格的老師，訂了很多嚴格的規定。'}
-], avoid: [], roots: ['strain'], usages: [], forms: [] },
+], avoid: [], roots: ['strain'], usages: [], forms: [], kk: 'strɪkt' },
 { word: 'restrict', meaning: '限制', pos: 'v.', sentences: [
   {en: 'Under the curfew, freedom of movement in and out of the city is restricted.', zh: '在宵禁期間，進出城市的行動自由受到限制。'}
-], avoid: [], roots: ['strain'], usages: [], forms: [] },
+], avoid: [], roots: ['strain'], usages: [], forms: [], kk: 'rɪˋstrɪkt' },
 { word: 'restrain', meaning: '抑制、克制', pos: 'v.', sentences: [
   {en: 'You should restrain yourself at those eat-all-you-can restaurants.', zh: '在那些吃到飽的餐廳，你應該克制自己。'}
-], avoid: [], roots: ['strain'], usages: [], forms: [] },
+], avoid: [], roots: ['strain'], usages: [], forms: [], kk: 'rɪˋstren' },
 { word: 'distress', meaning: '沮喪、苦惱；使苦惱', pos: 'n., v.', sentences: [
   {en: 'The student showed signs of distress after he failed in the important exam.', zh: '這名學生在重要考試失利後表現出痛苦的跡象。'}
-], avoid: [], roots: ['strain'], usages: [], forms: [] },
+], avoid: [], roots: ['strain'], usages: [], forms: [], kk: 'dɪˋstrɛs' },
 { word: 'baggy', meaning: '寬鬆的、袋狀的', pos: 'adj.', sentences: [
-  {en: 'The fashion trend this year favors baggy clothes.', zh: '今年的流行趨勢偏愛寬鬆的衣服。'},], avoid: [], roots: [], usages: ['baggy clothes 寬鬆的衣服'], forms: [] },
+  {en: 'The fashion trend this year favors baggy clothes.', zh: '今年的流行趨勢偏愛寬鬆的衣服。'},], avoid: [], roots: [], usages: ['baggy clothes 寬鬆的衣服'], forms: [], kk: 'ˋbægɪ' },
 { word: 'strangle', meaning: '勒死、使窒息', pos: 'v.', sentences: [
   {en: 'The postmortem reveals that the woman was strangled to death.', zh: '屍體解剖顯示，這名女子是被勒死的。'}
-], avoid: [], roots: ['strain'], usages: [], forms: [] },
+], avoid: [], roots: ['strain'], usages: [], forms: [], kk: 'ˋstræŋgḷ' },
 { word: 'tend', meaning: '照料、傾向', pos: 'v.', sentences: [
   {en: 'Who tends the garden for you?', zh: '誰幫你照料花園？'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'tɛnd' },
 { word: 'tendency', meaning: '傾向', pos: 'n.', sentences: [
   {en: 'The man has a tendency to exaggerate.', zh: '這個人有誇大的傾向。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'ˋtɛndənsɪ' },
 { word: 'tender', meaning: '投標、提出；溫柔的', pos: 'n., v., adj.', sentences: [
   {en: "The company's tender for the building contract has been accepted.", zh: '該公司對建築合約的投標已被接受。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'ˋtɛndɚ' },
 { word: 'contend', meaning: '競爭、爭論', pos: 'v.', sentences: [
   {en: 'This year there are three top-tier players contending for the title.', zh: '今年有三位頂尖選手爭奪冠軍。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'kənˋtɛnd' },
 { word: 'extension', meaning: '延伸', pos: 'n.', sentences: [
   {en: 'Without an extension, the contract will be terminated at the end of the year.', zh: '若沒有延期，合約將於年底終止。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'ɪkˋstɛnʃən' },
 { word: 'intense', meaning: '密集的、強烈的', pos: 'adj.', sentences: [
   {en: 'The injury caused her to feel intense pain.', zh: '這次傷害使她感到劇烈的疼痛。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'ɪnˋtɛns' },
 { word: 'pretend', meaning: '假裝', pos: 'v.', sentences: [
   {en: 'I closed my eyes and pretended that I was asleep.', zh: '我閉上眼睛，假裝自己睡著了。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'prɪˋtɛnd' },
 { word: 'tension', meaning: '張力、緊張', pos: 'n.', sentences: [
   {en: 'The tension was unbearable as we waited for the verdict.', zh: '等待判決時，緊張的氣氛令人難以忍受。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'ˋtɛnʃən' },
 { word: 'tenuous', meaning: '細的、稀薄的、薄弱的', pos: 'adj.', sentences: [
   {en: 'His tenuous reasoning is not convincing at all.', zh: '他薄弱的推理一點也不令人信服。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'ˋtɛnjʊəs' },
 { word: 'abide', meaning: '遵守、忍受、居住（古／文）', pos: 'v.', sentences: [
   {en: 'All members must abide by the club’s rules.', zh: '所有成員都必須遵守俱樂部的規定。'},
   {en: 'I cannot abide rudeness in any form.', zh: '我無法忍受任何形式的無禮。'},
@@ -1714,7 +1715,7 @@ const words = [
 ], avoid: [], roots: [], usages: [
     'abide by the law = observe the law = comply with the law 遵守法律）',
     'cannot abide 無法忍受',
-  ], forms: [] },
+  ], forms: [], kk: 'əˋbaɪd' },
 { word: 'pry', meaning: '打聽、窺探；撬開、撬動', pos: 'v.', sentences: [
   {en: 'She used a screwdriver to pry open the lid of the paint can.', zh: '她用螺絲起子撬開了油漆罐的蓋子。'},
   {en: 'I don\'t mean to pry, but are you feeling okay?', zh: '我不想打聽私事，但你还還好吧？'},
@@ -1724,72 +1725,72 @@ const words = [
     'pry something open 撬開某物',
     'pry something off 撬下、撬掉某物',
     'pry something out of someone 從某人那裡逼問出某事／從某人手中奪走某物',
-  ], forms: [] },
+  ], forms: [], kk: 'praɪ' },
 { word: 'attenuate', meaning: '稀釋、減弱；稀釋的、變弱的', pos: 'v., adj.', sentences: [
   {en: 'Earplugs will attenuate the loud sounds of the machinery.', zh: '耳塞會減弱機器的噪音。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'əˋtɛnjuˏet' },
 { word: 'distend', meaning: '膨脹', pos: 'v.', sentences: [
   {en: 'The medication causes my stomach to distend.', zh: '這種藥會讓我的胃脹大。'}
-], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [] },
+], avoid: [], roots: ['tend, tent, tens'], usages: [], forms: [], kk: 'dɪˋstɛnd' },
   { word: 'absolve', meaning: '赦免、免除', pos: 'v.', sentences: [
   {en: 'The priest absolved the poor sinner.', zh: '神父赦免了這位可憐的罪人。'}
-], avoid: [], roots: ['solu, solv'], usages: [], forms: [] },
+], avoid: [], roots: ['solu, solv'], usages: [], forms: [], kk: 'əbˋzɑlv' },
 { word: 'solve', meaning: '解決', pos: 'v.', sentences: [
   {en: 'The clever man solved the problem in five seconds.', zh: '這個聰明的人在五秒內解決了問題。'}
-], avoid: [], roots: ['solu, solv'], usages: [], forms: [] },
+], avoid: [], roots: ['solu, solv'], usages: [], forms: [], kk: 'sɑlv' },
 { word: 'dissolve', meaning: '溶解、解除（契約等）、解散（公司等）', pos: 'v.', sentences: [
   {en: 'Sugar dissolves in hot water faster than in cold water.', zh: '糖在熱水中比在冷水中溶解得更快。'}
-], avoid: [], roots: ['solu, solv'], usages: [], forms: [] },
+], avoid: [], roots: ['solu, solv'], usages: [], forms: [], kk: 'dɪˋzɑlv' },
 { word: 'solvent', meaning: '有償債能力的；溶劑', pos: 'adj., n.', sentences: [
   {en: 'The company stayed solvent by selling off a branch.', zh: '這家公司靠出售一個分支機構而保持了償債能力。'}
-], avoid: [], roots: ['solu, solv'], usages: [], forms: [] },
+], avoid: [], roots: ['solu, solv'], usages: [], forms: [], kk: 'ˋsɑlvənt' },
 { word: 'resolve', meaning: '化解、決定；決心', pos: 'v., n.', sentences: [
   {en: 'The brothers finally resolved their conflict.', zh: '兄弟倆終於化解了他們的衝突。'}
-], avoid: [], roots: ['solu, solv'], usages: [], forms: [] },
+], avoid: [], roots: ['solu, solv'], usages: [], forms: [], kk: 'rɪˋzɑlv' },
 { word: 'complement', meaning: '互補物；補充、補足', pos: 'n., v.', sentences: [
   {en: 'The extroverted man and the introverted woman complement each other.', zh: '外向的男人和內向的女人彼此互補。'}
-], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [] },
+], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [], kk: 'ˋkɑmpləmənt' },
 { word: 'compliment', meaning: '恭維、致意；讚美、贈送……以表達敬意', pos: 'n., v.', sentences: [
   {en: 'I must compliment you on your handling of a very difficult situation.', zh: '我必須讚揚你處理一個非常困難局面的方式。'}
-], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [] },
+], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [], kk: 'ˋkɑmpləmənt' },
 { word: 'supplement', meaning: '補充物、副刊、附錄；補充、添加', pos: 'n., v.', sentences: [
   {en: 'The man supplements his income by selling collectibles on the internet.', zh: '這個人靠在網路上販售收藏品來補充收入。'},
   {en: 'Many people take vitamin supplements to make up for nutrients missing from their diet.', zh: '許多人服用維生素補充劑，以彌補飲食中缺乏的營養素。'},
-], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [] },
+], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [], kk: 'ˋsʌpləmənt' },
 { word: 'implement', meaning: '實施、實行；工具', pos: 'v., n.', sentences: [
   {en: 'The reform program needs to be implemented immediately.', zh: '改革計畫需要立即實施。'}
-], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [] },
+], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [], kk: 'ˋɪmpləˏmɛnt' },
 { word: 'deplete', meaning: '耗盡、枯竭', pos: 'v.', sentences: [
   {en: 'Experts say that our oil reserves will soon be depleted.', zh: '專家說我們的石油儲量很快就會耗盡。'}
-], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [] },
+], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [], kk: 'dɪˋplit' },
 { word: 'sovereign', meaning: '君主、元首；擁有主權的、至高無上的', pos: 'n., adj.', sentences: [
   {en: 'The sovereign has the ultimate authority over the country.', zh: '君主對國家擁有最高權力。'},
 ], avoid: [], roots: ['sur, super'], usages: [
     'sovereign state / nation 主權國家',
     'sovereign power / authority 最高權力、主權',
     'sovereignty n. 主權、統治權 eg: sovereignty over something 對某物的主權'
-  ], forms: [] },
+  ], forms: [], kk: 'ˋsɑvrən' },
 { word: 'plenteous', meaning: '大量的、豐富的', pos: 'adj.', sentences: [
   {en: 'The host made sure there was a plenteous supply of food and drink at the party.', zh: '主人確保派對上有大量的食物和飲料。'}
-], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [] },
+], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [], kk: 'ˋplɛntɪəs' },
 { word: 'plethora', meaning: '大量、過多', pos: 'n.', sentences: [
   {en: 'Around the Taroko Gorge you can see a plethora of hotels, restaurants and gift shops.', zh: '在太魯閣峽谷周圍，你可以看到大量的飯店、餐廳和禮品店。'}
-], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [] },
+], avoid: [], roots: ['ple, plet, plen'], usages: [], forms: [], kk: 'ˋplɛθərə' },
 { word: 'prime', meaning: '主要的、最好的；全盛期、巔峰狀態', pos: 'adj., n.', sentences: [
   {en: 'The prime suspect of the murder investigation turned out to be innocent.', zh: '謀殺案的主要嫌疑人結果是無辜的。'}
-], avoid: [], roots: ['prim, prem'], usages: [], forms: [] },
+], avoid: [], roots: ['prim, prem'], usages: [], forms: [], kk: 'praɪm' },
 { word: 'primeval', meaning: '太古的、原始的', pos: 'adj.', sentences: [
   {en: 'Many rare animals live in these primeval forests.', zh: '許多稀有動物生活在這些太古森林中。'}
-], avoid: [], roots: ['prim, prem'], usages: [], forms: [] },
+], avoid: [], roots: ['prim, prem'], usages: [], forms: [], kk: 'praɪˋmivḷ' },
 { word: 'primitive', meaning: '原始的、簡陋的；原始人', pos: 'adj., n.', sentences: [
   {en: 'Humans in the Paleolithic Age used primitive tools.', zh: '舊石器時代的人類使用原始的工具。'}
-], avoid: [], roots: ['prim, prem'], usages: [], forms: [] },
+], avoid: [], roots: ['prim, prem'], usages: [], forms: [], kk: 'ˋprɪmətɪv' },
 { word: 'primordial', meaning: '原始的、洪荒的', pos: 'adj.', sentences: [
   {en: 'Many scientists believe that life originated in primordial oceans.', zh: '許多科學家相信生命起源於原始海洋。'}
-], avoid: [], roots: ['prim, prem'], usages: [], forms: [] },
+], avoid: [], roots: ['prim, prem'], usages: [], forms: [], kk: 'prɪˋmɔrdɪəl' },
 { word: 'primate', meaning: '靈長類動物', pos: 'n.', sentences: [
   {en: 'Monkeys, apes and humans are all primates.', zh: '猴子、猿類和人類都屬於靈長類動物。'}
-], avoid: [], roots: ['prim, prem'], usages: [], forms: [] },
+], avoid: [], roots: ['prim, prem'], usages: [], forms: [], kk: 'ˋpraɪˏmet' },
 { word: 'rehearse', meaning: '排練、預演；背誦；詳述', pos: 'v.', sentences: [
   {en: 'The actors were rehearsing the final scene of the play.', zh: '演員們正在排練這齣戲的最後一幕。'},
   {en: 'She rehearsed her speech several times before the presentation.', zh: '她在演講前把講稿練習了好幾遍。'}
@@ -1798,356 +1799,358 @@ const words = [
     'rehearse for something 為某事進行排練',
     'in rehearsal 在排練中',
     '同義詞：drill, run through（練習、預演）'
-  ], forms: [] },
+  ], forms: [], kk: 'rɪˋhɝs' },
 { word: 'stay caught in', meaning: '一直被困在……之中、持續陷入（某種困境或狀態）', pos: 'phr.', sentences: [
   {en: 'We stayed caught in a heavy traffic jam for over two hours.', zh: '我們一直被困在嚴重的交通堵塞中長達兩個多小時。'},
   {en: 'Don\'t stay caught in the past; you need to move on.', zh: '不要一直陷在過去；你需要向前看。'},
 ], avoid: [], roots: [], usages: [
     'stay caught in the middle 夾在中間（進退兩難）',
     'stay caught in a dilemma 持續陷入兩難境地',
-  ], forms: [] },
+  ], forms: [], kk: 'ste kɔt ɪn' },
 { word: 'stampede', meaning: '奔逃、驚逃', pos: 'n., v.', sentences: [
     {en: 'The fire alarm caused a stampede to the exits.', zh: '火警警報造成人群朝出口奔逃。'}
-  ], avoid: [], roots: ['ped, pod'], usages: [], forms: [] },
+  ], avoid: [], roots: ['ped, pod'], usages: [], forms: [], kk: 'stæmˋpid' },
 { word: 'pedal', meaning: '踏板；踩踏板、騎腳踏車', pos: 'n., v.', sentences: [
     {en: 'He struggled to pedal his bicycle up the hill.', zh: '他費力地踩著腳踏車爬上山坡。'}
-  ], avoid: [], roots: ['ped, pod'], usages: [], forms: [] },
+  ], avoid: [], roots: ['ped, pod'], usages: [], forms: [], kk: 'ˋpɛdḷ' },
 { word: 'pedestal', meaning: '柱腳、臺座', pos: 'n.', sentences: [
     {en: 'In the riot, the statues were toppled from their pedestals.', zh: '在暴動中，雕像被推倒在地，離開了它們的底座。'}
-  ], avoid: [], roots: ['ped, pod'], usages: [], forms: [] },
+  ], avoid: [], roots: ['ped, pod'], usages: [], forms: [], kk: 'ˋpɛdəstḷ' },
 { word: 'recognize', meaning: '辨認、承認', pos: 'v.', sentences: [
     {en: 'The 200-mile offshore fishing zone is internationally recognized.', zh: '這個200英里的近海漁區獲得國際承認。'}
-  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [] },
+  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [], kk: 'ˋrɛkəgˏnaɪz' },
 { word: 'cognizant', meaning: '知道的、注意到的', pos: 'adj.', sentences: [
     {en: 'The explorer is fully cognizant of potential dangers.', zh: '這名探險家完全意識到潛在的危險。'}
-  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [] },
+  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [], kk: 'ˋkɑgnəzənt' },
 { word: 'connoisseur', meaning: '鑑賞家、專家', pos: 'n.', sentences: [
     {en: 'The character James Bond is portrayed as a connoisseur of fine wines.', zh: '詹姆斯·龐德這個角色被描繪成一位精緻葡萄酒的鑑賞家。'}
-  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [] },
+  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [], kk: 'ˏkɑnəˋsɝ' },
 { word: 'cognoscente', meaning: '鑑賞家、專家', pos: 'n.', sentences: [
     {en: 'The man is a cognoscente of medieval art.', zh: '這個人是中世紀藝術的鑑賞專家。'}
-  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [] },
+  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [], kk: 'ˏkɑnjəˋʃɛntɪ' },
 { word: 'diagnosis', meaning: '診斷', pos: 'n.', sentences: [
     {en: "What's the doctor's diagnosis of your stomach ache?", zh: '醫生對你的胃痛做出了什麼診斷？'}
-  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [] },
+  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [], kk: 'ˏdaɪəgˋnosəs' },
 { word: 'prognosis', meaning: '預後、預測', pos: 'n.', sentences: [
     {en: "The expert's prognosis of the new year is optimistic.", zh: '專家對新一年的預測很樂觀。'},
     {en: "An early diagnosis usually leads to a better prognosis.", zh: '早期診斷通常帶來較好的預後。'}
-  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [] },
+  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [], kk: 'prɑgˋnosəs' },
 { word: 'ignore', meaning: '忽略、無視', pos: 'v.', sentences: [
     {en: 'The man ignored the "No Trespassing" sign and pressed ahead.', zh: '這個人無視「禁止擅入」的標誌，繼續往前走。'}
-  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [] },
+  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [], kk: 'ɪgˋnɔr' },
 { word: 'incognito', meaning: '隱藏身分', pos: 'adj., adv.', sentences: [
     {en: 'The best-selling author remains incognito.', zh: '這位暢銷書作家仍然隱藏身分。'}
-  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [] },
+  ], avoid: [], roots: ['cogni, gnos, gno'], usages: [], forms: [], kk: 'ˏɪnkɔgˋnito' },
 { word: 'exclusively', meaning: '專門地、唯一地、排他地', pos: 'adv.', sentences: [
     {en: 'The room is exclusively for staff members.', zh: '這個房間僅供員工使用。'},
     {en: 'He writes exclusively for the local newspaper.', zh: '他專門為當地報紙撰稿。'}
-  ], avoid: [], roots: ['clud, clus, claus'], usages: ['exclusively for 專門為',  ], forms: [] },
+  ], avoid: [], roots: ['clud, clus, claus'], usages: ['exclusively for 專門為',  ], forms: [], kk: 'ɪkˋsklusɪvlɪ' },
 { word: 'exclusive', meaning: '獨家的、專屬的；排外的；不包括……的', pos: 'adj., n.', sentences: [
     {en: 'The magazine published an exclusive interview with the movie star.', zh: '該雜誌刊登了對這位電影明星的獨家專訪。'},
     {en: 'The offer is exclusive to members of the club.', zh: '這項優惠僅限俱樂部會員享有。'}
-  ], avoid: [], roots: ['clud, clus, claus'], usages: ['exclusive to 僅限於……、為……獨有',] },
+  ], avoid: [], roots: ['clud, clus, claus'], usages: ['exclusive to 僅限於……、為……獨有',], kk: 'ɪkˋsklusɪv' },
 { word: 'pierce', meaning: '刺穿、穿透；（聲音等）響徹；（情感）深深觸動', pos: 'v.', sentences: [
     {en: 'The needle pierced her skin when she got the injection.', zh: '她打針時，針頭刺穿了她的皮膚。'},
     {en: 'A sudden scream pierced the silence of the night.', zh: '一聲突如其來的尖叫劃破了夜晚的寂靜。'}
-  ], avoid: [], roots: [], usages: ['have one\'s ears pierced 穿耳洞','pierce through 穿透、刺穿'] },
+  ], avoid: [], roots: [], usages: ['have one\'s ears pierced 穿耳洞','pierce through 穿透、刺穿'], kk: 'pɪrs' },
 { word: 'drizzle', meaning: '毛毛雨；下毛毛雨；淋（油等）', pos: 'n., v.', sentences: [
     {en: 'A light drizzle fell all morning.', zh: '整個早上都下著毛毛雨。'},
     {en: 'Drizzle the olive oil over the salad.', zh: '將橄欖油淋在沙拉上。'}
-  ], avoid: [], roots: [], usages: ['drizzle A over B 將A淋在B上'] },
+  ], avoid: [], roots: [], usages: ['drizzle A over B 將A淋在B上'], kk: 'ˋdrɪzḷ' },
 { word: 'dip', meaning: '浸；下降、減少', pos: 'v., n.', sentences: [
     {en: 'She dipped her toes into the cold water.', zh: '她把腳趾浸入冷水中。'},
     {en: 'There was a sudden dip in temperature last night.', zh: '昨晚氣溫突然下降。'}
-  ], avoid: [], roots: [], usages: ['dip into 浸入；動用（存款）','a dip in 在……方面的下降'] },
+  ], avoid: [], roots: [], usages: ['dip into 浸入；動用（存款）','a dip in 在……方面的下降'], kk: 'dɪp' },
 { word: 'playgoer', meaning: '常看戲的人、戲迷', pos: 'n.', sentences: [
     {en: 'The theater was packed with enthusiastic playgoers on opening night.', zh: '首演之夜，劇院裡擠滿了熱情的戲迷。'},
     {en: 'As a frequent playgoer, she has seen almost every major production in the city.', zh: '作為一名常看戲的人，她幾乎看過這座城市所有的大型劇目。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'ˋpleˏgoɚ' },
 { word: 'promising', meaning: '有前途的、有希望的、大有可為的', pos: 'adj.', sentences: [
     {en: 'She is a highly promising young actress.', zh: '她是一位極具前途的年輕女演員。'},
     {en: 'The initial test results are very promising.', zh: '初步的測試結果非常有希望。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'ˋprɑməsɪŋ' },
 { word: 'prerequisite', meaning: '先決條件、前提；必備的、先決的', pos: 'n., adj.', sentences: [
     {en: 'A good level of English is a prerequisite for this course.', zh: '良好的英語水平是這門課程的先決條件。'},
     {en: 'Passing the written exam is a prerequisite to getting the driver\'s license.', zh: '通過筆試是獲得駕照的前提。'}
-  ], avoid: [], roots: [], usages: ['a prerequisite for sth /to Ving. 某事的先決條件'], forms: [] },
+  ], avoid: [], roots: [], usages: ['a prerequisite for sth /to Ving. 某事的先決條件'], forms: [], kk: 'prɪˋrɛkwəzɪt' },
 { word: 'clumsy', meaning: '笨拙的、不靈巧的', pos: 'adj.', sentences: [
     {en: 'I am too clumsy to do delicate work like embroidery.', zh: '我太笨拙了，做不了刺繡這種精細的工作。'},
-  ], avoid: [], roots: [], usages: ['be clumsy at sth. 對某事笨拙'], forms: [] },
+  ], avoid: [], roots: [], usages: ['be clumsy at sth. 對某事笨拙'], forms: [], kk: 'ˋklʌmzɪ' },
 { word: 'hatch', meaning: '孵化；策劃、密謀；艙口', pos: 'v., n.', sentences: [
     {en: 'The eggs will hatch in about three weeks.', zh: '這些蛋大約三週後會孵化。'},
     {en: 'They hatched a plan to escape from prison.', zh: '他們策劃了一個逃獄計畫。'}
-  ], avoid: [], roots: [], usages: ['hatch a plan/plot 策劃計畫／陰謀'], forms: [] },
+  ], avoid: [], roots: [], usages: ['hatch a plan/plot 策劃計畫／陰謀'], forms: [], kk: 'hætʃ' },
 { word: 'waddle', meaning: '搖擺地走、蹣跚而行；搖擺的步態', pos: 'v., n.', sentences: [
     {en: 'The duck waddled across the road with her ducklings following closely.', zh: '鴨子搖搖擺擺地穿過馬路，小鴨子緊緊跟在後面。'},
     {en: 'The toddler waddled towards his mother with a big smile.', zh: '學步的孩子帶著燦爛的笑容搖搖晃晃地走向母親。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋwɑdḷ' },
 { word: 'mound', meaning: '土堆、小丘；一堆、大量', pos: 'n., v.', sentences: [
     {en: 'There is a large mound of dirt in the backyard.', zh: '後院有一大堆泥土。'},
     {en: 'He has a mound of paperwork waiting for him on his desk.', zh: '他的桌上有一大堆文件等著他處理。'}
-  ], avoid: [], roots: [], usages: ['a mound of 一堆⋯'], forms: [] },
+  ], avoid: [], roots: [], usages: ['a mound of 一堆⋯'], forms: [], kk: 'maʊnd' },
 { word: 'peril', meaning: '危險、危難', pos: 'n.', sentences: [
     {en: 'The ship was in great peril during the violent storm.', zh: '在猛烈的暴風雨中，這艘船處於極大的危險之中。'},
     {en: 'Many species are now in peril of extinction due to habitat loss.', zh: '由於棲息地喪失，許多物種現在面臨滅絕的危險。'}
-  ], avoid: [], roots: [], usages: ['in peril 處於危險中', 'at your peril 自擔風險'], forms: [] },
+  ], avoid: [], roots: [], usages: ['in peril 處於危險中', 'at your peril 自擔風險'], forms: [], kk: 'ˋpɛrəl' },
 { word: 'dub', meaning: '給……取綽號、把……稱為；為（電影等）配音、譯製', pos: 'v.', sentences: [
     {en: 'The media dubbed her the "Queen of Pop" due to her massive success.', zh: '由於取得了巨大的成功，媒體封她為「流行天后」。'},
     {en: 'The foreign film was dubbed into Chinese for the local audience.', zh: '這部外國電影為了當地觀眾被譯製成了中文配音。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'dʌb' },
 { word: 'congestion', meaning: '擁擠、堵塞；充血（如鼻塞）', pos: 'n.', sentences: [
     {en: 'Traffic congestion is a major problem in big cities.', zh: '交通堵塞是大城市的一個主要問題。'},
     {en: 'He suffers from nasal congestion during allergy season.', zh: '他在過敏季節會鼻塞。'}
   ], avoid: [], roots: ['gest'], usages: [
     'traffic congestion 交通擁擠／堵塞',
     'nasal congestion 鼻塞'
-  ] },
+  ], kk: 'kənˋdʒɛstʃən' },
 { word: 'confront', meaning: '遭遇、面對', pos: 'v.', sentences: [
     {en: "We'll have to confront the issue sooner or later.", zh: '我們遲早得面對這個問題。'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'kənˋfrʌnt' },
 { word: 'congregation', meaning: '集合、群眾、會眾', pos: 'n.', sentences: [
     {en: 'The church has a congregation of 500 members.', zh: '這間教堂有500名會眾。'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'ˏkɑŋgrəˋgeʃən' },
 { word: 'connote', meaning: '暗示', pos: 'v.', sentences: [
     {en: 'The number "eight" connotes fortune and prosperity in Chinese.', zh: '在中文裡，數字「八」暗示著財富與興旺。'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'kəˋnot' },
 { word: 'coauthor', meaning: '共同作者；聯合執筆', pos: 'n., v.', sentences: [
     {en: 'Duran coauthored the book with his wife.', zh: '杜蘭與他的妻子共同撰寫了這本書。'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'koˋɑθɚ' },
 { word: 'copilot', meaning: '副駕駛', pos: 'n.', sentences: [
     {en: 'The captain and the copilot took turns manning the cockpit.', zh: '機長和副駕駛輪流操控駕駛艙。'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'ˋkoˏpaɪlət' },
 { word: 'conspiracy', meaning: '共謀、陰謀', pos: 'n.', sentences: [
     {en: "There's a conspiracy going on to keep him from being elected.", zh: '有人正在密謀阻止他當選。'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'kənˋspɪrəsɪ' },
 { word: 'consternation', meaning: '驚愕', pos: 'n.', sentences: [
     {en: 'To his consternation, when he arrived at the airport he found that he had forgotten his passport!', zh: '令他驚愕的是，到了機場他才發現自己忘了帶護照！'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'ˏkɑnstɚˋneʃən' },
 { word: 'coeducational', meaning: '男女合校的、男女兼收的', pos: 'adj.', sentences: [
     {en: 'The college went coeducational in 1960.', zh: '這所學院於1960年改為男女合校。'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'ˏkoˏɛdʒəˋkeʃənḷ' },
 { word: 'cohabit', meaning: '同居', pos: 'v.', sentences: [
     {en: "He's cohabiting with his girlfriend.", zh: '他和女朋友同居。'}
-  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [] },
+  ], avoid: [], roots: ['com, con, col, co'], usages: [], forms: [], kk: 'koˋhæbɪt' },
 { word: 'havoc', meaning: '大破壞、浩劫', pos: 'n.', sentences: [
     {en: 'The storm played havoc with the local power lines.', zh: '暴風雨對當地的電線造成了嚴重破壞。'},
     {en: 'The new policy played havoc with the company\'s budget.', zh: '新政策嚴重打亂了公司的預算。'}
-  ], avoid: [], roots: [], usages: ['play/wreck/create/cause havoc with 對……造成嚴重破壞、打亂'], forms: [] },
+  ], avoid: [], roots: [], usages: ['play/wreck/create/cause havoc with 對……造成嚴重破壞、打亂'], forms: [], kk: 'ˋhævək' },
 { word: 'marvel', meaning: '驚奇、驚嘆；奇蹟、令人驚嘆的事物', pos: 'n., v.', sentences: [
     {en: 'We marveled at the beauty of the sunset.', zh: '我們對日落的美景感到驚嘆。'},
     {en: 'The Great Wall is one of the marvels of the world.', zh: '長城是世界奇蹟之一。'}
-  ], avoid: [], roots: [], usages: ['marvel at 對……感到驚嘆', 'a marvel of ……的奇蹟'], forms: [] },
+  ], avoid: [], roots: [], usages: ['marvel at 對……感到驚嘆', 'a marvel of ……的奇蹟'], forms: [], kk: 'ˋmɑrvḷ' },
 { word: 'vibrant', meaning: '充滿活力的、鮮豔的、震動的', pos: 'adj.', sentences: [
     {en: 'The city has a vibrant nightlife.', zh: '這座城市有充滿活力的夜生活。'},
     {en: 'She was wearing a vibrant red dress.', zh: '她穿著一件鮮豔的紅色洋裝。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋvaɪbrənt' },
 { word: 'crafted', meaning: '精心製作的、手工製作的', pos: 'adj.', sentences: [
     {en: 'She gave a carefully crafted speech.', zh: '她發表了一篇精心準備的演說。'},
     {en: 'The program is crafted to meet the needs of young learners.', zh: '這項計畫旨在滿足年輕學習者的需求。'}
-  ], avoid: ['handcrafted'], roots: [], usages: ['be crafted to 精心設計以⋯⋯'  ], forms: [] },
+  ], avoid: ['handcrafted'], roots: [], usages: ['be crafted to 精心設計以⋯⋯'  ], forms: [], kk: 'ˋkræftɪd' },
 { word: 'stunning', meaning: '極其美麗的、驚艷的；令人震驚的', pos: 'adj.', sentences: [
     {en: 'She looked absolutely stunning in her wedding dress.', zh: '她穿上婚紗後看起來美極了。'},
     {en: 'The view from the mountain top is stunning.', zh: '從山頂上望去，景色令人驚嘆。'},
     {en: 'The team delivered a stunning victory against the defending champions.', zh: '這支隊伍擊敗了衛冕冠軍，取得了令人震驚的勝利。'}
-  ], avoid: [], roots: [], usages: [], forms: [] },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋstʌnɪŋ' },
 { word: 'organize', meaning: '組織', pos: 'v.', sentences: [
     {en: 'The club is very loosely organized.', zh: '這個社團組織得很鬆散。'}
-  ], avoid: [], roots: ['erc, erg, org'], usages: [] },
+  ], avoid: [], roots: ['erc, erg, org'], usages: [], kk: 'ˋɔrgəˏnaɪz' },
 { word: 'ergonomic', meaning: '人體工學的', pos: 'adj.', sentences: [
     {en: 'This ergonomic chair looks weird but is comfortable to sit on.', zh: '這張人體工學椅看起來怪，但坐起來很舒服。'}
-  ], avoid: [], roots: ['erc, erg, org'], usages: [] },
+  ], avoid: [], roots: ['erc, erg, org'], usages: [], kk: 'ˏɝgəˋnɑmɪk' },
 { word: 'urge', meaning: '敦促、催促；衝動、欲望', pos: 'v., n.', sentences: [
     {en: "The wife felt a strong urge to confess to her husband, but didn't.", zh: '妻子很想向丈夫坦白，但最後沒有說。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'ɝdʒ' },
 { word: 'urgency', meaning: '緊急性、迫切性', pos: 'n.', sentences: [
     {en: 'Take your time; there is no urgency to the task.', zh: '慢慢來，這項工作沒有急迫性。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'ˋɝdʒənsɪ' },
 { word: 'coercion', meaning: '強制、強迫', pos: 'n.', sentences: [
     {en: 'The police used coercion to obtain a confession from the suspect.', zh: '警方使用強迫手段從嫌犯那裡取得供詞。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'koˋɝʃən' },
 { word: 'ascetic', meaning: '苦修者', pos: 'n.', sentences: [
     {en: "The ascetic consumes only bread and water and doesn't sleep in bed.", zh: '這位苦修者只吃麵包和喝水，也不睡床。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'əˋsɛtɪk' },
 { word: 'allergic', meaning: '過敏的', pos: 'adj.', sentences: [
     {en: 'The boy is allergic to cats.', zh: '這個男孩對貓過敏。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'əˋlɝdʒɪk' },
 { word: 'labor', meaning: '勞工、勞動；努力、賣力', pos: 'n., v.', sentences: [
     {en: "The car parts themselves are inexpensive; it's the labor that will cost you.", zh: '汽車零件本身不貴，會讓你花錢的是人工費。'}
-  ], avoid: [], roots: ['labor'], usages: [] },
+  ], avoid: [], roots: ['labor'], usages: [], kk: 'ˋlebɚ' },
 { word: 'laborious', meaning: '費力的、辛苦的', pos: 'adj.', sentences: [
     {en: 'Fetching water from the stream is a laborious task.', zh: '從溪裡打水是一件費力的工作。'}
-  ], avoid: [], roots: ['labor'], usages: [] },
+  ], avoid: [], roots: ['labor'], usages: [], kk: 'ləˋbɔrɪəs' },
 { word: 'elaborate', meaning: '精密的、複雜的；詳盡闡述、發揮', pos: 'adj., v.', sentences: [
     {en: 'They took elaborate precautions before going abroad.', zh: '他們出國前採取了周密的防範措施。'}
-  ], avoid: [], roots: ['labor'], usages: [] },
+  ], avoid: [], roots: ['labor'], usages: [], kk: 'ɪˋlæbərɪt' },
 { word: 'cooperate', meaning: '合作', pos: 'v.', sentences: [
     {en: "We'll have to cooperate if we wish to succeed.", zh: '如果我們想成功，就必須合作。'}
-  ], avoid: [], roots: ['oper'], usages: [] },
+  ], avoid: [], roots: ['oper'], usages: [], kk: 'koˋɑpəˏret' },
 { word: 'operation', meaning: '作業、營運、行動、開刀', pos: 'n.', sentences: [
     {en: 'Desert Storm was a successful military operation.', zh: '沙漠風暴是一次成功的軍事行動。'}
-  ], avoid: [], roots: ['oper'], usages: [] },
+  ], avoid: [], roots: ['oper'], usages: [], kk: 'ˏɑpəˋreʃən' },
 { word: 'maneuver', meaning: '策略、行動；操控', pos: 'n., v.', sentences: [
     {en: 'Through a series of legal maneuvers, the defense lawyer kept her client out of jail.', zh: '透過一連串的法律策略，辯護律師讓她的當事人免於入獄。'}
-  ], avoid: [], roots: ['oper'], usages: [] },
+  ], avoid: [], roots: ['oper'], usages: [], kk: 'məˋnuvɚ' },
 { word: 'opulent', meaning: '富裕的、豪華的', pos: 'adj.', sentences: [
     {en: 'He lives in an opulent mansion filled with priceless art and antiques.', zh: '他住在一棟充滿無價藝術品和古董的豪華宅邸裡。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'ˋɑpjələnt' },
 { word: 'copious', meaning: '大量的、豐富的', pos: 'adj.', sentences: [
     {en: 'The typhoon brought a copious amount of rain.', zh: '颱風帶來了大量的降雨。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'ˋkopɪəs' },
 { word: 'optimum', meaning: '最多的、最理想的', pos: 'adj.', sentences: [
     {en: 'The software keeps your hard disk organized for optimum performance.', zh: '這套軟體讓你的硬碟保持整齊，以獲得最佳效能。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'ˋɑptəməm' },
 { word: 'optimistic', meaning: '樂觀的', pos: 'adj.', sentences: [
     {en: 'The case is still pending, but my lawyer is optimistic.', zh: '案件仍在審理中，但我的律師很樂觀。'}
-  ], avoid: [], roots: [], usages: [] },
+  ], avoid: [], roots: [], usages: [], kk: 'ˏɑptəˋmɪstɪk' },
 { word: 'install', meaning: '就職、架設、裝設', pos: 'v.', sentences: [
     {en: 'The college recently installed its first woman president.', zh: '這所學院最近任命了第一位女校長。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'ɪnˋstɔl' },
 { word: 'installment', meaning: '分期付款、一集', pos: 'n.', sentences: [
     {en: 'You may pay for the car in 12 installments.', zh: '你可以分12期付清這輛車的款項。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'ɪnˋstɔlmənt' },
 { word: 'persist', meaning: '持續', pos: 'v.', sentences: [
     {en: 'If the pain persists, you must see a doctor.', zh: '如果疼痛持續，你必須去看醫生。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'pɚˋsɪst' },
 { word: 'resistance', meaning: '阻力、反抗', pos: 'n.', sentences: [
     {en: 'Copper is a good conductor because its resistance is small.', zh: '銅是良導體，因為它的電阻很小。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'rɪˋzɪstəns' },
 { word: 'consist', meaning: '組成、構成', pos: 'v.', sentences: [
     {en: 'The hypothesis consists of two parts.', zh: '這個假說由兩個部分組成。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'kənˋsɪst' },
 { word: 'desist', meaning: '停止、打消念頭、不去做', pos: 'v.', sentences: [
     {en: 'The soldiers have been ordered to desist from firing their guns.', zh: '士兵們已被下令停止開火。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'dɪˋsɪst' },
 { word: 'institution', meaning: '設立、推行、機構、制度', pos: 'n.', sentences: [
     {en: 'This is the most prestigious educational institution in the nation.', zh: '這是全國最負盛名的教育機構。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'ˏɪnstɪˋtuʃən' },
 { word: 'institute', meaning: '機構；設立、推行', pos: 'n., v.', sentences: [
     {en: "By instituting these programs, we hope to improve our children's education.", zh: '透過推行這些計畫，我們希望改善孩子們的教育。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'ˋɪnstəˏtut' },
 { word: 'stance', meaning: '站姿、立場', pos: 'n.', sentences: [
     {en: 'Most students took an antiwar stance during the conflict.', zh: '在衝突期間，大多數學生採取了反戰的立場。'}
-  ], avoid: [], roots: ['stit, stat'], usages: [] },
+  ], avoid: [], roots: ['stit, stat'], usages: [], kk: 'stæns' },
 { word: 'rebellious', meaning: '反叛的、叛逆的', pos: 'adj.', sentences: [
     {en: 'The rebellious troops are marching on the capital.', zh: '叛亂部隊正向首都進軍。'}
-  ], avoid: [], roots: ['bel'], usages: [] },
+  ], avoid: [], roots: ['bel'], usages: [], kk: 'rɪˋbɛljəs' },
 { word: 'bellicose', meaning: '好鬥的、好戰的', pos: 'adj.', sentences: [
     {en: 'Those bellicose hockey players always seem to be fighting.', zh: '那些好鬥的冰球選手似乎總在打架。'}
-  ], avoid: [], roots: ['bel'], usages: [] },
+  ], avoid: [], roots: ['bel'], usages: [], kk: 'ˋbɛləˏkos' },
 { word: 'belligerent', meaning: '好鬥的、交戰的；交戰國', pos: 'adj., n.', sentences: [
     {en: 'It is called World War II because so many nations were belligerents.', zh: '這場戰爭被稱為第二次世界大戰，因為有許多國家參與交戰。'}
-  ], avoid: [], roots: ['bel'], usages: [] },
+  ], avoid: [], roots: ['bel'], usages: [], kk: 'bəˋlɪdʒərənt' },
 { word: 'conflict', meaning: '衝突', pos: 'n., v.', sentences: [
     {en: 'Artists often come into conflict with politicians.', zh: '藝術家常與政治人物發生衝突。'}
-  ], avoid: [], roots: ['flict'], usages: [] },
+  ], avoid: [], roots: ['flict'], usages: [], kk: 'ˋkɑnflɪkt' },
 { word: 'inflict', meaning: '給予（打擊）、施加（懲罰）', pos: 'v.', sentences: [
     {en: 'The bullet was designed to inflict pain only.', zh: '這顆子彈的設計目的只是造成疼痛。'}
-  ], avoid: [], roots: ['flict'], usages: [] },
+  ], avoid: [], roots: ['flict'], usages: [], kk: 'ɪnˋflɪkt' },
 { word: 'afflict', meaning: '折磨', pos: 'v.', sentences: [
     {en: 'The old woman was afflicted with arthritis.', zh: '這位老婦人被關節炎折磨。'}
-  ], avoid: [], roots: ['flict'], usages: [] },
+  ], avoid: [], roots: ['flict'], usages: [], kk: 'əˋflɪkt' },
 { word: 'profligate', meaning: '放蕩的、浪費的；放蕩的人', pos: 'adj., n.', sentences: [
     {en: 'She is well-known for her profligate spending habits.', zh: '她以揮霍無度的消費習慣而聞名。'}
-  ], avoid: [], roots: ['flict'], usages: [] },
+  ], avoid: [], roots: ['flict'], usages: [], kk: 'ˋprɑfləgɪt' },
 { word: 'innocuous', meaning: '無害的、不得罪人的', pos: 'adj.', sentences: [
     {en: 'He told a few innocuous jokes.', zh: '他講了幾個無傷大雅的笑話。'}
-  ], avoid: [], roots: ['noc, nox, nic'], usages: [] },
+  ], avoid: [], roots: ['noc, nox, nic'], usages: [], kk: 'ɪˋnɑkjuəs' },
 { word: 'noxious', meaning: '有害的、有毒的', pos: 'adj.', sentences: [
     {en: 'The factory was fined for discharging noxious effluents into the river.', zh: '這家工廠因向河川排放有毒廢水而被罰款。'}
-  ], avoid: [], roots: ['noc, nox, nic'], usages: [] },
+  ], avoid: [], roots: ['noc, nox, nic'], usages: [], kk: 'ˋnɑkʃəs' },
 { word: 'obnoxious', meaning: '令人厭惡的、粗魯無禮的', pos: 'adj.', sentences: [
     {en: "When she's in a bad mood she's obnoxious to everyone.", zh: '她心情不好時對每個人都很無禮。'}
-  ], avoid: [], roots: ['noc, nox, nic'], usages: [] },
+  ], avoid: [], roots: ['noc, nox, nic'], usages: [], kk: 'ɑbˋnɑkʃəs' },
 { word: 'pernicious', meaning: '致命的、惡性的', pos: 'adj.', sentences: [
     {en: 'She thinks television has a pernicious influence on our children.', zh: '她認為電視對我們的孩子有惡劣的影響。'}
-  ], avoid: [], roots: ['noc, nox, nic'], usages: [] },
+  ], avoid: [], roots: ['noc, nox, nic'], usages: [], kk: 'pɚˋnɪʃəs' },
 { word: 'innocent', meaning: '無罪的、天真的', pos: 'adj.', sentences: [
     {en: 'The jury found the defendant innocent of all charges.', zh: '陪審團裁定被告所有罪名不成立。'}
-  ], avoid: [], roots: ['noc, nox, nic'], usages: [] },
+  ], avoid: [], roots: ['noc, nox, nic'], usages: [], kk: 'ˋɪnəsənt' },
 { word: 'candid', meaning: '坦白的、坦誠的', pos: 'adj.', sentences: [
     {en: 'He was quite candid about his past.', zh: '他對自己的過去相當坦白。'}
-  ], avoid: [], roots: ['cand, cend'], usages: [] },
+  ], avoid: [], roots: ['cand, cend'], usages: [], kk: 'ˋkændɪd' },
 { word: 'incandescent', meaning: '白熱的、燦爛的', pos: 'adj.', sentences: [
     {en: 'The poet laureate captivated the audience with his incandescent wit.', zh: '這位桂冠詩人以他燦爛的機智吸引了觀眾。'}
-  ], avoid: [], roots: ['cand, cend'], usages: [] },
+  ], avoid: [], roots: ['cand, cend'], usages: [], kk: 'ˏɪnkənˋdɛsənt' },
 { word: 'incendiary', meaning: '燃燒的、煽動的；縱火犯、煽動者', pos: 'adj., n.', sentences: [
     {en: 'The populist has won a following with his incendiary remarks.', zh: '這位民粹主義者靠著煽動性的言論贏得了追隨者。'}
-  ], avoid: [], roots: ['cand, cend'], usages: [] },
+  ], avoid: [], roots: ['cand, cend'], usages: [], kk: 'ɪnˋsɛndɪˏɛrɪ' },
 { word: 'incensed', meaning: '被激怒的', pos: 'adj.', sentences: [
     {en: 'She was incensed about the billionaires monopolizing all the perks.', zh: '她對那些億萬富翁壟斷所有福利感到憤怒。'}
-  ], avoid: [], roots: ['cand, cend'], usages: [] },
+  ], avoid: [], roots: ['cand, cend'], usages: [], kk: 'ɪnˋsɛnst' },
 { word: 'incentive', meaning: '刺激、誘因；激勵的、鼓勵的', pos: 'n., adj.', sentences: [
     {en: 'The government has imposed special tax incentives to encourage spending.', zh: '政府實施了特別的稅收優惠，以鼓勵消費。'}
-  ], avoid: [], roots: ['cand, cend'], usages: [] },
+  ], avoid: [], roots: ['cand, cend'], usages: [], kk: 'ɪnˋsɛntɪv' },
 { word: 'candidate', meaning: '候選人、求職者', pos: 'n.', sentences: [
     {en: 'Which candidate are you going to vote for?', zh: '你要投給哪位候選人？'}
-  ], avoid: [], roots: ['cand, cend'], usages: [] },
+  ], avoid: [], roots: ['cand, cend'], usages: [], kk: 'ˋkændəˏdet' },
 { word: 'convict', meaning: '證明有罪、判決有罪；罪犯、囚犯', pos: 'v., n.', sentences: [
     {en: 'The man was convicted of burglary and sent to jail.', zh: '這個人因入室盜竊罪被判有罪並入獄。'}
-  ], avoid: [], roots: ['vict, vin, van'], usages: [] },
+  ], avoid: [], roots: ['vict, vin, van'], usages: [], kk: 'kənˋvɪkt' },
 { word: 'convince', meaning: '說服', pos: 'v.', sentences: [
     {en: 'The lawyer convinced the jury that his client was innocent.', zh: '律師說服陪審團相信他的當事人是無辜的。'}
-  ], avoid: [], roots: ['vict, vin, van'], usages: [] },
+  ], avoid: [], roots: ['vict, vin, van'], usages: [], kk: 'kənˋvɪns' },
 { word: 'evict', meaning: '逐出、驅逐', pos: 'v.', sentences: [
     {en: 'The landlord had the tenant evicted because the latter never paid any rent.', zh: '房東因房客從未付過租金而將其趕走。'}
-  ], avoid: [], roots: ['vict, vin, van'], usages: [] },
+  ], avoid: [], roots: ['vict, vin, van'], usages: [], kk: 'ɪˋvɪkt' },
 { word: 'invincible', meaning: '無敵的', pos: 'adj.', sentences: [
     {en: 'Spain sent an invincible fleet to conquer England, but the fleet perished in a storm.', zh: '西班牙派出無敵艦隊征服英格蘭，但艦隊在暴風雨中覆沒。'}
-  ], avoid: [], roots: ['vict, vin, van'], usages: [] },
+  ], avoid: [], roots: ['vict, vin, van'], usages: [], kk: 'ɪnˋvɪnsəbḷ' },
 { word: 'vanquish', meaning: '征服、打敗', pos: 'v.', sentences: [
     {en: 'We shall vanquish the foe.', zh: '我們將打敗敵人。'}
-  ], avoid: [], roots: ['vict, vin, van'], usages: [] },
+  ], avoid: [], roots: ['vict, vin, van'], usages: [], kk: 'ˋvæŋkwɪʃ' },
 { word: 'province', meaning: '省', pos: 'n.', sentences: [
     {en: 'The Republic is divided into 20 provinces.', zh: '這個共和國劃分為20個省。'}
-  ], avoid: [], roots: ['vict, vin, van'], usages: [] },
+  ], avoid: [], roots: ['vict, vin, van'], usages: [], kk: 'ˋprɑvəns' },
 { word: 'vindicate', meaning: '證明正確、證明無罪', pos: 'v.', sentences: [
     {en: 'The investigation vindicated her complaint about the newspaper.', zh: '調查證明了她對報社的投訴是正確的。'}
-  ], avoid: [], roots: ['vict, vin, van'], usages: [] },
+  ], avoid: [], roots: ['vict, vin, van'], usages: [], kk: 'ˋvɪndəˏket' },
 { word: 'registration', meaning: '註冊、登記', pos: 'n.', sentences: [
     {en: 'The man took down the registration number of the car.', zh: '這個男人記下了那輛車的車牌號碼。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'ˏrɛdʒɪˋstreʃən' },
 { word: 'regal', meaning: '帝王的、莊嚴的', pos: 'adj.', sentences: [
     {en: 'The lion is called the king of beasts because of its regal look.', zh: '獅子因其威嚴的外貌被稱為百獸之王。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'ˋrigḷ' },
 { word: 'royal', meaning: '皇家的、王室的、高貴的', pos: 'adj.', sentences: [
     {en: 'The British royal family is a symbol of stability and continuity.', zh: '英國皇室是穩定與延續的象徵。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'ˋrɔɪəl' },
 { word: 'royalty', meaning: '皇族成員、專利金、版稅', pos: 'n.', sentences: [
     {en: 'Modern novelists live on royalties.', zh: '現代小說家靠版稅過活。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'ˋrɔɪəltɪ' },
 { word: 'deregulation', meaning: '開放、解除管制', pos: 'n.', sentences: [
     {en: 'Deregulation of air traffic resulted in lower fares but a higher incidence of delays and crashes.', zh: '航空運輸解除管制後票價降低，但延誤和事故的發生率也更高。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'dɪˏrɛgjəˋleʃən' },
 { word: 'regime', meaning: '政權、統治', pos: 'n.', sentences: [
     {en: "The autocrat's regime didn't last long.", zh: '這位獨裁者的政權沒有維持太久。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'rəˋʒim' },
 { word: 'regimen', meaning: '養生法、訓練、管制', pos: 'n.', sentences: [
     {en: 'He observes a daily exercise regimen strictly.', zh: '他嚴格遵守每日的運動計畫。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'ˋrɛdʒəmən' },
 { word: 'reign', meaning: '統治', pos: 'n., v.', sentences: [
     {en: "Under Queen Elizabeth's reign, Britain became a mighty country.", zh: '在伊麗莎白女王統治下，英國成為強大的國家。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'ren' },
 { word: 'sovereignty', meaning: '主權', pos: 'n.', sentences: [
     {en: 'Britain and Argentina fought a war over the sovereignty of the Falklands.', zh: '英國和阿根廷為福克蘭群島的主權發生過戰爭。'}
-  ], avoid: [], roots: ['reg'], usages: [] },
+  ], avoid: [], roots: ['reg'], usages: [], kk: 'ˋsɑvrəntɪ' },
 { word: 'dominate', meaning: '主宰、支配', pos: 'v.', sentences: [
     {en: 'Operating systems of this company dominate the market.', zh: '這家公司的作業系統主導了市場。'}
-  ], avoid: [], roots: ['dom, domin'], usages: [] },
+  ], avoid: [], roots: ['dom, domin'], usages: [], kk: 'ˋdɑməˏnet' },
 { word: 'indomitable', meaning: '不屈不撓的', pos: 'adj.', sentences: [
     {en: "The man's indomitable will helped him overcome all obstacles.", zh: '這個人不屈不撓的意志幫助他克服了所有障礙。'}
-  ], avoid: [], roots: ['dom, domin'], usages: [] },
+  ], avoid: [], roots: ['dom, domin'], usages: [], kk: 'ɪnˋdɑmətəbḷ' },
 { word: 'domain', meaning: '領域、領土', pos: 'n.', sentences: [
     {en: 'His is a respected name in the domain of science.', zh: '他在科學領域是一個受人尊敬的名字。'}
-  ], avoid: [], roots: ['dom, domin'], usages: [] },
+  ], avoid: [], roots: ['dom, domin'], usages: [], kk: 'doˋmen' },
 { word: 'domestic', meaning: '家庭的、國內的、養馴的；僕人、佣人', pos: 'adj., n.', sentences: [
     {en: 'The couple worked as domestics for wealthy homeowners.', zh: '這對夫婦為富有的屋主當傭人。'}
-  ], avoid: [], roots: ['dom, domin'], usages: [] },
+  ], avoid: [], roots: ['dom, domin'], usages: [], kk: 'dəˋmɛstɪk' },
 { word: 'domesticate', meaning: '養馴、馴服', pos: 'v.', sentences: [
     {en: 'Dogs have been domesticated for thousands of years.', zh: '狗已經被馴化了數千年。'}
-  ], avoid: [], roots: ['dom, domin'], usages: [] },
+  ], avoid: [], roots: ['dom, domin'], usages: [], kk: 'dəˋmɛstəˏket' },
 { word: 'domineering', meaning: '盛氣凌人的', pos: 'adj.', sentences: [
     {en: 'He can never be happy with that domineering wife of his.', zh: '他永遠無法對他那盛氣凌人的妻子感到滿意。'}
-  ], avoid: [], roots: ['dom, domin'], usages: [] },
+  ], avoid: [], roots: ['dom, domin'], usages: [], kk: 'ˏdɑməˋnɪrɪŋ' },
+{ word: 'saprotroph', meaning: '腐生生物', pos: 'n.', sentences: [{en: 'Fungi and some bacteria are saprotrophs that break down dead organic matter.', zh: '真菌和一些細菌是分解死亡有機物質的腐生生物。'}], avoid: [], roots: [], usages: [], forms: ['saprotrophic (adj.)', 'saprotrophy (n.)'], kk: 'ˋsæprə͵trɑf' },
+{ word: 'sinister', meaning: '邪惡的、陰險的、不祥的', pos: 'adj.', sentences: [{en: 'There was a sinister look on his face.', zh: '他的臉上有一種邪惡的表情。'}, {en: 'The abandoned house had a sinister atmosphere.', zh: '那棟廢棄的房子有一種不祥的氣氛。'}], avoid: [], roots: [], usages: [], forms: ['sinisterly (adv.)'], kk: 'ˋsɪnɪstɚ' },
 ];
 const ROOTS={
   'act, ag, ig': '做、行動',
@@ -2291,6 +2294,8 @@ function usedRoots(){return [...new Set(words.flatMap(getRoots))].sort((a,b)=>a.
 function getSentences(w){if(Array.isArray(w?.sentences)&&w.sentences.length)return w.sentences.map(x=>({en:x.en||'',zh:x.zh||''}));return [{en:w?.sentence||'',zh:w?.translation||''}]}
 let sessionSentences=new Map();
 function pickSentence(w){if(!sessionSentences.has(w.word)){const list=getSentences(w);sessionSentences.set(w.word,list[Math.floor(Math.random()*list.length)])}return sessionSentences.get(w.word)}
+// KK 音標：只有 PLAYERS 設定 showKK:true 的玩家會顯示（單字總覽、考完的解析）
+function kkHTML(w){const pl=PLAYERS.find(p=>p.id===currentPlayer);return pl&&pl.showKK&&w&&w.kk?`<span class="kk">[${w.kk}]</span>`:''}
 function usagesHTML(w){const u=Array.isArray(w?.usages)?w.usages.map(String).filter(x=>x.trim()):[];return u.length?`<div class="usage-block">${u.map(x=>`<div class="usage-line">${x}</div>`).join('')}</div>`:''}
 function sentencesHTML(w){return getSentences(w).map(x=>`<div class="sentence-block"><div class="review-sentence">${x.en}</div><div class="review-translation">${x.zh}</div></div>`).join('')}
 const WORDS_PER_GAME=5;
@@ -2517,7 +2522,7 @@ let s6selected=null,s6matched=[],s6wrong=[];
 function initS6(){s6selected=null;s6matched=[];s6wrong=[];document.getElementById('s6matched').textContent='0/'+gameWords.length;const wb=document.getElementById('s6wordButtons');wb.innerHTML='';const set=new Set(gameWords.map(x=>x.word)),extraItems=shuffle(eligibleWords().filter(x=>!set.has(x.word)&&!gameWords.some(g=>conflicts(g.word,x.word)))).slice(0,gameWords.length),extras=extraItems.map(x=>x.word),choices=shuffle([...gameWords.map(x=>x.word),...extras]);extraItems.forEach(x=>distractorWords.set(x.word,x));choices.forEach(w=>{const b=document.createElement('button');b.className='word-btn';b.textContent=w;b.onclick=()=>{document.querySelectorAll('#s6wordButtons .word-btn').forEach(x=>x.removeAttribute('data-selected'));b.dataset.selected='true';s6selected=w};wb.appendChild(b)});const sc=document.getElementById('s6sentences');sc.innerHTML='';shuffle([...gameWords]).forEach(item=>{const d=document.createElement('div');d.className='sentence',txt=sentenceWithBlank(item),k=txt.indexOf('_____');d.append(document.createTextNode(txt.slice(0,k)));const blank=document.createElement('span');blank.className='blank';blank.textContent='_____';blank.onclick=()=>s6fill(blank,item);d.append(blank,document.createTextNode(txt.slice(k+5)));sc.appendChild(d)});startTimer('s6timer')}
 function s6fill(blank,item){if(!s6selected)return;const b=document.querySelector('#s6wordButtons .word-btn[data-selected="true"]');if(s6selected===item.word){blank.textContent=s6selected;blank.classList.add('correct');blank.onclick=null;s6matched.push(s6selected);if(b)b.remove();s6selected=null;document.getElementById('s6matched').textContent=s6matched.length+'/'+gameWords.length;if(s6matched.length===gameWords.length)setTimeout(()=>finishStage(6,s6wrong),300)}else{blank.classList.add('incorrect');s6wrong.push(pickSentence(item).en+' → '+s6selected);setTimeout(()=>blank.classList.remove('incorrect'),500)}}
 
-function showReview(){document.getElementById('finalOverlay').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');const when=completionTime||new Date();document.getElementById('reviewCompleted').textContent='完成時間：'+when.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});const list=document.getElementById('reviewList');list.innerHTML='';gameWords.forEach(w=>{const item=document.createElement('div');item.className='review-item';const hr=hintRecords.find(h=>h.word===w.word),m4=s4HintWords.has(w.word);item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}</div>${rootTagsHTML(w)}${sentencesHTML(w)}${usagesHTML(w)}${hr?`<div class="hint-tag">💡 第七關使用提示：${hr.options.join(' / ')}</div>`:''}${m4?`<div class="hint-tag">💡 第六關使用「再看一次」</div>`:''}`;list.appendChild(item)});const dl=reviewDistractorList();if(dl.length){const title=document.createElement('h3');title.textContent='出現的干擾單字';title.style.margin='24px 0 10px';list.appendChild(title);dl.forEach(w=>{const item=document.createElement('div');item.className='review-item';item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}</div>${rootTagsHTML(w)}${sentencesHTML(w)}${usagesHTML(w)}`;list.appendChild(item)})}document.getElementById('reviewContainer').classList.add('show');window.scrollTo({top:0,behavior:'smooth'})}
+function showReview(){document.getElementById('finalOverlay').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');const when=completionTime||new Date();document.getElementById('reviewCompleted').textContent='完成時間：'+when.toLocaleString('zh-TW',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});const list=document.getElementById('reviewList');list.innerHTML='';gameWords.forEach(w=>{const item=document.createElement('div');item.className='review-item';const hr=hintRecords.find(h=>h.word===w.word),m4=s4HintWords.has(w.word);item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}${kkHTML(w)}</div>${rootTagsHTML(w)}${sentencesHTML(w)}${usagesHTML(w)}${hr?`<div class="hint-tag">💡 第七關使用提示：${hr.options.join(' / ')}</div>`:''}${m4?`<div class="hint-tag">💡 第六關使用「再看一次」</div>`:''}`;list.appendChild(item)});const dl=reviewDistractorList();if(dl.length){const title=document.createElement('h3');title.textContent='出現的干擾單字';title.style.margin='24px 0 10px';list.appendChild(title);dl.forEach(w=>{const item=document.createElement('div');item.className='review-item';item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}${kkHTML(w)}</div>${rootTagsHTML(w)}${sentencesHTML(w)}${usagesHTML(w)}`;list.appendChild(item)})}document.getElementById('reviewContainer').classList.add('show');window.scrollTo({top:0,behavior:'smooth'})}
 
 /* ===== 多人雲端學習紀錄＋動態升級功能 ===== */
 const CLOUD_URL='https://script.google.com/macros/s/AKfycbxmKpFPVgZauhFDiAW-NlCGptTKMfbU1FXtdKbkPWEjY7lOaSBCFMXa3_75pGpJJyRWoQ/exec';
@@ -2559,12 +2564,12 @@ function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el
 showRandomQuote();
 
 const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,defaults:{stages:[1,3,4,5,6,8],mode:'random',count:5,memorySeconds:1.0}},
+  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,showKK:true,defaults:{stages:[1,3,4,5,6,8],mode:'random',count:5,memorySeconds:1.0}},
   {id:'YSH',name:'楊',icon:'🐱',password:'',active:1,defaults:{stages:[1,3,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'CTY',name:'張',icon:'🐶',password:'1234',active:0,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}}
 ];
-/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。password留空字串表示個人紀錄不需密碼。defaults可設定每位玩家預設遊戲：stages關卡（用內部代號，不是畫面上的第幾關：1選中文、2找單字、3選英文、4拼單字、5挑句子、6字句配、7挑單字、8戳泡泡）、mode可用random（新學）或weak（學過）、count單字數、memorySeconds拼單字關的單字顯示秒數。*/
+/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。password留空字串表示個人紀錄不需密碼。showKK:true表示在單字總覽和解析顯示KK音標（不寫就不顯示）。defaults可設定每位玩家預設遊戲：stages關卡（用內部代號，不是畫面上的第幾關：1選中文、2找單字、3選英文、4拼單字、5挑句子、6字句配、7挑單字、8戳泡泡）、mode可用random（新學）或weak（學過）、count單字數、memorySeconds拼單字關的單字顯示秒數。*/
 let currentPlayer=null,cloudStats={},sessionWordStats={},sessionStageResult={},manualFilterLetter='',randomWordCount=Math.min(5,words.length),practiceWrongMode=false,lastSessionWrongWords=new Set(),sessionHistory=[];
 const stageNames={1:'選中文',2:'找單字',3:'選英文',4:'拼單字',5:'挑句子',6:'字句配',7:'挑單字',8:'戳泡泡'};
 // 畫面上的關卡編號（內部代號 → 顯示第幾關）：選中文1、選英文2、挑句子3、挑單字4、字句配5、拼單字6、找單字7、戳泡泡8
@@ -2662,7 +2667,7 @@ function allWordsCard(w){
   const isLearned=cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0;
   const item=document.createElement('div');
   item.className='review-item';
-  item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}${isLearned?' <span class=\"learned-tag\">已學過</span>':''}</div>${rootTagsHTML(w)}${sentencesHTML(w)}${usagesHTML(w)}`+reviewFlagButtons(w.word);
+  item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}${kkHTML(w)}${isLearned?' <span class=\"learned-tag\">已學過</span>':''}</div>${rootTagsHTML(w)}${sentencesHTML(w)}${usagesHTML(w)}`+reviewFlagButtons(w.word);
   return item;
 }
 function renderAllWordsContent(){
