@@ -435,7 +435,7 @@ h1::after{
 .balloon::before{content:'';position:absolute;left:calc(50% - 4px);bottom:-5px;border:4px solid transparent;border-top-color:inherit}
 .balloon.en{font-family:Georgia,'Times New Roman',serif;font-size:15px}
 .balloon-pair.correct .balloon{cursor:default}
-@keyframes balloonUp{from{transform:translateY(80px) scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes balloonUp{from{transform:translateY(-80px) scale(.6);opacity:0}to{transform:none;opacity:1}}
 @keyframes balloonPulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 .s8-msg{display:none;padding:10px;border-radius:11px;margin:0 0 12px;text-align:center;font-size:13px;font-weight:600}.s8-msg.show{display:block}.s8-msg.success{background:rgba(70,129,137,.14);border:.5px solid #468189;color:#468189}.s8-msg.error{background:rgba(232,130,140,.16);border:.5px solid #E8828C;color:#E8828C}
 .bubble-area{position:relative;overflow:hidden;border-radius:16px;background:linear-gradient(180deg,rgba(var(--theme-rgb),.06),rgba(var(--theme-rgb),.20));border:1px solid rgba(var(--theme-rgb),.35);margin-bottom:12px;touch-action:manipulation}
@@ -507,7 +507,7 @@ h1::after{
     <div id="stage5" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="s5progress"></div></div><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s5timer">0:00</div></div></div><div class="instruction">第三關｜挑句子：上方會給一個單字，請從三個挖空例句中選出它真正適合的位置。兩個干擾例句會從完整 data 抽取。</div><div class="question-container"><div class="question-text" id="s5word"></div><div id="s5options"></div><div class="feedback" id="s5feedback"></div></div><div class="btn-row center-row"><button class="primary" id="s5submitBtn" onclick="s5submit()">確認答案</button></div></div>
     <div id="stage6" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s6timer">0:00</div></div><div class="stat-card"><div class="stat-label">✓ 配對</div><div class="stat-value" id="s6matched">0/0</div></div></div><div class="instruction">第五關｜字句配：選擇一個單字，再點擊句子中的空白填入。</div><div class="word-buttons" id="s6wordButtons"></div><div class="sentences" id="s6sentences"></div></div>
     <div id="stage7" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="s7progress"></div></div><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s7timer">0:00</div></div></div><div class="instruction">第四關｜挑單字：看挖空的例句，選出正確的單字。</div><div class="question-container"><div class="question-text" id="s7question"></div><div id="s7options"></div><div class="feedback" id="s7feedback"></div></div><div class="btn-row center-row"><button class="primary" id="s7submitBtn" onclick="s7submit()">確認答案</button></div></div>
-    <div id="stage8" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s8timer">0:00</div></div><div class="stat-card"><div class="stat-label">🎈 配對</div><div class="stat-value" id="s8count">0/0</div></div></div><div class="instruction">第八關｜戳泡泡：點泡泡戳破它，會變成氣球飄到上方；接著戳的那一顆會變成同色氣球，兩顆配成一對（一個英文、一個中文）。點上方的氣球可以拆開重配。有些泡泡找不到對應的，不用配。配好後按「交卷」；沒配完或配錯也可以交卷。</div><div class="balloon-area" id="s8balloons"></div><div class="bubble-area" id="s8bubbles"></div><div class="s8-msg" id="s8feedback"></div><div class="btn-row center-row"><button class="primary" id="s8confirmBtn" onclick="s8confirm()">交卷</button></div></div>
+    <div id="stage8" class="hidden"><div class="stats"><div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="s8timer">0:00</div></div><div class="stat-card"><div class="stat-label">🎈 配對</div><div class="stat-value" id="s8count">0/0</div></div></div><div class="instruction">第八關｜戳泡泡：點泡泡戳破它，會變成氣球飄到下方；接著戳的那一顆會變成同色氣球，兩顆配成一對（一個英文、一個中文）。點下方的氣球可以拆開重配。有些泡泡找不到對應的，不用配。配好後按「交卷」；沒配完或配錯也可以交卷。</div><div class="bubble-area" id="s8bubbles"></div><div class="balloon-area" id="s8balloons"></div><div class="s8-msg" id="s8feedback"></div><div class="btn-row center-row"><button class="primary" id="s8confirmBtn" onclick="s8confirm()">交卷</button></div></div>
   </div>
 
   <div class="review-container" id="reviewContainer"><div class="review-header"><h2>📋 查看解析</h2><div class="review-actions"><button class="secondary" onclick="restartPractice(false)">回首頁</button><button class="secondary" onclick="showPersonalRecord()">個人紀錄</button><button class="secondary" id="wrongPracticeBtn" onclick="practiceWrongWords()">錯題再練習</button><button class="primary" onclick="repeatSamePractice()">再練習一次</button></div></div><div class="review-completed" id="reviewCompleted"></div><div id="reviewList"></div><div class="review-quote" id="reviewQuote"></div></div>
@@ -1950,6 +1950,84 @@ const words = [
     {en: 'The view from the mountain top is stunning.', zh: '從山頂上望去，景色令人驚嘆。'},
     {en: 'The team delivered a stunning victory against the defending champions.', zh: '這支隊伍擊敗了衛冕冠軍，取得了令人震驚的勝利。'}
   ], avoid: [], roots: [], usages: [], forms: [] },
+{ word: 'organize', meaning: '組織', pos: 'v.', sentences: [
+    {en: 'The club is very loosely organized.', zh: '這個社團組織得很鬆散。'}
+  ], avoid: [], roots: ['erc, erg, org'], usages: [] },
+{ word: 'ergonomic', meaning: '人體工學的', pos: 'adj.', sentences: [
+    {en: 'This ergonomic chair looks weird but is comfortable to sit on.', zh: '這張人體工學椅看起來怪，但坐起來很舒服。'}
+  ], avoid: [], roots: ['erc, erg, org'], usages: [] },
+{ word: 'urge', meaning: '敦促、催促；衝動、欲望', pos: 'v., n.', sentences: [
+    {en: "The wife felt a strong urge to confess to her husband, but didn't.", zh: '妻子很想向丈夫坦白，但最後沒有說。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'urgency', meaning: '緊急性、迫切性', pos: 'n.', sentences: [
+    {en: 'Take your time; there is no urgency to the task.', zh: '慢慢來，這項工作沒有急迫性。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'coercion', meaning: '強制、強迫', pos: 'n.', sentences: [
+    {en: 'The police used coercion to obtain a confession from the suspect.', zh: '警方使用強迫手段從嫌犯那裡取得供詞。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'ascetic', meaning: '苦修者', pos: 'n.', sentences: [
+    {en: "The ascetic consumes only bread and water and doesn't sleep in bed.", zh: '這位苦修者只吃麵包和喝水，也不睡床。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'allergic', meaning: '過敏的', pos: 'adj.', sentences: [
+    {en: 'The boy is allergic to cats.', zh: '這個男孩對貓過敏。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'labor', meaning: '勞工、勞動；努力、賣力', pos: 'n., v.', sentences: [
+    {en: "The car parts themselves are inexpensive; it's the labor that will cost you.", zh: '汽車零件本身不貴，會讓你花錢的是人工費。'}
+  ], avoid: [], roots: ['labor'], usages: [] },
+{ word: 'laborious', meaning: '費力的、辛苦的', pos: 'adj.', sentences: [
+    {en: 'Fetching water from the stream is a laborious task.', zh: '從溪裡打水是一件費力的工作。'}
+  ], avoid: [], roots: ['labor'], usages: [] },
+{ word: 'elaborate', meaning: '精密的、複雜的；詳盡闡述、發揮', pos: 'adj., v.', sentences: [
+    {en: 'They took elaborate precautions before going abroad.', zh: '他們出國前採取了周密的防範措施。'}
+  ], avoid: [], roots: ['labor'], usages: [] },
+{ word: 'cooperate', meaning: '合作', pos: 'v.', sentences: [
+    {en: "We'll have to cooperate if we wish to succeed.", zh: '如果我們想成功，就必須合作。'}
+  ], avoid: [], roots: ['oper'], usages: [] },
+{ word: 'operation', meaning: '作業、營運、行動、開刀', pos: 'n.', sentences: [
+    {en: 'Desert Storm was a successful military operation.', zh: '沙漠風暴是一次成功的軍事行動。'}
+  ], avoid: [], roots: ['oper'], usages: [] },
+{ word: 'maneuver', meaning: '策略、行動；操控', pos: 'n., v.', sentences: [
+    {en: 'Through a series of legal maneuvers, the defense lawyer kept her client out of jail.', zh: '透過一連串的法律策略，辯護律師讓她的當事人免於入獄。'}
+  ], avoid: [], roots: ['oper'], usages: [] },
+{ word: 'opulent', meaning: '富裕的、豪華的', pos: 'adj.', sentences: [
+    {en: 'He lives in an opulent mansion filled with priceless art and antiques.', zh: '他住在一棟充滿無價藝術品和古董的豪華宅邸裡。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'copious', meaning: '大量的、豐富的', pos: 'adj.', sentences: [
+    {en: 'The typhoon brought a copious amount of rain.', zh: '颱風帶來了大量的降雨。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'optimum', meaning: '最多的、最理想的', pos: 'adj.', sentences: [
+    {en: 'The software keeps your hard disk organized for optimum performance.', zh: '這套軟體讓你的硬碟保持整齊，以獲得最佳效能。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'optimistic', meaning: '樂觀的', pos: 'adj.', sentences: [
+    {en: 'The case is still pending, but my lawyer is optimistic.', zh: '案件仍在審理中，但我的律師很樂觀。'}
+  ], avoid: [], roots: [], usages: [] },
+{ word: 'install', meaning: '就職、架設、裝設', pos: 'v.', sentences: [
+    {en: 'The college recently installed its first woman president.', zh: '這所學院最近任命了第一位女校長。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
+{ word: 'installment', meaning: '分期付款、一集', pos: 'n.', sentences: [
+    {en: 'You may pay for the car in 12 installments.', zh: '你可以分12期付清這輛車的款項。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
+{ word: 'persist', meaning: '持續', pos: 'v.', sentences: [
+    {en: 'If the pain persists, you must see a doctor.', zh: '如果疼痛持續，你必須去看醫生。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
+{ word: 'resistance', meaning: '阻力、反抗', pos: 'n.', sentences: [
+    {en: 'Copper is a good conductor because its resistance is small.', zh: '銅是良導體，因為它的電阻很小。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
+{ word: 'consist', meaning: '組成、構成', pos: 'v.', sentences: [
+    {en: 'The hypothesis consists of two parts.', zh: '這個假說由兩個部分組成。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
+{ word: 'desist', meaning: '停止、打消念頭、不去做', pos: 'v.', sentences: [
+    {en: 'The soldiers have been ordered to desist from firing their guns.', zh: '士兵們已被下令停止開火。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
+{ word: 'institution', meaning: '設立、推行、機構、制度', pos: 'n.', sentences: [
+    {en: 'This is the most prestigious educational institution in the nation.', zh: '這是全國最負盛名的教育機構。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
+{ word: 'institute', meaning: '機構；設立、推行', pos: 'n., v.', sentences: [
+    {en: "By instituting these programs, we hope to improve our children's education.", zh: '透過推行這些計畫，我們希望改善孩子們的教育。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
+{ word: 'stance', meaning: '站姿、立場', pos: 'n.', sentences: [
+    {en: 'Most students took an antiwar stance during the conflict.', zh: '在衝突期間，大多數學生採取了反戰的立場。'}
+  ], avoid: [], roots: ['stit, stat'], usages: [] },
 ];
 const ROOTS={
   'act, ag, ig': '做、行動',
@@ -1984,6 +2062,7 @@ const ROOTS={
   'duc, duct': 'lead',
   'en': '使做某事或進入某狀態',
   'epi': '在⋯之上',
+  'erc, erg, org': 'energy',
   'escent': '在⋯的狀態',
   'ex': '向外',
   'fab, fess, phet': '說話',
@@ -1999,6 +2078,7 @@ const ROOTS={
   'grad, gress': 'step',
   'gyn': '女性',
   'it': 'go',
+  'labor': 'work',
   'lax': '鬆開、鬆弛',
   'liber': '自由',
   'luc, lumin': '光',
@@ -2353,7 +2433,7 @@ function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el
 showRandomQuote();
 
 const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.0}},
+  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,defaults:{stages:[1,3,4,5,6,8],mode:'random',count:5,memorySeconds:1.0}},
   {id:'YSH',name:'楊',icon:'🐱',password:'',active:1,defaults:{stages:[1,3,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'CTY',name:'張',icon:'🐶',password:'1234',active:0,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}}
