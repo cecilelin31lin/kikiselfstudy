@@ -133,7 +133,29 @@ button{font-family:inherit}
 .sec-zh{font-size:14px;line-height:1.8;color:#657086;margin:6px 0 0}
 .hl-bar{border-top:1px solid var(--line);padding:9px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .hl-tip{font-size:12px;color:var(--muted)}
-mark.hl{background:rgba(255,225,53,.6);color:inherit;border-radius:2px;cursor:pointer}
+mark.hl{background:#E6D89C;color:inherit;border-radius:2px;cursor:pointer}
+mark.hl.hlc0{background:#E6D89C}
+mark.hl.hlc1{background:#B0C4DE}
+mark.hl.hlc2{background:#E8828C}
+mark.hl.hlc3{background:#DDA0DD}
+mark.hl.hlc4{background:#A8D5BA}
+.hl-colors{display:inline-flex;align-items:center;gap:10px;padding:0 4px}
+.hl-dot{position:relative;width:28px;height:28px;border-radius:50%;border:2px solid transparent;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.hl-dot::before{content:'';position:absolute;inset:-6px}
+.hl-dot[aria-pressed="true"]{border-color:#2B3A55;transform:scale(1.08)}
+.timer-row{display:flex;align-items:center;justify-content:center;gap:10px}
+.pause-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.9);color:inherit;font-size:15px;line-height:1;padding:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.pause-overlay{display:none;position:fixed;inset:0;z-index:900;align-items:center;justify-content:center;padding:20px;background:rgba(255,255,255,.3);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.pause-overlay.show{display:flex}
+.pause-card{background:rgba(255,255,255,.92);border-radius:22px;box-shadow:0 24px 70px rgba(43,58,85,.18);padding:28px 34px;text-align:center}
+.pause-title{font-size:22px;font-weight:700;letter-spacing:.06em;margin-bottom:6px}
+.pause-sub{font-size:13px;color:var(--muted);margin-bottom:18px}
+.note-dot{display:inline-block;position:relative;width:7px;height:7px;margin-left:2px;border-radius:50%;background:#6b7a99;vertical-align:super;cursor:pointer}
+.note-dot::before{content:'';position:absolute;inset:-10px}
+.note-modal textarea{width:100%;min-height:96px;box-sizing:border-box;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:16px;resize:vertical;margin:10px 0 12px}
+.note-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px;font-size:13px;color:var(--muted)}
+.sync-box{margin-top:22px;padding:18px;border-radius:15px;background:rgba(255,255,255,.88);text-align:center;border:1px solid var(--line)}
+.sync-box .btn-row{margin-top:12px}
 mark.ev{background:rgba(255,225,53,.4);color:inherit;border-radius:2px;padding:0 1px}
 .q-card{padding:22px;background:rgba(255,255,255,.92)}
 .q-progress{font-size:13px;color:var(--muted);letter-spacing:.04em;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
@@ -274,6 +296,12 @@ section:not(.hidden){animation:vocFade .22s ease}
       <button class="btn secondary" id="avMarkClear">全部清除</button>
       <span class="count" id="avMarkTip">開啟後，點文章裡的字就標成空格，再點取消</span>
     </div>
+    <div class="mark-bar" id="avHlBar">
+      <span class="hl-colors" id="avColors"></span>
+      <button class="btn secondary" id="avHlBtn" disabled>🖍 標示選取文字</button>
+      <button class="btn secondary" id="avHlClear">清除標示</button>
+      <span class="count">選取文字後按「標示」；點文字可新增備註，備註會在文字右邊出現小點</span>
+    </div>
     <div class="av-card" id="avBody"></div>
   </section>
 
@@ -282,13 +310,14 @@ section:not(.hidden){animation:vocFade .22s ease}
     <div class="topbar"><h2 id="rqTitle" style="font-size:16px"></h2></div>
     <div class="stats">
       <div class="stat-card"><div class="stat-label">題目</div><div class="stat-value" id="rqProg">1/1</div></div>
-      <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="stat-value" id="rqTimer">0:00</div></div>
+      <div class="stat-card"><div class="stat-label">⏱ 時間</div><div class="timer-row"><div class="stat-value" id="rqTimer">0:00</div><button class="pause-btn" id="rqPause" type="button" aria-label="暫停">⏸</button></div></div>
     </div>
     <div class="reading-layout">
       <div class="article-pane" id="rqPane">
         <div class="article-pane-head"><span>文章</span><button class="btn secondary" id="rqCollapse">收合文章</button></div>
         <div class="article-scroll" id="rqArticle"></div>
         <div class="hl-bar" id="hlBar">
+          <span class="hl-colors" id="hlColors"></span>
           <button class="btn secondary" id="hlBtn" disabled>🖍 標示選取文字</button>
           <span class="hl-tip">選取文字後按「標示」；點已標示的字可取消</span>
         </div>
@@ -356,6 +385,29 @@ section:not(.hidden){animation:vocFade .22s ease}
       <div class="btn-row">
         <button class="btn primary" id="resReview">查看解析</button>
         <button class="btn secondary" id="resHome">回主頁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 暫停（霧化） ================= -->
+  <div class="pause-overlay" id="pauseOverlay">
+    <div class="pause-card">
+      <div class="pause-title">已暫停</div>
+      <div class="pause-sub">時間已停止計算</div>
+      <button class="btn primary" id="pauseResume" type="button">▶ 繼續作答</button>
+    </div>
+  </div>
+
+  <!-- ================= 備註 ================= -->
+  <div class="overlay" id="noteOverlay">
+    <div class="modal note-modal">
+      <div class="modal-title" id="noteWord"></div>
+      <div class="note-row hidden" id="noteHlRow"><span>標示顏色</span><span class="hl-colors" id="noteColors"></span><button class="btn secondary" id="noteUnhl" type="button">取消標示</button></div>
+      <textarea id="noteText" placeholder="在這裡寫備註…" aria-label="備註"></textarea>
+      <div class="btn-row">
+        <button class="btn primary" id="noteSave" type="button">儲存</button>
+        <button class="btn secondary hidden" id="noteDel" type="button">刪除備註</button>
+        <button class="btn secondary" id="noteClose" type="button">關閉</button>
       </div>
     </div>
   </div>
@@ -3341,7 +3393,7 @@ It can be a huge relief to find a partner who can treat you in an ordinary way, 
 /* ============================================================
    小工具
    ============================================================ */
-const STORE = { records: 'rl_records', marks: 'rl_marks', flags: 'rl_flags', pending: 'rl_pending', voice: 'rl_voice', collapsed: 'rl_collapsed' };
+const STORE = { records: 'rl_records', marks: 'rl_marks', flags: 'rl_flags', pending: 'rl_pending', voice: 'rl_voice', collapsed: 'rl_collapsed', hl: 'rl_hl', notes: 'rl_notes' };
 const $ = id => document.getElementById(id);
 function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
@@ -3493,7 +3545,7 @@ function segText(a, s, p) { return p === 't' ? a.sections[s].title : a.sections[
 /* ============================================================
    狀態與紀錄（本機 + Google）
    ============================================================ */
-const state = { records: [], marks: {}, flags: {}, cloud: 'none' };
+const state = { records: [], marks: {}, flags: {}, hl: {}, notes: {}, cloud: 'none' };
 
 function setCloud(s) {
   state.cloud = s;
@@ -3501,7 +3553,7 @@ function setCloud(s) {
   box.className = 'cloud-status' + (s === 'ok' ? ' ok' : s === 'fail' ? ' fail' : '');
   box.textContent = { none: '☁️ 尚未連接 Google，紀錄只存在這台瀏覽器', sync: '☁️ 同步中…', ok: '✓ 已同步 Google', fail: '⚠️ 雲端同步失敗，紀錄暫存在這台瀏覽器' }[s];
 }
-function saveLocal() { lsSet(STORE.records, state.records); lsSet(STORE.marks, state.marks); lsSet(STORE.flags, state.flags); }
+function saveLocal() { lsSet(STORE.records, state.records); lsSet(STORE.marks, state.marks); lsSet(STORE.flags, state.flags); lsSet(STORE.hl, state.hl); lsSet(STORE.notes, state.notes); }
 
 async function cloudGetAll() {
   const r = await fetch(CLOUD_URL + '?action=getAll&_=' + Date.now());
@@ -3540,16 +3592,26 @@ function mergeFromCloud(d) {
   const localOnly = state.records.filter(r => !have.has(recKey(r)));
   state.records = [...cloudRecs, ...localOnly];
   localOnly.forEach(r => cloudSend({ action: 'saveResult', ...r }));
-  const cmRaw = d.marks || {}, cm = {}, cf = {};
-  Object.keys(cmRaw).forEach(id => { const arr = Array.isArray(cmRaw[id]) ? cmRaw[id] : []; cm[id] = arr.filter(x => x && typeof x === 'object' && !x.noListening); if (arr.some(x => x && x.noListening)) cf[id] = true; });
-  new Set([...Object.keys(state.marks), ...Object.keys(state.flags)]).forEach(id => { if (!(id in cmRaw) && ((state.marks[id] || []).length || state.flags[id])) cloudSend({ action: 'saveMarks', articleId: id, marks: marksPayload(id) }); });
+  const cmRaw = d.marks || {}, cm = {}, cf = {}, ch = {}, cn = {};
+  Object.keys(cmRaw).forEach(id => {
+    const arr = Array.isArray(cmRaw[id]) ? cmRaw[id] : [];
+    cm[id] = arr.filter(x => x && typeof x === 'object' && !x.noListening && !x.hl && !x.note);
+    if (arr.some(x => x && x.noListening)) cf[id] = true;
+    ch[id] = arr.filter(x => x && x.hl && typeof x.hl === 'object').map(x => x.hl);
+    cn[id] = arr.filter(x => x && x.note && typeof x.note === 'object').map(x => x.note);
+  });
+  new Set([...Object.keys(state.marks), ...Object.keys(state.flags), ...Object.keys(state.hl), ...Object.keys(state.notes)]).forEach(id => { if (!(id in cmRaw) && ((state.marks[id] || []).length || state.flags[id] || (state.hl[id] || []).length || (state.notes[id] || []).length)) cloudSend({ action: 'saveMarks', articleId: id, marks: marksPayload(id) }); });
   state.marks = { ...state.marks, ...cm };
-  Object.keys(cm).forEach(id => { if (cf[id]) state.flags[id] = true; else delete state.flags[id]; });
+  Object.keys(cm).forEach(id => {
+    if (cf[id]) state.flags[id] = true; else delete state.flags[id];
+    if (ch[id].length) state.hl[id] = ch[id]; else delete state.hl[id];
+    if (cn[id].length) state.notes[id] = cn[id]; else delete state.notes[id];
+  });
   saveLocal();
 }
 function addRecord(rec) { state.records.push(rec); saveLocal(); cloudSend({ action: 'saveResult', ...rec }); }
 
-function marksPayload(id) { return [...(state.marks[id] || []), ...(state.flags[id] ? [{ noListening: true }] : [])]; }
+function marksPayload(id) { return [...(state.marks[id] || []), ...(state.flags[id] ? [{ noListening: true }] : []), ...(state.hl[id] || []).map(h => ({ hl: h })), ...(state.notes[id] || []).map(n => ({ note: n }))]; }
 const marksTimers = {};
 function persistMarks(articleId) {
   saveLocal();
@@ -3584,6 +3646,79 @@ function validMarks(a) {
 }
 function markKey(m) { return m.s + '.' + m.p + '.' + m.i; }
 
+/* ---------- 標示（五色）與備註：閱讀測驗、文章瀏覽、解析頁共用 ---------- */
+const HL_COLORS = ['#E6D89C', '#B0C4DE', '#E8828C', '#DDA0DD', '#A8D5BA'];
+const HL_NAMES = ['黃', '藍', '紅', '紫', '綠'];
+function validHl(a, h) { return !!h && !!a.sections[h.s] && h.b > h.a && segText(a, h.s, h.p).slice(h.a, h.b) === h.t; }
+function validHls(a, list) { return (list || []).filter(h => validHl(a, h)); }
+function hlsAt(list, s, p) { return list.filter(h => h.s === s && h.p === p); }
+// 新標示蓋掉舊的重疊部分（舊的被切開，不會重疊）
+function addHl(a, list, h) {
+  const text = segText(a, h.s, h.p), out = [];
+  list.forEach(x => {
+    if (x.s !== h.s || x.p !== h.p || x.b <= h.a || x.a >= h.b) { out.push(x); return; }
+    if (x.a < h.a) out.push({ ...x, b: h.a, t: text.slice(x.a, h.a) });
+    if (x.b > h.b) out.push({ ...x, a: h.b, t: text.slice(h.b, x.b) });
+  });
+  out.push({ s: h.s, p: h.p, a: h.a, b: h.b, c: h.c, t: text.slice(h.a, h.b) });
+  return out.filter(x => x.t.trim()).sort((x, y) => x.s - y.s || (x.p === y.p ? 0 : x.p === 't' ? -1 : 1) || x.a - y.a);
+}
+// 依「字元位置」畫出文字：標示（mark.hl）、依據句（mark.ev）、單字（.w）一次處理
+function renderHlText(box, text, hls, opt) {
+  opt = opt || {};
+  const n = text.length, cc = new Array(n).fill(-1), kk = new Array(n).fill(-1), ev = new Array(n).fill(false);
+  hls.forEach((h, k) => { for (let x = h.a; x < h.b && x < n; x++) { cc[x] = h.c; kk[x] = k; } });
+  (opt.ev || []).forEach(([a, b]) => { for (let x = a; x < b && x < n; x++) ev[x] = true; });
+  function runs(parent, base, str) {
+    let k = 0;
+    while (k < str.length) {
+      const c = cc[base + k], kv = kk[base + k], e = ev[base + k]; let j = k + 1;
+      while (j < str.length && cc[base + j] === c && kk[base + j] === kv && ev[base + j] === e) j++;
+      let node = document.createTextNode(str.slice(k, j));
+      if (c >= 0) { const m = el('mark', 'hl hlc' + c); m.dataset.k = kv; m.appendChild(node); node = m; }
+      if (e) { const m2 = el('mark', 'ev'); m2.appendChild(node); node = m2; }
+      parent.appendChild(node); k = j;
+    }
+  }
+  if (!opt.word) { runs(box, 0, text); return; }
+  let pos = 0;
+  tokenize(text).forEach(t => {
+    if (!t.w) { runs(box, pos, t.v); pos += t.v.length; return; }
+    const sp = el('span', 'w'); runs(sp, pos, t.v);
+    opt.word(sp, t, pos); box.appendChild(sp);
+    const d = opt.after ? opt.after(t, pos) : null; if (d) box.appendChild(d);
+    pos += t.v.length;
+  });
+}
+function evRanges(text, evs) {
+  const ranges = evs.map(e => { const i = text.indexOf(e); return i >= 0 ? [i, i + e.length] : null; }).filter(Boolean).sort((a, b) => a[0] - b[0]);
+  const out = []; let pos = 0; ranges.forEach(([s, e]) => { if (s < pos) return; out.push([s, e]); pos = e; }); return out;
+}
+// 選取範圍 → 各段落（.hlbox）內的字元位置
+function rangeToPieces(range, root) {
+  const pieces = [];
+  root.querySelectorAll('.hlbox').forEach(box => {
+    if (!range.intersectsNode(box)) return;
+    const text = box.textContent; let a = 0, b = text.length;
+    if (box.contains(range.startContainer)) { const pre = document.createRange(); pre.selectNodeContents(box); pre.setEnd(range.startContainer, range.startOffset); a = pre.toString().length; }
+    if (box.contains(range.endContainer)) { const pre = document.createRange(); pre.selectNodeContents(box); pre.setEnd(range.endContainer, range.endOffset); b = pre.toString().length; }
+    while (a < b && /\s/.test(text[a])) a++;
+    while (b > a && /\s/.test(text[b - 1])) b--;
+    if (b > a) pieces.push({ s: Number(box.dataset.s), p: box.dataset.p, a, b });
+  });
+  return pieces;
+}
+function buildColorDots(box, get, set) {
+  box.innerHTML = '';
+  HL_COLORS.forEach((col, c) => {
+    const b = el('button', 'hl-dot'); b.type = 'button'; b.style.background = col;
+    b.setAttribute('aria-label', '標示顏色：' + HL_NAMES[c]); b.setAttribute('aria-pressed', String(get() === c));
+    b.addEventListener('mousedown', e => e.preventDefault());   // 點色點時不要讓選取範圍消失
+    b.onclick = () => { set(c); box.querySelectorAll('.hl-dot').forEach((x, k) => x.setAttribute('aria-pressed', String(k === c))); };
+    box.appendChild(b);
+  });
+}
+
 /* ============================================================
    畫面切換
    ============================================================ */
@@ -3594,17 +3729,21 @@ function show(id) {
   document.body.classList.toggle('rq-mode', id === 'readingQuiz');
   window.scrollTo(0, 0);
 }
-let timerId = null, timerStart = 0;
+let timerId = null, timerStart = 0, timerShow = null, timerPausedAt = 0;
+function tickTimer() { $(timerShow).textContent = fmt(Math.floor((Date.now() - timerStart) / 1000)); }
 function startTimer(displayId) {
   clearInterval(timerId);
-  timerStart = Date.now();
+  timerShow = displayId; timerPausedAt = 0; timerStart = Date.now();
   $(displayId).textContent = '0:00';
-  timerId = setInterval(() => { $(displayId).textContent = fmt(Math.floor((Date.now() - timerStart) / 1000)); }, 250);
+  timerId = setInterval(tickTimer, 250);
 }
-function stopTimer() { clearInterval(timerId); timerId = null; return Math.floor((Date.now() - timerStart) / 1000); }
+function pauseTimer() { if (timerId === null || timerPausedAt) return; clearInterval(timerId); timerId = null; timerPausedAt = Date.now(); tickTimer(); }
+function resumeTimer() { if (!timerPausedAt) return; timerStart += Date.now() - timerPausedAt; timerPausedAt = 0; timerId = setInterval(tickTimer, 250); }
+function stopTimer() { clearInterval(timerId); timerId = null; const end = timerPausedAt || Date.now(); timerPausedAt = 0; return Math.floor((end - timerStart) / 1000); }
 
 function goHome() {
   stopTimer(); unbindKeys(); Reader.stop();
+  $('pauseOverlay').classList.remove('show'); if (rq) rq.paused = false;
   $('resultOverlay').classList.remove('show'); $('menuOverlay').classList.remove('show');
   applyRandomTheme();
   renderHome(); show('home');
@@ -3794,10 +3933,12 @@ function addSectionPlayButton(head, bar, section) {
 /* ============================================================
    文章瀏覽
    ============================================================ */
-const av = { a: null, tab: 'en', marking: false };
+const av = { a: null, tab: 'en', marking: false, color: 0 };
+let avRange = null;
 function openArticle(id) {
   stopTimer(); unbindKeys(); Reader.stop();
   av.a = articleById(id); av.tab = 'en'; av.marking = false;
+  buildColorDots($('avColors'), () => av.color, c => { av.color = c; });
   $('avTitle').textContent = av.a.title;
   buildReaderBar($('avReader'), () => articleItems(av.a));
   renderArticleView();
@@ -3823,6 +3964,8 @@ function renderArticleView() {
     b.textContent = { en: '英文', zh: '中文', both: '對照' }[b.dataset.tab] + (locked ? ' 🔒' : '');
   });
   $('avMarkBar').classList.toggle('hidden', av.tab !== 'en');
+  $('avHlBar').classList.toggle('hidden', !(av.tab === 'en' || (av.tab === 'both' && isUnlocked(a.id))));
+  avRange = null; $('avHlBtn').disabled = true;
   $('avMarkToggle').textContent = '標記聽力空格：' + (av.marking ? '開' : '關');
   $('avMarkCount').textContent = '已標 ' + validMarks(a).length + ' 格';
   body.innerHTML = '';
@@ -3848,14 +3991,20 @@ function renderArticleView() {
   });
 }
 function buildWords(a, si, p, text, marks, cls) {
-  const box = el(cls ? 'p' : 'span', cls || null);
-  tokenize(text).forEach(t => {
-    if (!t.w) { box.appendChild(document.createTextNode(t.v)); return; }
-    const sp = el('span', 'w', t.v);
-    const key = si + '.' + p + '.' + t.i;
-    if (marks.has(key)) sp.classList.add('m');
-    sp.onclick = () => { if (av.marking) toggleMark(a, si, p, t.i, t.v, sp); };
-    box.appendChild(sp);
+  const box = el(cls ? 'p' : 'span', cls ? cls + ' hlbox' : 'hlbox'); box.dataset.s = si; box.dataset.p = p;
+  const hls = hlsAt(validHls(a, state.hl[a.id]), si, p), notes = state.notes[a.id] || [];
+  renderHlText(box, text, hls, {
+    word: (sp, t) => {
+      if (marks.has(si + '.' + p + '.' + t.i)) sp.classList.add('m');
+      sp.onclick = () => { if (av.marking) toggleMark(a, si, p, t.i, t.v, sp); else openNote(si, p, t.i, t.v); };
+    },
+    after: t => {
+      const n = notes.find(x => x.s === si && x.p === p && x.i === t.i && normalizeWord(x.w) === normalizeWord(t.v));
+      if (!n) return null;
+      const d = el('span', 'note-dot'); d.title = n.n; d.setAttribute('role', 'button'); d.setAttribute('aria-label', '備註：' + n.n);
+      d.onclick = e => { e.stopPropagation(); openNote(si, p, t.i, t.v); };
+      return d;
+    }
   });
   return box;
 }
@@ -3868,6 +4017,75 @@ function toggleMark(a, s, p, i, w, sp) {
   persistMarks(a.id);
 }
 
+/* ---------- 文章瀏覽：標示選取文字 ---------- */
+function avSelection() {
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount || sel.isCollapsed) return null;
+  const r = sel.getRangeAt(0);
+  return $('avBody').contains(r.commonAncestorContainer) ? r : null;
+}
+function avRangeValid() { return !!avRange && !avRange.collapsed && $('avBody').contains(avRange.commonAncestorContainer); }
+function checkSelectionAv() {
+  if ($('articleView').classList.contains('hidden')) return;
+  const r = avSelection(); if (r) avRange = r.cloneRange();
+  $('avHlBtn').disabled = !r && !avRangeValid();
+}
+document.addEventListener('selectionchange', checkSelectionAv);
+document.addEventListener('touchend', () => setTimeout(checkSelectionAv, 100));
+document.addEventListener('mouseup', () => setTimeout(checkSelectionAv, 100));
+$('avHlBtn').addEventListener('pointerdown', e => e.stopPropagation());
+$('avHlBtn').onclick = () => {
+  const r = avSelection() || (avRangeValid() ? avRange : null);
+  if (!r || !av.a) return;
+  let list = validHls(av.a, state.hl[av.a.id]);
+  rangeToPieces(r, $('avBody')).forEach(pc => { list = addHl(av.a, list, { ...pc, c: av.color }); });
+  state.hl[av.a.id] = list; persistMarks(av.a.id);
+  window.getSelection().removeAllRanges(); avRange = null; renderArticleView();
+};
+$('avHlClear').onclick = () => {
+  if (!validHls(av.a, state.hl[av.a.id]).length) return;
+  if (!confirm('確定清除這篇文章所有的標示？（備註不會被清除）')) return;
+  state.hl[av.a.id] = []; persistMarks(av.a.id); renderArticleView();
+};
+
+/* ---------- 文章瀏覽：點文字新增備註 ---------- */
+let noteCtx = null;
+function openNote(si, p, i, w) {
+  const sel = window.getSelection(); if (sel && !sel.isCollapsed) return;   // 正在選取文字時不要跳出備註
+  const a = av.a, text = segText(a, si, p);
+  let pos = 0, found = false;
+  tokenize(text).forEach(t => { if (found) return; if (t.w && t.i === i) found = true; else pos += t.v.length; });
+  const ex = (state.notes[a.id] || []).find(x => x.s === si && x.p === p && x.i === i);
+  const hl = validHls(a, state.hl[a.id]).find(h => h.s === si && h.p === p && h.a <= pos && pos < h.b) || null;
+  noteCtx = { si, p, i, w, hl };
+  $('noteWord').textContent = w; $('noteText').value = ex ? ex.n : '';
+  $('noteDel').classList.toggle('hidden', !ex);
+  $('noteHlRow').classList.toggle('hidden', !hl);
+  if (hl) buildColorDots($('noteColors'), () => noteCtx.hl.c, c => { noteCtx.hl.c = c; persistMarks(a.id); });
+  $('noteOverlay').classList.add('show'); $('noteText').focus();
+}
+function closeNote() { if (!$('noteOverlay').classList.contains('show')) return; $('noteOverlay').classList.remove('show'); noteCtx = null; renderArticleView(); }
+$('noteClose').onclick = closeNote;
+$('noteOverlay').addEventListener('click', e => { if (e.target === $('noteOverlay')) closeNote(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNote(); });
+$('noteSave').onclick = () => {
+  if (!noteCtx) return;
+  const id = av.a.id, txt = $('noteText').value.trim(), c = noteCtx;
+  let list = (state.notes[id] || []).filter(x => !(x.s === c.si && x.p === c.p && x.i === c.i));
+  if (txt) list.push({ s: c.si, p: c.p, i: c.i, w: c.w, n: txt });
+  state.notes[id] = list; persistMarks(id); closeNote();
+};
+$('noteDel').onclick = () => {
+  if (!noteCtx) return;
+  const id = av.a.id, c = noteCtx;
+  state.notes[id] = (state.notes[id] || []).filter(x => !(x.s === c.si && x.p === c.p && x.i === c.i)); persistMarks(id); closeNote();
+};
+$('noteUnhl').onclick = () => {
+  if (!noteCtx || !noteCtx.hl) return;
+  const id = av.a.id, h = noteCtx.hl;
+  state.hl[id] = (state.hl[id] || []).filter(x => x !== h); persistMarks(id); closeNote();
+};
+
 /* ============================================================
    閱讀測驗
    ============================================================ */
@@ -3875,9 +4093,11 @@ let rq = null;
 function startReading(id) {
   const a = articleById(id);
   stopTimer(); Reader.stop();
-  rq = { a, items: a.questions.map(q => ({ q, options: shuffle(q.options), selected: null, flagged: {} })), idx: 0, finished: false };
+  rq = { a, items: a.questions.map(q => ({ q, options: shuffle(q.options), selected: null, flagged: {} })), idx: 0, finished: false, hls: [], color: 0, paused: false };
   $('rqTitle').textContent = a.title;
   buildReadingArticle(a);
+  buildColorDots($('hlColors'), () => rq.color, c => { rq.color = c; });
+  $('pauseOverlay').classList.remove('show');
   $('rqCollapse').textContent = '收合文章';
   $('rqArticle').classList.remove('hidden'); $('hlBar').classList.remove('hidden');
   show('readingQuiz');
@@ -3885,16 +4105,29 @@ function startReading(id) {
   startTimer('rqTimer');
   bindKeys(readingKeys);
 }
-function buildReadingArticle(a) {
-  const box = $('rqArticle'); box.innerHTML = '';
-  a.sections.forEach(s => {
+function buildReadingArticle(a, keepScroll) {
+  const box = $('rqArticle'), top = box.scrollTop; box.innerHTML = '';
+  a.sections.forEach((s, si) => {
     const sec = el('div', 'sec');
-    const head = el('div', 'sec-head'); head.appendChild(el('span', 'sec-label', s.label)); if (s.title) head.appendChild(document.createTextNode(s.title));
-    sec.appendChild(head); sec.appendChild(el('p', 'sec-body', s.en));
+    const head = el('div', 'sec-head'); head.appendChild(el('span', 'sec-label', s.label));
+    if (s.title) { const t = el('span', 'hlbox'); t.dataset.s = si; t.dataset.p = 't'; renderHlText(t, s.title, hlsAt(rq.hls, si, 't')); head.appendChild(t); }
+    sec.appendChild(head);
+    const body = el('p', 'sec-body hlbox'); body.dataset.s = si; body.dataset.p = 'b'; renderHlText(body, s.en, hlsAt(rq.hls, si, 'b')); sec.appendChild(body);
     box.appendChild(sec);
   });
-  box.scrollTop = 0;
+  box.scrollTop = keepScroll ? top : 0;
 }
+function pauseRQ() {
+  if (!rq || rq.finished || rq.paused) return;
+  rq.paused = true; if (document.activeElement) document.activeElement.blur();
+  pauseTimer(); $('pauseOverlay').classList.add('show');
+}
+function resumeRQ() {
+  if (!rq || !rq.paused) return;
+  rq.paused = false; resumeTimer(); $('pauseOverlay').classList.remove('show');
+}
+$('rqPause').onclick = pauseRQ;
+$('pauseResume').onclick = resumeRQ;
 $('rqCollapse').onclick = () => {
   const collapsed = $('rqArticle').classList.toggle('hidden');
   $('hlBar').classList.toggle('hidden', collapsed);
@@ -4003,33 +4236,19 @@ function lastRangeValid() { return !!lastRange && !lastRange.collapsed && $('rqA
 $('hlBtn').addEventListener('pointerdown', e => e.stopPropagation());
 $('hlBtn').onclick = () => {
   const r = selectionInArticle() || (lastRangeValid() ? lastRange : null);
-  if (!r) return;
-  highlightRange(r);
+  if (!r || !rq) return;
+  rangeToPieces(r, $('rqArticle')).forEach(pc => { rq.hls = addHl(rq.a, rq.hls, { ...pc, c: rq.color }); });
   window.getSelection().removeAllRanges(); lastRange = null; $('hlBtn').disabled = true;
+  buildReadingArticle(rq.a, true);
 };
-function highlightRange(range) {
-  const sc = range.startContainer, so = range.startOffset, ec = range.endContainer, eo = range.endOffset;
-  const root = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentNode : range.commonAncestorContainer;
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while (walker.nextNode()) { const n = walker.currentNode; if (range.intersectsNode(n)) nodes.push(n); }
-  nodes.forEach(n => {
-    if (n.parentNode.closest && n.parentNode.closest('mark.hl')) return;
-    const start = n === sc ? so : 0, end = n === ec ? eo : n.nodeValue.length;
-    if (end <= start) return;
-    if (!n.nodeValue.slice(start, end).trim()) return;
-    const mid = n.splitText(start); mid.splitText(end - start);
-    const m = document.createElement('mark'); m.className = 'hl';
-    mid.parentNode.replaceChild(m, mid); m.appendChild(mid);
-  });
-}
 $('rqArticle').addEventListener('click', e => {
   const m = e.target.closest && e.target.closest('mark.hl');
-  if (!m) return;
+  if (!m || !rq) return;
   const sel = window.getSelection(); if (sel && !sel.isCollapsed) return;
-  const parent = m.parentNode;
-  while (m.firstChild) parent.insertBefore(m.firstChild, m);
-  parent.removeChild(m); parent.normalize();
+  const box = m.closest('.hlbox'); if (!box) return;
+  const h = hlsAt(rq.hls, Number(box.dataset.s), box.dataset.p)[Number(m.dataset.k)];
+  if (!h) return;
+  rq.hls = rq.hls.filter(x => x !== h); buildReadingArticle(rq.a, true);
 });
 
 /* ============================================================
@@ -4182,16 +4401,17 @@ function evidenceBySection(a) {
   a.questions.forEach(q => (q.evidence || []).forEach(ev => { (map[ev.s] = map[ev.s] || []).push(ev.text); }));
   return map;
 }
-function renderBilingual(a, body) {
+function renderBilingual(a, body, hls) {
+  hls = hls || [];
   const evMap = evidenceBySection(a);
   const readerBar = $('rvReader');
   a.sections.forEach((s, si) => {
     const sec = el('div', 'sec');
     const head = el('div', 'sec-head'); head.appendChild(el('span', 'sec-label', s.label));
-    head.appendChild(document.createTextNode(s.title ? s.title + '｜' + s.zhTitle : s.zhTitle));
+    if (s.title) { const t = el('span'); renderHlText(t, s.title, hlsAt(hls, si, 't')); head.appendChild(t); head.appendChild(document.createTextNode('｜' + s.zhTitle)); } else head.appendChild(document.createTextNode(s.zhTitle));
     addSectionPlayButton(head, readerBar, s);
     sec.appendChild(head);
-    const en = el('p', 'sec-body'); ctxMarkEvidence(en, s.en, evMap[si] || []); sec.appendChild(en);
+    const en = el('p', 'sec-body'); renderHlText(en, s.en, hlsAt(hls, si, 'b'), { ev: evRanges(s.en, evMap[si] || []) }); sec.appendChild(en);
     sec.appendChild(el('p', 'sec-zh', s.zh));
     body.appendChild(sec);
   });
@@ -4219,8 +4439,28 @@ function showReadingReview(r) {
     body.appendChild(card);
   });
   body.appendChild(el('div', 'rv-title', '文章對照（原文依據句以淡黃標示）'));
-  renderBilingual(a, body);
+  renderBilingual(a, body, r.hls || []);
+  if ((r.hls || []).length) buildSyncBox(body, r);
   show('review');
+}
+function buildSyncBox(body, r) {
+  const box = el('div', 'sync-box'); body.appendChild(box);
+  const draw = () => {
+    box.innerHTML = '';
+    if (r.syncState === 'yes') { box.appendChild(el('div', null, '✓ 已把這次的 ' + r.hls.length + ' 處標記同步到「文章瀏覽」')); return; }
+    if (r.syncState === 'no') { box.appendChild(el('div', null, '這次的標記沒有同步到「文章瀏覽」')); return; }
+    box.appendChild(el('div', null, '要把這次閱讀測驗畫的 ' + r.hls.length + ' 處標記，同步到「文章瀏覽」嗎？'));
+    const row = el('div', 'btn-row'), yes = el('button', 'btn primary', '是，同步'), no = el('button', 'btn secondary', '否');
+    yes.onclick = () => { syncHls(r); r.syncState = 'yes'; draw(); };
+    no.onclick = () => { r.syncState = 'no'; draw(); };
+    row.appendChild(yes); row.appendChild(no); box.appendChild(row);
+  };
+  draw();
+}
+function syncHls(r) {
+  const a = r.a; let list = validHls(a, state.hl[a.id]);
+  r.hls.forEach(h => { list = addHl(a, list, h); });
+  state.hl[a.id] = list; persistMarks(a.id);
 }
 function renderEnWithChips(box, a, si, text, chips) {
   tokenize(text).forEach(t => {
@@ -4271,6 +4511,7 @@ function bindKeys(fn) { unbindKeys(); keyHandler = fn; document.addEventListener
 function unbindKeys() { if (keyHandler) document.removeEventListener('keydown', keyHandler); keyHandler = null; }
 function readingKeys(e) {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (rq && rq.paused) { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); resumeRQ(); } return; }
   if ($('resultOverlay').classList.contains('show')) return;
   if (e.key === 'Enter') { e.preventDefault(); nextRQ(); return; }
   if (/^[1-9]$/.test(e.key)) {
@@ -4286,6 +4527,7 @@ async function init() {
   state.records = lsGet(STORE.records, []);
   state.marks = lsGet(STORE.marks, {});
   state.flags = lsGet(STORE.flags, {});
+  state.hl = lsGet(STORE.hl, {}); state.notes = lsGet(STORE.notes, {});
   renderHome(); show('home');
   if (!CLOUD_URL) { setCloud('none'); return; }
   setCloud('sync');
