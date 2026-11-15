@@ -133,12 +133,12 @@ button{font-family:inherit}
 .sec-zh{font-size:14px;line-height:1.8;color:#657086;margin:6px 0 0}
 .hl-bar{border-top:1px solid var(--line);padding:9px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .hl-tip{font-size:12px;color:var(--muted)}
-mark.hl{background:#E6D89C;color:inherit;border-radius:2px;cursor:pointer}
-mark.hl.hlc0{background:#E6D89C}
-mark.hl.hlc1{background:#B0C4DE}
-mark.hl.hlc2{background:#E8828C}
-mark.hl.hlc3{background:#DDA0DD}
-mark.hl.hlc4{background:#A8D5BA}
+mark.hl{background:#E8828C;color:inherit;border-radius:2px;cursor:pointer}
+mark.hl.hlc0{background:#E8828C}
+mark.hl.hlc1{background:#E6D89C}
+mark.hl.hlc2{background:#A8D5BA}
+mark.hl.hlc3{background:#B0C4DE}
+mark.hl.hlc4{background:#DDA0DD}
 .hl-colors{display:inline-flex;align-items:center;gap:10px;padding:0 4px}
 .hl-dot{position:relative;width:28px;height:28px;border-radius:50%;border:2px solid transparent;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .hl-dot::before{content:'';position:absolute;inset:-6px}
@@ -3647,8 +3647,8 @@ function validMarks(a) {
 function markKey(m) { return m.s + '.' + m.p + '.' + m.i; }
 
 /* ---------- 標示（五色）與備註：閱讀測驗、文章瀏覽、解析頁共用 ---------- */
-const HL_COLORS = ['#E6D89C', '#B0C4DE', '#E8828C', '#DDA0DD', '#A8D5BA'];
-const HL_NAMES = ['黃', '藍', '紅', '紫', '綠'];
+const HL_COLORS = ['#E8828C', '#E6D89C', '#A8D5BA', '#B0C4DE', '#DDA0DD'];
+const HL_NAMES = ['紅', '黃', '綠', '藍', '紫'];
 function validHl(a, h) { return !!h && !!a.sections[h.s] && h.b > h.a && segText(a, h.s, h.p).slice(h.a, h.b) === h.t; }
 function validHls(a, list) { return (list || []).filter(h => validHl(a, h)); }
 function hlsAt(list, s, p) { return list.filter(h => h.s === s && h.p === p); }
