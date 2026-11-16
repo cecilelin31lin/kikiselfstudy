@@ -119,6 +119,8 @@ button{font-family:inherit}
 .word-mode{margin-top:18px;padding-top:16px;border-top:1px solid #eee}
 .word-mode h2{font-size:18px;margin:0 0 10px}
 .mode-options{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.few-first-row{display:flex;align-items:center;gap:8px;margin:-6px 0 14px;font-size:13px;color:#2B3A55;cursor:pointer;width:max-content}
+.few-first-row input{width:16px;height:16px;accent-color:var(--theme-hover);margin:0}
 .mode-desc{font-size:13px;color:#657086;margin:-4px 0 14px;line-height:1.6}
 .mode-option{flex:1;min-width:80px;display:flex;gap:6px;align-items:center;justify-content:center;text-align:center;background:#fafafa;border:.5px solid #ddd;border-radius:8px;padding:9px 6px;cursor:pointer;font-size:13px}
 .mode-option input{margin:0}
@@ -486,6 +488,7 @@ h1::after{
         <label class="mode-option"><input type="radio" name="wordMode" value="manual"><div><strong>自選</strong></div></label>
       </div>
       <div class="mode-desc" id="modeDesc"></div>
+      <label class="few-first-row hidden" id="fewFirstRow"><input type="checkbox" id="fewFirstCheck"> 練習次數少的優先</label>
       <div class="settings-section">
         <div class="setting-row" id="randomCountRow"><label for="randomCount">挑戰單字</label><input type="number" id="randomCount" min="1" value="5" inputmode="numeric"><span style="font-size:12px;color:#777">個</span><span id="randomCountMax" style="font-size:12px;color:#999;margin-left:4px"></span></div>
       </div>
@@ -2592,12 +2595,12 @@ function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el
 showRandomQuote();
 
 const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,showKK:true,defaults:{stages:[1,3,4,5,6,8],mode:'random',count:5,memorySeconds:1.0}},
-  {id:'YSH',name:'楊',icon:'🐱',password:'',active:1,defaults:{stages:[1,3,5,6],mode:'random',count:5,memorySeconds:1.5}},
+  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,showKK:true,defaults:{stages:[1,3,4,5,6,8],mode:'random',count:5,memorySeconds:1.0,fewFirst:false}},
+  {id:'YSH',name:'楊',icon:'🐱',password:'',active:1,defaults:{stages:[1,3,5,6],mode:'random',count:5,memorySeconds:1.5,fewFirst:true}},
   {id:'CTY',name:'張',icon:'🐶',password:'1234',active:0,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}}
 ];
-/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。password留空字串表示個人紀錄不需密碼。showKK:true表示在單字總覽和解析顯示KK音標（不寫就不顯示）。defaults可設定每位玩家預設遊戲：stages關卡（用內部代號，不是畫面上的第幾關：1選中文、2找單字、3選英文、4拼單字、5挑句子、6字句配、7挑單字、8戳泡泡）、mode可用random（新學）或weak（學過）、count單字數、memorySeconds拼單字關的單字顯示秒數。*/
+/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。password留空字串表示個人紀錄不需密碼。showKK:true表示在單字總覽和解析顯示KK音標（不寫就不顯示）。defaults可設定每位玩家預設遊戲：stages關卡（用內部代號，不是畫面上的第幾關：1選中文、2找單字、3選英文、4拼單字、5挑句子、6字句配、7挑單字、8戳泡泡）、mode可用random（新學）或weak（學過）、count單字數、memorySeconds拼單字關的單字顯示秒數、fewFirst是否預設勾選「練習次數少的優先」（true勾、false不勾，用在學過／星號／標記／醫學）。*/
 let currentPlayer=null,cloudStats={},sessionWordStats={},sessionStageResult={},manualFilterLetter='',randomWordCount=Math.min(5,words.length),practiceWrongMode=false,lastSessionWrongWords=new Set(),sessionHistory=[];
 const stageNames={1:'選中文',2:'找單字',3:'選英文',4:'拼單字',5:'挑句子',6:'字句配',7:'挑單字',8:'戳泡泡'};
 // 畫面上的關卡編號（內部代號 → 顯示第幾關）：選中文1、選英文2、挑句子3、挑單字4、字句配5、拼單字6、找單字7、戳泡泡8
@@ -2607,7 +2610,7 @@ function stageTitle(n){return '第'+CN_NUM[stageDisplayNo[n]]+'關｜'+stageName
 function getSW(word){if(!sessionWordStats[word])sessionWordStats[word]={practice:0,wrong:0,hint:0,rewatch:0,stages:{}};return sessionWordStats[word]}
 function markStage(word,stage,ok){const x=getSW(word);if(!x.stages[stage])x.stages[stage]={wrong:0,correct:false};if(ok)x.stages[stage].correct=true;else{x.stages[stage].wrong++;x.wrong++;lastSessionWrongWords.add(word)}}
 function renderPlayers(){const g=document.getElementById('playerGrid');g.innerHTML='';PLAYERS.filter(p=>p.active!==0).forEach(p=>{const b=document.createElement('div');b.className='player-card'+(currentPlayer===p.id?' selected':'');b.innerHTML=`<span class="player-icon">${p.icon}</span><span class="player-name">${p.name}</span>`;b.onclick=()=>selectPlayer(p.id);g.appendChild(b)})}
-function applyPlayerDefaults(p){const d=p?.defaults||{};const stages=Array.isArray(d.stages)&&d.stages.length?d.stages:[1,2,3,4,5,6];document.querySelectorAll('.stage-check input').forEach(x=>x.checked=stages.includes(Number(x.value)));const mode=['random','weak'].includes(d.mode)?d.mode:'random';const radio=document.querySelector(`input[name="wordMode"][value="${mode}"]`);if(radio)radio.checked=true;const count=document.getElementById('randomCount');if(count){const max=Math.max(1,eligibleWords().length||words.length);const n=Math.max(1,Math.min(Number(d.count)||5,max));count.value=n;randomWordCount=n}updateModeVisibility()}
+function applyPlayerDefaults(p){const d=p?.defaults||{};const stages=Array.isArray(d.stages)&&d.stages.length?d.stages:[1,2,3,4,5,6];document.querySelectorAll('.stage-check input').forEach(x=>x.checked=stages.includes(Number(x.value)));const mode=['random','weak'].includes(d.mode)?d.mode:'random';const radio=document.querySelector(`input[name="wordMode"][value="${mode}"]`);if(radio)radio.checked=true;const few=document.getElementById('fewFirstCheck');if(few)few.checked=!!d.fewFirst;const count=document.getElementById('randomCount');if(count){const max=Math.max(1,eligibleWords().length||words.length);const n=Math.max(1,Math.min(Number(d.count)||5,max));count.value=n;randomWordCount=n}updateModeVisibility()}
 async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('homeAllWordsBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};sessionHistory=[];try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(currentPlayer!==id)return;if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){if(currentPlayer!==id)return;document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}try{const r2=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(id)+'&_='+Date.now());const data2=await r2.json();if(currentPlayer!==id)return;if(data2.ok)sessionHistory=Array.isArray(data2.sessions)?data2.sessions:[]}catch(e){}updateModeVisibility()}
 function familiarityScore(word){const s=cloudStats[word]||{};const p=Number(s.practice||0),w=Number(s.wrong||0),h=Number(s.hint||0),r=Number(s.rewatch||0);if(!p)return 0;return Math.max(0,Math.min(5,Math.round(5*(p/(p+w*1.6+h*.8+r*.8))*(1-Math.exp(-p/4)))))}
 function stars(word){const n=familiarityScore(word);return '★'.repeat(n)+'☆'.repeat(5-n)}
@@ -2748,13 +2751,22 @@ function fairRandomSample(source,count){
 const DRAW_MODES=['random','weak','mixed','staronly','markonly','medonly'];
 const MODE_DESC={
   random:'只從還沒看過的單字中隨機出題。',
-  weak:'只從已經學過的單字中出題。一半隨機挑，一半挑常答錯的字。',
+  weak:'只從已經學過的單字中出題。⅕ 隨機挑，⅖ 挑常答錯的字，⅖ 挑練習次數少的字。',
   mixed:'一半從還沒練過的單字出題，一半從練過的單字出題。',
-  staronly:'只從星號單字中出題，練習次數少的優先。',
-  markonly:'只從標記單字中出題，練習次數少的優先。',
-  medonly:'只從醫學單字中出題，練習次數少的優先。',
+  staronly:'只從星號單字中隨機出題。',
+  markonly:'只從標記單字中隨機出題。',
+  medonly:'只從醫學單字中隨機出題。',
   manual:'自己勾選要練的單字。'
 };
+// 勾選「練習次數少的優先」時的說明
+const MODE_DESC_FEW={
+  weak:'只從已經學過的單字中出題，練習次數少的優先。',
+  staronly:'只從星號單字中出題，練習次數少的優先。',
+  markonly:'只從標記單字中出題，練習次數少的優先。',
+  medonly:'只從醫學單字中出題，練習次數少的優先。'
+};
+const FEW_FIRST_MODES=['weak','staronly','markonly','medonly'];
+function fewFirstOn(){return !!document.getElementById('fewFirstCheck')?.checked}
 const MODE_EMPTY_MSG={random:'已經沒有新的單字了 🎉',weak:'目前沒有學過的單字',staronly:'目前沒有標記星號重要的單字',markonly:'目前沒有🔖標記的單字',medonly:'目前沒有🩺醫學的單字'};
 function isLearnedWord(w){return !!(cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0)}
 function modePool(mode){
@@ -2782,10 +2794,20 @@ function drawLearnedWords(n,picked){
   const randomPart=pickWords(learned,n-weakPart.length,pickRandom,picked);
   return [...weakPart,...randomPart];
 }
+// 學過模式：勾「練習次數少的優先」→全部照練習次數少的；不勾→⅕ 隨機、⅖ 常答錯、⅖ 練習次數少（除不盡多的給常答錯）
+function drawWeakModeWords(n,picked){
+  const learned=modePool('weak');
+  if(fewFirstOn())return pickWords(learned,n,pickFair,picked);
+  const fewN=Math.floor(n*2/5),randN=Math.floor(n/5),weakN=n-fewN-randN;
+  const weakPart=pickWords(learned,weakN,pickWeak,picked);
+  const fewPart=pickWords(learned,fewN,pickFair,picked);
+  const randPart=pickWords(learned,n-weakPart.length-fewPart.length,pickRandom,picked);
+  return [...weakPart,...fewPart,...randPart];
+}
 function drawNewGameWords(){
   const n=Math.max(1,Number(document.getElementById('randomCount')?.value||randomWordCount||5));
   const picked=[];
-  if(wordMode==='weak'){gameWords=shuffle(drawLearnedWords(n,picked));return}
+  if(wordMode==='weak'){gameWords=shuffle(drawWeakModeWords(n,picked));return}
   if(wordMode==='mixed'){
     const newPool=modePool('random');
     const newPart=pickWords(newPool,Math.floor(n/2),pickRandom,picked);
@@ -2794,7 +2816,8 @@ function drawNewGameWords(){
     gameWords=shuffle([...newPart,...oldPart,...extraNew]);
     return;
   }
-  const picker=wordMode==='random'?pickRandom:pickFair;
+  // 星號／標記／醫學：預設隨機；勾「練習次數少的優先」才照練習次數少的先出
+  const picker=wordMode==='random'?pickRandom:(fewFirstOn()?pickFair:pickRandom);
   gameWords=pickWords(modePool(wordMode),n,picker,picked);
 }
 function renderAZ(){const row=document.getElementById('azRow');if(!row)return;const letters=[...new Set(eligibleWords().map(w=>(w.word[0]||'').toUpperCase()).filter(x=>/[A-Z]/.test(x)))].sort();row.innerHTML='';const all=document.createElement('button');all.className='az-btn'+(!manualFilterLetter?' active':'');all.textContent='全部';all.onclick=()=>{manualFilterLetter='';filterWordSelector();renderAZ()};row.appendChild(all);letters.forEach(l=>{const b=document.createElement('button');b.className='az-btn'+(manualFilterLetter===l?' active':'');b.textContent=l;b.onclick=()=>{manualFilterLetter=l;filterWordSelector();renderAZ()};row.appendChild(b)});[['star','⭐ 星號'],['marked','🔖 標記'],['medical','🩺 醫學']].forEach(([key,label])=>{const b=document.createElement('button');b.className='az-btn'+(manualFilterLetter===key?' active':'');b.textContent=label;b.onclick=()=>{manualFilterLetter=key;filterWordSelector();renderAZ()};row.appendChild(b)})}
@@ -2890,8 +2913,10 @@ async function toggleWordFlag(word,flag){
 function updateModeVisibility(){
   const mode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';
   document.getElementById('randomCountRow').classList.toggle('hidden',!DRAW_MODES.includes(mode));
+  const fewRow=document.getElementById('fewFirstRow');
+  if(fewRow)fewRow.classList.toggle('hidden',!FEW_FIRST_MODES.includes(mode));
   const desc=document.getElementById('modeDesc');
-  if(desc)desc.textContent=MODE_DESC[mode]||'';
+  if(desc)desc.textContent=(FEW_FIRST_MODES.includes(mode)&&fewFirstOn()?MODE_DESC_FEW[mode]:MODE_DESC[mode])||'';
   const maxEl=document.getElementById('randomCountMax');
   if(!maxEl)return;
   const pool=modePool(mode);
@@ -2900,6 +2925,7 @@ function updateModeVisibility(){
   if(input)input.max=pool.length||1;
 }
 document.querySelectorAll('input[name="wordMode"]').forEach(r=>r.addEventListener('change',updateModeVisibility));
+document.getElementById('fewFirstCheck').addEventListener('change',updateModeVisibility);
 buildRandomCountOptions();renderPlayers();updateModeVisibility();
 
 document.addEventListener('keydown',e=>{
