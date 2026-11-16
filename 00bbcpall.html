@@ -572,6 +572,16 @@ const blueThemes=[
 {main:'#AFC8E8',hover:'#91B1D9',rgb:'175,200,232'},
 {main:'#BDBCE8',hover:'#A3A1D9',rgb:'189,188,232'},
 {main:'#D1B9E6',hover:'#BE9ED8',rgb:'209,185,230'},
+{ main: '#F4E29C', hover: '#E5CE7B', rgb: '244,226,156' },  // 奶油蛋黃
+{ main: '#EFE3A8', hover: '#DECFA0', rgb: '239,227,168' },  // 淡奶霜黃
+{ main: '#E8D98A', hover: '#D5C36A', rgb: '232,217,138' },  // 檸檬奶昔
+{ main: '#F2D388', hover: '#E2BE68', rgb: '242,211,136' },  // 杏桃奶黃
+{ main: '#E6C673', hover: '#D3B055', rgb: '230,198,115' },  // 暖陽麥穗
+{ main: '#DDB85D', hover: '#C7A041', rgb: '221,184,93' },   // 蜂蜜暖金
+{ main: '#D4B254', hover: '#BE9B3B', rgb: '212,178,84' },   // 復古金黃
+{ main: '#CFA94C', hover: '#B89134', rgb: '207,169,76' },   // 薑黃蜜糖
+{ main: '#C9A449', hover: '#B18B31', rgb: '201,164,73' },   // 熟成芥末
+{ main: '#B8943E', hover: '#9E7C2B', rgb: '184,148,62' },   // 煙燻琥珀
 {main:'#C68B59', hover:'#B57A48', rgb:'198,139,89'},  // 焦糖棕
 {main:'#C96F4A', hover:'#B35D3A', rgb:'201,111,74'},  // 赤陶
 {main:'#D98A3D', hover:'#C4762B', rgb:'217,138,61'},  // 南瓜橙
@@ -582,6 +592,21 @@ const blueThemes=[
 {main:'#A97142', hover:'#915B30', rgb:'169,113,66'},  // 深赭石
 {main:'#C98B7A', hover:'#B37463', rgb:'201,139,122'}, // 陶土粉
 {main:'#9C6B4E', hover:'#83563C', rgb:'156,107,78'},   // 秋葉褐
+{main: '#B87D4B', hover: '#A16838', rgb: '184,125,75' },   // 肉桂棕
+{main: '#D4A373', hover: '#BF8D5C', rgb: '212,163,115' },  // 焦糖拿鐵
+{main: '#C49A6C', hover: '#AE8355', rgb: '196,154,108' },  // 榛果奶茶
+{main: '#B5835A', hover: '#9E6E46', rgb: '181,131,90' },   // 烤杏仁
+{main: '#8C6248', hover: '#754F38', rgb: '140,98,72' },    // 可可褐
+{main: '#7A5C48', hover: '#644937', rgb: '122,92,72' },    // 濃咖啡
+{main: '#B96A48', hover: '#A15636', rgb: '185,106,72' },   // 陶瓦橘
+{main: '#C9825B', hover: '#B26D47', rgb: '201,130,91' },   // 夕陽赤陶
+{main: '#B86B5E', hover: '#9F5649', rgb: '184,107,94' },   // 玫瑰陶土
+{main: '#9E5A4C', hover: '#864639', rgb: '158,90,76' },    // 紅陶磚
+{main: '#C79A5B', hover: '#B08447', rgb: '199,154,91' },   // 蜂蜜芥末
+{main: '#B68F52', hover: '#9E783E', rgb: '182,143,82' },   // 琥珀金
+{main: '#9BA36B', hover: '#838C55', rgb: '155,163,107' },  // 鼠尾草綠
+{main: '#6F7F5E', hover: '#59684A', rgb: '111,127,94' },   // 森林苔原
+{main: '#8B9A74', hover: '#73825D', rgb: '139,154,116' },  // 乾燥尤加利
 {main:'#E7B9CF',hover:'#D79DBA',rgb:'231,185,207'}
 ];
 let lastTheme = -1;
@@ -610,6 +635,7 @@ applyRandomTheme();
    needImage   true＝缺圖，補好圖後改成 false 才會被抽到
    ============================================================ */
 const questions = [
+  { id: "E102-17", subject: "有機化學", unit: 1, source: "exam", school: "E", year: 102, number: 17, language: "zh", type: 3, group: "", question: "在氯氣(Cl₂)和乙烷(ethane)的 UV 照光的反應中，下面哪一步反應是傳播步驟(propagation event)？\nI) Cl· + CH₃-CH₃ → CH₃-CH₂-Cl + H·\nII) Cl· + CH₃-CH₃ → CH₃-H₂C· + HCl\nIII) Cl· + CH₃-H₂C· → CH₃-CH₂-Cl\nIV) Cl₂ + CH₃-H₂C· → CH₃-CH₂-Cl + Cl·\nV) Cl₂ + UV light → Cl· + Cl·", answer: "II 與 IV", options: ["I 與 IV", "I 與 V", "II 與 IV", "II, III 與 IV"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
   /* ---- ch23 基因表現之控制（講義溫故知新，放生化 B6）---- */
   { id: "nCH114-22", subject: "生化", unit: 6, source: "exam", school: "nCH", year: 114, number: 22, language: "en", type: 3, group: "", question: "Which of the following statements about the effects of oxaliplatin on SW480 colon cancer cells, as observed in the DNA content histogram plots, is incorrect?", answer: "Oxaliplatin treatment causes a majority of SW480 cells to pass through the G1 phase, indicating enhanced cell proliferation.", options: ["An increase in the sub-G1 population after oxaliplatin treatment indicates a rise in apoptotic cells due to DNA fragmentation.", "Oxaliplatin treatment leads to DNA damage in SW480 colon cancer cells.", "The accumulation of cells in the G2/M phase after oxaliplatin treatment suggests cell cycle arrest at this phase.", "Oxaliplatin treatment causes a majority of SW480 cells to pass through the G1 phase, indicating enhanced cell proliferation.", "Cells with a 4N DNA content cannot be distinctly separated into G2 and M phases due to their similar DNA content."], image: "", optionImages: [], needImage: true, explanation: {"text": "", "image": ""} },
   { id: "M005", subject: "生化", unit: 6, source: "exam", school: "E", year: 111, language: "zh", type: 3, group: "", question: "下列何種藥物主要機轉為抑制血管新生作用？", answer: "癌思停(Avastin)", options: ["賀癌平(Herceptin)", "順鉑(Cisplatin)", "紫杉醇(Taxol)", "癌思停(Avastin)"], image: "", optionImages: [], needImage: false, explanation: {"text": "", "image": ""} },
@@ -6010,6 +6036,9 @@ const questions = [
   { id: "org1-17", subject: "有機化學", unit: 1, source: "note", school: "", year: null, language: "zh", type: 3, group: "", question: "「反應位能圖上，有最高能量過渡狀態的相對應步驟」是指下列何者？", answer: "RDS", options: ["NBS", "AIBN", "RDS", "BHT"], image: "", optionImages: [], needImage: false, explanation: { text: "", image: "" } },
   { id: "org1-19", subject: "有機化學", unit: 1, source: "note", school: "", year: null, language: "zh", type: 3, group: "", question: "Which of the following is NOT a substance or functional group that easily generates free radicals?", answer: "Primary C-H", options: ["Benzylic C-H", "Peroxide with an O-O bond", "Primary C-H", "Azo compound"], image: "", optionImages: [], needImage: false, explanation: {"text":"容易產生自由基的物質或結構包括：含有 O-O 鍵的過氧化物（Peroxide）、鹵素分子（X₂）、偶氮化合物（Azo compound）、Benzylic C-H、Allylic C-H 以及三級（3°）C-H。一級（1°）C-H（Primary C-H）的鍵解離能（BDE）高，自由基穩定度低，不易產生自由基。","image":""} },
   { id: "org1-20", subject: "有機化學", unit: 1, source: "note", school: "", year: null, language: "zh", type: 3, group: "", question: "Which of the following is NOT prone to forming free radicals?", answer: "Vinylic C-H", options: ["Halogen (X₂)", "Vinylic C-H", "Tertiary C-H", "Allylic C-H"], image: "", optionImages: [], needImage: false, explanation: {"text":"容易產生自由基的物質或結構包括：鹵素分子（X₂）、三級（3°）C-H（Tertiary C-H）、Allylic C-H、Benzylic C-H、過氧化物（O-O 鍵）以及偶氮化合物（Azo compound）。乙烯基（Vinylic C-H）的 C-H 鍵極強且自由基極不穩定，最難形成自由基。","image":""} },
+  { id: "org1-21", subject: "有機化學", unit: 1, source: "note", school: "", year: null, language: "zh", type: 3, group: "", question: "Which of the following is NOT a radical inhibitor (antioxidant) used to stabilize free radicals?", answer: "AIBN", options: ["BHA", "BHT", "Vitamin E", "AIBN"], image: "", optionImages: [], needImage: false, explanation: {"text":"BHA（丁基羥基茴香醚）、BHT（二丁基羥基甲苯）以及維生素（如 Vitamin E、Vitamin C）皆為常見的自由基抑制劑（抗氧化劑），能透過提供氫原子並藉由共振穩定自身形成的自由基來終止連鎖反應；而 AIBN 是自由基起始劑（radical initiator），用於產生自由基而非穩定或抑制自由基。","image":""} },
+
+  
 ];
 const QMAP = {};
 questions.forEach(q => { QMAP[q.id] = q; });
