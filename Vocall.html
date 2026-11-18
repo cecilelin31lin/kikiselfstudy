@@ -1033,7 +1033,7 @@ const words = [
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'proˋæktɪv' },
   { word: 'reserve', meaning: '預留、預訂、保留', pos: 'v.', sentences: [
     {en: 'You can go online to reserve a ticket to the opera.', zh: '你可以在線預訂歌劇票。'}
-  ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˋzɝv' },
+  ], avoid: [], roots: ['serv'], usages: [], forms: [], kk: 'rɪˋzɝv' },
   { word: 'recuperation', meaning: '康復、療養', pos: 'n.', sentences: [
     {en: 'After the surgery, the man went to the countryside for recuperation.', zh: '手術後，這個人去了鄉下休養。'}
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˏkupəˋreʃən' },
@@ -2212,6 +2212,13 @@ const words = [
     'leave sb./sth. out 遺漏某人／某物、把某人／某物排除在外',
     'feel left out 感到被冷落、被排擠'
   ], forms: [], kk: 'liv aʊt' },
+{ word: 'conservation', meaning: '保護、保存、節約（資源等）', pos: 'n.', sentences: [
+    {en: 'Wildlife conservation is essential for maintaining biodiversity.', zh: '野生動物保護對於維持生物多樣性至關重要。'},
+    {en: 'We must focus on energy conservation to reduce costs.', zh: '我們必須注重節約能源以降低成本。'}
+  ], avoid: [], roots: ['serv'], usages: [
+    'energy conservation 節約能源',
+    'wildlife conservation 野生動物保護'
+  ], forms: [], kk: '͵kɑnsɚˋveʃən' },
 ];
 /* 這是尾巴 tailll */
 const ROOTS={
@@ -2311,6 +2318,7 @@ const ROOTS={
   'scath': '傷害',
   'scrut': '翻找',
   'sequ': 'follow',
+  'serv': 'keep',
   'sid': '坐',
   'sol': 'one, alone',
   'solu, solv': '鬆開、解開',
