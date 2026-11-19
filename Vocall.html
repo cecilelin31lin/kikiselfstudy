@@ -1104,7 +1104,7 @@ const words = [
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'rɪˋpraɪzḷ' },
   { word: 'comprise', meaning: '包含、由...構成', pos: 'v.', sentences: [
     {en: 'The factory comprises 20 buildings.', zh: '這家工廠由20棟建築組成。'}
-  ], avoid: [], roots: [], usages: [], forms: [], kk: 'kəmˋpraɪz' },
+  ], avoid: ['encapsulate'], roots: [], usages: [], forms: [], kk: 'kəmˋpraɪz' },
   { word: 'opposition', meaning: '反對', pos: 'n.', sentences: [
     {en: 'Most legislators are in opposition to the tax hike.', zh: '大多數立法者反對增稅。'}
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏɑpəˋzɪʃən' },
@@ -1448,8 +1448,9 @@ const words = [
   { word: 'dehydrated', meaning: '脫水的、乾燥的', pos: 'adj.', sentences: [
     {en: 'Dehydrated food was originally developed by NASA for astronauts.', zh: '脫水食物最初是由美國宇航局為宇航員開發的。'}
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋhaɪˏdretɪd' },
-  { word: 'deliberate', meaning: '故意的、慎重的、考慮', pos: 'adj., v.', sentences: [
-    {en: 'That was no accident but a deliberate attack.', zh: '那不是意外，而是故意的攻擊。'}
+  { word: 'deliberate', meaning: '故意的；深思熟慮的、慎重的；考慮', pos: 'adj., v.', sentences: [
+    {en: 'That was no accident but a deliberate attack.', zh: '那不是意外，而是故意的攻擊。'},
+    {en: 'The jury deliberated for three days before reaching a verdict.', zh: '陪審團經過三天的商議才做出裁決。'}
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'dɪˋlɪbərɪt' },
   { word: 'delineate', meaning: '勾勒、描繪', pos: 'v.', sentences: [
     {en: 'The boundary of the park is delineated by a low fence.', zh: '公園的邊界由低柵欄標示。'}
@@ -2234,6 +2235,14 @@ const words = [
     'energy conservation 節約能源',
     'wildlife conservation 野生動物保護'
   ], forms: [], kk: '͵kɑnsɚˋveʃən' },
+{ word: 'overarching', meaning: '首要的、總體的、包羅萬象的', pos: 'adj.', sentences: [
+    {en: 'The overarching theme of the novel is the struggle for freedom.', zh: '這部小說的首要主題是對自由的抗爭。'},
+    {en: 'We need an overarching strategy to deal with these issues.', zh: '我們需要一個總體策略來處理這些問題。'}
+  ], avoid: [], roots: [], usages: [], forms: [], kk: '͵ovɚˋɑrtʃɪŋ' },
+{ word: 'encapsulate', meaning: '概括、概述；封裝、包含', pos: 'v.', sentences: [
+    {en: 'The book perfectly encapsulates the spirit of the 1960s.', zh: '這本書完美地概括了1960年代的精神。'},
+    {en: 'The new software encapsulates all the essential functions in one simple interface.', zh: '這套新軟體將所有基本功能封裝在一個簡單的介面中。'}
+  ], avoid: ['comprise'], roots: [], usages: [], forms: [], kk: 'ɪnˋkæpsə͵let' },
 ];
 /* 這是尾巴 tailll */
 const ROOTS={
