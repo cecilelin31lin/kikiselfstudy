@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+、<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
@@ -479,6 +479,7 @@ h1::after{
     <div class="word-mode">
       <h2>單字</h2>
       <div class="mode-options">
+        <label class="mode-option hidden" id="dailyModeOption"><input type="radio" name="wordMode" value="daily"><div><strong>每日挑戰</strong></div></label>
         <label class="mode-option"><input type="radio" name="wordMode" value="random" checked><div><strong>新學</strong></div></label>
         <label class="mode-option"><input type="radio" name="wordMode" value="weak"><div><strong>學過</strong></div></label>
         <label class="mode-option"><input type="radio" name="wordMode" value="mixed"><div><strong>混合</strong></div></label>
@@ -2637,8 +2638,8 @@ function repeatSamePractice(){
   sessionStageResult={};
   startSelectedStage();
 }
-function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();s4DistractorWords=new Map();s7DistractorWords=new Map();s8DistractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(newWords&&DRAW_MODES.includes(wordMode))drawNewGameWords();const modeRadio=document.querySelector(`input[name="wordMode"][value="${wordMode}"]`)||document.querySelector('input[name="wordMode"][value="random"]');modeRadio.checked=true;updateModeVisibility();window.scrollTo({top:0,behavior:'smooth'})}
-function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(!modePool(wordMode).length){alert(MODE_EMPTY_MSG[wordMode]||'目前沒有可以出題的單字');return}drawNewGameWords();beginGame()}
+function restartPractice(newWords){clearInterval(timer);applyRandomTheme();hintRecords=[];s4HintWords=new Set();distractorWords=new Map();s4DistractorWords=new Map();s7DistractorWords=new Map();s8DistractorWords=new Map();stats={};selectedStages=[];stagePos=0;currentStage=null;completionTime=null;document.getElementById('reviewContainer').classList.remove('show');document.getElementById('gameArea').classList.add('hidden');document.getElementById('finalOverlay').classList.remove('show');document.getElementById('stageOverlay').classList.remove('show');document.getElementById('wordSelectScreen').classList.add('hidden');document.getElementById('startScreen').classList.remove('hidden');document.querySelectorAll('.stage-check input').forEach(x=>x.checked=true);if(wordMode==='daily')applyDailyStages();if(newWords&&(DRAW_MODES.includes(wordMode)||wordMode==='daily'))drawNewGameWords();const modeRadio=document.querySelector(`input[name="wordMode"][value="${wordMode}"]`)||document.querySelector('input[name="wordMode"][value="random"]');modeRadio.checked=true;updateModeVisibility();window.scrollTo({top:0,behavior:'smooth'})}
+function startGame(){selectedStages=[...document.querySelectorAll('.stage-check input:checked')].map(x=>+x.value);if(!selectedStages.length){alert('請至少選一關');return}wordMode=document.querySelector('input[name="wordMode"]:checked')?.value||'random';if(wordMode==='manual'){renderWordSelector();document.getElementById('startScreen').classList.add('hidden');document.getElementById('wordSelectScreen').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});return}if(!modePool(wordMode).length){alert(wordMode==='daily'?dailyStatusText():(MODE_EMPTY_MSG[wordMode]||'目前沒有可以出題的單字'));return}drawNewGameWords();beginGame()}
 function renderIndicator(){const el=document.getElementById('stageIndicator');el.innerHTML='';selectedStages.forEach((s,i)=>{const d=document.createElement('div');d.className='stage-dot'+(i<stagePos?' done':i===stagePos?' active':'');d.textContent=stageDisplayNo[s]||s;el.appendChild(d)})}
 function hideStages(){[1,2,3,4,5,6,7,8].forEach(n=>document.getElementById('stage'+n).classList.add('hidden'))}
 function startTimer(id){clearInterval(timer);stageStart=Date.now();timer=setInterval(()=>{const e=document.getElementById(id);if(e)e.textContent=formatTime(Math.floor((Date.now()-stageStart)/1000))},100)}
@@ -2871,12 +2872,12 @@ function showReviewQuote(){const el=document.getElementById('reviewQuote');if(el
 showRandomQuote();
 
 const PLAYERS=[
-  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,showKK:true,defaults:{stages:[1,3,4,5,6,8],mode:'random',count:5,memorySeconds:1.0,fewFirst:false}},
+  {id:'LKF',name:'西',icon:'🐶',password:'',active:1,showKK:true,daily:true,defaults:{stages:[1,3,4,5,6,8],mode:'random',count:5,memorySeconds:1.0,fewFirst:false,dailyCount:5}},
   {id:'YSH',name:'楊',icon:'🐱',password:'',active:1,defaults:{stages:[1,3,5,6],mode:'random',count:5,memorySeconds:1.5,fewFirst:true}},
   {id:'CTY',name:'張',icon:'🐶',password:'1234',active:0,defaults:{stages:[1,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}},
   {id:'ZYZ',name:'朱',icon:'🦄',password:'1234',active:0,defaults:{stages:[1,2,3,4,5,6],mode:'random',count:5,memorySeconds:1.5}}
 ];
-/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。password留空字串表示個人紀錄不需密碼。showKK:true表示在單字總覽和解析顯示KK音標（不寫就不顯示）。defaults可設定每位玩家預設遊戲：stages關卡（用內部代號，不是畫面上的第幾關：1選中文、2找單字、3選英文、4拼單字、5挑句子、6字句配、7挑單字、8戳泡泡）、mode可用random（新學）或weak（學過）、count單字數、memorySeconds拼單字關的單字顯示秒數、fewFirst是否預設勾選「練習次數少的優先」（true勾、false不勾，用在學過／星號／標記／醫學）。*/
+/* id是系統標記人的，不要改，改了資料不會同步。name可改顯示名字。password留空字串表示個人紀錄不需密碼。showKK:true表示在單字總覽和解析顯示KK音標（不寫就不顯示）。daily:true表示有「每日挑戰」（記憶曲線複習，不寫就沒有），defaults裡的dailyCount是每日挑戰一次練幾個（不寫就是5）。defaults可設定每位玩家預設遊戲：stages關卡（用內部代號，不是畫面上的第幾關：1選中文、2找單字、3選英文、4拼單字、5挑句子、6字句配、7挑單字、8戳泡泡）、mode可用random（新學）或weak（學過）、count單字數、memorySeconds拼單字關的單字顯示秒數、fewFirst是否預設勾選「練習次數少的優先」（true勾、false不勾，用在學過／星號／標記／醫學）。*/
 let currentPlayer=null,cloudStats={},sessionWordStats={},sessionStageResult={},manualFilterLetter='',randomWordCount=Math.min(5,words.length),practiceWrongMode=false,lastSessionWrongWords=new Set(),sessionHistory=[];
 const stageNames={1:'選中文',2:'找單字',3:'選英文',4:'拼單字',5:'挑句子',6:'字句配',7:'挑單字',8:'戳泡泡'};
 // 畫面上的關卡編號（內部代號 → 顯示第幾關）：選中文1、選英文2、挑句子3、挑單字4、字句配5、拼單字6、找單字7、戳泡泡8
@@ -2887,7 +2888,7 @@ function getSW(word){if(!sessionWordStats[word])sessionWordStats[word]={practice
 function markStage(word,stage,ok){const x=getSW(word);if(!x.stages[stage])x.stages[stage]={wrong:0,correct:false};if(ok)x.stages[stage].correct=true;else{x.stages[stage].wrong++;x.wrong++;lastSessionWrongWords.add(word)}}
 function renderPlayers(){const g=document.getElementById('playerGrid');g.innerHTML='';PLAYERS.filter(p=>p.active!==0).forEach(p=>{const b=document.createElement('div');b.className='player-card'+(currentPlayer===p.id?' selected':'');b.innerHTML=`<span class="player-icon">${p.icon}</span><span class="player-name">${p.name}</span>`;b.onclick=()=>selectPlayer(p.id);g.appendChild(b)})}
 function applyPlayerDefaults(p){const d=p?.defaults||{};const stages=Array.isArray(d.stages)&&d.stages.length?d.stages:[1,2,3,4,5,6];document.querySelectorAll('.stage-check input').forEach(x=>x.checked=stages.includes(Number(x.value)));const mode=['random','weak'].includes(d.mode)?d.mode:'random';const radio=document.querySelector(`input[name="wordMode"][value="${mode}"]`);if(radio)radio.checked=true;const few=document.getElementById('fewFirstCheck');if(few)few.checked=!!d.fewFirst;const count=document.getElementById('randomCount');if(count){const max=Math.max(1,eligibleWords().length||words.length);const n=Math.max(1,Math.min(Number(d.count)||5,max));count.value=n;randomWordCount=n}updateModeVisibility()}
-async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('homeAllWordsBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};sessionHistory=[];try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(currentPlayer!==id)return;if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){if(currentPlayer!==id)return;document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}try{const r2=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(id)+'&_='+Date.now());const data2=await r2.json();if(currentPlayer!==id)return;if(data2.ok)sessionHistory=Array.isArray(data2.sessions)?data2.sessions:[]}catch(e){}updateModeVisibility()}
+async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('homeAllWordsBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};sessionHistory=[];try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(currentPlayer!==id)return;if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){if(currentPlayer!==id)return;document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}try{const r2=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(id)+'&_='+Date.now());const data2=await r2.json();if(currentPlayer!==id)return;if(data2.ok)sessionHistory=Array.isArray(data2.sessions)?data2.sessions:[]}catch(e){}updateModeVisibility();srsInitExisting()}
 function familiarityScore(word){const s=cloudStats[word]||{};const p=Number(s.practice||0),w=Number(s.wrong||0),h=Number(s.hint||0),r=Number(s.rewatch||0);if(!p)return 0;return Math.max(0,Math.min(5,Math.round(5*(p/(p+w*1.6+h*.8+r*.8))*(1-Math.exp(-p/4)))))}
 function stars(word){const n=familiarityScore(word);return '★'.repeat(n)+'☆'.repeat(5-n)}
 function buildRandomCountOptions(){const s=document.getElementById('randomCount');if(!s)return;s.max=Math.max(1,words.length);s.value=Math.min(5,Math.max(1,words.length));randomWordCount=Number(s.value);s.onchange=()=>{let n=Math.round(Number(s.value)||5);n=Math.max(1,Math.min(n,words.length));s.value=n;randomWordCount=n}}
@@ -3041,11 +3042,62 @@ const MODE_DESC_FEW={
   markonly:'只從標記單字中出題，練習次數少的優先。',
   medonly:'只從醫學單字中出題，練習次數少的優先。'
 };
+/* ===== 每日挑戰（艾賓浩斯記憶曲線） =====
+   每個字在 Sheet 存：srsStage 複習階段（0~6）、srsDue 下次複習日、srsLast 最後複習日（都是 YYYY-MM-DD）
+   第一次使用 → 學過的字平均分配到今天～第13天；第一次練到 → 階段0，隔天複習；到期時通過 → 升一階，間隔依序 1、2、5、8、15、30 天，階段6（已記熟）之後每 35 天
+   到期時沒通過 → 留在同一階段，隔天再複習；還沒到期練到 → 不影響；同一天只算一次；「不用再出」的字完全排除 */
+const SRS_GAPS=[1,2,5,8,15,30,35];
+const SRS_SPREAD_DAYS=14;
+function srsToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function srsAddDays(day,n){const [y,m,d]=day.split('-').map(Number);const t=new Date(y,m-1,d+n);return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')}
+function playerHasDaily(){const pl=PLAYERS.find(p=>p.id===currentPlayer);return !!(pl&&pl.daily)}
+function srsInfo(word){const s=cloudStats[word]||{};return {stage:(s.srsStage===null||s.srsStage===undefined||s.srsStage==='')?null:Number(s.srsStage),due:s.srsDue||'',last:s.srsLast||''}}
+function dailyDueWords(){const today=srsToday();return eligibleWords().filter(w=>{const i=srsInfo(w.word);return i.stage!==null&&i.due&&i.due<=today})}
+// 這一場這個字算不算通過：當次選的每一關都有完成（沒跳過；戳泡泡要配對正確）
+function srsPassed(word){const x=getSW(word);return selectedStages.every(n=>{const st=stats[n];if(!st||st.skipped)return false;if(n===8)return !!(x.stages[8]&&x.stages[8].correct);return true})}
+function srsUpdatesForSession(){
+  const today=srsToday(),out=[];
+  gameWords.forEach(w=>{
+    if(isExcluded(w.word))return;
+    const i=srsInfo(w.word);
+    if(i.last===today)return;
+    if(i.stage===null){out.push({word:w.word,stage:0,due:srsAddDays(today,SRS_GAPS[0]),last:today});return}
+    if(!i.due||i.due>today)return;
+    if(srsPassed(w.word)){const st=Math.min(i.stage+1,6);out.push({word:w.word,stage:st,due:srsAddDays(today,SRS_GAPS[st]),last:today})}
+    else out.push({word:w.word,stage:i.stage,due:srsAddDays(today,1),last:today});
+  });
+  return out;
+}
+function srsApplyLocal(items){items.forEach(it=>{cloudStats[it.word]={...(cloudStats[it.word]||{}),srsStage:it.stage,srsDue:it.due,srsLast:it.last}})}
+// 第一次使用：已學過但還沒有複習排程的字，全部從階段0開始，平均分配到今天～第 13 天（共 14 天）
+// 最後複習日寫 'init' 表示是初始分配；舊版初始分配（最後複習日空白、排在明天以後）會重新分配一次，讓今天也有字
+async function srsInitExisting(){
+  if(!playerHasDaily())return;
+  const id=currentPlayer,today=srsToday();
+  const todo=shuffle(eligibleWords().filter(w=>{if(!isLearnedWord(w))return false;const i=srsInfo(w.word);return i.stage===null||(i.stage===0&&i.last===''&&i.due>today)}));
+  if(!todo.length)return;
+  const items=todo.map((w,i)=>({word:w.word,stage:0,due:srsAddDays(today,Math.floor(i*SRS_SPREAD_DAYS/todo.length)),last:'init'}));
+  const ok=await cloudPost({action:'setSrs',player:id,items});
+  if(ok&&currentPlayer===id){srsApplyLocal(items);updateModeVisibility()}
+}
+function dailyStatusText(){
+  const today=srsToday(),due=dailyDueWords();
+  if(due.length){const late=due.filter(w=>srsInfo(w.word).due<today).length;return `依艾賓浩斯記憶曲線複習到期的單字。今天要複習 ${due.length} 個字${late?`（其中逾期 ${late} 個）`:''}。`}
+  const list=eligibleWords();
+  if(list.some(isLearnedWord)&&!list.some(w=>srsInfo(w.word).stage!==null))return '複習排程還沒建立。請確認 Apps Script 已更新並重新部署，再重新選一次玩家。';
+  if(list.some(w=>srsInfo(w.word).last===today))return '今天的每日挑戰都完成了 🎉';
+  const tomorrow=srsAddDays(today,1),n=list.filter(w=>{const i=srsInfo(w.word);return i.stage!==null&&i.due===tomorrow}).length;
+  return `今天沒有要複習的單字，明天有 ${n} 個。`;
+}
+// 每日挑戰一次練幾個：預設看 PLAYERS 的 dailyCount，沒寫就是 5
+function applyDailyCount(){const pl=PLAYERS.find(p=>p.id===currentPlayer);const input=document.getElementById('randomCount');if(input)input.value=Math.max(1,Number(pl?.defaults?.dailyCount)||5);updateModeVisibility()}
+function applyDailyStages(){document.querySelectorAll('.stage-check input').forEach(x=>x.checked=[7,8].includes(Number(x.value)))}
 const FEW_FIRST_MODES=['weak','staronly','markonly','medonly'];
 function fewFirstOn(){return !!document.getElementById('fewFirstCheck')?.checked}
-const MODE_EMPTY_MSG={random:'已經沒有新的單字了 🎉',weak:'目前沒有學過的單字',staronly:'目前沒有標記星號重要的單字',markonly:'目前沒有🔖標記的單字',medonly:'目前沒有🩺醫學的單字'};
+const MODE_EMPTY_MSG={daily:'今天的每日挑戰都完成了 🎉',random:'已經沒有新的單字了 🎉',weak:'目前沒有學過的單字',staronly:'目前沒有標記星號重要的單字',markonly:'目前沒有🔖標記的單字',medonly:'目前沒有🩺醫學的單字'};
 function isLearnedWord(w){return !!(cloudStats[w.word]&&Number(cloudStats[w.word].practice||0)>0)}
 function modePool(mode){
+  if(mode==='daily')return dailyDueWords();
   const base=eligibleWords();
   if(mode==='random')return base.filter(w=>!isLearnedWord(w));
   if(mode==='weak')return base.filter(isLearnedWord);
@@ -3081,6 +3133,12 @@ function drawWeakModeWords(n,picked){
   return [...weakPart,...fewPart,...randPart];
 }
 function drawNewGameWords(){
+  if(wordMode==='daily'){
+    // 每次練幾個由「挑戰單字」決定；到期最早（逾期最久）的先出，同一天到期的隨機
+    const n=Math.max(1,Number(document.getElementById('randomCount')?.value||5));
+    gameWords=shuffle(dailyDueWords()).sort((a,b)=>srsInfo(a.word).due.localeCompare(srsInfo(b.word).due)).slice(0,n);
+    return;
+  }
   const n=Math.max(1,Number(document.getElementById('randomCount')?.value||randomWordCount||5));
   const picked=[];
   if(wordMode==='weak'){gameWords=shuffle(drawWeakModeWords(n,picked));return}
@@ -3117,7 +3175,7 @@ async function cloudPost(payload){
     return false;
   }
 }
-async function syncSessionToCloud(){if(!currentPlayer)return;const duration=Math.floor((Date.now()-totalStart)/1000),wrongCount=Object.values(stats).reduce((n,s)=>n+(s.wrongDetails?.length||0),0);const details={stageResults:sessionStageResult,wordResults:sessionWordStats};const okSession=await cloudPost({action:'saveSession',player:currentPlayer,mode:practiceWrongMode?'wrong-review':wordMode,stages:selectedStages.map(n=>stageNames[n]),words:gameWords.map(w=>w.word),duration,wrongCount,hintWords:hintRecords.map(x=>x.word),rewatchWords:[...s4HintWords],stage5Distractors:[...distractorWords.values()].filter(x=>selectedStages.includes(5)).map(x=>x.word),stage6Distractors:[...distractorWords.values()].filter(x=>selectedStages.includes(6)).map(x=>x.word),details});const updates=gameWords.map(w=>{const x=getSW(w.word);return {word:w.word,practice:x.practice,wrong:x.wrong,hint:x.hint,rewatch:x.rewatch}});const okStats=await cloudPost({action:'updateWordStats',player:currentPlayer,words:updates});if(okStats){updates.forEach(u=>{const old=cloudStats[u.word]||{};cloudStats[u.word]={...old,practice:Number(old.practice||0)+u.practice,wrong:Number(old.wrong||0)+u.wrong,hint:Number(old.hint||0)+u.hint,rewatch:Number(old.rewatch||0)+u.rewatch}})}const statusEl=document.getElementById('cloudStatus');if(statusEl){if(okSession&&okStats){statusEl.className='cloud-status ok';statusEl.textContent='✓ 學習資料已同步'}else{statusEl.className='cloud-status err';statusEl.textContent='⚠️ 本次練習紀錄雲端同步失敗，下次可能重複出現同樣單字'}}}
+async function syncSessionToCloud(){if(!currentPlayer)return;const duration=Math.floor((Date.now()-totalStart)/1000),wrongCount=Object.values(stats).reduce((n,s)=>n+(s.wrongDetails?.length||0),0);const details={stageResults:sessionStageResult,wordResults:sessionWordStats};const okSession=await cloudPost({action:'saveSession',player:currentPlayer,mode:practiceWrongMode?'wrong-review':wordMode,stages:selectedStages.map(n=>stageNames[n]),words:gameWords.map(w=>w.word),duration,wrongCount,hintWords:hintRecords.map(x=>x.word),rewatchWords:[...s4HintWords],stage5Distractors:[...distractorWords.values()].filter(x=>selectedStages.includes(5)).map(x=>x.word),stage6Distractors:[...distractorWords.values()].filter(x=>selectedStages.includes(6)).map(x=>x.word),details});const updates=gameWords.map(w=>{const x=getSW(w.word);return {word:w.word,practice:x.practice,wrong:x.wrong,hint:x.hint,rewatch:x.rewatch}});const okStats=await cloudPost({action:'updateWordStats',player:currentPlayer,words:updates});if(playerHasDaily()){const srsItems=srsUpdatesForSession();if(srsItems.length&&await cloudPost({action:'setSrs',player:currentPlayer,items:srsItems}))srsApplyLocal(srsItems)}if(okStats){updates.forEach(u=>{const old=cloudStats[u.word]||{};cloudStats[u.word]={...old,practice:Number(old.practice||0)+u.practice,wrong:Number(old.wrong||0)+u.wrong,hint:Number(old.hint||0)+u.hint,rewatch:Number(old.rewatch||0)+u.rewatch}})}const statusEl=document.getElementById('cloudStatus');if(statusEl){if(okSession&&okStats){statusEl.className='cloud-status ok';statusEl.textContent='✓ 學習資料已同步'}else{statusEl.className='cloud-status err';statusEl.textContent='⚠️ 本次練習紀錄雲端同步失敗，下次可能重複出現同樣單字'}}}
 const _showFinal=showFinal;
 showFinal=function(){const completedStages=selectedStages.filter(st=>!stats[st]?.skipped).length;gameWords.forEach(w=>{const x=getSW(w.word);x.practice+=completedStages});selectedStages.forEach(st=>{sessionStageResult[st]={wrong:(stats[st]?.wrongDetails||[]).length,time:stats[st]?.time||0,skipped:!!stats[st]?.skipped}});_showFinal();syncSessionToCloud()}
 
@@ -3193,6 +3251,17 @@ function updateModeVisibility(){
   if(fewRow)fewRow.classList.toggle('hidden',!FEW_FIRST_MODES.includes(mode));
   const desc=document.getElementById('modeDesc');
   if(desc)desc.textContent=(FEW_FIRST_MODES.includes(mode)&&fewFirstOn()?MODE_DESC_FEW[mode]:MODE_DESC[mode])||'';
+  document.getElementById('dailyModeOption')?.classList.toggle('hidden',!playerHasDaily());
+  if(mode==='daily'){
+    if(!playerHasDaily()){document.querySelector('input[name="wordMode"][value="random"]').checked=true;updateModeVisibility();return}
+    const dueN=dailyDueWords().length;
+    document.getElementById('randomCountRow').classList.toggle('hidden',!dueN);
+    const maxEl=document.getElementById('randomCountMax'),input=document.getElementById('randomCount');
+    if(maxEl)maxEl.textContent=`（最多 ${dueN} 個）`;
+    if(input)input.max=dueN||1;
+    if(desc)desc.textContent=dailyStatusText();
+    return;
+  }
   const maxEl=document.getElementById('randomCountMax');
   if(!maxEl)return;
   const pool=modePool(mode);
@@ -3202,6 +3271,7 @@ function updateModeVisibility(){
 }
 document.querySelectorAll('input[name="wordMode"]').forEach(r=>r.addEventListener('change',updateModeVisibility));
 document.getElementById('fewFirstCheck').addEventListener('change',updateModeVisibility);
+document.querySelector('input[name="wordMode"][value="daily"]').addEventListener('change',e=>{if(e.target.checked){applyDailyStages();applyDailyCount()}});
 buildRandomCountOptions();renderPlayers();updateModeVisibility();
 
 document.addEventListener('keydown',e=>{
