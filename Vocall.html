@@ -844,16 +844,16 @@ const words = [
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋænjuəl' },
   { word: 'chronological', meaning: '按時間順序的', pos: 'adj.', sentences: [
     {en: 'Events in the narrative are arranged in chronological order.', zh: '敘述中的事件按時間順序排列。'}
-  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏkrɑnəˋlɑdʒɪkḷ' },
+  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˏkrɑnəˋlɑdʒɪkḷ' },
   { word: 'chronic', meaning: '慢性的、長期的、習慣性的', pos: 'adj.', sentences: [
     {en: 'Arthritis is a chronic disease.', zh: '關節炎是一種慢性疾病。'}
-  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkrɑnɪk' },
+  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˋkrɑnɪk' },
   { word: 'chronicle', meaning: '編年史、記事、（依時間順序）記錄', pos: 'n., v.', sentences: [
     {en: 'The book is a chronicle of the American Civil War.', zh: '這本書是美國內戰的編年史。'}
-  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkrɑnɪkḷ' },
+  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˋkrɑnɪkḷ' },
   { word: 'synchronous', meaning: '同時的、同步的', pos: 'adj.', sentences: [
     {en: 'The synchronous arrival of a baby sister and loss of a beloved grandmother strongly affected the child.', zh: '妹妹的同時出生和所愛祖母的去世深深影響了這個孩子。'}
-  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪŋkrənəs' },
+  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˋsɪŋkrənəs' },
   { word: 'recital', meaning: '背誦、獨奏會', pos: 'n.', sentences: [
     {en: "There's a piano recital at the music hall tonight.", zh: '今晚音樂廳有鋼琴獨奏會。'}
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'rəˋsaɪtḷ' },
@@ -889,7 +889,7 @@ const words = [
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪmbḷ' },
   { word: 'synchronize', meaning: '同步化、對時', pos: 'v.', sentences: [
     {en: "Let's synchronize our watches.", zh: '讓我們同步調整我們的手錶。'}
-  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪŋkrəˏnaɪz' },
+  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˋsɪŋkrəˏnaɪz' },
   { word: 'wind up', meaning: '最後落得、最後收場；結束；上緊（發條）', pos: 'phr. v.', sentences: [
     {en: 'If you keep spending money like that, you will wind up in debt.', zh: '如果你繼續那樣花錢，你最後會負債。'},
     {en: 'They took a wrong turn and wound up getting lost in the forest.', zh: '他們轉錯了一個彎，最後在森林裡迷了路。'},
@@ -949,7 +949,7 @@ const words = [
     'tell / share an anecdote 講述／分享軼事'
   ], forms: [], kk: 'ˋænəkˏdot' },
   { word: 'analgesic', meaning: '止痛劑、止痛的', pos: 'n., adj.', sentences: [
-    {en: 'The nurse gave the girl some analgesics for her pain.', zh: '護士給女孩一些止痛藥來緩解她的疼痛。'}
+    {en: 'The nurse gave the girl some analgesics for her pain.', zh: '護理師給女孩一些止痛藥來緩解她的疼痛。'}
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏænəlˋdʒisɪk' },
   { word: 'arrhythmia', meaning: '心律不整', pos: 'n.', sentences: [
     {en: 'Arrhythmia is among the side effects of this drug.', zh: '心律不整是這種藥物的副作用之一。'}
@@ -2443,7 +2443,7 @@ const words = [
     {en: 'The customers grew impatient as the line barely moved.', zh: '隊伍幾乎沒有移動，顧客們越來越不耐煩。'}
   ], avoid: [], roots: ['pass, pati, path'], usages: [], forms: [], kk: 'ɪmˋpeʃənt' },
 { word: 'compassion', meaning: '同情', pos: 'n.', sentences: [
-    {en: 'The nurse showed great compassion toward the frightened children.', zh: '護士對受驚嚇的孩子們表現出極大的同情心。'}
+    {en: 'The nurse showed great compassion toward the frightened children.', zh: '護理師對受驚嚇的孩子們表現出極大的同情心。'}
   ], avoid: [], roots: ['pass, pati, path'], usages: [], forms: [], kk: 'kəmˋpæʃən' },
 { word: 'empathy', meaning: '同理心', pos: 'n.', sentences: [
     {en: 'Good teachers have the empathy to understand how students feel.', zh: '好的老師有同理心，能理解學生的感受。'}
@@ -2482,6 +2482,7 @@ const ROOTS={
   'com, con, col, co': '共同或強調語氣',
   'contra, counter': '對抗、相反',
   'corp': 'body',
+  'chron': 'time',
   'de': 'down、not',
   'demo': 'people',
   'dict': 'speak',
