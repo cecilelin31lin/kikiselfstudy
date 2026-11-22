@@ -421,6 +421,23 @@ h1::after{
 .review-item{border-color:var(--theme-main)}
 .usage-block{border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:14px}
 .kk{margin-left:8px;font-weight:400;color:#657086;font-family:'Lucida Sans Unicode','Segoe UI','Arial Unicode MS',Arial,sans-serif;white-space:nowrap}
+.daily-cal{margin:6px 0 10px;padding:12px;border-radius:14px;background:rgba(var(--theme-rgb),.08);border:1px solid rgba(var(--theme-rgb),.35)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:700;color:#2B3A55}
+.cal-head button{border:none;background:none;font-size:18px;cursor:pointer;color:#2B3A55;padding:2px 10px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-w{text-align:center;font-size:11px;color:#8a93a6;padding:2px 0}
+.cal-d{min-height:44px;border-radius:9px;border:1px solid transparent;background:rgba(255,255,255,.7);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;color:#2B3A55;cursor:pointer;padding:2px 0}
+.cal-d.empty{background:none;cursor:default}
+.cal-d.today{border-color:var(--theme-main)}
+.cal-d.selected{background:var(--theme-main)}
+.cal-d .cal-n{font-size:10px;line-height:1.2;color:#657086}
+.cal-d .cal-n.all-done{color:#468189;font-weight:700}
+.cal-d .cal-n.missed{color:#E8828C;font-weight:700}
+.daily-tag{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:700;vertical-align:middle}
+.daily-tag.pass{background:rgba(70,129,137,.15);color:#468189}
+.daily-tag.fail{background:rgba(232,130,140,.18);color:#E8828C}
+.daily-tag.todo{background:#eceef2;color:#7a8294}
+.daily-tag.plan{background:rgba(var(--theme-rgb),.25);color:#2B3A55}
 .all-words-count{margin:6px 0 10px;font-size:14px;font-weight:700;color:#657086}
 /* 挑單字 */
 #s7question{font-size:18px;font-weight:500;line-height:1.7}
@@ -526,6 +543,7 @@ h1::after{
     <input id="allWordsSearch" class="word-search" placeholder="搜尋單字或中文意思" oninput="renderAllWordsContent()">
     <div class="az-row" id="allWordsFilterRow"></div>
     <div class="az-row hidden" id="allWordsSubRow"></div>
+    <div id="dailyCalendar" class="daily-cal hidden"></div>
     <div id="allWordsCount" class="all-words-count"></div>
     <div id="allWordsContent"></div>
   </div>
@@ -844,16 +862,16 @@ const words = [
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋænjuəl' },
   { word: 'chronological', meaning: '按時間順序的', pos: 'adj.', sentences: [
     {en: 'Events in the narrative are arranged in chronological order.', zh: '敘述中的事件按時間順序排列。'}
-  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˏkrɑnəˋlɑdʒɪkḷ' },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏkrɑnəˋlɑdʒɪkḷ' },
   { word: 'chronic', meaning: '慢性的、長期的、習慣性的', pos: 'adj.', sentences: [
     {en: 'Arthritis is a chronic disease.', zh: '關節炎是一種慢性疾病。'}
-  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˋkrɑnɪk' },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkrɑnɪk' },
   { word: 'chronicle', meaning: '編年史、記事、（依時間順序）記錄', pos: 'n., v.', sentences: [
     {en: 'The book is a chronicle of the American Civil War.', zh: '這本書是美國內戰的編年史。'}
-  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˋkrɑnɪkḷ' },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋkrɑnɪkḷ' },
   { word: 'synchronous', meaning: '同時的、同步的', pos: 'adj.', sentences: [
     {en: 'The synchronous arrival of a baby sister and loss of a beloved grandmother strongly affected the child.', zh: '妹妹的同時出生和所愛祖母的去世深深影響了這個孩子。'}
-  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˋsɪŋkrənəs' },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪŋkrənəs' },
   { word: 'recital', meaning: '背誦、獨奏會', pos: 'n.', sentences: [
     {en: "There's a piano recital at the music hall tonight.", zh: '今晚音樂廳有鋼琴獨奏會。'}
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'rəˋsaɪtḷ' },
@@ -889,7 +907,7 @@ const words = [
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪmbḷ' },
   { word: 'synchronize', meaning: '同步化、對時', pos: 'v.', sentences: [
     {en: "Let's synchronize our watches.", zh: '讓我們同步調整我們的手錶。'}
-  ], avoid: [], roots: ['chron'], usages: [], forms: [], kk: 'ˋsɪŋkrəˏnaɪz' },
+  ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˋsɪŋkrəˏnaɪz' },
   { word: 'wind up', meaning: '最後落得、最後收場；結束；上緊（發條）', pos: 'phr. v.', sentences: [
     {en: 'If you keep spending money like that, you will wind up in debt.', zh: '如果你繼續那樣花錢，你最後會負債。'},
     {en: 'They took a wrong turn and wound up getting lost in the forest.', zh: '他們轉錯了一個彎，最後在森林裡迷了路。'},
@@ -949,7 +967,7 @@ const words = [
     'tell / share an anecdote 講述／分享軼事'
   ], forms: [], kk: 'ˋænəkˏdot' },
   { word: 'analgesic', meaning: '止痛劑、止痛的', pos: 'n., adj.', sentences: [
-    {en: 'The nurse gave the girl some analgesics for her pain.', zh: '護理師給女孩一些止痛藥來緩解她的疼痛。'}
+    {en: 'The nurse gave the girl some analgesics for her pain.', zh: '護士給女孩一些止痛藥來緩解她的疼痛。'}
   ], avoid: [], roots: [], usages: [], forms: [], kk: 'ˏænəlˋdʒisɪk' },
   { word: 'arrhythmia', meaning: '心律不整', pos: 'n.', sentences: [
     {en: 'Arrhythmia is among the side effects of this drug.', zh: '心律不整是這種藥物的副作用之一。'}
@@ -2443,7 +2461,7 @@ const words = [
     {en: 'The customers grew impatient as the line barely moved.', zh: '隊伍幾乎沒有移動，顧客們越來越不耐煩。'}
   ], avoid: [], roots: ['pass, pati, path'], usages: [], forms: [], kk: 'ɪmˋpeʃənt' },
 { word: 'compassion', meaning: '同情', pos: 'n.', sentences: [
-    {en: 'The nurse showed great compassion toward the frightened children.', zh: '護理師對受驚嚇的孩子們表現出極大的同情心。'}
+    {en: 'The nurse showed great compassion toward the frightened children.', zh: '護士對受驚嚇的孩子們表現出極大的同情心。'}
   ], avoid: [], roots: ['pass, pati, path'], usages: [], forms: [], kk: 'kəmˋpæʃən' },
 { word: 'empathy', meaning: '同理心', pos: 'n.', sentences: [
     {en: 'Good teachers have the empathy to understand how students feel.', zh: '好的老師有同理心，能理解學生的感受。'}
@@ -2482,7 +2500,6 @@ const ROOTS={
   'com, con, col, co': '共同或強調語氣',
   'contra, counter': '對抗、相反',
   'corp': 'body',
-  'chron': 'time',
   'de': 'down、not',
   'demo': 'people',
   'dict': 'speak',
@@ -2889,7 +2906,7 @@ function getSW(word){if(!sessionWordStats[word])sessionWordStats[word]={practice
 function markStage(word,stage,ok){const x=getSW(word);if(!x.stages[stage])x.stages[stage]={wrong:0,correct:false};if(ok)x.stages[stage].correct=true;else{x.stages[stage].wrong++;x.wrong++;lastSessionWrongWords.add(word)}}
 function renderPlayers(){const g=document.getElementById('playerGrid');g.innerHTML='';PLAYERS.filter(p=>p.active!==0).forEach(p=>{const b=document.createElement('div');b.className='player-card'+(currentPlayer===p.id?' selected':'');b.innerHTML=`<span class="player-icon">${p.icon}</span><span class="player-name">${p.name}</span>`;b.onclick=()=>selectPlayer(p.id);g.appendChild(b)})}
 function applyPlayerDefaults(p){const d=p?.defaults||{};const stages=Array.isArray(d.stages)&&d.stages.length?d.stages:[1,2,3,4,5,6];document.querySelectorAll('.stage-check input').forEach(x=>x.checked=stages.includes(Number(x.value)));const mode=['random','weak'].includes(d.mode)?d.mode:'random';const radio=document.querySelector(`input[name="wordMode"][value="${mode}"]`);if(radio)radio.checked=true;const few=document.getElementById('fewFirstCheck');if(few)few.checked=!!d.fewFirst;const count=document.getElementById('randomCount');if(count){const max=Math.max(1,eligibleWords().length||words.length);const n=Math.max(1,Math.min(Number(d.count)||5,max));count.value=n;randomWordCount=n}updateModeVisibility()}
-async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('homeAllWordsBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};sessionHistory=[];try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(currentPlayer!==id)return;if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){if(currentPlayer!==id)return;document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}try{const r2=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(id)+'&_='+Date.now());const data2=await r2.json();if(currentPlayer!==id)return;if(data2.ok)sessionHistory=Array.isArray(data2.sessions)?data2.sessions:[]}catch(e){}updateModeVisibility();srsInitExisting()}
+async function selectPlayer(id){currentPlayer=id;renderPlayers();const p=PLAYERS.find(x=>x.id===id);applyPlayerDefaults(p);document.getElementById('homeRecordBtn').classList.remove('hidden');document.getElementById('homeAllWordsBtn').classList.remove('hidden');document.getElementById('cloudStatus').className='cloud-status';document.getElementById('cloudStatus').textContent='☁️ 同步中…';cloudStats={};sessionHistory=[];dailyLog=[];try{const r=await fetch(CLOUD_URL+'?action=getWordStats&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(currentPlayer!==id)return;if(data.ok){cloudStats=data.stats||{};document.getElementById('cloudStatus').className='cloud-status ok';document.getElementById('cloudStatus').textContent='✓ 學習資料已同步'}else throw new Error(data.error||'讀取失敗')}catch(e){if(currentPlayer!==id)return;document.getElementById('cloudStatus').className='cloud-status err';document.getElementById('cloudStatus').textContent='⚠️ 雲端同步失敗，仍可進行練習'}try{const r2=await fetch(CLOUD_URL+'?action=getSessionHistory&player='+encodeURIComponent(id)+'&_='+Date.now());const data2=await r2.json();if(currentPlayer!==id)return;if(data2.ok)sessionHistory=Array.isArray(data2.sessions)?data2.sessions:[]}catch(e){}updateModeVisibility();srsInitExisting();loadDailyLog()}
 function familiarityScore(word){const s=cloudStats[word]||{};const p=Number(s.practice||0),w=Number(s.wrong||0),h=Number(s.hint||0),r=Number(s.rewatch||0);if(!p)return 0;return Math.max(0,Math.min(5,Math.round(5*(p/(p+w*1.6+h*.8+r*.8))*(1-Math.exp(-p/4)))))}
 function stars(word){const n=familiarityScore(word);return '★'.repeat(n)+'☆'.repeat(5-n)}
 function buildRandomCountOptions(){const s=document.getElementById('randomCount');if(!s)return;s.max=Math.max(1,words.length);s.value=Math.min(5,Math.max(1,words.length));randomWordCount=Number(s.value);s.onchange=()=>{let n=Math.round(Number(s.value)||5);n=Math.max(1,Math.min(n,words.length));s.value=n;randomWordCount=n}}
@@ -2960,6 +2977,7 @@ function renderAllWordsFilterRow(){
   addBtn(row,'🔖 標記',allWordsFilter==='marked',()=>setMain('marked'));
   addBtn(row,'🩺 醫學',allWordsFilter==='medical',()=>setMain('medical'));
   addBtn(row,'✓ 已學過',allWordsFilter==='learned',()=>setMain('learned'));
+  if(playerHasDaily())addBtn(row,'📅 今日挑戰',allWordsFilter==='daily',()=>{calSelected=srsToday();calMonth=calSelected.slice(0,7);setMain('daily')});
   sub.innerHTML='';
   if(allWordsFilter==='az'){
     const letters=[...new Set(words.map(w=>(w.word[0]||'').toUpperCase()).filter(x=>/[A-Z]/.test(x)))].sort();
@@ -2979,8 +2997,52 @@ function allWordsCard(w){
   item.innerHTML=`<div class="review-word-meaning">${w.word}（${w.pos||''}） ${w.meaning}${kkHTML(w)}${isLearned?' <span class=\"learned-tag\">已學過</span>':''}</div>${rootTagsHTML(w)}${sentencesHTML(w)}${usagesHTML(w)}`+reviewFlagButtons(w.word);
   return item;
 }
+/* ===== 單字總覽：📅 今日挑戰（月曆） =====
+   過去／今天：每日挑戰紀錄（通過、未通過）＋ 那天到期但到現在都還沒練的字（未完成，只顯示在到期那天）
+   未來：排在那天要複習的字（預定） */
+let calMonth='',calSelected='';
+const DAILY_TAG={pass:'✓ 已完成',fail:'✗ 未通過',todo:'○ 未完成',plan:'預定'};
+function dailyEntriesOn(day){
+  const today=srsToday(),out=new Map();
+  dailyLog.filter(x=>x.date===day).forEach(x=>{if(words.some(w=>w.word===x.word))out.set(x.word,x.result==='pass'?'pass':'fail')});
+  eligibleWords().forEach(w=>{if(out.has(w.word))return;const i=srsInfo(w.word);if(i.stage===null||i.due!==day)return;if(day>today)out.set(w.word,'plan');else if(i.last!==today||day<today)out.set(w.word,'todo')});
+  return out;
+}
+function renderDailyCalendar(){
+  const box=document.getElementById('dailyCalendar'),today=srsToday();
+  if(!calMonth)calMonth=today.slice(0,7);
+  const [y,m]=calMonth.split('-').map(Number),first=new Date(y,m-1,1),days=new Date(y,m,0).getDate();
+  let h=`<div class="cal-head"><button onclick="calShift(-1)">‹</button><span>${y} 年 ${m} 月</span><button onclick="calShift(1)">›</button></div><div class="cal-grid">`;
+  ['日','一','二','三','四','五','六'].forEach(x=>h+=`<div class="cal-w">${x}</div>`);
+  for(let i=0;i<first.getDay();i++)h+='<div class="cal-d empty"></div>';
+  for(let d=1;d<=days;d++){
+    const day=`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`,e=[...dailyEntriesOn(day).values()];
+    let n='';
+    if(e.length){if(day>today)n=`<span class="cal-n">${e.length}</span>`;else{const done=e.filter(x=>x==='pass').length;n=`<span class="cal-n ${done===e.length?'all-done':(day<today?'missed':'')}">${done}/${e.length}</span>`}}
+    h+=`<div class="cal-d${day===today?' today':''}${day===calSelected?' selected':''}" onclick="calPick('${day}')">${d}${n}</div>`;
+  }
+  box.innerHTML=h+'</div>';
+}
+function calShift(k){const [y,m]=calMonth.split('-').map(Number);const t=new Date(y,m-1+k,1);calMonth=t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0');renderDailyCalendar()}
+function calPick(day){calSelected=day;renderAllWordsContent()}
 function renderAllWordsContent(){
   const content=document.getElementById('allWordsContent');
+  const cal=document.getElementById('dailyCalendar');
+  cal.classList.toggle('hidden',allWordsFilter!=='daily');
+  if(allWordsFilter==='daily'){
+    renderDailyCalendar();
+    const entries=dailyEntriesOn(calSelected),order={todo:0,fail:1,pass:2,plan:3};
+    let dl=eligibleWords().filter(w=>entries.has(w.word));
+    const q2=(document.getElementById('allWordsSearch')?.value||'').trim().toLowerCase();
+    if(q2)dl=dl.filter(w=>(w.word+' '+w.meaning+' '+(w.pos||'')).toLowerCase().includes(q2));
+    dl.sort((a,b)=>order[entries.get(a.word)]-order[entries.get(b.word)]||a.word.localeCompare(b.word,'en',{sensitivity:'base'}));
+    const [, mm, dd]=calSelected.split('-').map(Number);
+    document.getElementById('allWordsCount').textContent=`${mm}/${dd}　共 ${dl.length} 個字`;
+    content.innerHTML='';
+    if(!dl.length){content.innerHTML='<div class="history-empty">這天沒有挑戰的單字</div>';return}
+    dl.forEach(w=>{const card=allWordsCard(w),st=entries.get(w.word),t=document.createElement('span');t.className='daily-tag '+st;t.textContent=DAILY_TAG[st];card.querySelector('.review-word-meaning').appendChild(t);content.appendChild(card)});
+    return;
+  }
   const st=w=>cloudStats[w.word]||{};
   let list=[...words];
   if(allWordsFilter==='star')list=list.filter(w=>st(w).important);
@@ -3064,11 +3126,13 @@ function srsUpdatesForSession(){
     if(i.last===today)return;
     if(i.stage===null){out.push({word:w.word,stage:0,due:srsAddDays(today,SRS_GAPS[0]),last:today});return}
     if(!i.due||i.due>today)return;
-    if(srsPassed(w.word)){const st=Math.min(i.stage+1,6);out.push({word:w.word,stage:st,due:srsAddDays(today,SRS_GAPS[st]),last:today})}
-    else out.push({word:w.word,stage:i.stage,due:srsAddDays(today,1),last:today});
+    if(srsPassed(w.word)){const st=Math.min(i.stage+1,6);out.push({word:w.word,stage:st,due:srsAddDays(today,SRS_GAPS[st]),last:today,result:'pass'})}
+    else out.push({word:w.word,stage:i.stage,due:srsAddDays(today,1),last:today,result:'fail'});
   });
   return out;
 }
+let dailyLog=[];
+async function loadDailyLog(){if(!playerHasDaily()){dailyLog=[];return}const id=currentPlayer;try{const r=await fetch(CLOUD_URL+'?action=getDailyLog&player='+encodeURIComponent(id)+'&_='+Date.now());const data=await r.json();if(currentPlayer===id&&data.ok)dailyLog=Array.isArray(data.log)?data.log:[]}catch(e){}}
 function srsApplyLocal(items){items.forEach(it=>{cloudStats[it.word]={...(cloudStats[it.word]||{}),srsStage:it.stage,srsDue:it.due,srsLast:it.last}})}
 // 第一次使用：已學過但還沒有複習排程的字，全部從階段0開始，平均分配到今天～第 13 天（共 14 天）
 // 最後複習日寫 'init' 表示是初始分配；舊版初始分配（最後複習日空白、排在明天以後）會重新分配一次，讓今天也有字
@@ -3176,7 +3240,7 @@ async function cloudPost(payload){
     return false;
   }
 }
-async function syncSessionToCloud(){if(!currentPlayer)return;const duration=Math.floor((Date.now()-totalStart)/1000),wrongCount=Object.values(stats).reduce((n,s)=>n+(s.wrongDetails?.length||0),0);const details={stageResults:sessionStageResult,wordResults:sessionWordStats};const okSession=await cloudPost({action:'saveSession',player:currentPlayer,mode:practiceWrongMode?'wrong-review':wordMode,stages:selectedStages.map(n=>stageNames[n]),words:gameWords.map(w=>w.word),duration,wrongCount,hintWords:hintRecords.map(x=>x.word),rewatchWords:[...s4HintWords],stage5Distractors:[...distractorWords.values()].filter(x=>selectedStages.includes(5)).map(x=>x.word),stage6Distractors:[...distractorWords.values()].filter(x=>selectedStages.includes(6)).map(x=>x.word),details});const updates=gameWords.map(w=>{const x=getSW(w.word);return {word:w.word,practice:x.practice,wrong:x.wrong,hint:x.hint,rewatch:x.rewatch}});const okStats=await cloudPost({action:'updateWordStats',player:currentPlayer,words:updates});if(playerHasDaily()){const srsItems=srsUpdatesForSession();if(srsItems.length&&await cloudPost({action:'setSrs',player:currentPlayer,items:srsItems}))srsApplyLocal(srsItems)}if(okStats){updates.forEach(u=>{const old=cloudStats[u.word]||{};cloudStats[u.word]={...old,practice:Number(old.practice||0)+u.practice,wrong:Number(old.wrong||0)+u.wrong,hint:Number(old.hint||0)+u.hint,rewatch:Number(old.rewatch||0)+u.rewatch}})}const statusEl=document.getElementById('cloudStatus');if(statusEl){if(okSession&&okStats){statusEl.className='cloud-status ok';statusEl.textContent='✓ 學習資料已同步'}else{statusEl.className='cloud-status err';statusEl.textContent='⚠️ 本次練習紀錄雲端同步失敗，下次可能重複出現同樣單字'}}}
+async function syncSessionToCloud(){if(!currentPlayer)return;const duration=Math.floor((Date.now()-totalStart)/1000),wrongCount=Object.values(stats).reduce((n,s)=>n+(s.wrongDetails?.length||0),0);const details={stageResults:sessionStageResult,wordResults:sessionWordStats};const okSession=await cloudPost({action:'saveSession',player:currentPlayer,mode:practiceWrongMode?'wrong-review':wordMode,stages:selectedStages.map(n=>stageNames[n]),words:gameWords.map(w=>w.word),duration,wrongCount,hintWords:hintRecords.map(x=>x.word),rewatchWords:[...s4HintWords],stage5Distractors:[...distractorWords.values()].filter(x=>selectedStages.includes(5)).map(x=>x.word),stage6Distractors:[...distractorWords.values()].filter(x=>selectedStages.includes(6)).map(x=>x.word),details});const updates=gameWords.map(w=>{const x=getSW(w.word);return {word:w.word,practice:x.practice,wrong:x.wrong,hint:x.hint,rewatch:x.rewatch}});const okStats=await cloudPost({action:'updateWordStats',player:currentPlayer,words:updates});if(playerHasDaily()){const srsItems=srsUpdatesForSession();if(srsItems.length){const logs=srsItems.filter(x=>x.result).map(x=>({date:x.last,word:x.word,result:x.result}));if(await cloudPost({action:'setSrs',player:currentPlayer,items:srsItems,logs})){srsApplyLocal(srsItems);dailyLog.push(...logs)}}}if(okStats){updates.forEach(u=>{const old=cloudStats[u.word]||{};cloudStats[u.word]={...old,practice:Number(old.practice||0)+u.practice,wrong:Number(old.wrong||0)+u.wrong,hint:Number(old.hint||0)+u.hint,rewatch:Number(old.rewatch||0)+u.rewatch}})}const statusEl=document.getElementById('cloudStatus');if(statusEl){if(okSession&&okStats){statusEl.className='cloud-status ok';statusEl.textContent='✓ 學習資料已同步'}else{statusEl.className='cloud-status err';statusEl.textContent='⚠️ 本次練習紀錄雲端同步失敗，下次可能重複出現同樣單字'}}}
 const _showFinal=showFinal;
 showFinal=function(){const completedStages=selectedStages.filter(st=>!stats[st]?.skipped).length;gameWords.forEach(w=>{const x=getSW(w.word);x.practice+=completedStages});selectedStages.forEach(st=>{sessionStageResult[st]={wrong:(stats[st]?.wrongDetails||[]).length,time:stats[st]?.time||0,skipped:!!stats[st]?.skipped}});_showFinal();syncSessionToCloud()}
 
