@@ -55,6 +55,11 @@ button{font-family:inherit}
 .home-col .home-n{font-size:13px;color:#777;flex:1}
 .home-col .btn-col{display:flex;gap:8px;flex-wrap:wrap}
 .home-col .btn-col button{font-size:14px;padding:9px 14px}
+/* 首頁科目按鈕：由左到右顏色漸淡，最左邊也不是全飽和 */
+.hbtn{border:none;border-radius:8px;cursor:pointer;color:var(--ink);--w:0}
+.hbtn{background:linear-gradient(rgba(255,255,255,var(--w)),rgba(255,255,255,var(--w))),var(--theme-main)}
+.hb1{--w:.2}.hb2{--w:.45}.hb3{--w:.7}
+.hb1:hover{--w:.1}.hb2:hover{--w:.35}.hb3:hover{--w:.6}
 a.secondary{text-decoration:none;display:inline-block}
 
 /* 章節選擇 */
@@ -151,6 +156,8 @@ a.secondary{text-decoration:none;display:inline-block}
 .link-box{margin-top:8px}
 .link-row{display:flex;align-items:center;gap:6px;font-size:14px;margin:4px 0}
 .link-row a{color:var(--ink);word-break:break-all}
+.link-row button.link-prev{color:var(--ink);font-size:12px;border:1px solid #ccc;border-radius:6px;padding:2px 8px}
+.link-frame{width:100%;height:55vh;border:1px solid #ddd;border-radius:8px;margin:4px 0 8px;background:#fff}
 .link-row button{border:none;background:none;color:#999;cursor:pointer;font-size:14px}
 .link-add{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 .link-add input{flex:1;min-width:120px;padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit}
@@ -235,6 +242,7 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
     <input class="search-input" id="homeSearch" placeholder="搜尋" autocomplete="off">
     <div class="list-count" id="homeCount"></div>
     <datalist id="allTagsList"></datalist>
+    <div class="card-tools" data-scope="home"></div>
     <div class="batch-bar" id="batchBar-home"></div>
     <div id="homeResults"></div>
     <div class="more-row hidden" id="homeMore"><button class="secondary" onclick="homeShown+=30;renderHomeSearch(false)">顯示更多</button></div>
@@ -246,8 +254,8 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
   <div class="top-bar">
     <button class="secondary small" onclick="goHome()">← 首頁</button>
     <div class="btn-row">
-      <button class="secondary small" onclick="openOverview()">📖 題目總覽</button>
-      <button class="secondary small" onclick="openRecord()">📋 個人紀錄</button>
+      <button class="secondary small" onclick="openOverview()">📖 題目</button>
+      <button class="secondary small" onclick="openRecord()">📋 紀錄</button>
     </div>
   </div>
   <h1 id="subjectTitle"></h1>
@@ -353,7 +361,7 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
     </div>
     <div class="btn-row center">
       <button class="primary" onclick="practiceAgain()">再練一次</button>
-      <button class="secondary" onclick="backToSubject()">回科目頁面</button>
+      <button class="secondary" onclick="backToSubject()">回練習頁面</button>
     </div>
     <div class="save-status" id="saveStatus"></div>
   </div>
@@ -367,7 +375,7 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
     <button class="secondary small" onclick="goHome()">← 首頁</button>
     <a class="secondary small" id="notesLink" href="#" target="_blank" rel="noopener">📚 知識重點</a>
   </div>
-  <h1 id="ovTitle">題目總覽</h1>
+  <h1 id="ovTitle">題目</h1>
   <div class="card">
     <div class="progress-wrap">
       <div class="progress-label"><span>學過／所有</span><span id="pgLearnedText"></span></div>
@@ -420,11 +428,13 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
       <label class="chip"><input type="checkbox" id="fWrongMark">🙀 錯題</label>
       <label class="chip"><input type="checkbox" id="fSkip">🚫 不出</label>
       <label class="chip"><input type="checkbox" id="fNeedImg">缺圖</label>
+      <label class="chip"><input type="checkbox" id="fHasLink">🔗 有連結</label>
     </div>
     <input class="search-input" id="fSearch" placeholder="搜尋題目、選項、題號或注記">
     <div style="text-align:right;margin-top:8px"><button class="secondary small" onclick="clearOverviewFilters()">✕ 清除所有篩選</button></div>
   </div>
   <div class="list-count" id="ovCount"></div>
+  <div class="card-tools" data-scope="ov"></div>
   <div class="batch-bar" id="batchBar-ov"></div>
   <div id="ovList"></div>
   <div class="more-row hidden" id="ovMore"><button class="secondary" onclick="ovShown+=30;renderOverviewList(false)">顯示更多</button></div>
@@ -435,7 +445,7 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
   <div class="top-bar">
     <button class="secondary small" onclick="goHome()">← 首頁</button>
   </div>
-  <h1 id="recTitle">個人紀錄</h1>
+  <h1 id="recTitle">紀錄</h1>
   <div class="card record-section">
     <h2>📘 題目紀錄</h2>
     <div class="list-count" id="recQCount"></div>
@@ -7063,9 +7073,9 @@ function renderHome() {
     const n = questions.filter(q => q.subject === name).length;
     return `<div class="home-col"><strong>${name}</strong><div class="home-n">${n} 題</div>
       <div class="btn-col">
-        <button class="primary" onclick="openSubject('${name}')">📝 考試</button>
-        <button class="secondary" onclick="openStudy('${name}')">📖 學習</button>
-        <button class="secondary" onclick="openRecordFor('${name}')">📋 個人紀錄</button>
+        <button class="hbtn hb1" onclick="openStudy('${name}')">📖 題目</button>
+        <button class="hbtn hb2" onclick="openSubject('${name}')">📝 練習</button>
+        <button class="hbtn hb3" onclick="openRecordFor('${name}')">📋 紀錄</button>
       </div></div>`;
   }).join('');
 }
@@ -7078,18 +7088,19 @@ let homeShown = 30, homeTimer = null;
 function homeFiltered() {
   const kw = normalize(document.getElementById('homeSearch').value || '');
   if (!kw) return [];
-  return questions.filter(q => normalize([q.question, (q.options || []).join(' '), String(q.answer), (q.explanation && q.explanation.text) || '', st(q.id).note || '', tagsOf(q.id).join(' ')].join(' ')).includes(kw));
+  return questions.filter(q => normalize([q.question, (q.options || []).join(' '), String(q.answer), (q.explanation && q.explanation.text) || '', st(q.id).note || '', tagsOf(q.id).join(' '), linkText(q.id)].join(' ')).includes(kw));
 }
 function renderHomeSearch(reset) {
   const kw = normalize(document.getElementById('homeSearch').value || '');
   const box = document.getElementById('homeResults');
   if (reset) box.innerHTML = '';
   renderBatchBar('home');
+  renderCardTools('home', !!normalize(document.getElementById('homeSearch').value || ''));
   if (!kw) { box.innerHTML = ''; document.getElementById('homeCount').textContent = ''; document.getElementById('homeMore').classList.add('hidden'); return; }
   const list = homeFiltered();
   document.getElementById('homeCount').textContent = `找到 ${list.length} 題`;
   const have = box.children.length;
-  box.insertAdjacentHTML('beforeend', list.slice(have, homeShown).map(q => qCardHtml(q, { withSubject: true, batch: batchOn.home })).join(''));
+  box.insertAdjacentHTML('beforeend', list.slice(have, homeShown).map(q => qCardHtml(q, { withSubject: true, batch: batchOn.home, open: cardsOpen.home })).join(''));
   document.getElementById('homeMore').classList.toggle('hidden', list.length <= homeShown);
 }
 document.getElementById('homeSearch').addEventListener('input', () => { clearTimeout(homeTimer); homeTimer = setTimeout(() => { homeShown = 30; renderHomeSearch(true); }, 250); });
@@ -7113,7 +7124,7 @@ function setSubject(name) {
 }
 function openSubject(name) {
   setSubject(name);
-  document.getElementById('subjectTitle').textContent = name;
+  document.getElementById('subjectTitle').textContent = name + '｜練習';
   const all = subjQs();
   document.getElementById('subjectSub').textContent = `共 ${all.length} 題`;
   renderOptionsRows();
@@ -7193,7 +7204,7 @@ function renderOptionsRows() {
   renderTagOptions();
 }
 /* 學校排序與顯示名稱（代碼不變，只改畫面上顯示的字） */
-const SCHOOL_ORDER = ['KMU', 'nCH', 'nCX', 'nCS', 'CMU', 'CMUn', 'E', 'H', '私醫'];
+const SCHOOL_ORDER = ['KMU', 'KMUn', 'nCH', 'nCX', 'nCS', 'CMU', 'CMUn', 'E', 'H', '私醫'];
 const SCHOOL_LABEL = { E: 'ESU', H: 'HTC' };
 function schoolLabel(s) { return SCHOOL_LABEL[s] || s; }
 function schoolRank(s) { const i = SCHOOL_ORDER.indexOf(s); return i < 0 ? 999 : i; }
@@ -7208,17 +7219,25 @@ function renderSchoolYearOptions() {
   document.getElementById('yearOptions').innerHTML = years.map(y =>
     `<label class="chip"><input type="checkbox" data-year-filter="${y}" ${sel.years.has(y) ? 'checked' : ''}>${y}</label>`).join('');
 }
+/* 標籤排序：英文在前按字母，中文依字數由少到多，同字數再依筆劃序 */
+function tagSort(a, b) {
+  const ea = /^[A-Za-z0-9]/.test(a), eb = /^[A-Za-z0-9]/.test(b);
+  if (ea !== eb) return ea ? -1 : 1;
+  if (ea) return a.localeCompare(b, 'en', { sensitivity: 'base', numeric: true });
+  return [...a].length - [...b].length || a.localeCompare(b, 'zh-Hant');
+}
+function linkText(id) { return linksOf(id).map(l => (l.text || '') + ' ' + (l.url || '')).join(' '); }
 function subjectTags() {
   const ids = new Set(subjQs().map(q => q.id)), set = new Set();
   Object.keys(data.tags).forEach(id => { if (ids.has(id)) tagsOf(id).forEach(t => set.add(t)); });
-  return [...set].sort();
+  return [...set].sort(tagSort);
 }
 function renderTagOptions() {
   const tags = subjectTags();
   [...sel.tags].forEach(t => { if (!tags.includes(t)) sel.tags.delete(t); });
   document.getElementById('tagOptions').innerHTML = tags.length
     ? tags.map(t => `<label class="chip"><input type="checkbox" data-tag-filter="${esc(t)}" ${sel.tags.has(t) ? 'checked' : ''}>${esc(t)}</label>`).join('')
-    : '<span class="avail">還沒有標籤，可以在題目總覽或答題後新增</span>';
+    : '<span class="avail">還沒有標籤，可以在題目頁或答題後新增</span>';
 }
 
 /* 篩選後的題目（不含模式） */
@@ -7308,6 +7327,14 @@ document.addEventListener('click', e => {
   if (td) { removeTag(td.dataset.tagId, td.dataset.tagDel); return; }
   const ta = e.target.closest('[data-tag-add]');
   if (ta) { const inp = ta.parentElement.querySelector('.tag-input'); addTag(ta.dataset.tagAdd, inp.value); return; }
+  const lp = e.target.closest('[data-link-prev]');
+  if (lp) {
+    const row = lp.closest('.link-row'), nx = row.nextElementSibling;
+    if (nx && nx.classList.contains('link-frame')) { nx.remove(); lp.textContent = '👁 預覽'; return; }
+    const f = document.createElement('iframe');
+    f.className = 'link-frame'; f.src = lp.dataset.linkPrev; f.loading = 'lazy'; f.referrerPolicy = 'no-referrer';
+    row.after(f); lp.textContent = '✕ 收起'; return;
+  }
   const la = e.target.closest('[data-link-add]');
   if (la) { addLink(la.dataset.linkAdd, la.parentElement); return; }
   const ld = e.target.closest('[data-link-del]');
@@ -7607,9 +7634,11 @@ function flagBarHtml(q) {
 }
 /* ---- 超連結（存在 Google Sheet 題目紀錄的「連結」欄）---- */
 function linksOf(id) { const l = st(id).links; return Array.isArray(l) ? l : []; }
+/* Notion 連結可以在題目卡裡直接預覽 */
+function isNotion(u) { return /^https?:\/\/([\w-]+\.)?(notion\.site|notion\.so)\//i.test(u || ''); }
 function linksHtml(id) {
   const e = esc(id);
-  return linksOf(id).map((l, i) => `<div class="link-row"><a href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.text || l.url)}</a><button data-link-del="${i}" data-link-id="${e}" aria-label="刪除連結">×</button></div>`).join('')
+  return linksOf(id).map((l, i) => `<div class="link-row"><a href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.text || l.url)}</a>${isNotion(l.url) ? `<button class="link-prev" data-link-prev="${esc(l.url)}">👁 預覽</button>` : ''}<button data-link-del="${i}" data-link-id="${e}" aria-label="刪除連結">×</button></div>`).join('')
     + `<div class="link-add"><input class="link-name" placeholder="連結名稱"><input class="link-url" placeholder="網址 https://..."><button class="secondary small" data-link-add="${e}">加入連結</button></div>
     <div class="note-saved" data-link-saved="${e}"></div>`;
 }
@@ -7617,6 +7646,7 @@ function saveLinks(id, list) {
   const q = QMAP[id], cur = data.stats[id] || {};
   data.stats[id] = Object.assign({}, cur, { links: list });
   document.querySelectorAll('[data-link-box]').forEach(b => { if (b.dataset.linkBox === id) b.innerHTML = linksHtml(id); });
+  document.querySelectorAll('[data-sum-flags]').forEach(s => { if (s.dataset.sumFlags === id) s.textContent = sumFlags(id); });
   cloudPost({ action: 'setFlag', player: currentPlayer, id, subject: q.subject, field: 'links', value: JSON.stringify(list) }).then(ok => {
     document.querySelectorAll('[data-link-saved]').forEach(s => { if (s.dataset.linkSaved === id) s.textContent = ok ? '✓ 連結已儲存' : '⚠️ 連結沒有存到雲端'; });
   });
@@ -7630,7 +7660,7 @@ function addLink(id, box) {
 }
 function tagChipsHtml(id) {
   const e = esc(id);
-  return tagsOf(id).map(t => `<span class="tag-chip">${esc(t)}<button data-tag-del="${esc(t)}" data-tag-id="${e}" aria-label="移除標籤 ${esc(t)}">×</button></span>`).join('')
+  return tagsOf(id).slice().sort(tagSort).map(t => `<span class="tag-chip">${esc(t)}<button data-tag-del="${esc(t)}" data-tag-id="${e}" aria-label="移除標籤 ${esc(t)}">×</button></span>`).join('')
     + `<input class="tag-input" placeholder="新增標籤" list="allTagsList" data-tag-input="${e}"><button class="secondary small" data-tag-add="${e}">加入</button>`;
 }
 function explainHtml(q) {
@@ -7694,7 +7724,7 @@ function wrongRate(id) {
   const s = st(id), p = Number(s.practice || 0);
   return p ? Math.round(Number(s.wrong || 0) / p * 100) : null;
 }
-function sumFlags(id) { const s = st(id); return (s.star ? '⭐' : '') + (s.mark ? '🔖' : '') + (s.wrongMark ? '🙀' : '') + (s.skip ? '🚫' : '') + (s.note ? '📝' : ''); }
+function sumFlags(id) { const s = st(id); return (s.star ? '⭐' : '') + (s.mark ? '🔖' : '') + (s.wrongMark ? '🙀' : '') + (s.skip ? '🚫' : '') + (s.note ? '📝' : '') + (linksOf(id).length ? '🔗' : ''); }
 function qCardHtml(q, opt = {}) {
   const s = st(q.id);
   const mark = opt.mark ? `<span class="sum-mark ${opt.mark}">${opt.mark === 'ok' ? '✓' : '✗'}</span>` : '';
@@ -7741,8 +7771,22 @@ function refillTagDatalist() {
   const cnt = {};
   Object.values(data.tags || {}).forEach(a => (a || []).forEach(t => { cnt[t] = (cnt[t] || 0) + 1; }));
   const dl = document.getElementById('allTagsList');
-  if (dl) dl.innerHTML = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a] || a.localeCompare(b)).map(t => `<option value="${esc(t)}">`).join('');
+  if (dl) dl.innerHTML = Object.keys(cnt).sort(tagSort).map(t => `<option value="${esc(t)}">`).join('');
 }
+/* 一鍵展開／收合目前列出的題目 */
+const cardsOpen = { home: false, ov: false };
+function renderCardTools(scope, has) {
+  const el = document.querySelector('.card-tools[data-scope="' + scope + '"]');
+  if (!el) return;
+  el.innerHTML = has ? `<button class="secondary small" data-cards-open="${scope}">▾ 全部展開</button> <button class="secondary small" data-cards-close="${scope}">▸ 全部收合</button>` : '';
+}
+document.addEventListener('click', e => {
+  const o = e.target.closest('[data-cards-open], [data-cards-close]');
+  if (!o) return;
+  const scope = o.dataset.cardsOpen || o.dataset.cardsClose, open = !!o.dataset.cardsOpen;
+  cardsOpen[scope] = open;
+  document.querySelectorAll('#' + (scope === 'home' ? 'homeResults' : 'ovList') + ' details.qcard').forEach(d => { d.open = open; });
+});
 function renderBatchBar(scope) {
   const box = document.getElementById('batchBar-' + scope);
   if (!box) return;
@@ -7837,7 +7881,7 @@ document.addEventListener('change', e => {
 let ovShown = 30;
 function openOverview() {
   document.getElementById('notesLink').href = SUBJECTS[currentSubject].notesUrl || '#';
-  document.getElementById('ovTitle').textContent = currentSubject + '｜題目總覽';
+  document.getElementById('ovTitle').textContent = currentSubject + '｜題目';
   const cfg = SUBJECTS[currentSubject], cnt = unitStats();
   const opt = u => cnt[u] ? `<option value="u${u}">${esc(unitLabel(currentSubject, u))}</option>` : '';
   let html = '<option value="all">章節：全部</option>';
@@ -7902,24 +7946,26 @@ function overviewFiltered() {
     if (c('fWrongMark') && !s.wrongMark) return false;
     if (c('fSkip') && !s.skip) return false;
     if (c('fNeedImg') && !q.needImage) return false;
-    if (kw && !normalize([q.id, q.question, (q.options || []).join(' '), s.note || '', tagsOf(q.id).join(' ')].join(' ')).includes(kw)) return false;
+    if (c('fHasLink') && !linksOf(q.id).length) return false;
+    if (kw && !normalize([q.id, q.question, (q.options || []).join(' '), s.note || '', tagsOf(q.id).join(' '), linkText(q.id)].join(' ')).includes(kw)) return false;
     return true;
   });
 }
 function clearOverviewFilters() {
   document.querySelectorAll('#pageOverview .filter-grid select').forEach(s => { s.selectedIndex = 0; });
-  ['fStar', 'fMark', 'fWrongMark', 'fSkip', 'fNeedImg'].forEach(id => { const c = document.getElementById(id); if (c) c.checked = false; });
+  ['fStar', 'fMark', 'fWrongMark', 'fSkip', 'fNeedImg', 'fHasLink'].forEach(id => { const c = document.getElementById(id); if (c) c.checked = false; });
   document.getElementById('fSearch').value = '';
   ovShown = 30; renderOverviewList(true);
 }
 function renderOverviewList(reset) {
   const list = overviewFiltered();
   renderBatchBar('ov');
+  renderCardTools('ov', true);
   document.getElementById('ovCount').textContent = `符合 ${list.length} 題`;
   const box = document.getElementById('ovList');
   if (reset) box.innerHTML = '';
   const have = box.children.length;
-  box.insertAdjacentHTML('beforeend', list.slice(have, ovShown).map(q => qCardHtml(q, { batch: batchOn.ov })).join(''));
+  box.insertAdjacentHTML('beforeend', list.slice(have, ovShown).map(q => qCardHtml(q, { batch: batchOn.ov, open: cardsOpen.ov })).join(''));
   if (!list.length) box.innerHTML = '<div class="card">沒有符合條件的題目，試著放寬篩選。</div>';
   document.getElementById('ovMore').classList.toggle('hidden', list.length <= ovShown);
 }
@@ -7930,7 +7976,7 @@ document.getElementById('fSearch').addEventListener('input', () => { clearTimeou
    個人紀錄
    ============================================================ */
 function openRecord() {
-  document.getElementById('recTitle').textContent = currentSubject + '｜個人紀錄';
+  document.getElementById('recTitle').textContent = currentSubject + '｜紀錄';
   const practiced = subjQs().filter(q => isLearned(q.id))
     .sort((a, b) => String(st(b.id).last || '').localeCompare(String(st(a.id).last || '')));
   document.getElementById('recQCount').textContent = `做過 ${practiced.length} 題（最近練習的在最上面）`;
