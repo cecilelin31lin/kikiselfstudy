@@ -242,7 +242,6 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
     <input class="search-input" id="homeSearch" placeholder="搜尋" autocomplete="off">
     <div class="list-count" id="homeCount"></div>
     <datalist id="allTagsList"></datalist>
-    <div class="card-tools" data-scope="home"></div>
     <div class="batch-bar" id="batchBar-home"></div>
     <div id="homeResults"></div>
     <div class="more-row hidden" id="homeMore"><button class="secondary" onclick="homeShown+=30;renderHomeSearch(false)">顯示更多</button></div>
@@ -434,7 +433,6 @@ details.qcard[open]>summary{border-bottom:.5px solid #eee}
     <div style="text-align:right;margin-top:8px"><button class="secondary small" onclick="clearOverviewFilters()">✕ 清除所有篩選</button></div>
   </div>
   <div class="list-count" id="ovCount"></div>
-  <div class="card-tools" data-scope="ov"></div>
   <div class="batch-bar" id="batchBar-ov"></div>
   <div id="ovList"></div>
   <div class="more-row hidden" id="ovMore"><button class="secondary" onclick="ovShown+=30;renderOverviewList(false)">顯示更多</button></div>
@@ -7095,12 +7093,11 @@ function renderHomeSearch(reset) {
   const box = document.getElementById('homeResults');
   if (reset) box.innerHTML = '';
   renderBatchBar('home');
-  renderCardTools('home', !!normalize(document.getElementById('homeSearch').value || ''));
   if (!kw) { box.innerHTML = ''; document.getElementById('homeCount').textContent = ''; document.getElementById('homeMore').classList.add('hidden'); return; }
   const list = homeFiltered();
   document.getElementById('homeCount').textContent = `找到 ${list.length} 題`;
   const have = box.children.length;
-  box.insertAdjacentHTML('beforeend', list.slice(have, homeShown).map(q => qCardHtml(q, { withSubject: true, batch: batchOn.home, open: cardsOpen.home })).join(''));
+  box.insertAdjacentHTML('beforeend', list.slice(have, homeShown).map(q => qCardHtml(q, { withSubject: true, batch: batchOn.home, open: batchOn.home && openIds.has(q.id) })).join(''));
   document.getElementById('homeMore').classList.toggle('hidden', list.length <= homeShown);
 }
 document.getElementById('homeSearch').addEventListener('input', () => { clearTimeout(homeTimer); homeTimer = setTimeout(() => { homeShown = 30; renderHomeSearch(true); }, 250); });
@@ -7773,20 +7770,15 @@ function refillTagDatalist() {
   const dl = document.getElementById('allTagsList');
   if (dl) dl.innerHTML = Object.keys(cnt).sort(tagSort).map(t => `<option value="${esc(t)}">`).join('');
 }
-/* 一鍵展開／收合目前列出的題目 */
-const cardsOpen = { home: false, ov: false };
-function renderCardTools(scope, has) {
-  const el = document.querySelector('.card-tools[data-scope="' + scope + '"]');
-  if (!el) return;
-  el.innerHTML = has ? `<button class="secondary small" data-cards-open="${scope}">▾ 全部展開</button> <button class="secondary small" data-cards-close="${scope}">▸ 全部收合</button>` : '';
+/* 批次模式：展開／收合已勾選的題目 */
+const openIds = new Set();
+function setOpenSelected(open) {
+  batchSel.forEach(id => { open ? openIds.add(id) : openIds.delete(id); });
+  document.querySelectorAll('[data-bsel]').forEach(c => {
+    if (!batchSel.has(c.dataset.bsel)) return;
+    const d = c.parentElement.querySelector('details.qcard'); if (d) d.open = open;
+  });
 }
-document.addEventListener('click', e => {
-  const o = e.target.closest('[data-cards-open], [data-cards-close]');
-  if (!o) return;
-  const scope = o.dataset.cardsOpen || o.dataset.cardsClose, open = !!o.dataset.cardsOpen;
-  cardsOpen[scope] = open;
-  document.querySelectorAll('#' + (scope === 'home' ? 'homeResults' : 'ovList') + ' details.qcard').forEach(d => { d.open = open; });
-});
 function renderBatchBar(scope) {
   const box = document.getElementById('batchBar-' + scope);
   if (!box) return;
@@ -7799,6 +7791,8 @@ function renderBatchBar(scope) {
     <div class="brow"><b>已選 <span data-bcount>${batchSel.size}</span> 題</b>
       <button class="secondary small" data-batch-all="${scope}">全選符合的 ${n} 題</button>
       <button class="secondary small" data-batch-none="${scope}">取消全選</button>
+      <button class="secondary small" data-batch-open="1">▾ 展開已選</button>
+      <button class="secondary small" data-batch-close="1">▸ 收合已選</button>
       <button class="secondary small" data-batch-toggle="${scope}">✕ 結束選取編輯</button></div>
     <div class="brow">🏷️ <input class="b-tag" list="allTagsList" placeholder="標籤（可選打過的）">
       <button class="small" data-batch-op="tag-add" data-scope="${scope}">加入標籤</button>
@@ -7862,11 +7856,13 @@ async function runBatch(scope, op, panel) {
 }
 document.addEventListener('click', e => {
   const tg = e.target.closest('[data-batch-toggle]');
-  if (tg) { const s = tg.dataset.batchToggle; batchOn[s] = !batchOn[s]; batchSel.clear(); rerenderScope(s); return; }
+  if (tg) { const s = tg.dataset.batchToggle; batchOn[s] = !batchOn[s]; batchSel.clear(); openIds.clear(); rerenderScope(s); return; }
   const ba = e.target.closest('[data-batch-all]');
   if (ba) { batchList(ba.dataset.batchAll).forEach(q => batchSel.add(q.id)); document.querySelectorAll('[data-bsel]').forEach(c => { c.checked = batchSel.has(c.dataset.bsel); }); updateBatchCount(); return; }
   const bn = e.target.closest('[data-batch-none]');
   if (bn) { batchSel.clear(); document.querySelectorAll('[data-bsel]').forEach(c => { c.checked = false; }); updateBatchCount(); return; }
+  if (e.target.closest('[data-batch-open]')) { setOpenSelected(true); return; }
+  if (e.target.closest('[data-batch-close]')) { setOpenSelected(false); return; }
   const bo = e.target.closest('[data-batch-op]');
   if (bo) { runBatch(bo.dataset.scope, bo.dataset.batchOp, bo.closest('.batch-panel')); return; }
 });
@@ -7960,12 +7956,11 @@ function clearOverviewFilters() {
 function renderOverviewList(reset) {
   const list = overviewFiltered();
   renderBatchBar('ov');
-  renderCardTools('ov', true);
   document.getElementById('ovCount').textContent = `符合 ${list.length} 題`;
   const box = document.getElementById('ovList');
   if (reset) box.innerHTML = '';
   const have = box.children.length;
-  box.insertAdjacentHTML('beforeend', list.slice(have, ovShown).map(q => qCardHtml(q, { batch: batchOn.ov, open: cardsOpen.ov })).join(''));
+  box.insertAdjacentHTML('beforeend', list.slice(have, ovShown).map(q => qCardHtml(q, { batch: batchOn.ov, open: batchOn.ov && openIds.has(q.id) })).join(''));
   if (!list.length) box.innerHTML = '<div class="card">沒有符合條件的題目，試著放寬篩選。</div>';
   document.getElementById('ovMore').classList.toggle('hidden', list.length <= ovShown);
 }
